@@ -1,6 +1,6 @@
 export interface EmailPayload {
   to: string;
-  name: string;
+  displayname: string;
   otp: string;
   subject: string;
   content: string;

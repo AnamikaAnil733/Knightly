@@ -1,10 +1,23 @@
 import { Router } from "express";
-import { authController } from "../../Composition/AuthComposition";
+import { authController } from "../../Infrastructure/Composition/AuthComposition";
 
-const router = Router();
+export class AuthRoutes {
+  public router: Router;
 
-router.post("/send-otp", authController.sendOtp);
-router.post("/verify-otp", authController.verifyOtp);
-router.post("/register", authController.register);
+  constructor() {
+    this.router = Router();
+    this.initializeRoutes();
+  }
 
-export default router;
+  private initializeRoutes() {
+    this.router.post("/send-otp", authController.resendOTP);
+    this.router.post("/verify-otp", authController.verifyOtp);
+    this.router.post("/register", authController.register);
+    this.router.post("/login", authController.login);
+    this.router.post("/resend-otp", authController.resendOTP);
+    this.router.post("/forget-password", authController.forgetPassword);
+    this.router.post("/verify-forgetpasswordOTP",authController.verifyOtp );
+    this.router.post("/reset-password", authController.resetPassword);
+    this.router.post("/googleAuth",authController.googleAuth)
+  }
+}

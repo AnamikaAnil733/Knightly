@@ -16,7 +16,7 @@ export class EmailService implements IEmailService {
   }
 
   async sendMail(payload: EmailPayload): Promise<void> {
-    const html = otpMailHtml(payload.name, payload.otp, payload.content);
+    const html = otpMailHtml(payload.displayname, payload.otp, payload.content);
 
     // Verify transporter
     const isVerified = await this._transporter.verify();

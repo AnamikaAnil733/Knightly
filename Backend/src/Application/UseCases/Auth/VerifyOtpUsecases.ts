@@ -1,7 +1,8 @@
 import { IOtpService } from "../../../Domain/Interface/service/otpService";
 import { ICachingService } from "../../../Domain/Interface/service/cachingService";
+import { IVerifyOtpUseCase } from "../../../Domain/Interface/usecases/authentication/IVerifyOtpUseCase";
 
-export class VerifyOtpUseCase {
+export class VerifyOtpUseCase implements IVerifyOtpUseCase{
   constructor(
     private _otpService: IOtpService,
     private _cachingService: ICachingService

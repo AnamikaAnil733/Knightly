@@ -1,0 +1,182 @@
+{"level":30,"time":1765349766508,"pid":50045,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: null\n      - Given: 4521599\n    "}
+{"level":30,"time":1765349794890,"pid":50045,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 3513847"}
+{"level":30,"time":1765349794890,"pid":50045,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 3513847"}
+{"level":30,"time":1765461558888,"pid":96077,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6238324"}
+{"level":30,"time":1765461558889,"pid":96077,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 6238324"}
+{"level":30,"time":1765461621537,"pid":96077,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 6238324\n      - Given: 62383224\n    "}
+{"level":30,"time":1765461641806,"pid":96077,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 6238324\n      - Given: 6238324\n    "}
+{"level":30,"time":1765512791325,"pid":9729,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4183889"}
+{"level":30,"time":1765512791325,"pid":9729,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 4183889"}
+{"level":30,"time":1765516976056,"pid":44459,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6453336"}
+{"level":30,"time":1765516976057,"pid":44459,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 6453336"}
+{"level":30,"time":1765517197283,"pid":45875,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 7692199"}
+{"level":30,"time":1765517197283,"pid":45875,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 7692199"}
+{"level":30,"time":1765518296522,"pid":57185,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 8462362"}
+{"level":30,"time":1765518296523,"pid":57185,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 8462362"}
+{"level":30,"time":1765518357532,"pid":57185,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 8462362\n      - Given: 8462362\n    "}
+{"level":30,"time":1765518384749,"pid":57185,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9979182"}
+{"level":30,"time":1765518384749,"pid":57185,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 9979182"}
+{"level":30,"time":1765545687237,"pid":140741,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 3253444"}
+{"level":30,"time":1765545687238,"pid":140741,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 3253444"}
+{"level":30,"time":1765545738229,"pid":140741,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 3253444\n      - Given: undefined\n    "}
+{"level":30,"time":1765545792234,"pid":140741,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 3253444\n      - Given: 3253444\n    "}
+{"level":30,"time":1765546502290,"pid":143968,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9521462"}
+{"level":30,"time":1765546502291,"pid":143968,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 9521462"}
+{"level":30,"time":1765546554576,"pid":143968,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 9521462\n      - Given: 9521462\n    "}
+{"level":30,"time":1765546660698,"pid":145101,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: null\n      - Given: 9521462\n    "}
+{"level":30,"time":1765546671915,"pid":145101,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 2379941"}
+{"level":30,"time":1765546671916,"pid":145101,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 2379941"}
+{"level":30,"time":1765546707875,"pid":145101,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 2379941\n      - Given: 2379941\n    "}
+{"level":30,"time":1765547045438,"pid":147645,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 2915569"}
+{"level":30,"time":1765547045440,"pid":147645,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 2915569"}
+{"level":30,"time":1765547082590,"pid":147645,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 2915569\n      - Given: 2915569\n    "}
+{"level":30,"time":1765552143471,"pid":156388,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 2799215"}
+{"level":30,"time":1765552143471,"pid":156388,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 2799215"}
+{"level":30,"time":1765552183252,"pid":156388,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 2799215\n      - Given: 2799215\n    "}
+{"level":30,"time":1765552509827,"pid":157691,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6485363"}
+{"level":30,"time":1765552509828,"pid":157691,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 6485363"}
+{"level":30,"time":1765552521900,"pid":157691,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 7769351"}
+{"level":30,"time":1765552521901,"pid":157691,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 7769351"}
+{"level":30,"time":1765552565457,"pid":157691,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 7769351\n      - Given: 7769351\n    "}
+{"level":30,"time":1765552890010,"pid":159436,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6778689"}
+{"level":30,"time":1765552890011,"pid":159436,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 6778689"}
+{"level":30,"time":1765552922702,"pid":159436,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 6778689\n      - Given: 6778689\n    "}
+{"level":30,"time":1765558144601,"pid":4594,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 1988369"}
+{"level":30,"time":1765558144602,"pid":4594,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil02912@gmail.com, otp: 1988369"}
+{"level":30,"time":1765558212442,"pid":4594,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil02912@gmail.com\n      - Stored: 1988369\n      - Given: 1988369\n    "}
+{"level":30,"time":1765714850865,"pid":29197,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 3518613"}
+{"level":30,"time":1765714850866,"pid":29197,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 3518613"}
+{"level":50,"time":1765714934743,"pid":29197,"hostname":"acer-Aspire-A315-58","msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":50,"time":1765714950747,"pid":29197,"hostname":"acer-Aspire-A315-58","msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":50,"time":1765715045362,"pid":30353,"hostname":"acer-Aspire-A315-58","msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":50,"time":1765715133881,"pid":30679,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":50,"time":1765715348598,"pid":31898,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":50,"time":1765715410458,"pid":32581,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765715477510,"pid":33135,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 3518613\n    "}
+{"level":50,"time":1765715477511,"pid":33135,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765715538031,"pid":33135,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9915797"}
+{"level":30,"time":1765715538032,"pid":33135,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 9915797"}
+{"level":30,"time":1765715585326,"pid":33135,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 9915797\n      - Given: 9915797\n    "}
+{"level":50,"time":1765715585326,"pid":33135,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765715696457,"pid":34210,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 9915797\n    "}
+{"level":50,"time":1765715696458,"pid":34210,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765715985484,"pid":34210,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 9915797\n    "}
+{"level":50,"time":1765715985484,"pid":34210,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765716012602,"pid":34210,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 8495177"}
+{"level":30,"time":1765716012603,"pid":34210,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 8495177"}
+{"level":30,"time":1765716043611,"pid":34210,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 8495177\n      - Given: 8495177\n    "}
+{"level":30,"time":1765716157577,"pid":36109,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4648119"}
+{"level":30,"time":1765716157578,"pid":36109,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 4648119"}
+{"level":30,"time":1765716191715,"pid":36109,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 4648119\n      - Given: 4648119\n    "}
+{"level":30,"time":1765716447129,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 4648119\n    "}
+{"level":50,"time":1765716447130,"pid":37663,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765716733678,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 7431612"}
+{"level":30,"time":1765716733679,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 7431612"}
+{"level":30,"time":1765716779859,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 7431612\n      - Given: 7431612\n    "}
+{"level":30,"time":1765716793902,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6861238"}
+{"level":30,"time":1765716793902,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 6861238"}
+{"level":50,"time":1765716834493,"pid":37663,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: User Auth controller - verifyOtp"}
+{"level":30,"time":1765716848385,"pid":37663,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 6861238\n      - Given: 6861238\n    "}
+{"level":50,"time":1765776900635,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765781760248,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765781762820,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765781799050,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765781987696,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765781996527,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 5982234"}
+{"level":30,"time":1765781996529,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 5982234"}
+{"level":50,"time":1765782149373,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765782156360,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4698219"}
+{"level":30,"time":1765782156360,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 4698219"}
+{"level":30,"time":1765782470320,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 4698219\n    "}
+{"level":50,"time":1765782470320,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765782497509,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9219188"}
+{"level":30,"time":1765782497509,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 9219188"}
+{"level":30,"time":1765782526694,"pid":24586,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 9219188\n      - Given: 9219188\n    "}
+{"level":50,"time":1765782845864,"pid":24586,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - register"}
+{"level":50,"time":1765783018333,"pid":36431,"hostname":"acer-Aspire-A315-58","error":{},"msg":"ERROR: AuthController - register"}
+{"level":30,"time":1765783041876,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: null\n      - Given: 9219188\n    "}
+{"level":50,"time":1765783041876,"pid":36431,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765783047357,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 1488674"}
+{"level":30,"time":1765783047358,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 1488674"}
+{"level":30,"time":1765783070874,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 1488674\n      - Given: 1488674\n    "}
+{"level":50,"time":1765783400184,"pid":36431,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - forgetPassword"}
+{"level":30,"time":1765783521560,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 8879745"}
+{"level":30,"time":1765783521560,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 8879745"}
+{"level":30,"time":1765783543387,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 1657562"}
+{"level":30,"time":1765783543387,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 1657562"}
+{"level":30,"time":1765783606991,"pid":36431,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 1657562\n      - Given: 1657562\n    "}
+{"level":50,"time":1765783771605,"pid":38636,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resetPassword"}
+{"level":50,"time":1765783853993,"pid":38636,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - resetPassword"}
+{"level":30,"time":1765783873149,"pid":38636,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 1199193"}
+{"level":30,"time":1765783873149,"pid":38636,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 1199193"}
+{"level":30,"time":1765783899368,"pid":38636,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 1199193\n      - Given: 1199193\n    "}
+{"level":50,"time":1765791556274,"pid":52700,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":409,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765791569256,"pid":52700,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 8319766"}
+{"level":30,"time":1765791569257,"pid":52700,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 8319766"}
+{"level":50,"time":1765804776023,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765804781859,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765805074814,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765805132787,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":409,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765805220484,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806005663,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806019118,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806223430,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806264994,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806440268,"pid":82629,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765806677582,"pid":91575,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765806701468,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4868126"}
+{"level":30,"time":1765806701468,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 4868126"}
+{"level":30,"time":1765806761275,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9611749"}
+{"level":30,"time":1765806761276,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 9611749"}
+{"level":30,"time":1765806990667,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 9611749\n      - Given: 9611749\n    "}
+{"level":30,"time":1765807518970,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6981685"}
+{"level":30,"time":1765807518970,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 6981685"}
+{"level":30,"time":1765807547162,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 6981685\n      - Given: 6981685\n    "}
+{"level":30,"time":1765808159196,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 9387818"}
+{"level":30,"time":1765808159196,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnu12@gmail.com, otp: 9387818"}
+{"level":30,"time":1765808242341,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 7275117"}
+{"level":30,"time":1765808242341,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 7275117"}
+{"level":30,"time":1765808268664,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 7275117\n      - Given: 7275117\n    "}
+{"level":30,"time":1765809005722,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 1431286"}
+{"level":30,"time":1765809005722,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 1431286"}
+{"level":30,"time":1765809053651,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 1431286\n      - Given: 1431286\n    "}
+{"level":30,"time":1765811964228,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 3277198"}
+{"level":30,"time":1765811964228,"pid":91575,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:sdfsdfsdf@gyty.com, otp: 3277198"}
+{"level":30,"time":1765812025222,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:sdfsdfsdf@gyty.com\n      - Stored: null\n      - Given: 3277198\n    "}
+{"level":50,"time":1765812025222,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765812041254,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:sdfsdfsdf@gyty.com\n      - Stored: null\n      - Given: 3223332\n    "}
+{"level":50,"time":1765812041254,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765812122141,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 2488979"}
+{"level":30,"time":1765812122141,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:erewrwer@vcmail.com, otp: 2488979"}
+{"level":30,"time":1765812154618,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:erewrwer@vcmail.com\n      - Stored: 2488979\n      - Given: 2488979\n    "}
+{"level":50,"time":1765812194207,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{},"msg":"ERROR: AuthController - register"}
+{"level":50,"time":1765812201716,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":409,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765812231650,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 5798555"}
+{"level":30,"time":1765812231650,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:ewtwertwertwer@fggmail.com, otp: 5798555"}
+{"level":50,"time":1765812275486,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765812310076,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765812325381,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 6592686"}
+{"level":30,"time":1765812325381,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:ewtwerai@rtyertyret.com, otp: 6592686"}
+{"level":50,"time":1765812339219,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765812499234,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4575873"}
+{"level":30,"time":1765812499234,"pid":105202,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:ewtwerai@wert.dggdg, otp: 4575873"}
+{"level":50,"time":1765812514611,"pid":105202,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":50,"time":1765857633055,"pid":5622,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - resendOTP"}
+{"level":30,"time":1765857662023,"pid":5622,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 7481638"}
+{"level":30,"time":1765857662024,"pid":5622,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 7481638"}
+{"level":30,"time":1765857808604,"pid":5622,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 7481638\n      - Given: 7481638\n    "}
+{"level":30,"time":1765861662616,"pid":5622,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 5297431"}
+{"level":30,"time":1765861662616,"pid":5622,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil12@gmail.com, otp: 5297431"}
+{"level":30,"time":1765861730393,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil12@gmail.com\n      - Stored: null\n      - Given: 5297431\n    "}
+{"level":50,"time":1765861730393,"pid":20182,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765861766172,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 2425561"}
+{"level":30,"time":1765861766173,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil132@gmail.com, otp: 2425561"}
+{"level":30,"time":1765861799074,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil132@gmail.com\n      - Stored: 2425561\n      - Given: 2425561\n    "}
+{"level":50,"time":1765861799080,"pid":20182,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":400,"_details":""},"msg":"ERROR: AuthController - register"}
+{"level":30,"time":1765861888480,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4687728"}
+{"level":30,"time":1765861888480,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:anamikaanil12@gmail.com, otp: 4687728"}
+{"level":30,"time":1765861931665,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:anamikaanil12@gmail.com\n      - Stored: 4687728\n      - Given: 4687782\n    "}
+{"level":50,"time":1765861931665,"pid":20182,"hostname":"acer-Aspire-A315-58","error":{"_statusCode":401,"_details":""},"msg":"ERROR: AuthController - verifyOtp"}
+{"level":30,"time":1765862068155,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Generated OTP: 4867793"}
+{"level":30,"time":1765862068156,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Stored OTP - key: USER_OTP:minnuanil12@gmail.com, otp: 4867793"}
+{"level":30,"time":1765862093977,"pid":20182,"hostname":"acer-Aspire-A315-58","msg":"Verify OTP:\n      - Key: USER_OTP:minnuanil12@gmail.com\n      - Stored: 4867793\n      - Given: 4867793\n    "}
