@@ -13,13 +13,15 @@ export const AuthRequestSchema =  z.object({
 
 })
 
+export const LoginRequestSchema = z.object({
+  email:  z.email("Invalid email address").min(1, "Email is required"),
+  password: z.string().min(6),
+});
+
 
 export const GoogleAuthRequestSchema = z.object({
-  token: z
-    .string()
-    .min(1, "Google token is required")
-    .regex(/^[\w-]+\.[\w-]+\.[\w-]+$/, "Invalid Google token format"),
-  role: z.enum(UserRole),
+  token: z.string().min(1, "Google Token is required"),
+  role: z.string().optional() 
 });
 
 
@@ -52,12 +54,7 @@ export const ResetPasswordRequestSchema = z.object({
 });
 
 export const ForgotPasswordRequestSchema = z.object({
-displayname: z
-  .string()
-  .min(2, "Name must be at least 2 characters long")
-  .max(50, "Name must not exceed 50 characters"),
 email: z.email("Invalid email address").min(1, "Email is required"),
-role: z.enum(UserRole),
 });
 
 

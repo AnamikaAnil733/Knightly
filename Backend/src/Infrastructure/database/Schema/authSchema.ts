@@ -12,6 +12,17 @@ export interface IAuthDocument extends Document{
     isNewUser:boolean;
     createdAt:Date;
     updatedAt:Date;
+
+    gamesPlayed: number;
+    gamesWin: number;
+    rating: number;
+    premium: boolean;
+    longestStreak: number;
+    currentStreak: number;
+    rewards: string[];
+    achievements: string[];
+    subscriptionStart?: Date;
+
 }
 
  export const authSchema = new Schema<IAuthDocument>(
@@ -43,7 +54,17 @@ export interface IAuthDocument extends Document{
         type:Boolean,
         required:true,
         default:true,
-    }
+    },
+    gamesPlayed: { type: Number, default: 0 },
+    gamesWin: { type: Number, default: 0 },
+    rating: { type: Number, default: 0 },
+    premium: { type: Boolean, default: false },
+    longestStreak: { type: Number, default: 0 },
+    currentStreak: { type: Number, default: 0 },
+    rewards: { type: [String], default: [] },
+    achievements: { type: [String], default: [] },
+    subscriptionStart: { type: Date },
+
 },
 {timestamps:true}
 )

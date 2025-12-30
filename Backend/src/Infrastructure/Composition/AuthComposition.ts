@@ -2,7 +2,7 @@ import { AuthRepository } from "../Repository/AuthRepository";
 
 import { CachingService } from "../services/cachingService";
 import { OtpService } from "../services/OTPservice";
-import { EmailService } from "../services/EmilService";
+import { EmailService } from "../services/EmailService";
 import { HashService } from "../services/passwordHashing";
 import { GoogleAuthService } from "../services/GoogleAuthService";
 import { TokenService } from "../services/tokenService"
@@ -29,11 +29,11 @@ const googleAuthService = new GoogleAuthService()
 //useCases
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService,cache);
 const registerUserUseCase = new RegisterUserUseCase(UserRepo,cache,hashService);
-const loginUserCase = new LoginUseCase(UserRepo,hashService);
+const loginUserCase = new LoginUseCase(UserRepo,hashService,tokenservice);
 const resendOtpUseCase  = new ResendOtpUseCase(otpService,emailService,UserRepo);
 const forgetPassword = new ForgetPasswordUseCase(emailService,otpService,UserRepo)
 const resetPassword = new ResetPaswordUseCase(cache,hashService,UserRepo)
-const googleAuthUseCase = new GoogleAuthUseCase(UserRepo,googleAuthService)
+const googleAuthUseCase = new GoogleAuthUseCase(UserRepo,googleAuthService,tokenservice)
 
 //injection
 export const authController = new AuthController(

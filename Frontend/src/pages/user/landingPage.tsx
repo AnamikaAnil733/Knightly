@@ -1,10 +1,10 @@
-import { Navbar } from "../../components/navbar";
-import { Footer } from "../../components/footer";
-import { Hero } from "../../components/landingpage/hero";
-import { LearningZone } from "../../components/landingpage/learningZone";
-import { LiveMatches } from "../../components/landingpage/liveMatches";
-import { TopPlayers } from "../../components/landingpage/topPlayers";
-import { CommunityNews } from "../../components/landingpage/commununtitynews";
+import { Navbar } from "../../components/user/common/navbar";
+import { Footer } from "../../components/user/common/footer";
+import { Hero } from "../../components/user/landingpage/hero";
+import { LearningZone } from "../../components/user/landingpage/learningZone";
+import { LiveMatches } from "../../components/user/landingpage/liveMatches";
+import { TopPlayers } from "../../components/user/landingpage/topPlayers";
+import { CommunityNews } from "../../components/user/landingpage/commununtitynews";
 
 
 

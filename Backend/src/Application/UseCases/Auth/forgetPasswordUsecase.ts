@@ -15,7 +15,8 @@ export class ForgetPasswordUseCase implements IforgetPasswordUseCase{
     ){}
 
    async execute(data: AuthRequestDTO): Promise<void> {
-    const {email,displayname} = data
+    const {email} = data
+    console.log(email)
         const existingUser = await this._userRepo.findByEmail(email)
         if(existingUser && existingUser.googleId){
             throw new CustomError(
@@ -28,7 +29,7 @@ export class ForgetPasswordUseCase implements IforgetPasswordUseCase{
             await this._otpservice.storeOtp(email,otp)
             await this._emailservice.sendMail({
                 to:email,
-                displayname:displayname!,
+                displayname:"User",
                 otp,
                 subject:"Your Forget Password OTP",
                 content:"Use this OTP to verfify your account"

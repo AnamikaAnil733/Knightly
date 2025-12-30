@@ -6,6 +6,7 @@ import { UserRole } from "../../../Domain/Types/UserRole";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { IRegisterUserUseCase } from "../../../Domain/Interface/usecases/authentication/IRegisterUseCase";
+import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
 
 export class RegisterUserUseCase implements IRegisterUserUseCase{
   constructor(

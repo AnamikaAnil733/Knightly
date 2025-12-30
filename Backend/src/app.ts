@@ -4,6 +4,7 @@ dotenv.config();
 import express, { Application } from "express";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
+import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware"
 import cors from "cors";
 
 export class App {
@@ -14,6 +15,7 @@ export class App {
     this.initializeMiddlewares();
     this.initializeDatabase();
     this.initializeRoutes();
+    this.setErrorHandlerMiddleware();
   }
 
   private initializeMiddlewares(): void {
@@ -33,6 +35,10 @@ export class App {
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     this.app.use("/api/auth", authRoutes.router);
+  }
+
+  private setErrorHandlerMiddleware() {
+    this.app.use(errorHandler);
   }
 
   public listen(port:any): void {

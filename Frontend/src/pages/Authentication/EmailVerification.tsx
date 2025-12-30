@@ -3,12 +3,10 @@ import { CheckCircle2Icon, XCircleIcon, CrownIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { KnightlyParticles } from "../../utils/Particle";
 import api from "../../Service/api/axios"; 
+import { KnightlyParticles } from "../../utils/Particle";
 
-/* ---------------- TYPES ---------------- */
-
-
+/* -------- Types --------*/
 interface VerifyOtpPayload {
   email: string;
   otp: string;
@@ -19,246 +17,183 @@ interface RegisterPayload {
   email: string;
   password: string;
 }
-interface ApiErrorResponse {
-  message: string;
+
+interface ApiErrorResponse { message: string; }
+
+interface OTPVerifyProps {
+  mode: "signup" | "forgot";   // NEW
 }
 
-/* ---------------- API ---------------- */
+/* -------- API -------- */
+const verifyOtpRequest = async (data: VerifyOtpPayload) =>
+  (await api.post("/auth/verify-otp", data)).data;
 
-const verifyOtpRequest = async (data: VerifyOtpPayload) => {
-  const response = await api.post("/auth/verify-otp", data);
-  return response.data;
-};
+const registerRequest = async (data: RegisterPayload) =>
+  (await api.post("/auth/register", data)).data;
 
-const registerRequest = async (data: RegisterPayload) => {
-  const res = await api.post("/auth/register", data);
-  return res.data;
-};
-
-/* ---------------- COMPONENT ---------------- */
-
-export function OTP() {
-  /* ---------- ROUTER ---------- */
+/* -------- Component -------- */
+export function OTPVerify({ mode }: OTPVerifyProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Signup flow: displayname & password
+  // Forgot flow: only email required
   const { email, displayname, password } = location.state || {};
 
-
-  // Guard: user should not access OTP page directly
   useEffect(() => {
-    if (!email || !displayname || !password) {
-      navigate("/signup");
-    }
-  }, [email, displayname, password, navigate]);
+    if (!email) navigate("/signup");
+    if (mode === "signup" && (!password || !displayname)) navigate("/signup");
+  }, []);
 
-  /* ---------- STATE ---------- */
-  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", "",""]);
-  const [timer, setTimer] = useState(300);
-  const [message, setMessage] = useState<{
-    type: "success" | "error" | null;
-    text: string;
-  }>({ type: null, text: "" });
-
+  /* State */
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", "", ""]);
+  const [timer, setTimer] = useState(60);
+  const [message, setMessage] = useState<{ type:"success"|"error"|null;text:string }>({ type:null,text:"" });
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  /* ---------- TIMER ---------- */
+  /* Timer */
   useEffect(() => {
     if (timer <= 0) return;
-    const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(interval);
+    const interval = setInterval(()=> setTimer(p=>p-1),1000);
+    return ()=>clearInterval(interval);
   }, [timer]);
 
-  /* ---------- MUTATION ---------- */
+  /* -------- Register Mutation (used only for signup) -------- */
   const registerMutation = useMutation({
     mutationFn: registerRequest,
-    onSuccess: () => {
-      navigate("/landing-page");
-    },
-    onError: () => {
-      setMessage({
-        type: "error",
-        text: "Account creation failed. Try again.",
-      });
-    },
+    onSuccess: () => navigate("/user/login"),
+    onError: () => setMessage({ type:"error", text:"Account creation failed." })
   });
 
-  /* ---------- VERIFY OTP MUTATION ---------- */
+
+  /* -------- Resend OTP Mutation -------- */
+const resendOtpRequest = async (email:string) => {
+  return api.post("/auth/resend-otp", { email }); // Backend route must exist
+};
+
+const resendOtpMutation = useMutation({
+  mutationFn: () => resendOtpRequest(email),
+  onSuccess: () => {
+    setMessage({ type:"success", text:"OTP resent successfully!" });
+    setTimer(300);                       // restart timer
+    setOtp(["","","","","","",""]);      // clear input boxes
+    inputRefs.current[0]?.focus();
+  },
+  onError: () => {
+    setMessage({ type:"error", text:"Failed to resend OTP" });
+  }
+});
+
+  /* -------- Verify OTP Mutation -------- */
   const verifyOtpMutation = useMutation({
     mutationFn: verifyOtpRequest,
     onSuccess: () => {
-      setMessage({
-        type: "success",
-        text: "OTP verified. Creating account...",
-      });
-
-      registerMutation.mutate({
-        displayname,
-        email,
-        password,
-      });
+      if(mode === "signup"){
+        setMessage({ type:"success", text:"OTP Verified. Creating account..." });
+        registerMutation.mutate({ displayname,email,password });
+      } 
+      else if(mode === "forgot"){
+        navigate("/reset-password",{ state:{ email }});
+      }
     },
-    onError: (error: AxiosError<ApiErrorResponse>) => {
-      setMessage({
-        type: "error",
-        text: error.response?.data.message || "Invalid OTP. Try again.",
-      });
-
-      setOtp(["", "", "", "", "", "",""]);
+    onError:(error:AxiosError<ApiErrorResponse>)=>{
+      setMessage({ type:"error", text:error.response?.data.message || "Invalid OTP"});
+      setOtp(["","","","","","",""]);
       inputRefs.current[0]?.focus();
-    },
+    }
   });
 
-  /* ---------- HANDLERS ---------- */
-  const handleChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value.slice(-1);
+  /* Handlers */
+  const handleChange = (index:number,value:string)=>{
+    if(!/^\d*$/.test(value)) return;
+    const newOtp=[...otp];
+    newOtp[index]=value.slice(-1);
     setOtp(newOtp);
-
-    if (value && index < 6) {
-      inputRefs.current[index + 1]?.focus();
-    }
-
-    setMessage({ type: null, text: "" });
+    if(value && index<6) inputRefs.current[index+1]?.focus();
+    setMessage({type:null,text:""});
   };
 
-  const handleKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    }
-  };
-
-  const handlePaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    const pasted = e.clipboardData.getData("text").slice(0, 7);
-    if (!/^\d+$/.test(pasted)) return;
-
-    const newOtp = [...otp];
-    pasted.split("").forEach((char, i) => {
-      newOtp[i] = char;
-    });
-
-    setOtp(newOtp);
-    inputRefs.current[Math.min(pasted.length, 6)]?.focus();
-  };
-
-  const handleVerify = () => {
+  const handleVerify = ()=>{
     const otpString = otp.join("");
-
-    if (otpString.length !==7) {
-      setMessage({
-        type: "error",
-        text: "Please enter all 7 digits.",
-      });
+    if(otpString.length !== 7){
+      setMessage({type:"error",text:"Enter all digits"});
       return;
     }
-
-    verifyOtpMutation.mutate({
-      email,
-      otp: otpString,
-    });
+    verifyOtpMutation.mutate({ email, otp: otpString });
   };
 
-  const handleResend = () => {
-    if (timer === 0) {
+  const handleResend=()=>{
+    if(timer===0){
       setTimer(300);
-      setOtp(["", "", "", "", "", "",""]);
-      setMessage({ type: null, text: "" });
+      setOtp(["","","","","","",""]);
+      setMessage({type:null,text:""});
       inputRefs.current[0]?.focus();
-      // later: call resend OTP API
     }
   };
-  const minutes = Math.floor(timer / 60);
-const seconds = timer % 60;
 
-
-  /* ---------- UI ---------- */
   return (
-    <div className="min-h-screen w-full bg-knightly-gradient relative overflow-hidden flex flex-col">
-      <div className="absolute inset-0 pointer-events-none">
-        <KnightlyParticles />
-      </div>
+    <div className="min-h-screen w-full relative flex flex-col overflow-hidden bg-knightly-gradient">
+      <KnightlyParticles />
 
-      <header className="pt-12 pb-8 text-center">
-        <div className="flex justify-center gap-3 mb-2">
-          <CrownIcon className="w-10 h-10 text-gold" />
-          <h1 className="text-4xl font-bold text-gold">Knightly</h1>
+      <header className="pt-12 pb-6 text-center">
+        <div className="flex justify-center gap-2 mb-1">
+          <CrownIcon className="w-10 h-10 text-gold"/>
+          <h1 className="text-4xl text-gold font-bold">Knightly</h1>
         </div>
         <p className="text-gray-light text-sm">
           OTP sent to <b>{email}</b>
         </p>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-navy-midnight/85 p-8 rounded-2xl">
-          <h2 className="text-center text-2xl text-gold mb-6">
-            Verify Your Account
+      <main className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-md p-8 bg-navy-midnight/85 rounded-2xl">
+          <h2 className="text-gold text-center text-2xl mb-5">
+            {mode === "signup" ? "Verify Your Account" : "Verify Email"}
           </h2>
 
-          {/* OTP INPUTS */}
-          <div className="flex justify-center gap-3 mb-6" onPaste={handlePaste}>
-            {otp.map((digit, index) => (
-              <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                type="text"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-14 text-center text-2xl rounded-xl bg-navy-deep text-white border border-purple"
+          <div className="flex justify-center gap-3 mb-6">
+            {otp.map((digit,i)=>(
+              <input key={i}
+                ref={(el)=>inputRefs.current[i]=el}
+                type="text" maxLength={1} value={digit}
+                onChange={(e)=>handleChange(i,e.target.value)}
+                className="w-12 h-14 text-2xl text-center bg-navy-deep text-white border border-purple rounded-xl"
               />
             ))}
           </div>
 
-          {/* TIMER */}
-          <div className="text-center mb-6">
-            {timer > 0 ? (
-              <span className="text-gray-light text-sm">
-                Resend OTP in {minutes}:{seconds.toString().padStart(2, "0")}
+          <div className="text-center mb-4">
+            {timer>0 ? (
+              <span className="text-sm text-gray-light">
+                Resend in {Math.floor(timer/60)}:{(timer%60).toString().padStart(2,"0")}
               </span>
             ) : (
-              <button
-                onClick={handleResend}
-                className="text-gold text-sm underline"
-              >
-                Resend OTP
-              </button>
+              <button 
+              onClick={() => resendOtpMutation.mutate()} 
+              className="text-gold underline text-sm hover:opacity-80"
+            >
+              Resend OTP
+            </button>
+            
             )}
           </div>
 
-          {/* MESSAGE */}
           {message.type && (
-            <div
-              className={`flex items-center gap-2 mb-4 justify-center ${
-                message.type === "success"
-                  ? "text-green-400"
-                  : "text-red-400"
-              }`}
-            >
-              {message.type === "success" ? (
-                <CheckCircle2Icon />
-              ) : (
-                <XCircleIcon />
-              )}
-              <span>{message.text}</span>
-            </div>
+            <p className={`flex items-center gap-2 justify-center mb-2 
+              ${message.type === "success" ? "text-green-400":"text-red-400"}`}>
+              {message.type === "success" ? <CheckCircle2Icon/>:<XCircleIcon />}
+              {message.text}
+            </p>
           )}
 
-          {/* BUTTON */}
           <button
             onClick={handleVerify}
+            className="w-full py-3 rounded-xl bg-button-gradient font-semibold text-white"
             disabled={verifyOtpMutation.isPending || registerMutation.isPending}
-            className="w-full py-3 roundnavigateed-xl bg-button-gradient text-white font-semibold disabled:opacity-50"
           >
-            {verifyOtpMutation.isPending ? "Verifying..." : "Verify OTP"}
+            {verifyOtpMutation.isPending ? "Verifying..." :
+             registerMutation.isPending ? "Creating Account..." :
+             "Verify OTP"}
           </button>
         </div>
       </main>

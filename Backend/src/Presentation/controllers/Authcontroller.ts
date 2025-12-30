@@ -17,6 +17,7 @@ import {
   ForgotPasswordRequestSchema,
   ResetPasswordRequestSchema,
   GoogleAuthRequestSchema,
+  LoginRequestSchema
 } from "../Validators/authValidator";
 
 import { CustomError } from "../../Domain/Entity/CustomError";
@@ -95,7 +96,7 @@ export class AuthController {
 
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = AuthRequestSchema.safeParse(req.body);
+      const result = LoginRequestSchema.safeParse(req.body);
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
@@ -118,16 +119,11 @@ export class AuthController {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      const accessToken = this.tokenService.generateAccessToken({
-        userId: user.id,
-        role: user.role,
-      });
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
         message: "Logged in successfully",
         userInfo: user,
-        accessToken,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - login");
@@ -210,6 +206,7 @@ export class AuthController {
   googleAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = GoogleAuthRequestSchema.safeParse(req.body);
+      console.log(result)
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,

@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <UsersIcon size={20} />,
       name: 'User Management',
-      path: '/users',
+      path: '/admin/users',
     },
     {
       icon: <PuzzleIcon size={20} />,

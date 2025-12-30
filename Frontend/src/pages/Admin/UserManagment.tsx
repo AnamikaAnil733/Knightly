@@ -1,6 +1,8 @@
-import  { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserTable } from '../../components/admin/UserManagment/UserTable'
 import { UserProfile } from '../../components/admin/UserManagment/UserProfile'
+import { UserFilters } from '../../components/admin/UserManagment/UserFilters'
+import { mockUsers } from '../../components/admin/UserManagment/mockUsers'
 import { SearchIcon } from 'lucide-react'
 export interface User {
   id: string
@@ -19,8 +21,8 @@ export interface User {
   reports: number
 }
 export function UserManagement() {
-  const [users, setUsers] = useState<User[]>()
-  const [filteredUsers, setFilteredUsers] = useState<User[]>()
+  const [users, setUsers] = useState<User[]>(mockUsers)
+  const [filteredUsers, setFilteredUsers] = useState<User[]>(mockUsers)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState({
@@ -28,32 +30,32 @@ export function UserManagement() {
     banned: false,
     sortBy: 'rating',
   })
-//   // Apply filters and search
-//   useEffect(() => {
-//     let result = []
-//     // Apply premium filter
-//     if (filters.premium) {
-//       result = result.filter((user) => user.premium)
-//     }
-//     // Apply banned filter
-//     if (filters.banned) {
-//       result = result.filter((user) => user.banned)
-//     }
-//     // Apply search
-//     if (searchTerm) {
-//       result = result.filter(
-//         (user) =>
-//           user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//           user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//           user.id.toLowerCase().includes(searchTerm.toLowerCase()),
-//       )
-//     }
-//     // Apply sorting
-//     if (filters.sortBy === 'rating') {
-//       result.sort((a, b) => b.rating - a.rating)
-//     }
-//     setFilteredUsers(result)
-//   }, [filters, searchTerm])
+  // Apply filters and search
+  useEffect(() => {
+    let result = [...mockUsers]
+    // Apply premium filter
+    if (filters.premium) {
+      result = result.filter((user) => user.premium)
+    }
+    // Apply banned filter
+    if (filters.banned) {
+      result = result.filter((user) => user.banned)
+    }
+    // Apply search
+    if (searchTerm) {
+      result = result.filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.id.toLowerCase().includes(searchTerm.toLowerCase()),
+      )
+    }
+    // Apply sorting
+    if (filters.sortBy === 'rating') {
+      result.sort((a, b) => b.rating - a.rating)
+    }
+    setFilteredUsers(result)
+  }, [filters, searchTerm])
   const handleUserSelect = (user: User) => {
     setSelectedUser(user)
   }
@@ -95,7 +97,7 @@ export function UserManagement() {
                   />
                   <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 </div>
-                {/* <UserFilters filters={filters} setFilters={setFilters} /> */}
+                <UserFilters filters={filters} setFilters={setFilters} />
               </div>
             </div>
             {/* User table */}

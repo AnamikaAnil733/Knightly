@@ -8,11 +8,14 @@ import { IGoogleAuthUseCase } from "../../../Domain/Interface/usecases/authentic
 import { GoogleAuthRequestDTO } from "../../DTOs/googleAuthDTO";
 import EAuth from "../../../Domain/Entity/auth";
 import { IGoogleAuthService } from "../../../Domain/Interface/service/IGoogleAuthService";
+import { ITokenService } from "../../../Domain/Interface/service/ITokenService";
+import { UserRole } from "../../../Domain/Types/UserRole";
 
 export class GoogleAuthUseCase implements IGoogleAuthUseCase {
   constructor(
     private _authRepository: IUserRepository,
-    private _googleAuthService: IGoogleAuthService 
+    private _googleAuthService: IGoogleAuthService,
+    private _tokenService :ITokenService,
   ) {}
 
   async execute(data: GoogleAuthRequestDTO): Promise<AuthResponseDTO> {
@@ -44,20 +47,25 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     if (!user) {
       user = await this._authRepository.create(
         new EAuth({
-          displayname: payload.name,
+          displayname: payload.name || payload.email.split("@")[0], // fallback name
           email: payload.email,
-          googleId: payload.googleId,
+          googleId: payload.sub,
           isNewUser: true,
           isBlocked: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-          role: data.role, 
+          role:UserRole.USER
+
         })
       );
     } else {
       user.isNewUser = false;
     }
+    const accessToken = this._tokenService.generateAccessToken({
+      userId: user.id!,
+      role: user.role
+  });
 
-    return AuthMapper.toAuthResponseDTOfromEntity(user);
+    return AuthMapper.toAuthResponseDTOfromEntity(user,accessToken);
   }
 }

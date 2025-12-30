@@ -23,7 +23,7 @@ export class GoogleAuthService {
     return {
       email: payload.email!,
       name: payload.name!,
-      googleId: payload.sub!, // Google's unique user ID
+      sub: payload.sub!, // Google's unique user ID
     };
   }
 }

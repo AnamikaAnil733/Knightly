@@ -48,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <div className="w-8 h-8 bg-[#1e2547] rounded-full flex items-center justify-center">
               <UserIcon size={18} className="text-[#FFD166]" />
             </div>
-            <span className="ml-2 text-sm font-medium">Admin User</span>
+            <span className="ml-2 text-sm font-medium text-[#FFD166]">Admin</span>
           </div>
         </div>
       </div>

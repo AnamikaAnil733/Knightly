@@ -18,7 +18,7 @@ export class ResendOtpUseCase implements IResendOtpUsecase{
     ){}
 
     async execute(data: AuthRequestDTO): Promise<void> {
-        const {displayname,email} = data;
+        const {email} = data;
         const existingUser = await this._AuthRepository.findByEmail(email);
         if(existingUser){
           throw new CustomError(
@@ -30,7 +30,7 @@ export class ResendOtpUseCase implements IResendOtpUsecase{
         await this._otpService.storeOtp(email,otp)
         await this._emailService.sendMail({
             to: email,
-            displayname:displayname!, 
+            displayname:"User", 
             otp,                    
             subject: "Your Knightly OTP",
             content: "Use this OTP to verify your account.",
