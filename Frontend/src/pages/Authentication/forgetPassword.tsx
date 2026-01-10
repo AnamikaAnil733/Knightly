@@ -13,7 +13,6 @@ export function ForgotPassword() {
     try {
       setLoading(true)
       await axios.post("/auth/forget-password", { email })
-      
       setLoading(false)
       navigate("/forgot-otp", { state:{ email } });// move to OTP screen
     } catch (err: any) {
@@ -23,7 +22,7 @@ export function ForgotPassword() {
   }
 
   const handleBackToLogin = () => {
-    navigate("/login")
+    navigate("/user/login")
   }
 
   return (

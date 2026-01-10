@@ -1,6 +1,6 @@
-import { model } from "mongoose";
-import { authSchema,IAuthDocument} from "../Schema/authSchema";
+import { model ,HydratedDocument} from "mongoose";
+import { authSchema,AuthSchemaType} from "../Schema/authSchema";
 
 
-
-export const authModel = model<IAuthDocument>("Auth",authSchema)
+export type AuthDocument = HydratedDocument<AuthSchemaType>;
+export const authModel = model<AuthSchemaType>("Auth",authSchema)

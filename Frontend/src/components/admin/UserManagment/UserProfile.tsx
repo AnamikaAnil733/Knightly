@@ -1,4 +1,4 @@
-import { User } from '../../../pages/Admin/UserManagment'
+import { UserManagment } from '../../../pages/Admin/UserManagment'
 import {
   FlameIcon,
   TrophyIcon,
@@ -10,7 +10,7 @@ import {
   StarIcon,
 } from 'lucide-react'
 interface UserProfileProps {
-  user: User
+  user: UserManagment
   onBanUser: (userId: string, ban: boolean) => void
 }
 export function UserProfile({ user, onBanUser }: UserProfileProps) {
@@ -57,7 +57,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
               <span className="text-sm font-medium">Streak</span>
             </div>
             <p className="text-white text-xl font-bold mt-1">
-              {user.streaks} days
+              {user.longestStreak} days
             </p>
           </div>
           <div className="bg-[#11193F] p-3 rounded-lg">

@@ -14,7 +14,6 @@ export function Navbar() {
   function handleLogout(){
     localStorage.removeItem("userAccessToken");
     localStorage.removeItem("user");
-  
     dispatch(logout());       // clears redux state
     navigate("/user/login");  // redirect page
   };
@@ -34,7 +33,7 @@ export function Navbar() {
         </div>
         <div className="hidden md:flex items-center gap-8">
           <a
-            href="#"
+            href="/landing-page"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
             Home

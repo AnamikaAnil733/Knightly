@@ -4,6 +4,7 @@ dotenv.config();
 import express, { Application } from "express";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
+import { AdminRoutes } from "../src/Presentation/routes/adminroute";
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware"
 import cors from "cors";
 
@@ -35,6 +36,9 @@ export class App {
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     this.app.use("/api/auth", authRoutes.router);
+
+    const adminRoutes = new AdminRoutes();
+    this.app.use("/api/admin",adminRoutes.router)
   }
 
   private setErrorHandlerMiddleware() {

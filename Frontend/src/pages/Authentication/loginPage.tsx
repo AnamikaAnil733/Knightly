@@ -156,7 +156,7 @@ export function LoginPage({ role }: LoginPageProps) {
             </div>
             <div className="text-right mb-7">
               <a
-                href="#"
+                href="/forgotpassword"
                 className="text-sm text-[#6B2EFF] hover:text-[#FFD166] transition-colors"
               >
                 Forgot Password?

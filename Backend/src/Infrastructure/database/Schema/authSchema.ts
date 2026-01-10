@@ -1,17 +1,15 @@
-import { Document,Schema } from "mongoose";
+import {Schema } from "mongoose";
 import { UserRole } from "../../../Domain/Types/UserRole";
 
 
-export interface IAuthDocument extends Document{
+export interface AuthSchemaType{
     displayname:string;
     email:string;
-    passwordHash:string;
-    googleId:string,
+    passwordHash?:string;
+    googleId?:string,
     role:UserRole;
     isBlocked:boolean;
     isNewUser:boolean;
-    createdAt:Date;
-    updatedAt:Date;
 
     gamesPlayed: number;
     gamesWin: number;
@@ -25,7 +23,7 @@ export interface IAuthDocument extends Document{
 
 }
 
- export const authSchema = new Schema<IAuthDocument>(
+ export const authSchema = new Schema<AuthSchemaType>(
 {
     displayname:{
         type:Schema.Types.String,

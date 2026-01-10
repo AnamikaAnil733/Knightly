@@ -1,7 +1,7 @@
 import { UserRole } from "../Types/UserRole";
 
 export default class EAuth {
-    private _id: string | null;
+    private _id?: string;
     private _displayname: string;
     private _email: string;
     private _passwordHash?: string;     
@@ -48,7 +48,7 @@ export default class EAuth {
         createdAt?: Date;
         updatedAt?: Date;
     }) {
-        this._id = params.id ?? null;
+        this._id = params.id ;
         this._displayname = params.displayname;
         this._email = params.email;
 
@@ -75,7 +75,7 @@ export default class EAuth {
     }
 
     // GETTERS
-    get id(): string | null { return this._id; }
+    get id(): string | undefined { return this._id; }
     get displayname(): string { return this._displayname; }
     get email(): string { return this._email; }
     get passwordHash(): string | undefined { return this._passwordHash; }
@@ -95,6 +95,7 @@ export default class EAuth {
 
     get createdAt(): Date { return this._createdAt; }
     get updatedAt(): Date { return this._updatedAt; }
+    get subscriptionStart():Date|undefined{ return this._subscriptionStart}
 
     // SETTERS
     set passwordHash(passwordHash: string) { this._passwordHash = passwordHash; }

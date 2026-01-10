@@ -1,14 +1,12 @@
-import React from 'react'
-import { User } from "../../../pages/Admin/UserManagment"
 import {
   ChevronRightIcon,
-  StarIcon,
   ShieldCheckIcon,
   BanIcon,
 } from 'lucide-react'
+import { IUser } from '../../../types/user'
 interface UserTableProps {
-  users: User[]
-  onSelectUser: (user: User) => void
+  users: IUser[]
+  onSelectUser: (user: IUser) => void
   onBanUser: (userId: string, ban: boolean) => void
   selectedUserId: string
 }
@@ -34,7 +32,6 @@ export function UserTable({
             <th className="px-4 py-3 text-left text-sm font-medium">User ID</th>
             <th className="px-4 py-3 text-left text-sm font-medium">Name</th>
             <th className="px-4 py-3 text-left text-sm font-medium">Email</th>
-            <th className="px-4 py-3 text-left text-sm font-medium">Rating</th>
             <th className="px-4 py-3 text-left text-sm font-medium">Games</th>
             <th className="px-4 py-3 text-left text-sm font-medium">Premium</th>
             <th className="px-4 py-3 text-left text-sm font-medium">
@@ -54,15 +51,10 @@ export function UserTable({
                 {user.id.slice(0, 8)}...
               </td>
               <td className="px-4 py-3 text-sm text-white font-medium">
-                {user.name}
+                {user.displayname}
               </td>
               <td className="px-4 py-3 text-sm text-gray-300">{user.email}</td>
-              <td className="px-4 py-3">
-                <div className="flex items-center">
-                  <StarIcon className="h-4 w-4 text-[#FFD166] mr-1" />
-                  <span className="text-sm text-white">{user.rating}</span>
-                </div>
-              </td>
+              
               <td className="px-4 py-3 text-sm text-gray-300">
                 {user.gamesPlayed}
               </td>
@@ -84,9 +76,9 @@ export function UserTable({
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      onBanUser(user.id, !user.banned)
+                      onBanUser(user.id, !user.isBlocked)
                     }}
-                    className={`p-1 rounded-full ${user.banned ? 'bg-green-600/20 text-green-500 hover:bg-green-600/30' : 'bg-red-600/20 text-red-500 hover:bg-red-600/30'}`}
+                    className={`p-1 rounded-full ${user.isBlocked ? 'bg-green-600/20 text-green-500 hover:bg-green-600/30' : 'bg-red-600/20 text-red-500 hover:bg-red-600/30'}`}
                   >
                     <BanIcon className="h-4 w-4" />
                   </button>
