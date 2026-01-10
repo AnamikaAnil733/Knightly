@@ -10,7 +10,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
   
   async getAllUsers(): Promise<GetAllUsersOutputDTO> {
   const users = await this.userManagmentRepository.getAll();
-
+    console.log(users[0].createdAt)
   return {
     users: users.map(user => ({
       id: user.id!,

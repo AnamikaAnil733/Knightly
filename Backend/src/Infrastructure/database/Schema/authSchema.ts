@@ -20,7 +20,7 @@ export interface AuthSchemaType{
     rewards: string[];
     achievements: string[];
     subscriptionStart?: Date;
-
+    createdAt:Date
 }
 
  export const authSchema = new Schema<AuthSchemaType>(

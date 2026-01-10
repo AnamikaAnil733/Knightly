@@ -15,6 +15,7 @@ export class AuthMapper {
       passwordHash: doc.passwordHash,
       googleId: doc.googleId,
       role: doc.role,
+      createdAt:doc.createdAt,
       isBlocked: doc.isBlocked,
       isNewUser: doc.isNewUser,
     });
@@ -30,7 +31,7 @@ export class AuthMapper {
       role: auth.role,
       isBlocked: auth.isBlocked,
       isNewUser: auth.isNewUser,
-
+      createdAt:auth.createdAt,
       gamesPlayed: auth.gamesPlayed,
       gamesWin: auth.gamesWin,
       rating: auth.rating,

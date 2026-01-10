@@ -47,15 +47,16 @@ export function ResetPassword() {
       }
     
       try {
-        const res = await axios.post("/auth/reset-password", {
-          email,          // received from OTP page
-          password: newPassword
-        });
+        // const res = await axios.post("/auth/reset-password", {
+        //   email,          // received from OTP page
+        //   password: newPassword
+        // });
     
         setIsSuccess(true);
         setTimeout(() => navigate("/user/login"), 2000); // redirect to login
     
       } catch (error) {
+        console.log(error)
         setError("Failed to reset password. Try again.");
       }
     };
