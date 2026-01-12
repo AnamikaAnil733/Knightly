@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import  { useEffect, useState, useRef } from "react";
 import { CheckCircle2Icon, XCircleIcon, CrownIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -122,14 +122,14 @@ const resendOtpMutation = useMutation({
     verifyOtpMutation.mutate({ email, otp: otpString });
   };
 
-  const handleResend=()=>{
-    if(timer===0){
-      setTimer(300);
-      setOtp(["","","","","","",""]);
-      setMessage({type:null,text:""});
-      inputRefs.current[0]?.focus();
-    }
-  };
+  // const handleResend=()=>{
+  //   if(timer===0){
+  //     setTimer(300);
+  //     setOtp(["","","","","","",""]);
+  //     setMessage({type:null,text:""});
+  //     inputRefs.current[0]?.focus();
+  //   }
+  // };
 
   return (
     <div className="min-h-screen w-full relative flex flex-col overflow-hidden bg-knightly-gradient">

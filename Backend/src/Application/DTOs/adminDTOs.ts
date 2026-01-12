@@ -19,6 +19,8 @@ export interface BaseUserResponseDTO{
 
 }
 
+//--------get all users DTOs------
+
 export interface GetAllUsersInputDto {
     page?: number;
     limit?: number;
@@ -29,3 +31,31 @@ export interface GetAllUsersOutputDTO{
     users:BaseUserResponseDTO[];
     total:number;
 }
+
+//-------userManangment DTOs-------
+
+//----block DTOs-----
+
+export interface BlockUserInputDTO{
+    userId:string;
+}
+
+export interface BlockUserOutputDTO{
+   success:Boolean;
+   message:string;
+}
+//---unblock DTOs----
+
+
+export interface UnBlockUserInputDTO{
+    userId:string;
+}
+
+export interface UnBlockUserOutputDTO{
+   success:Boolean;
+   message:string;
+}
+
+
+
+

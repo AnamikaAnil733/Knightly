@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllUserController } from "../../Infrastructure/Composition/AdminCompostion";
+import { getAllUserController,banUserController,unBanUserController} from "../../Infrastructure/Composition/AdminCompostion";
 
 
 export class AdminRoutes{
@@ -12,5 +12,7 @@ export class AdminRoutes{
 
     private  initializeRoutes(){
         this.router.get("/users",getAllUserController.getallusers)
+        this.router.patch("/users/ban/:userId",banUserController.handleUserBan)
+        this.router.patch("/users/unban/:userId",unBanUserController.handleUserUnBan)
     }
 }

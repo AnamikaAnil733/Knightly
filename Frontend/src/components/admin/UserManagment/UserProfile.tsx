@@ -125,10 +125,10 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
       {/* Actions */}
       <div className="p-6">
         <button
-          onClick={() => onBanUser(user.id, !user.banned)}
-          className={`w-full py-2 px-4 rounded-md flex items-center justify-center ${user.banned ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
+          onClick={() => onBanUser(user.id, !user.isBlocked)}
+          className={`w-full py-2 px-4 rounded-md flex items-center justify-center ${user.isBlocked ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
         >
-          {user.banned ? (
+          {user.isBlocked ? (
             <>
               <CheckCircleIcon className="h-4 w-4 mr-2" />
               Unban User

@@ -59,7 +59,7 @@ export function UserManagment() {
 
   const banMutation = useMutation({
     mutationFn: async ({ id, block }: { id: string; block: boolean }) =>
-      axios.patch(`/admin/${block ? "ban" : "unban"}/${id}`),
+      axios.patch(`/admin/users/${block ? "ban" : "unban"}/${id}`),
     onSuccess: () => {
       toast.success("User status updated");
       refetch();

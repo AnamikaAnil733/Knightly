@@ -10,12 +10,24 @@ export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaTyp
     super(authModel, AuthMapper);
   }
 
-  async ban(id: string): Promise<void> {
-      await this.model.findByIdAndUpdate(id,{isBlocked:true}).exec()
+  async ban(id: string): Promise<boolean> {
+    const result = await this.model.findByIdAndUpdate(
+      id,
+      { isBlocked: true },
+      { new: true }
+    ).exec();
+
+    return result !== null;
   }
 
-  async unban(id: string): Promise<void> {
-    await this.model.findByIdAndUpdate(id,{isBlocked:false}).exec()
+  async unban(id: string): Promise<boolean> {
+    const result = await this.model.findByIdAndUpdate(
+      id,
+      { isBlocked: false },
+      { new: true }
+    ).exec();
+
+    return result !== null;
   }
 
   async getAll(): Promise<EAuth[]> {
