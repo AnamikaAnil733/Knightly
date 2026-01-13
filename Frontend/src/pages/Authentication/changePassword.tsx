@@ -6,7 +6,7 @@ import {
   ShieldIcon,
   ChevronLeftIcon,
 } from 'lucide-react'
-import axios from '../../Service/api/axios'
+import axios from "../../Service/api/axios/Useraxios";
 import { useNavigate,useLocation } from 'react-router-dom'
 
 

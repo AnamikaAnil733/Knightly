@@ -1,16 +1,18 @@
-import { UserManagment } from '../../../pages/Admin/UserManagment'
+import { IUser } from '../../../types/user'
 import {
   FlameIcon,
   TrophyIcon,
-  AwardIcon,
+  // AwardIcon,
   SaveIcon,
-  AlertTriangleIcon,
+  // AlertTriangleIcon,
+  ShieldCheckIcon,
   BanIcon,
   CheckCircleIcon,
   StarIcon,
 } from 'lucide-react'
+
 interface UserProfileProps {
-  user: UserManagment
+  user: IUser
   onBanUser: (userId: string, ban: boolean) => void
 }
 export function UserProfile({ user, onBanUser }: UserProfileProps) {
@@ -21,8 +23,8 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
         <div className="flex items-center">
           <div className="relative">
             <img
-              src={user.avatar}
-              alt={user.name}
+              // src={user.avatar}
+              alt={user.displayname}
               className="w-16 h-16 rounded-full object-cover border-2 border-[#6B2EFF]"
             />
             {user.premium && (
@@ -32,7 +34,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
             )}
           </div>
           <div className="ml-4">
-            <h2 className="text-xl font-bold text-white">{user.name}</h2>
+            <h2 className="text-xl font-bold text-white">{user.displayname}</h2>
             <p className="text-gray-400 text-sm">{user.email}</p>
             <div className="flex items-center mt-1">
               <StarIcon className="h-4 w-4 text-[#FFD166]" />
@@ -72,7 +74,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
       {/* Achievements */}
       <div className="p-6 border-b border-gray-800">
         <h3 className="text-sm font-medium text-gray-400 mb-3">ACHIEVEMENTS</h3>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           {user.achievements.map((achievement, index) => (
             <div key={index} className="flex items-center">
               <AwardIcon className="h-4 w-4 text-[#6B2EFF] mr-2" />
@@ -82,22 +84,22 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
           {user.achievements.length === 0 && (
             <p className="text-sm text-gray-500">No achievements yet</p>
           )}
-        </div>
+        </div> */}
       </div>
       {/* Saved Games */}
       <div className="p-6 border-b border-gray-800">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-400">SAVED GAMES</h3>
           <span className="text-[#6B2EFF] text-sm font-medium">
-            {user.savedGames}
+            {user. gamesPlayed}
           </span>
         </div>
         <div className="flex items-center mt-2">
           <SaveIcon className="h-4 w-4 text-gray-400 mr-2" />
           <span className="text-sm text-gray-300">
-            {user.savedGames > 0
-              ? `${user.savedGames} games saved`
-              : 'No saved games'}
+            {user. gamesPlayed > 0
+              ? `${user. gamesPlayed} games played`
+              : 'No games played'}
           </span>
         </div>
       </div>
@@ -105,7 +107,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
       <div className="p-6 border-b border-gray-800">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-400">REPORT HISTORY</h3>
-          <span
+          {/* <span
             className={`${user.reports > 0 ? 'text-red-400' : 'text-green-400'} text-sm font-medium`}
           >
             {user.reports}
@@ -119,7 +121,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
             {user.reports > 0
               ? `${user.reports} reports received`
               : 'No reports'}
-          </span>
+          </span> */}
         </div>
       </div>
       {/* Actions */}
@@ -144,5 +146,5 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
     </div>
   )
 }
-// Import the ShieldCheckIcon to avoid error
-import { ShieldCheckIcon } from 'lucide-react'
+
+

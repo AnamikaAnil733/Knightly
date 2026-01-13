@@ -1,5 +1,5 @@
-import React from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../../types/user"
 import {
   TrophyIcon,
   FlameIcon,
@@ -57,7 +57,7 @@ const achievements = [
 ];
 
 export function ProfileUser() {
-    const user = useSelector((state:any) => state.userAuth.user);
+    const user = useSelector((state:RootState) => state.userAuth.user);
     if (!user) return <p className="text-center text-white pt-32">Loading profile...</p>;
   return (
     <div className="bg-navy-dark min-h-screen px-6 pt-28 pb-12 text-white font-poppins">

@@ -3,7 +3,7 @@ import { CheckCircle2Icon, XCircleIcon, CrownIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import api from "../../Service/api/axios"; 
+import api from "../../Service/api/axios/Useraxios";
 import { KnightlyParticles } from "../../utils/Particle";
 
 /* -------- Types --------*/
@@ -43,7 +43,7 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
   useEffect(() => {
     if (!email) navigate("/signup");
     if (mode === "signup" && (!password || !displayname)) navigate("/signup");
-  }, []);
+  }, [email, mode, password, displayname, navigate]);
 
   /* State */
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", "", ""]);

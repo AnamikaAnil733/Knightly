@@ -18,6 +18,7 @@ export class AuthRoutes {
     this.router.post("/forget-password", authController.forgetPassword);
     this.router.post("/verify-forgetpasswordOTP",authController.verifyOtp );
     this.router.post("/reset-password", authController.resetPassword);
-    this.router.post("/googleAuth",authController.googleAuth)
+    this.router.post("/googleAuth",authController.googleAuth);
+    this.router.post("/refresh",authController.refresh);
   }
 }

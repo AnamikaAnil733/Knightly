@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import { useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../store/slices/auth/userAuthSlice';
+import { RootState } from '../../../types/user';
+
 
 export function Navbar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const user = useSelector((state:any) => state.userAuth.user);
+  const user = useSelector((state:RootState) => state.userAuth.user);
 
   function handleLogout(){
     localStorage.removeItem("userAccessToken");

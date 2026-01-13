@@ -21,3 +21,13 @@ export enum UserRole {
     "ADMIN" = "admin",
     "USER" = "user",
   }
+
+  export interface UserAuthState {
+    user: IUser | null;
+    isAuthenticated: boolean;
+  }
+  
+  export interface RootState {
+    userAuth: UserAuthState;
+  }
+  

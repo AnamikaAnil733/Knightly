@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { ChevronLeft, Crown } from 'lucide-react'
-import axios from "../../Service/api/axios";
-import { useNavigate } from 'react-router-dom'
+import axios from "../../Service/api/axios/Useraxios";
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from "axios"
 
 export function ForgotPassword() {
   const [email, setEmail] = useState('')
@@ -15,9 +16,11 @@ export function ForgotPassword() {
       await axios.post("/auth/forget-password", { email })
       setLoading(false)
       navigate("/forgot-otp", { state:{ email } });// move to OTP screen
-    } catch (err: any) {
+    }  catch (error) {
+      const err = error as AxiosError<{ message: string }>
+      alert(err.response?.data?.message ?? "Something went wrong")
+    }finally{
       setLoading(false)
-      alert(err?.response?.data?.message || "Something went wrong")
     }
   }
 

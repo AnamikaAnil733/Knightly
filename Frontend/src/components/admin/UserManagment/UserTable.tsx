@@ -3,13 +3,15 @@ import {
   ShieldCheckIcon,
   BanIcon,
 } from 'lucide-react'
-import { IUser } from '../../../types/user'
+import { IUser } from '../../../types/user';
+
 interface UserTableProps {
   users: IUser[]
   onSelectUser: (user: IUser) => void
   onBanUser: (userId: string, ban: boolean) => void
   selectedUserId: string
 }
+
 export function UserTable({
   users,
   onSelectUser,

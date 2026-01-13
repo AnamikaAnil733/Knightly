@@ -3,7 +3,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { SearchIcon } from "lucide-react";
 
-import axios from "../../Service/api/axios";
+import axios from "../../Service/api/axios/Adminaxios";
+
+import { IUser } from "../../types/user";
 import { UserTable } from "../../components/admin/UserManagment/UserTable";
 import { UserProfile } from "../../components/admin/UserManagment/UserProfile";
 import { UserFilters } from "../../components/admin/UserManagment/UserFilters";
@@ -29,7 +31,7 @@ interface Filters {
 
 export function UserManagment() {
   /* -------- UI STATE (NOT DERIVED) -------- */
-  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Filters>({
     blocked: false,
@@ -43,7 +45,7 @@ export function UserManagment() {
     isLoading,
     isError,
     refetch,
-  } = useQuery<AdminUser[]>({
+  } = useQuery<IUser[]>({
     queryKey: ["admin-users"],
     queryFn: async () => {
       const res = await axios.get("/admin/users");

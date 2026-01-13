@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import api from "./axios";
+import api from "./axios/Adminaxios";
 
 export const sendSignupOtp = async (data: {
   displayname: string;

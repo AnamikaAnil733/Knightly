@@ -5,10 +5,11 @@ import { sendSignupOtp } from "../../Service/api/authapi"
 import { useNavigate } from "react-router-dom"
 import { AxiosError } from "axios"
 import { useDispatch } from 'react-redux'
-import axios from "../../Service/api/axios"
+import axios from "../../Service/api/axios/Useraxios"
 import { setuserAccessToken, setUser } from '../../store/slices/auth/userAuthSlice'
 import { GoogleLogin } from "@react-oauth/google";
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
+import { FormErrors } from '../../types/error'
 
 interface ApiErrorResponse { message: string }
 interface CredentialResponse {
@@ -29,12 +30,7 @@ export function SignupPage() {
     confirmPassword: ""
   })
 
-  const [errors, setErrors] = useState({
-    displayname: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  })
+  const [errors, setErrors] = useState<FormErrors>({})
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -58,7 +54,7 @@ export function SignupPage() {
 
 
   const validateForm = () => {
-    const newErrors: any = {}
+    const newErrors: FormErrors = {}
 
     if (!formData.displayname.trim()) newErrors.displayname = "Full name required"
     if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) newErrors.email = "Enter valid email"
@@ -91,7 +87,8 @@ export function SignupPage() {
 
 
   const handleGoogleLogin = async (response: CredentialResponse) => {
-    try {
+    try {  
+
       const token = response.credential
       if (!token) return toast.error("No Google token received")
 
