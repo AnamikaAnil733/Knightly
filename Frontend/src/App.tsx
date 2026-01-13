@@ -9,6 +9,7 @@ import { Profile } from "./pages/user/profile";
 import {ForgotPassword} from "./pages/Authentication/forgetPassword";
 import {ResetPassword} from"./pages/Authentication/changePassword";
 import { Toaster } from "react-hot-toast";
+import { Settings } from "./pages/user/setting";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/forgotpassword"  element={<ForgotPassword/>}/>
         <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
         <Route path = "/reset-password" element={<ResetPassword/>}/>
+        <Route path="/settings" element={<Settings/>}/>
         
         <Route path="/admin" element={<AdminLayout />}>
         <Route path="users" element={<UserManagment/>}/>

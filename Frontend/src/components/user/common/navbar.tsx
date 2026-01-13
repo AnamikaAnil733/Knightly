@@ -61,10 +61,10 @@ export function Navbar() {
           </a>
         
         <a
-            href="#"
+            href="/settings"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
-            setting
+            settings
           </a>
           </div>
         
