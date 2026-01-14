@@ -6,7 +6,6 @@ export interface IUserRepository extends IBaseRepository<EAuth,string>{
 }
 
 
-// Domain/Interface/Repositories/IUserRepository.ts
 
 
 

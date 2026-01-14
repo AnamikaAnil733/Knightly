@@ -1,12 +1,12 @@
 import { UserManagmentRepository } from "../Repository/UserManagmentRepository";
 
-import { GetAllUserController } from "../../Presentation/controllers/admin/userManagment/findallUserController";
-import {  BlockUserController }  from "../../Presentation/controllers/admin/userManagment/blockUserController";
-import {  UnBlockUserController } from "../../Presentation/controllers/admin/userManagment/unBlockUserController";
+import { GetAllUserController } from "../../Presentation/controllers/admin/userManagement/findallUserController";
+import {  BlockUserController }  from "../../Presentation/controllers/admin/userManagement/blockUserController";
+import {  UnBlockUserController } from "../../Presentation/controllers/admin/userManagement/unBlockUserController";
 
-import { GetAllUserUseCase }  from "../../Application/UseCases/admin/getAllUserUseCase";
-import { BlockUserUseCase } from "../../Application/UseCases/admin/blockUserUseCase";
-import { UnBlockUserUseCase } from "../../Application/UseCases/admin/unBlockUserUseCase";
+import { GetAllUserUseCase }  from "../../Application/UseCases/admin/UserManagement/getAllUserUseCase";
+import { BlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/blockUserUseCase";
+import { UnBlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/unBlockUserUseCase";
 
 
 const UserManagmentRepo = new UserManagmentRepository()

@@ -100,5 +100,6 @@ export default class EAuth {
     // SETTERS
     set passwordHash(passwordHash: string) { this._passwordHash = passwordHash; }
     set isNewUser(isNewUser: boolean) { this._isNewUser = isNewUser; }
+    set displayname(displayname:string) { this._displayname = displayname; }
 
 }

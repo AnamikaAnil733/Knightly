@@ -1,7 +1,7 @@
-import  EAuth from "../../../Domain/Entity/auth";
-import { IUserManagmentRepository } from "../../../Domain/Interface/Repositories/UserManagmentRepository";
-import { IGetAllUserUseCase } from "../../../Domain/Interface/usecases/admin/IGetAllUserUseCase";
-import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../DTOs/adminDTOs";
+import  EAuth from "../../../../Domain/Entity/auth";
+import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/UserManagmentRepository";
+import { IGetAllUserUseCase } from "../../../../Domain/Interface/usecases/admin/IGetAllUserUseCase";
+import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../../DTOs/adminDTOs";
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
     constructor(

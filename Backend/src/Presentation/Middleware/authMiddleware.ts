@@ -16,8 +16,11 @@ export function authMiddleware(
             const token = authHeader.split(" ")[1];
             try{
                 const data = tokenService.verifyAccessToken(token);
-                (req as any).user = data
-                const role = data.role
+                (req as any).user = {
+                    id:data.userId,
+                    role:data.role
+                }
+                const role = (req as any).user.role
                 if(!allowedRoles.includes(role)){
              return res
               .status(403)

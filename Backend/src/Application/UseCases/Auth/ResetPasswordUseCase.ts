@@ -17,7 +17,6 @@ export class ResetPaswordUseCase implements IResetPasswordUseCase{
 
     async execute(password: string, email: string): Promise<UserRole> {
         
-        // Use reset password verification key, not registration key
         const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${email}`);
         console.log(verified)
 
@@ -29,7 +28,6 @@ export class ResetPaswordUseCase implements IResetPasswordUseCase{
         }
 
         const user = await this._authRepository.findByEmail(email);
-        console.log(user)
 
         if (!user) {
             throw new CustomError(
