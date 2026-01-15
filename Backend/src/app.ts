@@ -5,8 +5,12 @@ import express, { Application } from "express";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
 import { AdminRoutes } from "../src/Presentation/routes/adminroute";
+
+import {userRoutes} from "./Infrastructure/Composition/UserCompostion"
+
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware"
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 export class App {
   private app: Application;
@@ -24,6 +28,8 @@ export class App {
       origin: "http://localhost:5173",
       credentials: true,
     }));
+
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }
@@ -39,6 +45,9 @@ export class App {
 
     const adminRoutes = new AdminRoutes();
     this.app.use("/api/admin",adminRoutes.router)
+
+
+    this.app.use("/api/user",userRoutes.router);
   }
 
   private setErrorHandlerMiddleware() {

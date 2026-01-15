@@ -1,4 +1,4 @@
-import { UserManagmentRepository } from "../Repository/UserManagmentRepository";
+import { UserManagmentRepository } from "../Repository/UserRepository";
 
 import { GetAllUserController } from "../../Presentation/controllers/admin/userManagement/findallUserController";
 import {  BlockUserController }  from "../../Presentation/controllers/admin/userManagement/blockUserController";

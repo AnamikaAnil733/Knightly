@@ -4,39 +4,23 @@ import toast from "react-hot-toast";
 import { SearchIcon } from "lucide-react";
 
 import axios from "../../Service/api/axios/Adminaxios";
+import { IUser, UserRole } from "../../types/user";
 
-import { IUser } from "../../types/user";
 import { UserTable } from "../../components/admin/UserManagment/UserTable";
 import { UserProfile } from "../../components/admin/UserManagment/UserProfile";
 import { UserFilters } from "../../components/admin/UserManagment/UserFilters";
 
 /* ===================== TYPES ===================== */
 
-export interface AdminUser {
-  id: string;
-  displayname: string;
-  email: string;
-  role: string;
-  isBlocked: boolean;
-  isNewUser: boolean;
-  createdAt?: string;
-}
-
-interface Filters {
-  blocked: boolean;
-  newUser: boolean;
-}
+export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED";
 
 /* ===================== COMPONENT ===================== */
 
 export function UserManagment() {
-  /* -------- UI STATE (NOT DERIVED) -------- */
+  /* ---------- UI STATE ---------- */
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<Filters>({
-    blocked: false,
-    newUser: false,
-  });
+  const [filter, setFilter] = useState<UserFilter>("ALL");
 
   /* ===================== FETCH USERS ===================== */
 
@@ -55,17 +39,28 @@ export function UserManagment() {
 
   if (isError) {
     toast.error("Failed to load users");
+
   }
+
+
+  /* ===================== EXCLUDE ADMINS ===================== */
+
+const nonAdminUsers = useMemo(() => {
+  return users.filter((u) => u.role !== UserRole.ADMIN);
+}, [users]);
+
 
   /* ===================== BAN / UNBAN ===================== */
 
   const banMutation = useMutation({
     mutationFn: async ({ id, block }: { id: string; block: boolean }) =>
       axios.patch(`/admin/users/${block ? "ban" : "unban"}/${id}`),
+
     onSuccess: () => {
       toast.success("User status updated");
       refetch();
     },
+
     onError: () => {
       toast.error("Failed to update user");
     },
@@ -79,40 +74,42 @@ export function UserManagment() {
     }
   };
 
-  /* ===================== DERIVED DATA ===================== */
+  /* ===================== COUNTS ===================== */
 
   const blockedCount = useMemo(
-    () => users.filter((u) => u.isBlocked).length,
-    [users]
+    () => nonAdminUsers.filter((u) => u.isBlocked).length,
+    [nonAdminUsers]
   );
 
-  const newUserCount = useMemo(
-    () => users.filter((u) => u.isNewUser).length,
-    [users]
+  const unblockedCount = useMemo(
+    () => nonAdminUsers.filter((u) => !u.isBlocked).length,
+    [nonAdminUsers]
   );
+
+  /* ===================== FILTERED USERS ===================== */
 
   const filteredUsers = useMemo(() => {
-    let result = [...users];
+    let result = [...nonAdminUsers];
 
-    if (filters.blocked) {
+    if (filter === "BLOCKED") {
       result = result.filter((u) => u.isBlocked);
     }
 
-    if (filters.newUser) {
-      result = result.filter((u) => u.isNewUser);
+    if (filter === "UNBLOCKED") {
+      result = result.filter((u) => !u.isBlocked);
     }
 
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
       result = result.filter(
         (u) =>
-          (u.displayname?.toLowerCase().includes(lower) ?? false) ||
-          (u.email?.toLowerCase().includes(lower) ?? false)
+          u.displayname?.toLowerCase().includes(lower) ||
+          u.email?.toLowerCase().includes(lower)
       );
     }
 
     return result;
-  }, [users, filters, searchTerm]);
+  }, [nonAdminUsers, filter, searchTerm]);
 
   /* ===================== UI ===================== */
 
@@ -141,10 +138,10 @@ export function UserManagment() {
                 </div>
 
                 <UserFilters
-                  filters={filters}
-                  setFilters={setFilters}
+                  filter={filter}
+                  setFilter={setFilter}
                   blockedCount={blockedCount}
-                  newUserCount={newUserCount}
+                  unblockedCount={unblockedCount}
                 />
               </div>
             </div>
@@ -158,16 +155,16 @@ export function UserManagment() {
               ) : filteredUsers.length === 0 ? (
                 <div className="text-center text-gray-400 p-6 space-y-2">
                   <p className="text-lg font-medium">
-                    {searchTerm || filters.blocked || filters.newUser
+                    {searchTerm || filter !== "ALL"
                       ? "No users found matching your filters"
                       : "No users available"}
                   </p>
 
-                  {(searchTerm || filters.blocked || filters.newUser) && (
+                  {(searchTerm || filter !== "ALL") && (
                     <button
                       onClick={() => {
                         setSearchTerm("");
-                        setFilters({ blocked: false, newUser: false });
+                        setFilter("ALL");
                       }}
                       className="text-sm text-[#6B2EFF] hover:underline"
                     >

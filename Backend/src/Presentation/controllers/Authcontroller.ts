@@ -250,40 +250,43 @@ export class AuthController {
   refresh = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const refreshToken = req.cookies?.refreshToken;
+  
       if (!refreshToken) {
-        throw new CustomError(
-          HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.UNAUTHORIZED
-        );
+        return res.status(HttpStatusCodes.UNAUTHORIZED).json({
+          message: "Refresh token missing",
+        });
       }
-
+  
       const payload = this.tokenService.verifyRefreshToken(refreshToken);
-
+  
       const accessToken = this.tokenService.generateAccessToken({
         userId: payload.userId,
         role: payload.role,
       });
-
-      const newRefresh = this.tokenService.generateRefreshToken({
+  
+      const newRefreshToken = this.tokenService.generateRefreshToken({
         userId: payload.userId,
         role: payload.role,
       });
-
-      res.cookie("refreshToken", newRefresh.refreshToken, {
+  
+      res.cookie("refreshToken", newRefreshToken.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       });
-
-      res.status(HttpStatusCodes.OK).json({
+  
+      return res.status(HttpStatusCodes.OK).json({
         success: true,
         accessToken,
       });
     } catch (error) {
-      logger.error({ error }, "ERROR: AuthController - refresh");
-      next(error);
+      logger.error("REFRESH TOKEN FAILED");
+      return res.status(HttpStatusCodes.UNAUTHORIZED).json({
+        message: "Invalid refresh token",
+      });
     }
   };
+  
 }

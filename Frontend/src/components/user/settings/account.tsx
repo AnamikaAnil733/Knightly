@@ -3,13 +3,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../types/user";
 import { SectionHeader } from "./heading/sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
+import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import axios from "../../../Service/api/axios/Useraxios";
 
 export const AccountSettings = () => {
   const user = useSelector((state: RootState) => state.userAuth.user);
 
 
   const [nameError, setNameError] = useState("");
-  const [displayName, setDisplayName] = useState(() => {
+  const [displayname, setDisplayname] = useState(() => {
     return user?.displayname || "";
   });
   
@@ -30,13 +33,29 @@ export const AccountSettings = () => {
     return "";
   };
 
+  const editProfile = useMutation({
+    mutationFn: async ({ displayname }: { displayname: string }) =>
+      axios.patch("/user/edit-profile", { displayname }),
+  
+    onSuccess: () => {
+      toast.success("User profile updated");
+    },
+  
+    onError: () => {
+      toast.error("Failed to update user profile");
+    },
+  });
+  
+
 
   const handleSubmit = () => {
-    const error = validateDisplayName(displayName);
+    const error = validateDisplayName(displayname);
     if (error) {
       setNameError(error);
       return;
     }
+    console.log(displayname)
+    editProfile.mutate({ displayname });
   };
 
   return (
@@ -64,9 +83,9 @@ export const AccountSettings = () => {
 
               <input
                 type="text"
-                value={displayName}
+                value={displayname}
                 onChange={(e) => {
-                  setDisplayName(e.target.value);
+                  setDisplayname(e.target.value);
                   setNameError(validateDisplayName(e.target.value));
                 }}
                 onBlur={(e) =>
