@@ -1,6 +1,9 @@
-import { UserRole } from "../../Domain/Types/UserRole";
+import { UserRole } from "../Types/UserRole";
 
 
+
+//------------Edit-Profile-------------
+ 
 export interface EditProfileinputDto{
     userId:string;
     displayname:string
@@ -10,7 +13,7 @@ export interface EditProfileinputDto{
 export interface EditProfileoutputDto{
        id: string|undefined;
        displayname: string;
-        email: string;
+       email: string;
         role: UserRole;
         isBlocked: boolean;
         createdAt?: Date;
@@ -22,4 +25,19 @@ export interface EditProfileoutputDto{
         currentStreak: number;
         rewards: string[];
         achievements: string[];
+}
+
+
+//---------Change-password------------
+
+export interface ChangePasswordInputDto{
+    userId:string;
+    currentPassword:string;
+    newPassword:string;
+}
+
+
+export interface ChangePasswordOutputDto{
+    success:true;
+    message:string;
 }

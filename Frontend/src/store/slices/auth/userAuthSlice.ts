@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IUser } from "../../../types/user";
 
 interface UserAuthState {
   accesstoken: string | null;
-  user: null;
+  user: IUser|null;
   authLoaded: boolean;
 }
 
@@ -29,9 +30,14 @@ const userAuthSlice = createSlice({
       state.accesstoken = null;
       state.user = null;
       state.authLoaded = false;
+    },
+    updateUser(state,action){
+      if(state.user){
+       state.user.displayname = action.payload.displayname
+      }
     }
   }
 });
 
-export const { setuserAccessToken, setUser, setAuthLoaded, logout } = userAuthSlice.actions;
+export const { setuserAccessToken, setUser, setAuthLoaded, logout,updateUser } = userAuthSlice.actions;
 export default userAuthSlice.reducer;

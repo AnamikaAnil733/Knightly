@@ -1,4 +1,4 @@
-import { AuthRequestDTO } from "../../DTOs/authDTO";
+import { AuthRequestDTO } from "../../../Domain/DTOs/authDTO";
 import { IEmailService } from "../../../Domain/Interface/service/emailService";
 import { IOtpService } from "../../../Domain/Interface/service/otpService";
 import { IResendOtpUsecase } from "../../../Domain/Interface/usecases/authentication/IResendOtpUseCases";

@@ -1,4 +1,4 @@
-import { AuthRequestDTO,AuthResponseDTO } from "../../../../Application/DTOs/authDTO";
+import { AuthRequestDTO,AuthResponseDTO } from "../../../DTOs/authDTO";
 
 
 export interface ILoginUseCase{

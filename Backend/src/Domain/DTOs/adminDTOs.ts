@@ -1,4 +1,4 @@
-import { UserRole } from "../../Domain/Types/UserRole";
+import { UserRole } from "../Types/UserRole";
 
 export interface BaseUserResponseDTO{
     id: string;

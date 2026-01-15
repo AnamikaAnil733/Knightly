@@ -5,7 +5,7 @@ import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
 import { IEmailService } from "../../../Domain/Interface/service/emailService";
 import { IOtpService } from "../../../Domain/Interface/service/otpService";
-import { AuthRequestDTO } from "../../DTOs/authDTO";
+import { AuthRequestDTO } from "../../../Domain/DTOs/authDTO";
 
 export class ForgetPasswordUseCase implements IforgetPasswordUseCase{
   constructor(

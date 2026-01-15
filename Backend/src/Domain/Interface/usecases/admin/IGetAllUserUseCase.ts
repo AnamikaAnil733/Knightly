@@ -1,4 +1,4 @@
-import { GetAllUsersOutputDTO } from "../../../../Application/DTOs/adminDTOs";
+import { GetAllUsersOutputDTO } from "../../../DTOs/DTOs/adminDTOs";
 
 export interface IGetAllUserUseCase{
     getAllUsers():Promise<GetAllUsersOutputDTO|null>;

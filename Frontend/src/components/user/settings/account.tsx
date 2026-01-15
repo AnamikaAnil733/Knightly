@@ -1,13 +1,16 @@
 import { useState} from "react";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import { RootState } from "../../../types/user";
 import { SectionHeader } from "./heading/sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios from "../../../Service/api/axios/Useraxios";
+import { updateUser } from "../../../store/slices/auth/userAuthSlice";
+import { ChangePasswordModal } from "./changePasswordModal";
 
 export const AccountSettings = () => {
+  const dispatch = useDispatch()
   const user = useSelector((state: RootState) => state.userAuth.user);
 
 
@@ -15,6 +18,8 @@ export const AccountSettings = () => {
   const [displayname, setDisplayname] = useState(() => {
     return user?.displayname || "";
   });
+  const [showChangePassword, setShowChangePassword] = useState(false);
+
   
 
   const validateDisplayName = (value: string) => {
@@ -38,6 +43,7 @@ export const AccountSettings = () => {
       axios.patch("/user/edit-profile", { displayname }),
   
     onSuccess: () => {
+      dispatch(updateUser({ displayname: displayname }));
       toast.success("User profile updated");
     },
   
@@ -132,10 +138,13 @@ export const AccountSettings = () => {
         <h3 className="text-lg font-medium mb-4">Security</h3>
 
         <div className="space-y-4">
-          <button className="flex items-center text-[#C9CAD9] hover:text-white">
-            <LockIcon size={18} className="mr-2" />
-            Change Password
-          </button>
+        <button
+  onClick={() => setShowChangePassword(true)}
+  className="flex items-center text-[#C9CAD9] hover:text-white"
+>
+     <LockIcon size={18} className="mr-2" />
+       Change Password
+     </button>
 
           <button className="flex items-center text-[#C9CAD9] hover:text-white">
             <BellIcon size={18} className="mr-2" />
@@ -143,6 +152,11 @@ export const AccountSettings = () => {
           </button>
         </div>
       </div>
+      <ChangePasswordModal
+  isOpen={showChangePassword}
+  onClose={() => setShowChangePassword(false)}
+/>
+
 
       {/* Actions */}
       <div className="mt-8">

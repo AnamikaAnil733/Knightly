@@ -1,4 +1,4 @@
-import { AuthRequestDTO,AuthResponseDTO } from "../../DTOs/authDTO";
+import { AuthRequestDTO,AuthResponseDTO } from "../../../Domain/DTOs/authDTO";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
 import { IHashService } from "../../../Domain/Interface/service/hashpassword";
 import { ILoginUseCase } from "../../../Domain/Interface/usecases/authentication/ILoginUseCases";

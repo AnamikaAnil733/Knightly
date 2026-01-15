@@ -3,7 +3,7 @@ import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseReository";
 import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/IEditProfile";
-import { EditProfileinputDto,EditProfileoutputDto } from "../../../DTOs/userDTOs";
+import { EditProfileinputDto,EditProfileoutputDto } from "../../../../Domain/DTOs/userDTOs";
 import EAuth from "../../../../Domain/Entity/auth";
 
 
@@ -16,8 +16,6 @@ export class EditUserUseCase implements IEditProfileUseCase{
   async editUser(input: EditProfileinputDto): Promise<EditProfileoutputDto> {
     try{
       const {userId,displayname}  = input;
-      console.log(userId);
-      console.log(displayname);
 
       if (!displayname || displayname.trim().length < 3) {
         throw new CustomError(

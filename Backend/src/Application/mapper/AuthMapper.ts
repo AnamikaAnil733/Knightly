@@ -1,7 +1,7 @@
 import { HydratedDocument } from "mongoose";
 import Auth from "../../Domain/Entity/auth";
 import { AuthSchemaType } from "../../Infrastructure/database/Schema/authSchema";
-import { AuthResponseDTO } from "../DTOs/authDTO";
+import { AuthResponseDTO } from "../../Domain/DTOs/authDTO";
 
 export class AuthMapper {
   // DB → Domain
