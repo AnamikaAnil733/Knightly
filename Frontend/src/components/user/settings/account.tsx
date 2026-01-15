@@ -124,7 +124,7 @@ export const AccountSettings = () => {
               />
             </div>
           </div>
-        </div>
+        </div> 
       </div>
 
       {/* Security */}

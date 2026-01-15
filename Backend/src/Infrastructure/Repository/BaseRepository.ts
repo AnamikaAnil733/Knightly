@@ -9,7 +9,7 @@ TEntity extends BaseEntity,TSchema> implements IBaseRepository<TEntity>{
     protected readonly mapper: {
       toEntityFromDocument(doc: HydratedDocument<TSchema>): TEntity;
       toDocumentFromEntity(entity: TEntity): AnyKeys<TSchema>;
-    }
+    },
   ) {}
 
   async findById(id: string): Promise<TEntity | null> {
@@ -30,7 +30,7 @@ TEntity extends BaseEntity,TSchema> implements IBaseRepository<TEntity>{
     const doc = await this.model.findByIdAndUpdate(
       entity.id,
       this.mapper.toDocumentFromEntity(entity),
-      { new: true }
+      { new: true },
     );
 
     return doc ? this.mapper.toEntityFromDocument(doc) : null;

@@ -6,7 +6,7 @@ import { AuthResponseDTO } from "../DTOs/authDTO";
 export class AuthMapper {
   // DB → Domain
   static toEntityFromDocument(
-    doc: HydratedDocument<AuthSchemaType>
+    doc: HydratedDocument<AuthSchemaType>,
   ): Auth {
     return new Auth({
       id: doc._id.toString(),
@@ -21,7 +21,7 @@ export class AuthMapper {
     });
   }
 
-  // Domain → DB 
+  // Domain → DB
   static toDocumentFromEntity(auth: Auth) {
     return {
       displayname: auth.displayname,
@@ -46,7 +46,7 @@ export class AuthMapper {
 
   static toAuthResponseDTOfromEntity(
     auth: Auth,
-    token: string
+    token: string,
   ): AuthResponseDTO {
     return {
       id: auth.id!,

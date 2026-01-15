@@ -61,7 +61,7 @@ export default class UserEntity {
     return this._email;
   }
   get password() {
-    return this._password
+    return this._password;
   }
   get rating() {
     return this._rating;

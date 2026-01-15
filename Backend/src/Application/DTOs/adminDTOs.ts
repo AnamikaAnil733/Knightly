@@ -25,14 +25,14 @@ export interface GetAllUsersInputDto {
     page?: number;
     limit?: number;
   }
-  
+
 
 export interface GetAllUsersOutputDTO{
     users:BaseUserResponseDTO[];
     total:number;
 }
 
-//-------userManangment DTOs-------
+//-------userManangement DTOs-------
 
 //----block DTOs-----
 

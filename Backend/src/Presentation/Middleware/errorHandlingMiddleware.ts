@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../../Domain/Entity/CustomError"
+import { CustomError } from "../../Domain/Entity/CustomError";
 
 export const errorHandler = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (err instanceof CustomError) {
     return res.status(err.statusCode).json({

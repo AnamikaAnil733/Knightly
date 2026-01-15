@@ -8,14 +8,14 @@ import { TokenService } from "../services/tokenService";
 import { UserRoutes } from "../../Presentation/routes/userroute";
 
 
-const UserRepo = new UserManagmentRepository()
+const UserRepo = new UserManagmentRepository();
 
 
 //usecase
 const editUserUseCase = new EditUserUseCase(UserRepo);
 
 //service
-const tokenService = new TokenService()
+const tokenService = new TokenService();
 
 
 export const editUserController = new EditProfileController(editUserUseCase);

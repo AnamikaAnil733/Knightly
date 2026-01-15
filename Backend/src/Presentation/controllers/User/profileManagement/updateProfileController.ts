@@ -4,30 +4,30 @@ import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/
 
 
 export class EditProfileController{
-    constructor(private editUserUsecase:IEditProfileUseCase) {}
+  constructor(private editUserUsecase:IEditProfileUseCase) {}
 
-    handleEditProfile = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-      ) => {
-        try {
-          const userId = (req as any).user.id; 
-          const { displayname } = req.body;
-          console.log(userId,displayname)
-    
-          const result = await this.editUserUsecase.editUser({
-            userId,
-            displayname,
-          });
-    
-          return res.status(HttpStatusCodes.OK).json({
-            success: true,
-            message: "Profile updated successfully",
-            data: result,
-          });
-        } catch (error) {
-          next(error);
-        }
-      };
+  handleEditProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    try {
+      const userId = (req as any).user.id;
+      const { displayname } = req.body;
+      console.log(userId,displayname);
+
+      const result = await this.editUserUsecase.editUser({
+        userId,
+        displayname,
+      });
+
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "Profile updated successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

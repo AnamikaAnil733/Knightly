@@ -4,13 +4,13 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class GetAllUserController {
   constructor(
-    private readonly getAllUserUseCase: IGetAllUserUseCase
+    private readonly getAllUserUseCase: IGetAllUserUseCase,
   ) {}
 
   getallusers = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     try {
       const result = await this.getAllUserUseCase.getAllUsers();

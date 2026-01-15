@@ -12,7 +12,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase{
   constructor(
     private _userRepo: IUserRepository,
     private _cachingService: ICachingService,
-    private _hashService: IHashService
+    private _hashService: IHashService,
   ) {}
 
   async execute(data: {
@@ -38,18 +38,18 @@ export class RegisterUserUseCase implements IRegisterUserUseCase{
       hashedPassword = await this._hashService.hash(data.password);
     }
     const newUser = new EAuth({
-      displayname: data.displayname,       
+      displayname: data.displayname,
       email: data.email,
-      passwordHash: hashedPassword,         
-      googleId: data.googleId,             
+      passwordHash: hashedPassword,
+      googleId: data.googleId,
       role: UserRole.USER,
       isBlocked: false,
       isNewUser: true,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
-  
+
     return await this._userRepo.create(newUser);
   }
 }

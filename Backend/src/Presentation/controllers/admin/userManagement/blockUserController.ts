@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class BlockUserController {
   constructor(
-    private readonly userBlockUseCase: IBlockUserUseCase
+    private readonly userBlockUseCase: IBlockUserUseCase,
   ) {}
 
   handleUserBan = async (req: Request, res: Response): Promise<void> => {

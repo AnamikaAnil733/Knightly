@@ -22,7 +22,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     if (!data.token) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_GOOGLE_TOKEN
+        MESSAGES.INVALID_GOOGLE_TOKEN,
       );
     }
 
@@ -31,7 +31,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     if (!payload.email) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INVALID_GOOGLE_TOKEN
+        MESSAGES.INVALID_GOOGLE_TOKEN,
       );
     }
 
@@ -40,7 +40,7 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     if (user && user.isBlocked) {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USER_BLOCKED
+        MESSAGES.USER_BLOCKED,
       );
     }
 
@@ -54,17 +54,17 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
           isBlocked: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-          role:UserRole.USER
+          role:UserRole.USER,
 
-        })
+        }),
       );
     } else {
       user.isNewUser = false;
     }
     const accessToken = this._tokenService.generateAccessToken({
       userId: user.id!,
-      role: user.role
-  });
+      role: user.role,
+    });
 
     return AuthMapper.toAuthResponseDTOfromEntity(user,accessToken);
   }

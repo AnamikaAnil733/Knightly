@@ -6,9 +6,9 @@ import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
 import { AdminRoutes } from "../src/Presentation/routes/adminroute";
 
-import {userRoutes} from "./Infrastructure/Composition/UserCompostion"
+import {userRoutes} from "./Infrastructure/Composition/UserCompostion";
 
-import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware"
+import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -22,7 +22,6 @@ export class App {
     this.initializeRoutes();
     this.setErrorHandlerMiddleware();
   }
-
   private initializeMiddlewares(): void {
     this.app.use(cors({
       origin: "http://localhost:5173",
@@ -37,14 +36,14 @@ export class App {
   private async initializeDatabase(): Promise<void> {
     await MongoDB.connect();
   }
-  
+
 
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     this.app.use("/api/auth", authRoutes.router);
 
     const adminRoutes = new AdminRoutes();
-    this.app.use("/api/admin",adminRoutes.router)
+    this.app.use("/api/admin",adminRoutes.router);
 
 
     this.app.use("/api/user",userRoutes.router);

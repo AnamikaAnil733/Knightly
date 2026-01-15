@@ -17,7 +17,7 @@ import {
   ForgotPasswordRequestSchema,
   ResetPasswordRequestSchema,
   GoogleAuthRequestSchema,
-  LoginRequestSchema
+  LoginRequestSchema,
 } from "../Validators/authValidator";
 
 import { CustomError } from "../../Domain/Entity/CustomError";
@@ -34,7 +34,7 @@ export class AuthController {
     private forgetPasswordUseCase: IforgetPasswordUseCase,
     private resetPasswordUseCase: IResetPasswordUseCase,
     private googleAuthUseCase: IGoogleAuthUseCase,
-    private tokenService: ITokenService
+    private tokenService: ITokenService,
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -44,7 +44,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -54,7 +54,7 @@ export class AuthController {
       if (!isValid) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INVALID_OTP
+          MESSAGES.INVALID_OTP,
         );
       }
 
@@ -75,7 +75,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -100,7 +100,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -134,12 +134,12 @@ export class AuthController {
   // ---------------- RESEND OTP ----------------
   resendOTP = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body)
+      console.log(req.body);
       const result = ForgotPasswordRequestSchema.safeParse(req.body);
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -162,7 +162,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -185,7 +185,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -206,11 +206,11 @@ export class AuthController {
   googleAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = GoogleAuthRequestSchema.safeParse(req.body);
-      console.log(result)
+      console.log(result);
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -250,25 +250,25 @@ export class AuthController {
   refresh = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const refreshToken = req.cookies?.refreshToken;
-  
+
       if (!refreshToken) {
         return res.status(HttpStatusCodes.UNAUTHORIZED).json({
           message: "Refresh token missing",
         });
       }
-  
+
       const payload = this.tokenService.verifyRefreshToken(refreshToken);
-  
+
       const accessToken = this.tokenService.generateAccessToken({
         userId: payload.userId,
         role: payload.role,
       });
-  
+
       const newRefreshToken = this.tokenService.generateRefreshToken({
         userId: payload.userId,
         role: payload.role,
       });
-  
+
       res.cookie("refreshToken", newRefreshToken.refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -276,7 +276,7 @@ export class AuthController {
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       });
-  
+
       return res.status(HttpStatusCodes.OK).json({
         success: true,
         accessToken,
@@ -288,5 +288,5 @@ export class AuthController {
       });
     }
   };
-  
+
 }

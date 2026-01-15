@@ -9,39 +9,39 @@ import { IResetPasswordUseCase } from "../../../Domain/Interface/usecases/authen
 
 
 export class ResetPaswordUseCase implements IResetPasswordUseCase{
-    constructor(
+  constructor(
         private _cachingService: ICachingService,
         private _hashService: IHashService,
-        private _authRepository: IUserRepository
-    ){}
+        private _authRepository: IUserRepository,
+  ){}
 
-    async execute(password: string, email: string): Promise<UserRole> {
-        
-        const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${email}`);
-        console.log(verified)
+  async execute(password: string, email: string): Promise<UserRole> {
 
-        if (!verified) {
-            throw new CustomError(
-                HttpStatusCodes.UNAUTHORIZED,
-                MESSAGES.EMAIL_VALIDATION_EXPIRED
-            );
-        }
+    const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${email}`);
+    console.log(verified);
 
-        const user = await this._authRepository.findByEmail(email);
-
-        if (!user) {
-            throw new CustomError(
-                HttpStatusCodes.NOT_FOUND,
-                MESSAGES.USER_DOESNT_EXIST
-            );
-        }
-
-        const passwordHash = await this._hashService.hash(password);
-
-        user.passwordHash = passwordHash;
-
-        await this._authRepository.update(user);
-
-        return user.role;
+    if (!verified) {
+      throw new CustomError(
+        HttpStatusCodes.UNAUTHORIZED,
+        MESSAGES.EMAIL_VALIDATION_EXPIRED,
+      );
     }
+
+    const user = await this._authRepository.findByEmail(email);
+
+    if (!user) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.USER_DOESNT_EXIST,
+      );
+    }
+
+    const passwordHash = await this._hashService.hash(password);
+
+    user.passwordHash = passwordHash;
+
+    await this._authRepository.update(user);
+
+    return user.role;
+  }
 }

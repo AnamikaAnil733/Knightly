@@ -5,18 +5,18 @@ import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../DTOs/adminDTOs";
 
 
 export class BlockUserUseCase implements IBlockUserUseCase{
-    private _UserManagmentRepository:IUserManagmentRepository
-    constructor(UserManagmentRepository:IUserManagmentRepository){
-        this._UserManagmentRepository = UserManagmentRepository 
-    } 
-    async blockUser(input: BlockUserInputDTO): Promise<BlockUserOutputDTO> {
-      
-        const banUser = await this._UserManagmentRepository.ban(input.userId)
-        if(!banUser) throw new Error("User not found with the given ID")
+  private _UserManagmentRepository:IUserManagmentRepository;
+  constructor(UserManagmentRepository:IUserManagmentRepository){
+    this._UserManagmentRepository = UserManagmentRepository;
+  }
+  async blockUser(input: BlockUserInputDTO): Promise<BlockUserOutputDTO> {
 
-            return {
-                success:true,
-                message:"User is blocked Sucessfully"
-            }
-    }
+    const banUser = await this._UserManagmentRepository.ban(input.userId);
+    if(!banUser) throw new Error("User not found with the given ID");
+
+    return {
+      success:true,
+      message:"User is blocked Sucessfully",
+    };
+  }
 }

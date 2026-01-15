@@ -23,35 +23,35 @@ export interface AuthSchemaType{
     createdAt:Date
 }
 
- export const authSchema = new Schema<AuthSchemaType>(
-{
+export const authSchema = new Schema<AuthSchemaType>(
+  {
     displayname:{
-        type:Schema.Types.String,
-        required:true,
+      type:Schema.Types.String,
+      required:true,
     },
     email:{
-        type:Schema.Types.String,
-        required:true,
+      type:Schema.Types.String,
+      required:true,
     },
     passwordHash:{
-        type:Schema.Types.String
+      type:Schema.Types.String,
     },
     googleId:{
-        type:Schema.Types.String,
+      type:Schema.Types.String,
     },
     role:{
-        type:Schema.Types.String,
-        enum:Object.values(UserRole),
+      type:Schema.Types.String,
+      enum:Object.values(UserRole),
     },
     isBlocked:{
-        type:Boolean,
-        required:true,
-        default:false,
+      type:Boolean,
+      required:true,
+      default:false,
     },
     isNewUser:{
-        type:Boolean,
-        required:true,
-        default:true,
+      type:Boolean,
+      required:true,
+      default:true,
     },
     gamesPlayed: { type: Number, default: 0 },
     gamesWin: { type: Number, default: 0 },
@@ -63,6 +63,6 @@ export interface AuthSchemaType{
     achievements: { type: [String], default: [] },
     subscriptionStart: { type: Date },
 
-},
-{timestamps:true}
-)
+  },
+  {timestamps:true},
+);

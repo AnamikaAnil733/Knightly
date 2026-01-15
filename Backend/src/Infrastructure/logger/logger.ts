@@ -16,11 +16,11 @@ export const logger = pino({
         // File output
         target: "pino/file",
         options: {
-          destination: "./logs/app.log", 
-          mkdir: true                     
+          destination: "./logs/app.log",
+          mkdir: true,
         },
         level: "info",
-      }
+      },
     ],
   },
 });

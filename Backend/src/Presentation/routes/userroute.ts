@@ -5,17 +5,17 @@ import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
 
 export class UserRoutes{
-    public readonly router:Router;
-    constructor(tokenService: ITokenService){
-      this.router = Router();
-      this.router.use(
-        authMiddleware([UserRole.USER],tokenService)
-      );
+  public readonly router:Router;
+  constructor(tokenService: ITokenService){
+    this.router = Router();
+    this.router.use(
+      authMiddleware([UserRole.USER],tokenService),
+    );
 
-      this.initializeRoutes();
-    }
+    this.initializeRoutes();
+  }
 
-    private initializeRoutes(){
-        this.router.patch("/edit-profile",editUserController.handleEditProfile)
-    }
+  private initializeRoutes(){
+    this.router.patch("/edit-profile",editUserController.handleEditProfile);
+  }
 }

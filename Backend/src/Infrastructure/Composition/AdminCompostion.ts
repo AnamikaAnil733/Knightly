@@ -9,12 +9,12 @@ import { BlockUserUseCase } from "../../Application/UseCases/admin/UserManagemen
 import { UnBlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/unBlockUserUseCase";
 
 
-const UserManagmentRepo = new UserManagmentRepository()
+const UserManagmentRepo = new UserManagmentRepository();
 
 //useCase
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagmentRepo);
-const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo)
-const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo)
+const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo);
+const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo);
 
 
 

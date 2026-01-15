@@ -37,7 +37,7 @@ export default [
       "comma-dangle": ["error", "always-multiline"],
 
 
-      "@typescript-eslint/no-explicit-any": "off",
+      // "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "off"
     }
   }
