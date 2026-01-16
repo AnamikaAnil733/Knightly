@@ -14,8 +14,7 @@ export class EditProfileController{
     try {
       const userId = (req as any).user.id;
       const { displayname } = req.body;
-      console.log(userId,displayname);
-
+  
       const result = await this.editUserUsecase.editUser({
         userId,
         displayname,
@@ -23,7 +22,7 @@ export class EditProfileController{
 
       return res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "Profile updated successfully",
+        message: "Profile updated sucessfully",
         data: result,
       });
     } catch (error) {

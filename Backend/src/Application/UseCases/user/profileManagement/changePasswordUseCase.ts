@@ -22,14 +22,14 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase{
             if(!currentPassword||!newPassword){
                 throw new CustomError(
                     HttpStatusCodes.BAD_REQUEST,
-                    "All feilds are required"
+                    "All fields are required"
                 )
             }
 
             if(newPassword.length<8){
                 throw new CustomError(
                     HttpStatusCodes.BAD_REQUEST,
-                    "Password should be 8 letters"
+                    "Password should be atleast 8 letters"
                 )
             }
 
@@ -64,12 +64,8 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase{
 
 
             }
-            return {
-                success:true,
-                message:"update password sucessfully"
-            }
 
-            
+        
 
         }catch(error){
             throw error

@@ -1,6 +1,6 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/UserManagmentRepository";
 import { IBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/IBlockUserUseCase";
-import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../Domain/DTOs/DTOs/adminDTOs";
+import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../Domain/DTOs/adminDTOs";
 
 
 

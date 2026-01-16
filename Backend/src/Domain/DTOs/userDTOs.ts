@@ -37,7 +37,4 @@ export interface ChangePasswordInputDto{
 }
 
 
-export interface ChangePasswordOutputDto{
-    success:true;
-    message:string;
-}
+export type ChangePasswordOutputDto = void

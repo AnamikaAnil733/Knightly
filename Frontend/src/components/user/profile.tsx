@@ -5,7 +5,6 @@ import {
   FlameIcon,
   ClockIcon,
   TargetIcon,
-  SettingsIcon,
 } from "lucide-react";
 import {
   LineChart,
@@ -84,11 +83,6 @@ export function ProfileUser() {
                 <p className="text-3xl font-bold text-gold">{user.rating}</p>
               </div>
             </div>
-
-            <button className="py-3 px-6 border border-gold rounded-lg text-gold hover:bg-gold/10 transition flex items-center gap-2">
-              <SettingsIcon size={18} /> Edit Profile
-            </button>
-
           </div>
         </div>
       </div>

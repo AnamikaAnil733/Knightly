@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { editUserController } from "../../Infrastructure/Composition/UserCompostion";
+import { changePasswordController } from "../../Infrastructure/Composition/UserCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -17,5 +18,6 @@ export class UserRoutes{
 
   private initializeRoutes(){
     this.router.patch("/edit-profile",editUserController.handleEditProfile);
+    this.router.patch("/change-password",changePasswordController.handleChangePassword)
   }
 }

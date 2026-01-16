@@ -1,6 +1,6 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/UserManagmentRepository";
 import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/IUnBlockUserUseCase";
-import { UnBlockUserInputDTO,UnBlockUserOutputDTO } from "../../../../Domain/DTOs/DTOs/adminDTOs";
+import { UnBlockUserInputDTO,UnBlockUserOutputDTO } from "../../../../Domain/DTOs/adminDTOs";
 
 
 export class UnBlockUserUseCase implements IUnBlockUserUseCase{
