@@ -1,6 +1,10 @@
 import { Router } from "express";
-import { editUserController } from "../../Infrastructure/Composition/UserCompostion";
-import { changePasswordController } from "../../Infrastructure/Composition/UserCompostion";
+import { 
+  editUserController, 
+  changePasswordController,
+  avatarController  
+} 
+  from "../../Infrastructure/Composition/UserCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -18,6 +22,8 @@ export class UserRoutes{
 
   private initializeRoutes(){
     this.router.patch("/edit-profile",editUserController.handleEditProfile);
-    this.router.patch("/change-password",changePasswordController.handleChangePassword)
+    this.router.patch("/change-password",changePasswordController.handleChangePassword);
+    this.router.get("/avata/upload-avatar",avatarController.getAvatarUrl);
+    this.router.patch("/update-avatar",avatarController.updateAvatar);
   }
 }

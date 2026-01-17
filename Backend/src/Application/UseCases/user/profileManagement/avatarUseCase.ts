@@ -1,12 +1,12 @@
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IgetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
+import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
 import { GetAvatarInputDto,GetAvatarOutputDto } from "../../../../Domain/DTOs/userDTOs";
 import { IStorageService} from "../../../../Domain/Interface/service/S3Service";
 
 
 
-export class GetAvatarUrlUseCase implements IgetAvatarUseCase{
+export class GetAvatarUrlUseCase implements IGetAvatarUseCase{
     constructor( private readonly storageService :IStorageService){}
 
     async execute(input: GetAvatarInputDto): Promise<GetAvatarOutputDto> {

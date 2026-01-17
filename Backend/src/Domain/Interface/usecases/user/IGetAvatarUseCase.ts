@@ -1,6 +1,6 @@
-import { GetAvatarInputDto,GetAvatarOutputDto,    } from "../../../DTOs/userDTOs"
+import { GetAvatarInputDto,GetAvatarOutputDto} from "../../../DTOs/userDTOs"
 
-export interface IgetAvatarUseCase{
+export interface IGetAvatarUseCase{
     execute(
         input:GetAvatarInputDto
     ):Promise<GetAvatarOutputDto>

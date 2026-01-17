@@ -25,7 +25,7 @@ export default class EAuth {
   private _updatedAt: Date;
 
   //Avatar
- private _avatarUrl?:string|null;
+ private _avatarUrl:string|null;
  private _avatarSeed!:string;
  private _avatarStyle!:string;
 
@@ -49,6 +49,10 @@ export default class EAuth {
         rewards?: string[];
         achievements?: string[];
         subscriptionStart?: Date;
+
+        avatarUrl?: string | null;
+        avatarSeed?: string;
+        avatarStyle?: string;
 
         createdAt?: Date;
         updatedAt?: Date;
@@ -74,6 +78,10 @@ export default class EAuth {
     this._rewards = params.rewards ?? [];
     this._achievements = params.achievements ?? [];
     this._subscriptionStart = params.subscriptionStart;
+
+    this._avatarUrl = params.avatarUrl ?? null;
+    this._avatarSeed = params.avatarSeed ?? (params.id ?? params.email);
+    this._avatarStyle = params.avatarStyle ?? "bottts";
 
     this._createdAt = params.createdAt ?? new Date();
     this._updatedAt = params.updatedAt ?? new Date();
@@ -102,9 +110,15 @@ export default class EAuth {
   get updatedAt(): Date { return this._updatedAt; }
   get subscriptionStart():Date|undefined{ return this._subscriptionStart;}
 
+  get avatarUrl(): string | null { return this._avatarUrl; }
+  get avatarSeed(): string { return this._avatarSeed; }
+  get avatarStyle(): string { return this._avatarStyle; }
+
   // SETTERS
   set passwordHash(passwordHash: string) { this._passwordHash = passwordHash; }
   set isNewUser(isNewUser: boolean) { this._isNewUser = isNewUser; }
   set displayname(displayname:string) { this._displayname = displayname; }
+
+  set avatarUrl(value: string | null) { this._avatarUrl = value; }
 
 }
