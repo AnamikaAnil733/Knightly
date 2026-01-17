@@ -38,3 +38,21 @@ export interface ChangePasswordInputDto{
 
 
 export type ChangePasswordOutputDto = void
+
+
+//----------Avatar-------------
+
+export interface GetAvatarInputDto{
+    userId:string;
+    contentType:string;
+}
+
+export interface GetAvatarOutputDto{
+    uploadUrl:string;
+    avatarUrl:string;
+}
+
+export interface updateAvatarInputDto{
+    userId:string;
+    avatarUrl:string;
+}

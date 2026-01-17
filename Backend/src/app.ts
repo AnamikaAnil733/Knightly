@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { corsOptions } from "../src/Presentation/constants/corsOption";
 import express, { Application } from "express";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
@@ -23,10 +24,7 @@ export class App {
     this.setErrorHandlerMiddleware();
   }
   private initializeMiddlewares(): void {
-    this.app.use(cors({
-      origin: "http://localhost:5173",
-      credentials: true,
-    }));
+    this.app.use(cors(corsOptions));
 
     this.app.use(cookieParser());
     this.app.use(express.json());

@@ -1,4 +1,3 @@
-// src/Infrastructure/services/OtpService.ts
 
 import { IOtpService } from "../../Domain/Interface/service/otpService";
 import { logger } from "../../Infrastructure/logger/logger";

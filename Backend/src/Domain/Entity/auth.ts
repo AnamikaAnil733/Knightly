@@ -24,6 +24,11 @@ export default class EAuth {
   private _createdAt: Date;
   private _updatedAt: Date;
 
+  //Avatar
+ private _avatarUrl?:string|null;
+ private _avatarSeed!:string;
+ private _avatarStyle!:string;
+
   constructor(params: {
         id?: string;
         displayname: string;
