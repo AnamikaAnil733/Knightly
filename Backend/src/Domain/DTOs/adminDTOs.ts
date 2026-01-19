@@ -30,6 +30,8 @@ export interface GetAllUsersInputDto {
 export interface GetAllUsersOutputDTO{
     users:BaseUserResponseDTO[];
     total:number;
+    page:number;
+    totalPages:number;
 }
 
 //-------userManangement DTOs-------

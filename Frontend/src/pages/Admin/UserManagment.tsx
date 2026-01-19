@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { SearchIcon } from "lucide-react";
@@ -14,6 +14,15 @@ import { UserFilters } from "../../components/admin/UserManagment/UserFilters";
 
 export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED";
 
+type UsersResponse = {
+  users: IUser[];
+  total: number;
+  page: number;
+  totalPages: number;
+};
+
+const LIMIT = 10;
+
 /* ===================== COMPONENT ===================== */
 
 export function UserManagment() {
@@ -21,34 +30,48 @@ export function UserManagment() {
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<UserFilter>("ALL");
+  const [page, setPage] = useState(1);
 
-  /* ===================== FETCH USERS ===================== */
+  /* ===================== FETCH USERS (BACKEND PAGINATION) ===================== */
 
   const {
-    data: users = [],
+    data,
     isLoading,
     isError,
     refetch,
-  } = useQuery<IUser[]>({
-    queryKey: ["admin-users"],
+  } = useQuery<UsersResponse>({
+    queryKey: ["admin-users", page, searchTerm, filter],
     queryFn: async () => {
-      const res = await axios.get("/admin/users");
-      return res.data.users;
+      const res = await axios.get("/admin/users", {
+        params: {
+          page,
+          limit: LIMIT,
+          search: searchTerm || undefined,
+          filter: filter !== "ALL" ? filter : undefined,
+        },
+      });
+      return res.data;
     },
+    placeholderData: (previousData) => previousData,
   });
 
-  if (isError) {
-    toast.error("Failed to load users");
+  /* ===================== ERROR HANDLING ===================== */
 
-  }
+  useEffect(() => {
+    if (isError) {
+      toast.error("Failed to load users");
+    }
+  }, [isError]);
 
+  /* ===================== DERIVED DATA ===================== */
 
-  /* ===================== EXCLUDE ADMINS ===================== */
+  const users = useMemo(() => {
+    return (data?.users ?? []).filter(
+      (u) => u.role !== UserRole.ADMIN
+    );
+  }, [data]);
 
-const nonAdminUsers = useMemo(() => {
-  return users.filter((u) => u.role !== UserRole.ADMIN);
-}, [users]);
-
+  const totalPages = data?.totalPages ?? 1;
 
   /* ===================== BAN / UNBAN ===================== */
 
@@ -77,39 +100,14 @@ const nonAdminUsers = useMemo(() => {
   /* ===================== COUNTS ===================== */
 
   const blockedCount = useMemo(
-    () => nonAdminUsers.filter((u) => u.isBlocked).length,
-    [nonAdminUsers]
+    () => users.filter((u) => u.isBlocked).length,
+    [users]
   );
 
   const unblockedCount = useMemo(
-    () => nonAdminUsers.filter((u) => !u.isBlocked).length,
-    [nonAdminUsers]
+    () => users.filter((u) => !u.isBlocked).length,
+    [users]
   );
-
-  /* ===================== FILTERED USERS ===================== */
-
-  const filteredUsers = useMemo(() => {
-    let result = [...nonAdminUsers];
-
-    if (filter === "BLOCKED") {
-      result = result.filter((u) => u.isBlocked);
-    }
-
-    if (filter === "UNBLOCKED") {
-      result = result.filter((u) => !u.isBlocked);
-    }
-
-    if (searchTerm) {
-      const lower = searchTerm.toLowerCase();
-      result = result.filter(
-        (u) =>
-          u.displayname?.toLowerCase().includes(lower) ||
-          u.email?.toLowerCase().includes(lower)
-      );
-    }
-
-    return result;
-  }, [nonAdminUsers, filter, searchTerm]);
 
   /* ===================== UI ===================== */
 
@@ -131,56 +129,71 @@ const nonAdminUsers = useMemo(() => {
                     type="text"
                     placeholder="Search users..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-[#11193F] border border-gray-700 rounded-md text-white focus:outline-none"
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setPage(1);
+                    }}
+                    className="w-full pl-10 pr-4 py-2 bg-[#11193F] border border-gray-700 rounded-md text-white"
                   />
                   <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                 </div>
 
                 <UserFilters
                   filter={filter}
-                  setFilter={setFilter}
+                  setFilter={(value) => {
+                    setFilter(value);
+                    setPage(1);
+                  }}
                   blockedCount={blockedCount}
                   unblockedCount={unblockedCount}
                 />
               </div>
             </div>
 
-            {/* TABLE / EMPTY STATE */}
+            {/* TABLE */}
             <div className="bg-[#0A0F2C] rounded-lg overflow-hidden">
               {isLoading ? (
                 <div className="text-center text-gray-300 p-6">
                   Loading users...
                 </div>
-              ) : filteredUsers.length === 0 ? (
-                <div className="text-center text-gray-400 p-6 space-y-2">
-                  <p className="text-lg font-medium">
-                    {searchTerm || filter !== "ALL"
-                      ? "No users found matching your filters"
-                      : "No users available"}
-                  </p>
-
-                  {(searchTerm || filter !== "ALL") && (
-                    <button
-                      onClick={() => {
-                        setSearchTerm("");
-                        setFilter("ALL");
-                      }}
-                      className="text-sm text-[#6B2EFF] hover:underline"
-                    >
-                      Clear filters
-                    </button>
-                  )}
+              ) : users.length === 0 ? (
+                <div className="text-center text-gray-400 p-6">
+                  No users found
                 </div>
               ) : (
                 <UserTable
-                  users={filteredUsers}
+                  users={users}
                   onSelectUser={setSelectedUser}
                   onBanUser={handleBanUser}
                   selectedUserId={selectedUser?.id || ""}
                 />
               )}
             </div>
+
+            {/* PAGINATION UI */}
+            {totalPages > 1 && (
+              <div className="flex justify-between items-center mt-4 px-4 py-2 bg-[#0A0F2C] rounded-lg">
+                <button
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                  disabled={page === 1}
+                  className="px-4 py-2 bg-[#11193F] text-white rounded disabled:opacity-40"
+                >
+                  Prev
+                </button>
+
+                <span className="text-sm text-gray-400">
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                  disabled={page === totalPages}
+                  className="px-4 py-2 bg-[#11193F] text-white rounded disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
 
           {/* RIGHT PROFILE */}

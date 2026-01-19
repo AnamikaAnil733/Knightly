@@ -30,9 +30,22 @@ export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaTyp
     return result !== null;
   }
 
-  async getAll(): Promise<EAuth[]> {
-    const docs = await this.model.find();
-    return docs.map(docs=>this.mapper.toEntityFromDocument(docs));
+  async getAll(skip: number, limit: number): Promise<EAuth[]> {
+    const docs = await this.model
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+  
+    return docs.map(doc =>
+      this.mapper.toEntityFromDocument(doc)
+    );
   }
+
+  async count(): Promise<number> {
+    return this.model.countDocuments();
+  }
+  
+  
 
 }

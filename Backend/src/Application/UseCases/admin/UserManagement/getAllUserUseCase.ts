@@ -5,12 +5,21 @@ import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../../../Domain/DTO
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
-      private readonly userManagmentRepository: IUserManagmentRepository,
+    private readonly userManagmentRepository: IUserManagmentRepository
   ) {}
 
-  async getAllUsers(): Promise<GetAllUsersOutputDTO> {
-    const users = await this.userManagmentRepository.getAll();
-    console.log(users[0].createdAt);
+  async getAllUsers(
+    page: number,
+    limit: number
+  ): Promise<GetAllUsersOutputDTO> {
+
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await Promise.all([
+      this.userManagmentRepository.getAll(skip, limit),
+      this.userManagmentRepository.count(),
+    ]);
+
     return {
       users: users.map(user => ({
         id: user.id!,
@@ -20,18 +29,18 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
         isBlocked: user.isBlocked,
         isNewUser: user.isNewUser,
         createdAt: user.createdAt,
-        gamesPlayed:user.gamesPlayed,
-        premium:user.premium,
-        rating:user.rating,
-        gamesWin:user.gamesWin,
-        longestStreak:user.longestStreak,
-        currentStreak:user.currentStreak,
-        achievements:user.achievements,
-        rewards:user.rewards,
-
+        gamesPlayed: user.gamesPlayed,
+        premium: user.premium,
+        rating: user.rating,
+        gamesWin: user.gamesWin,
+        longestStreak: user.longestStreak,
+        currentStreak: user.currentStreak,
+        achievements: user.achievements,
+        rewards: user.rewards,
       })),
-      total: users.length,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
     };
   }
-
 }
