@@ -1,5 +1,5 @@
 import { useState} from "react";
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector ,useDispatch } from "react-redux";
 import { RootState } from "../../../types/user";
 import { SectionHeader } from "./heading/sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";

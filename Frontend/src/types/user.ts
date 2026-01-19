@@ -14,7 +14,11 @@ export interface IUser{
     currentStreak: number;
     rewards: string[];
     achievements: string[];
-
+    
+     // Avatar
+  avatarUrl?: string | null;
+  avatarSeed: string;
+  avatarStyle: string;
 }
 
 export enum UserRole {

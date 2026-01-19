@@ -17,4 +17,5 @@ export interface User {
   subscriptionStart?: Date;
   createdAt?: Date;
   role: UserRole;
+  avatarKey:string;
 }

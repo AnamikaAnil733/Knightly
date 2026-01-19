@@ -23,7 +23,9 @@ export class UserRoutes{
   private initializeRoutes(){
     this.router.patch("/edit-profile",editUserController.handleEditProfile);
     this.router.patch("/change-password",changePasswordController.handleChangePassword);
-    this.router.get("/avata/upload-avatar",avatarController.getAvatarUrl);
-    this.router.patch("/update-avatar",avatarController.updateAvatar);
+    this.router.post("/avatar/upload-avatar",avatarController.getAvatarUrl);
+    this.router.post("/avatar/dicebear",avatarController.saveDiceBearAvatar);
+     this.router.patch("/update-avatar",avatarController.updateAvatar);
+
   }
 }

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice , PayloadAction} from "@reduxjs/toolkit";
 import { IUser } from "../../../types/user";
 
 interface UserAuthState {
@@ -31,11 +31,15 @@ const userAuthSlice = createSlice({
       state.user = null;
       state.authLoaded = false;
     },
-    updateUser(state,action){
-      if(state.user){
-       state.user.displayname = action.payload.displayname
+    updateUser(state, action: PayloadAction<Partial<IUser>>) {
+      if (state.user) {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
       }
-    }
+    },
+
   }
 });
 

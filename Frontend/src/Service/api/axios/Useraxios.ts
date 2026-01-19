@@ -126,7 +126,7 @@ userApi.interceptors.response.use(
         return userApi(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        Store.dispatch(logout()); // ✅ ONLY HERE
+        Store.dispatch(logout()); 
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

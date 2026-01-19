@@ -21,6 +21,7 @@ export default class EAuth {
   private _achievements: string[];
   private _subscriptionStart?: Date;
 
+
   private _createdAt: Date;
   private _updatedAt: Date;
 
@@ -28,6 +29,7 @@ export default class EAuth {
  private _avatarUrl:string|null;
  private _avatarSeed!:string;
  private _avatarStyle!:string;
+ private _avatarKey?:string;
 
   constructor(params: {
         id?: string;
@@ -53,6 +55,7 @@ export default class EAuth {
         avatarUrl?: string | null;
         avatarSeed?: string;
         avatarStyle?: string;
+        avatarKey?:string
 
         createdAt?: Date;
         updatedAt?: Date;
@@ -82,6 +85,7 @@ export default class EAuth {
     this._avatarUrl = params.avatarUrl ?? null;
     this._avatarSeed = params.avatarSeed ?? (params.id ?? params.email);
     this._avatarStyle = params.avatarStyle ?? "bottts";
+    this._avatarKey = params.avatarKey
 
     this._createdAt = params.createdAt ?? new Date();
     this._updatedAt = params.updatedAt ?? new Date();
@@ -113,6 +117,7 @@ export default class EAuth {
   get avatarUrl(): string | null { return this._avatarUrl; }
   get avatarSeed(): string { return this._avatarSeed; }
   get avatarStyle(): string { return this._avatarStyle; }
+  get avatarKey(): string | undefined {return this._avatarKey}
 
   // SETTERS
   set passwordHash(passwordHash: string) { this._passwordHash = passwordHash; }
@@ -120,5 +125,9 @@ export default class EAuth {
   set displayname(displayname:string) { this._displayname = displayname; }
 
   set avatarUrl(value: string | null) { this._avatarUrl = value; }
+
+  set avatarKey(value: string) {
+    this._avatarKey = value;
+  }
 
 }

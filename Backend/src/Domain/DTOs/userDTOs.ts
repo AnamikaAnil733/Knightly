@@ -47,12 +47,14 @@ export interface GetAvatarInputDto{
     contentType:string;
 }
 
-export interface GetAvatarOutputDto{
-    uploadUrl:string;
-    avatarUrl:string;
-}
+export interface GetAvatarOutputDto {
+    uploadUrl: string;
+    key: string;
+  }
+  
 
-export interface updateAvatarInputDto{
-    userId:string;
-    avatarUrl:string;
-}
+  export interface updateAvatarInputDto {
+    userId: string;
+    avatarKey: string;
+  }
+  

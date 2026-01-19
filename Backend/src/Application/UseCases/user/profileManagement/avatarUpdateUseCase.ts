@@ -6,32 +6,32 @@ import EAuth from "../../../../Domain/Entity/auth";
 import { IUpdateAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IUpdateAvatarUseCase";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
+export class UpdateAvatarUseCase implements IUpdateAvatarUseCase {
+  constructor(
+    private readonly userRepo: IBaseRepository<EAuth>
+  ) {}
 
+  async execute(input: updateAvatarInputDto): Promise<void> {
+    const { userId, avatarKey } = input;
 
-export class updateAvatarUseCase implements IUpdateAvatarUseCase{
-    constructor(private readonly userRepo:IBaseRepository<EAuth>
-    ){}
-
-    async execute(input: updateAvatarInputDto): Promise<void> {
-        const {userId,avatarUrl} = input
-     
-        if(!avatarUrl){
-            throw new CustomError(
-                HttpStatusCodes.BAD_REQUEST,
-                "Avatar URL is Required"
-            )
-        }
-
-        const user = await this.userRepo.findById(userId)
-        if(!user){
-            throw new CustomError(
-                HttpStatusCodes.NOT_FOUND,
-                MESSAGES.USER_DOESNT_EXIST
-            )
-        }
-
-        user.avatarUrl = avatarUrl
-        await this.userRepo.update(user)
-
+    if (!avatarKey) {
+      throw new CustomError(
+        HttpStatusCodes.BAD_REQUEST,
+        "Avatar key is required"
+      );
     }
+
+    const user = await this.userRepo.findById(userId);
+    if (!user) {
+      throw new CustomError(
+        HttpStatusCodes.NOT_FOUND,
+        MESSAGES.USER_DOESNT_EXIST
+      );
+    }
+
+    // ✅ Store ONLY the S3 key
+    user.avatarKey = avatarKey;
+
+    await this.userRepo.update(user);
+  }
 }

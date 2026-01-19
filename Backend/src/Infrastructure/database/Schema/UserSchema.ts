@@ -22,6 +22,7 @@ export const UserSchema = new Schema<UserDocument>(
     subscriptionStart: { type: Date },
     createdAt: { type: Date, default: Date.now },
     role: { type: String, enum: Object.values(UserRole), required: true },
+    avatarKey: { type: String },
   },
   { timestamps: true },
 );

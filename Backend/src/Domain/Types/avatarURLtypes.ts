@@ -1,4 +1,6 @@
-export interface AvatarURLtypes{
-    uploadUrl:string;
-    avatarUrl:string;
-}
+
+export interface AvatarURLtypes {
+    uploadUrl: string;
+    key: string;
+  }
+  
