@@ -21,7 +21,7 @@ const initialState= {
       logout(state) {
         state.accessToken = null;
         state.admin = null;
-        state.authLoaded = false;
+        state.authLoaded = true;
       },
     },
   });

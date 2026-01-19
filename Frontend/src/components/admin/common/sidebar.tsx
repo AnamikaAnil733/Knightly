@@ -1,5 +1,11 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout} from "../../../store/slices/auth/adminAuthSlice"
+import { AppDispatch } from "../../../store/store";
+
+
 import {
   LayoutDashboardIcon,
   UsersIcon,
@@ -19,6 +25,18 @@ interface SidebarProps {
   collapsed: boolean
 }
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>();
+
+  function handleLogout() {
+    localStorage.removeItem("adminAccessToken");
+    localStorage.removeItem("admin");
+    dispatch(logout());
+    navigate("/admin/login", { replace: true });
+  }
+  
+  
+
   const navItems = [
     {
       icon: <LayoutDashboardIcon size={20} />,
@@ -78,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <SettingsIcon size={20} />,
       name: 'System Settings',
-      path: '/settings',
+      path: '/settings-123',
     },
   ]
   return (
@@ -115,7 +133,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         </ul>
       </nav>
       <div className="absolute bottom-0 w-full p-4">
-        <button className="flex items-center w-full p-3 text-gray-300 rounded-lg hover:bg-[#1e2547] hover:text-[#FFD166] transition-all duration-200">
+        <button className="flex items-center w-full p-3 text-gray-300 rounded-lg hover:bg-[#1e2547] hover:text-[#FFD166] transition-all duration-200" onClick={handleLogout}>
           <span className="text-[#FFD166]">
             <LogOutIcon size={20} />
           </span>

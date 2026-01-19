@@ -9,6 +9,8 @@ import { Profile } from "../pages/user/profile";
 import { ForgotPassword } from "../pages/Authentication/forgetPassword";
 import { ResetPassword } from "../pages/Authentication/changePassword";
 import { Settings } from "../pages/user/setting";
+import AdminProtectedRoute from "./AdminProtectedRoute";
+
 
 export default function AppRoutes() {
   return (
@@ -24,10 +26,16 @@ export default function AppRoutes() {
         <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
-
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="users" element={<UserManagment />} />
-        </Route>
+        <Route
+  path="/admin"
+  element={
+    <AdminProtectedRoute>
+      <AdminLayout />
+    </AdminProtectedRoute>
+  }
+>
+  <Route path="users" element={<UserManagment />} />
+</Route>
       </Routes>
     </BrowserRouter>
   );

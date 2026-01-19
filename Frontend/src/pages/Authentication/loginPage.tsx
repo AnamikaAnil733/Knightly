@@ -58,17 +58,19 @@ export function LoginPage({ role }: LoginPageProps) {
     try {
       const res = await api.post("/auth/login", data);
 
-      const { accessToken, userInfo } = res.data;
+      const { userInfo } = res.data;
+      const {accessToken} = userInfo
+      console.log(accessToken)
       console.log(userInfo)
 
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));
         dispatch(setAdmin(userInfo));
-        navigate("/admin/users");
+        navigate("/admin/users",{ replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
         dispatch(setUser(userInfo));
-        navigate("/landing-page");
+        navigate("/landing-page",{ replace: true });
       }
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
@@ -97,11 +99,11 @@ export function LoginPage({ role }: LoginPageProps) {
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));
         dispatch(setAdmin(userInfo));
-        navigate("/admin/users");
+        navigate("/admin/users",{ replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
         dispatch(setUser(userInfo));
-        navigate("/landing-page");
+        navigate("/landing-page",{ replace: true });
       }
     } catch {
       toast.error("Google authentication failed");
