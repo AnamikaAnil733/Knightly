@@ -5,9 +5,9 @@ import { corsOptions } from "../src/Presentation/constants/corsOption";
 import express, { Application } from "express";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
-import { AdminRoutes } from "../src/Presentation/routes/adminroute";
 
-import {userRoutes} from "./Infrastructure/Composition/UserCompostion";
+import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
+import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
 
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
 import cors from "cors";
@@ -39,11 +39,7 @@ export class App {
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     this.app.use("/api/auth", authRoutes.router);
-
-    const adminRoutes = new AdminRoutes();
     this.app.use("/api/admin",adminRoutes.router);
-
-
     this.app.use("/api/user",userRoutes.router);
   }
 

@@ -22,5 +22,6 @@ export interface AuthResponseDTO{
     rewards: string[];
     achievements: string[];
     premium: boolean;
+    avatarUrl:string;
 
 }

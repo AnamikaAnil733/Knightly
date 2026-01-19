@@ -66,6 +66,7 @@ export class AuthMapper {
       rewards: auth.rewards ?? [],
       achievements: auth.achievements,
       premium: auth.premium ?? false,
+      avatarUrl:auth.avatarUrl!,
   
     };
   }

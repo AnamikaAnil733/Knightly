@@ -59,6 +59,7 @@ export function LoginPage({ role }: LoginPageProps) {
       const res = await api.post("/auth/login", data);
 
       const { accessToken, userInfo } = res.data;
+      console.log(userInfo)
 
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));

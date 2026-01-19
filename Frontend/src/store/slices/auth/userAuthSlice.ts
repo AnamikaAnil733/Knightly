@@ -29,7 +29,7 @@ const userAuthSlice = createSlice({
     logout(state) {
       state.accesstoken = null;
       state.user = null;
-      state.authLoaded = false;
+      state.authLoaded = true;
     },
     updateUser(state, action: PayloadAction<Partial<IUser>>) {
       if (state.user) {

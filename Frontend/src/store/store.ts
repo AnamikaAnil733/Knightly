@@ -28,3 +28,7 @@ export const Store = configureStore({
 // create persistor to use in index.tsx
 export const persistor = persistStore(Store);
 
+
+
+export type RootState = ReturnType<typeof Store.getState>;
+export type AppDispatch = typeof Store.dispatch;

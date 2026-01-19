@@ -20,7 +20,7 @@ export class TokenService implements ITokenService {
   }
 
   generateAccessToken(data: AccessTokenData): string {
-    return jwt.sign(data, this._accessTokenSecret, { expiresIn: "5m" });
+    return jwt.sign(data, this._accessTokenSecret, { expiresIn: "30m" });
   }
 
   verifyAccessToken(token: string): AccessTokenData {

@@ -16,7 +16,6 @@ import {  HashService } from "../services/passwordHashing";
 import { S3StorageService } from "../services/S3Service";
 
 import { UserRoutes } from "../../Presentation/routes/userroute";
-import { S3 } from "@aws-sdk/client-s3";
 
 
 const UserRepo = new UserManagmentRepository();
