@@ -53,8 +53,27 @@ export interface GetAvatarOutputDto {
   }
   
 
-  export interface updateAvatarInputDto {
-    userId: string;
-    avatarKey: string;
-  }
+  export interface GetUserProfileOutputDto {
+    id: string;
+
+    displayname: string;
+    email: string;
   
+    role: UserRole;
+    isBlocked: boolean;
+  
+    createdAt: string;
+  
+    gamesPlayed: number;
+    gamesWin: number;
+    rating: number;
+    premium: boolean;
+  
+    longestStreak: number;
+    currentStreak: number;
+  
+    rewards: string[];
+    achievements: string[];
+  
+    avatarUrl: string | null;
+  }

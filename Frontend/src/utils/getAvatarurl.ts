@@ -6,11 +6,11 @@ const DEFAULT_AVATAR =
 export const getAvatarUrl = (user: IUser | null) => {
   if (!user) return DEFAULT_AVATAR;
 
-  // ✅ Only use stored S3 avatar
+  //Only use stored S3 avatar
   if (user.avatarUrl && user.avatarUrl.trim() !== "") {
     return user.avatarUrl;
   }
 
-  // ✅ Fallback ONLY (no DiceBear)
+  //Fallback ONLY (no DiceBear)
   return DEFAULT_AVATAR;
 };

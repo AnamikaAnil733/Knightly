@@ -28,7 +28,7 @@ console.log(diceBearUrl)
 
     // ✅ Native fetch (Node 18+)
     const response = await fetch(diceBearUrl);
-    console.log(response)
+    console.log(response,"Saveeeee")
 
     if (!response.ok) {
       throw new CustomError(
@@ -45,7 +45,7 @@ console.log(diceBearUrl)
       body: svgBuffer,
       contentType: "image/svg+xml",
     });
-    console.log(avatarUrl)
+    console.log(avatarUrl,"heyyyyy")
 
     const user = await this.userRepo.findById(userId);
     if (!user) {
@@ -54,8 +54,10 @@ console.log(diceBearUrl)
         "User not found"
       );
     }
+   
 
-    user.avatarUrl = avatarUrl;
+    user.avatarKey = avatarUrl;
+    console.log(user)
     await this.userRepo.update(user);
 
     return avatarUrl;

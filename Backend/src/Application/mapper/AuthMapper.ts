@@ -18,6 +18,7 @@ export class AuthMapper {
       createdAt:doc.createdAt,
       isBlocked: doc.isBlocked,
       isNewUser: doc.isNewUser,
+      avatarKey: doc.avatarKey ?? null,
     });
   }
 
@@ -41,6 +42,7 @@ export class AuthMapper {
       rewards: auth.rewards,
       achievements: auth.achievements,
       subscriptionStart: auth.subscriptionStart,
+      avatarKey: auth.avatarKey ?? null,
     };
   }
 
@@ -64,6 +66,7 @@ export class AuthMapper {
       rewards: auth.rewards ?? [],
       achievements: auth.achievements,
       premium: auth.premium ?? false,
+  
     };
   }
 }

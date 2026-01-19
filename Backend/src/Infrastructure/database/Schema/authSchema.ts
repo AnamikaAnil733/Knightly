@@ -63,7 +63,7 @@ export const authSchema = new Schema<AuthSchemaType>(
     rewards: { type: [String], default: [] },
     achievements: { type: [String], default: [] },
     subscriptionStart: { type: Date },
-    avatarKey: { type: String },
+    avatarKey: { type: String,default:null },
 
   },
   {timestamps:true},

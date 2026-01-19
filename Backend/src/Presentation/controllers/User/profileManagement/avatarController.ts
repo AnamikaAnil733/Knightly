@@ -1,7 +1,8 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
-import { IUpdateAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IUpdateAvatarUseCase";
+// import { IUpdateAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IUpdateAvatarUseCase";
+import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/IGetUserProfileUseCase";
 import { ISaveDiceBearAvatarUseCase } 
 from "../../../../Domain/Interface/usecases/user/ISaveDiceBearAvatarUseCase";
 
@@ -9,7 +10,8 @@ from "../../../../Domain/Interface/usecases/user/ISaveDiceBearAvatarUseCase";
 export class AvatarController{
     constructor(
         private readonly getAvatarUseCase:IGetAvatarUseCase,
-        private readonly updateAvatarUseCase:IUpdateAvatarUseCase,
+        // private readonly updateAvatarUseCase:IUpdateAvatarUseCase,
+        private readonly getUserProfileUseCase:IGetUserProfileUseCase,
         private readonly saveDiceBearAvatarUseCase: ISaveDiceBearAvatarUseCase
     ){}
 
@@ -30,28 +32,28 @@ export class AvatarController{
         }
     }
     
-    updateAvatar = async (
-      req: Request,
-      res: Response,
-      next: NextFunction
-    ) => {
-      try {
-        const userId = (req as any).user.id;
-        const { avatarKey } = req.body;
+    // updateAvatar = async (
+    //   req: Request,
+    //   res: Response,
+    //   next: NextFunction
+    // ) => {
+    //   try {
+    //     const userId = (req as any).user.id;
+    //     const { avatarKey } = req.body;
     
-        await this.updateAvatarUseCase.execute({
-          userId,
-          avatarKey,
-        });
+    //     await this.updateAvatarUseCase.execute({
+    //       userId,
+    //       avatarKey,
+    //     });
     
-        return res.status(HttpStatusCodes.OK).json({
-          success: true,
-          message: "Avatar updated successfully",
-        });
-      } catch (error) {
-        next(error);
-      }
-    };
+    //     return res.status(HttpStatusCodes.OK).json({
+    //       success: true,
+    //       message: "Avatar updated successfully",
+    //     });
+    //   } catch (error) {
+    //     next(error);
+    //   }
+    // };
     
     saveDiceBearAvatar = async (
         req: Request,
@@ -78,6 +80,23 @@ export class AvatarController{
           next(error);
         }
       };
+
+     
+        getProfile = async (
+          req: Request,
+          res: Response,
+          next: NextFunction
+        ) => {
+          try {
+            const userId = (req as any).user.id;
+      
+            const profile = await this.getUserProfileUseCase.execute(userId);
+      
+            return res.status(HttpStatusCodes.OK).json(profile);
+          } catch (error) {
+            next(error);
+          }
+        }
       
 
 }

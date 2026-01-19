@@ -25,7 +25,8 @@ export class UserRoutes{
     this.router.patch("/change-password",changePasswordController.handleChangePassword);
     this.router.post("/avatar/upload-avatar",avatarController.getAvatarUrl);
     this.router.post("/avatar/dicebear",avatarController.saveDiceBearAvatar);
-     this.router.patch("/update-avatar",avatarController.updateAvatar);
+    //  this.router.patch("/update-avatar",avatarController.updateAvatar);
+    this.router.get("/profile",avatarController.getProfile)
 
   }
 }

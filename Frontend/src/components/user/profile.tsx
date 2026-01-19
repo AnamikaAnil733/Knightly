@@ -18,38 +18,42 @@ import {
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = (userId: string) => {
   const base = "https://api.dicebear.com/7.x/adventurer/svg";
-
-  const params = new URLSearchParams({
-    seed: userId
-  });
-
+  const params = new URLSearchParams({ seed: userId });
   return `${base}?${params.toString()}`;
 };
 
 export function ProfileUser() {
   const user = useSelector((state: RootState) => state.userAuth.user);
   const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(false);
+
+  
+
+
 
   if (!user) {
     return <p className="text-center text-white pt-32">Loading profile...</p>;
   }
 
-  /* ---------------- DiceBear HANDLER ---------------- */
+ 
 
+  /* ---------------- Generate DiceBear Avatar ---------------- */
   const handleGenerateAvatar = async () => {
     try {
       setLoading(true);
 
       const diceBearUrl = generateDiceBearUrl(user.id);
-      console.log(diceBearUrl)
 
-      const res = await axios.post("/user/avatar/dicebear", {
+      
+      await axios.post("/user/avatar/dicebear", {
         diceBearUrl,
       });
 
-      dispatch(updateUser({ avatarUrl: res.data.avatarUrl }));
+    
+      const profileRes = await axios.get("/user/profile");
+      console.log(profileRes)
+
+      dispatch(updateUser(profileRes.data));
 
       toast.success("Avatar generated successfully");
     } catch (error) {
@@ -61,7 +65,6 @@ export function ProfileUser() {
   };
 
   /* ---------------- UI ---------------- */
-
   return (
     <div className="bg-navy-dark min-h-screen px-6 pt-28 pb-12 text-white">
       {/* PROFILE HEADER */}
@@ -88,12 +91,13 @@ export function ProfileUser() {
               <h1 className="text-4xl font-bold text-gold">
                 {user.displayname}
               </h1>
+
               <p className="mt-3 text-3xl font-bold text-gold">
                 {user.rating}
               </p>
+
               <span className="text-sm text-gray-light">Rating</span>
 
-              {/* Generate Avatar Button */}
               <button
                 onClick={handleGenerateAvatar}
                 disabled={loading}

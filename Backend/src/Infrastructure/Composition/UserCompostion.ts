@@ -6,15 +6,17 @@ import { AvatarController } from "../../Presentation/controllers/User/profileMan
 
 import {  EditUserUseCase } from "../../Application/UseCases/user/profileManagement/editUseCase";
 import { ChangePasswordUseCase } from "../../Application/UseCases/user/profileManagement/changePasswordUseCase";
-import { UpdateAvatarUseCase } from "../../Application/UseCases/user/profileManagement/avatarUpdateUseCase";
+
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/user/profileManagement/avatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/user/profileManagement/SaveDiceBearAvatarUseCase";
+import { GetUserProfileUseCase } from "../../Application/UseCases/user/profileManagement/GetUserProfileUseCase"
 
 import { TokenService } from "../services/tokenService";
 import {  HashService } from "../services/passwordHashing";
 import { S3StorageService } from "../services/S3Service";
 
 import { UserRoutes } from "../../Presentation/routes/userroute";
+import { S3 } from "@aws-sdk/client-s3";
 
 
 const UserRepo = new UserManagmentRepository();
@@ -29,12 +31,12 @@ const S3Service = new S3StorageService();
 const editUserUseCase = new EditUserUseCase(UserRepo);
 const changePasswordUseCase = new ChangePasswordUseCase(UserRepo,hashService);
 const getAvatarUrlUseCase = new GetAvatarUrlUseCase(S3Service)
-const updateAvatarUseCase = new UpdateAvatarUseCase(UserRepo)
 const saveDiceBearAvatarUseCase = new SaveDiceBearAvatarUseCase( S3Service,UserRepo)
+const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo,S3Service)
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(changePasswordUseCase)
-export const avatarController = new AvatarController(getAvatarUrlUseCase,updateAvatarUseCase,saveDiceBearAvatarUseCase)
+export const avatarController = new AvatarController(getAvatarUrlUseCase,getUserProfileUseCase,saveDiceBearAvatarUseCase)
 export const userRoutes = new UserRoutes(tokenService);
 

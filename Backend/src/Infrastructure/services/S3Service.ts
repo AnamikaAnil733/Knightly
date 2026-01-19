@@ -39,7 +39,6 @@ export class S3StorageService implements IStorageService {
     return { uploadUrl, key };
   }
 
-  // ❌ Keep only if needed elsewhere (do NOT use for DiceBear)
   async uploadObject({
     key,
     body,
@@ -61,7 +60,6 @@ export class S3StorageService implements IStorageService {
     return key;
   }
 
-  // ✅ Signed GET URL (read/display)
   async generateSignedGetUrl(
     key: string,
     expiresIn = 300
@@ -70,6 +68,7 @@ export class S3StorageService implements IStorageService {
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,
     });
+    console.log(command,"cooooommmm")
 
     return getSignedUrl(this.s3, command, { expiresIn });
   }
