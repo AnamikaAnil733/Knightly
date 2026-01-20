@@ -10,14 +10,16 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
 
   async getAllUsers(
     page: number,
-    limit: number
+    limit: number,
+    search?:string,
+    filter?:string,
   ): Promise<GetAllUsersOutputDTO> {
 
     const skip = (page - 1) * limit;
 
     const [users, total] = await Promise.all([
-      this.userManagmentRepository.getAll(skip, limit),
-      this.userManagmentRepository.count(),
+      this.userManagmentRepository.getAll(skip, limit,search,filter),
+      this.userManagmentRepository.count(search,filter),
     ]);
 
     return {

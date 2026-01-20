@@ -32,7 +32,7 @@ export const AccountSettings = () => {
     if (value.length > 20) {
       return "Username must be at most 20 characters";
     }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+    if (!/^[a-zA-Z0-9_ ]+$/.test(value)) {
       return "Only letters, numbers, and underscore allowed";
     }
     return "";

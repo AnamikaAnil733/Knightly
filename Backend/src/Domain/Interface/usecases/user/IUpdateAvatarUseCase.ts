@@ -1,6 +1,6 @@
-import { updateAvatarInputDto } from "../../../DTOs/userDTOs";
+// import { updateAvatarInputDto } from "../../../DTOs/userDTOs";
 
 
-export interface IUpdateAvatarUseCase{
-    execute(input:updateAvatarInputDto):Promise<void>
-}
+// export interface IUpdateAvatarUseCase{
+//     execute(input:updateAvatarInputDto):Promise<void>
+// }

@@ -60,6 +60,7 @@ export function SignupPage() {
     if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) newErrors.email = "Enter valid email"
 
     if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters"
+    if (formData.password.length >20) newErrors.password = "Password must be at most 20 characters"
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match"
 
     setErrors(newErrors)

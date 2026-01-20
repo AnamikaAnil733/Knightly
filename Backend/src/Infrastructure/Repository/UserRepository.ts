@@ -30,9 +30,24 @@ export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaTyp
     return result !== null;
   }
 
-  async getAll(skip: number, limit: number): Promise<EAuth[]> {
+  async getAll(skip: number, limit: number,search?:string,filter?:"ALL"|"BLOCKED"|"UNBLOCKED"): Promise<EAuth[]> {
+    const query: any = {};
+
+    if (search && search.trim() !== "") {
+      query.displayname = { $regex: `^${search}`, $options: "i" };
+
+    }
+
+    if (filter === "BLOCKED") {
+      query.isBlocked = true;
+    }
+  
+    if (filter === "UNBLOCKED") {
+      query.isBlocked = false;
+    }
+
     const docs = await this.model
-      .find()
+      .find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -42,8 +57,20 @@ export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaTyp
     );
   }
 
-  async count(): Promise<number> {
-    return this.model.countDocuments();
+  async count(search?:string,filter?:"ALL"|"BLOCKED"|"UNBLOCKED"): Promise<number> {
+    const query: any = {};
+
+    if (search && search.trim() !== "") {
+      query.displayname = { $regex: `^${search}`, $options: "i" };
+    }
+    if (filter === "BLOCKED") {
+      query.isBlocked = true;
+    }
+  
+    if (filter === "UNBLOCKED") {
+      query.isBlocked = false;
+    }
+    return this.model.countDocuments(query);
   }
   
   

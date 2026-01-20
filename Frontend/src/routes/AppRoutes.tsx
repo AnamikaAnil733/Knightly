@@ -26,16 +26,12 @@ export default function AppRoutes() {
         <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
-        <Route
-  path="/admin"
-  element={
-    <AdminProtectedRoute>
-      <AdminLayout />
-    </AdminProtectedRoute>
-  }
->
-  <Route path="users" element={<UserManagment />} />
-</Route>
+        <Route path="/admin" element={
+          <AdminProtectedRoute>
+         <AdminLayout />
+         </AdminProtectedRoute>
+        }><Route path="users" element={<UserManagment />} />
+         </Route>
       </Routes>
     </BrowserRouter>
   );

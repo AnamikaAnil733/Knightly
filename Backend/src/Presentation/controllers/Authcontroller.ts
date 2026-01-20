@@ -78,7 +78,6 @@ export class AuthController {
           MESSAGES.INVALID_REQUEST_BODY,
         );
       }
-
       const user = await this.registerUserUseCase.execute(result.data);
 
       res.status(HttpStatusCodes.CREATED).json({
