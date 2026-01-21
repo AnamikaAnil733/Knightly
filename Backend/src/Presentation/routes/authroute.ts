@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authController } from "../../Infrastructure/Composition/AuthComposition";
+import { AUTH_ROUTES } from "../constants/Routes/authRoutes";
 
 export class AuthRoutes {
   public router: Router;
@@ -10,15 +11,15 @@ export class AuthRoutes {
   }
 
   private initializeRoutes() {
-    this.router.post("/send-otp", authController.resendOTP);
-    this.router.post("/verify-otp", authController.verifyOtp);
-    this.router.post("/register", authController.register);
-    this.router.post("/login", authController.login);
-    this.router.post("/resend-otp", authController.resendOTP);
-    this.router.post("/forget-password", authController.forgetPassword);
-    this.router.post("/verify-forgetpasswordOTP",authController.verifyOtp );
-    this.router.post("/reset-password", authController.resetPassword);
-    this.router.post("/googleAuth",authController.googleAuth);
-    this.router.post("/refresh",authController.refresh);
+    this.router.post(AUTH_ROUTES.SEND_OTP, authController.resendOTP);
+    this.router.post(AUTH_ROUTES.VERIFY_OTP, authController.verifyOtp);
+    this.router.post(AUTH_ROUTES.REGISTER, authController.register);
+    this.router.post(AUTH_ROUTES.LOGIN, authController.login);
+    this.router.post(AUTH_ROUTES.RESEND_OTP, authController.resendOTP);
+    this.router.post(AUTH_ROUTES.FORGET_PASSWORD, authController.forgetPassword);
+    this.router.post(AUTH_ROUTES.VERIFY_FORGET_PASSWORD_OTP,authController.verifyOtp );
+    this.router.post(AUTH_ROUTES.RESET_PASSWORD, authController.resetPassword);
+    this.router.post(AUTH_ROUTES.GOOGLE_AUTH,authController.googleAuth);
+    this.router.post(AUTH_ROUTES.REFRESH,authController.refresh);
   }
 }

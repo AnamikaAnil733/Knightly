@@ -8,6 +8,7 @@ import {
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
+import { USER_ROUTES } from "../constants/Routes/userRoutes";
 
 export class UserRoutes{
   public readonly router:Router;
@@ -21,11 +22,11 @@ export class UserRoutes{
   }
 
   private initializeRoutes(){
-    this.router.patch("/edit-profile",editUserController.handleEditProfile);
-    this.router.patch("/change-password",changePasswordController.handleChangePassword);
-    this.router.post("/avatar/upload-avatar",avatarController.getAvatarUrl);
-    this.router.post("/avatar/dicebear",avatarController.saveDiceBearAvatar);
-    this.router.get("/profile",avatarController.getProfile)
+    this.router.patch(USER_ROUTES.EDIT_PROFILE,editUserController.handleEditProfile);
+    this.router.patch(USER_ROUTES.CHANGE_PASSWORD,changePasswordController.handleChangePassword);
+    this.router.post(USER_ROUTES.AVATAR.UPLOAD,avatarController.getAvatarUrl);
+    this.router.post(USER_ROUTES.AVATAR.DICEBEAR,avatarController.saveDiceBearAvatar);
+    this.router.get(USER_ROUTES.PROFILE,avatarController.getProfile)
 
   }
 }

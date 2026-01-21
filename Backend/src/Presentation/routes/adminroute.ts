@@ -3,6 +3,7 @@ import { getAllUserController,banUserController,unBanUserController} from "../..
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
+import { ADMIN_ROUTES } from "../constants/Routes/adminRoutes";
 
 
 export class AdminRoutes{
@@ -17,8 +18,8 @@ export class AdminRoutes{
   }
 
   private  initializeRoutes(){
-    this.router.get("/users",getAllUserController.getallusers);
-    this.router.patch("/users/ban/:userId",banUserController.handleUserBan);
-    this.router.patch("/users/unban/:userId",unBanUserController.handleUserUnBan);
+    this.router.get(ADMIN_ROUTES.USERS,getAllUserController.getallusers);
+    this.router.patch(ADMIN_ROUTES.BAN_USER,banUserController.handleUserBan);
+    this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
   }
 }
