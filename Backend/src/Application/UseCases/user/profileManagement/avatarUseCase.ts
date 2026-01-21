@@ -7,7 +7,7 @@ import { IStorageService} from "../../../../Domain/Interface/service/S3Service";
 
 
 export class GetAvatarUrlUseCase implements IGetAvatarUseCase{
-    constructor( private readonly storageService :IStorageService){}
+    constructor( private readonly _storageService :IStorageService){}
 
     async execute(input: GetAvatarInputDto): Promise<GetAvatarOutputDto> {
         const {userId,contentType} = input;
@@ -18,7 +18,7 @@ export class GetAvatarUrlUseCase implements IGetAvatarUseCase{
             )
         }
     const key = `avatars/${userId}/${Date.now()}`;
-return this.storageService.generateAvatarUploadUrl(key,contentType)
+return this._storageService.generateAvatarUploadUrl(key,contentType)
 
     }
 }

@@ -4,7 +4,7 @@ import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/
 
 
 export class EditProfileController{
-  constructor(private editUserUsecase:IEditProfileUseCase) {}
+  constructor(private _editUserUsecase:IEditProfileUseCase) {}
 
   handleEditProfile = async (
     req: Request,
@@ -15,7 +15,7 @@ export class EditProfileController{
       const userId = (req as any).user.id;
       const { displayname } = req.body;
   
-      const result = await this.editUserUsecase.editUser({
+      const result = await this._editUserUsecase.editUser({
         userId,
         displayname,
       });

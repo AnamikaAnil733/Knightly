@@ -3,14 +3,14 @@ import { GoogleUserPayload } from "../../Domain/Types/GoogleUserPayload";
 
 
 export class GoogleAuthService {
-  private client: OAuth2Client;
+  private _client: OAuth2Client;
 
   constructor() {
-    this.client = new OAuth2Client(process.env.GOOGLE_AUTH_CLIENT_ID);
+    this._client = new OAuth2Client(process.env.GOOGLE_AUTH_CLIENT_ID);
   }
 
   async verifyIdToken(idToken: string): Promise<GoogleUserPayload> {
-    const ticket = await this.client.verifyIdToken({
+    const ticket = await this._client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_AUTH_CLIENT_ID,
     });

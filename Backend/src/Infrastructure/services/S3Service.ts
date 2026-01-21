@@ -9,10 +9,10 @@ import { AvatarURLtypes } from "../../Domain/Types/avatarURLtypes"
 import { IStorageService } from "../../Domain/Interface/service/S3Service";
 
 export class S3StorageService implements IStorageService {
-  private s3: S3Client;
+  private _s3: S3Client;
 
   constructor() {
-    this.s3 = new S3Client({
+    this._s3 = new S3Client({
       region: process.env.AWS_REGION!,
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
@@ -32,7 +32,7 @@ export class S3StorageService implements IStorageService {
       ContentType: contentType,
     });
   
-    const uploadUrl = await getSignedUrl(this.s3, command, {
+    const uploadUrl = await getSignedUrl(this._s3, command, {
       expiresIn: 60,
     });
   
@@ -48,7 +48,7 @@ export class S3StorageService implements IStorageService {
     body: Buffer;
     contentType: string;
   }): Promise<string> {
-    await this.s3.send(
+    await this._s3.send(
       new PutObjectCommand({
         Bucket: process.env.AWS_S3_BUCKET!,
         Key: key,
@@ -68,8 +68,6 @@ export class S3StorageService implements IStorageService {
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,
     });
-    console.log(command,"cooooommmm")
-
-    return getSignedUrl(this.s3, command, { expiresIn });
+    return getSignedUrl(this._s3, command, { expiresIn });
   }
 }

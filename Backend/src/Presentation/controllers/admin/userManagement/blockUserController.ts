@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class BlockUserController {
   constructor(
-    private readonly userBlockUseCase: IBlockUserUseCase,
+    private readonly _userBlockUseCase: IBlockUserUseCase,
   ) {}
 
   handleUserBan = async (req: Request, res: Response): Promise<void> => {
@@ -17,7 +17,7 @@ export class BlockUserController {
         });
         return;
       }
-      const result = await this.userBlockUseCase.blockUser({ userId });
+      const result = await this._userBlockUseCase.blockUser({ userId });
       res.status(HttpStatusCodes.OK).json(result);
     } catch (error: any) {
       console.error("BLOCK USER ERROR:", error);

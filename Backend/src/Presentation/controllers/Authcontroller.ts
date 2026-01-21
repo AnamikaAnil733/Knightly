@@ -27,14 +27,14 @@ import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 
 export class AuthController {
   constructor(
-    private verifyOtpUseCase: IVerifyOtpUseCase,
-    private registerUserUseCase: IRegisterUserUseCase,
-    private loginUseCase: ILoginUseCase,
-    private resendOtpUseCase: IResendOtpUsecase,
-    private forgetPasswordUseCase: IforgetPasswordUseCase,
-    private resetPasswordUseCase: IResetPasswordUseCase,
-    private googleAuthUseCase: IGoogleAuthUseCase,
-    private tokenService: ITokenService,
+    private _verifyOtpUseCase: IVerifyOtpUseCase,
+    private _registerUserUseCase: IRegisterUserUseCase,
+    private _loginUseCase: ILoginUseCase,
+    private _resendOtpUseCase: IResendOtpUsecase,
+    private _forgetPasswordUseCase: IforgetPasswordUseCase,
+    private _resetPasswordUseCase: IResetPasswordUseCase,
+    private _googleAuthUseCase: IGoogleAuthUseCase,
+    private _tokenService: ITokenService,
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -49,7 +49,7 @@ export class AuthController {
       }
 
       const { email, otp } = result.data;
-      const isValid = await this.verifyOtpUseCase.execute(email, otp);
+      const isValid = await this._verifyOtpUseCase.execute(email, otp);
 
       if (!isValid) {
         throw new CustomError(
@@ -78,7 +78,7 @@ export class AuthController {
           MESSAGES.INVALID_REQUEST_BODY,
         );
       }
-      const user = await this.registerUserUseCase.execute(result.data);
+      const user = await this._registerUserUseCase.execute(result.data);
 
       res.status(HttpStatusCodes.CREATED).json({
         success: true,
@@ -103,9 +103,9 @@ export class AuthController {
         );
       }
 
-      const user = await this.loginUseCase.execute(result.data);
+      const user = await this._loginUseCase.execute(result.data);
 
-      const { refreshToken } = this.tokenService.generateRefreshToken({
+      const { refreshToken } = this._tokenService.generateRefreshToken({
         userId: user.id,
         role: user.role,
       });
@@ -142,7 +142,7 @@ export class AuthController {
         );
       }
 
-      await this.resendOtpUseCase.execute(result.data);
+      await this._resendOtpUseCase.execute(result.data);
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
@@ -165,7 +165,7 @@ export class AuthController {
         );
       }
 
-      await this.forgetPasswordUseCase.execute(result.data);
+      await this._forgetPasswordUseCase.execute(result.data);
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
@@ -189,7 +189,7 @@ export class AuthController {
       }
 
       const { email, password } = result.data;
-      await this.resetPasswordUseCase.execute(password, email);
+      await this._resetPasswordUseCase.execute(password, email);
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
@@ -213,9 +213,9 @@ export class AuthController {
         );
       }
 
-      const user = await this.googleAuthUseCase.execute(result.data);
+      const user = await this._googleAuthUseCase.execute(result.data);
 
-      const { refreshToken } = this.tokenService.generateRefreshToken({
+      const { refreshToken } = this._tokenService.generateRefreshToken({
         userId: user.id,
         role: user.role,
       });
@@ -228,7 +228,7 @@ export class AuthController {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      const accessToken = this.tokenService.generateAccessToken({
+      const accessToken = this._tokenService.generateAccessToken({
         userId: user.id,
         role: user.role,
       });
@@ -256,14 +256,14 @@ export class AuthController {
         });
       }
 
-      const payload = this.tokenService.verifyRefreshToken(refreshToken);
+      const payload = this._tokenService.verifyRefreshToken(refreshToken);
 
-      const accessToken = this.tokenService.generateAccessToken({
+      const accessToken = this._tokenService.generateAccessToken({
         userId: payload.userId,
         role: payload.role,
       });
 
-      const newRefreshToken = this.tokenService.generateRefreshToken({
+      const newRefreshToken = this._tokenService.generateRefreshToken({
         userId: payload.userId,
         role: payload.role,
       });

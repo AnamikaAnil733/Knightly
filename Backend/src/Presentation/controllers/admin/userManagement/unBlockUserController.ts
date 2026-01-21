@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class UnBlockUserController {
   constructor(
-    private readonly userUnBlockUseCase: IUnBlockUserUseCase,
+    private readonly _userUnBlockUseCase: IUnBlockUserUseCase,
   ) {}
 
   handleUserUnBan = async (req: Request, res: Response): Promise<void> => {
@@ -17,7 +17,7 @@ export class UnBlockUserController {
         });
         return;
       }
-      const result = await this.userUnBlockUseCase.unblockUser({ userId });
+      const result = await this._userUnBlockUseCase.unblockUser({ userId });
       res.status(HttpStatusCodes.OK).json(result);
     } catch (error: any) {
       console.error("BLOCK USER ERROR:", error);

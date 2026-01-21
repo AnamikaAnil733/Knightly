@@ -9,12 +9,12 @@ import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/us
 
 export class GetUserProfileUseCase implements IGetUserProfileUseCase{
   constructor(
-    private readonly userRepo: IBaseRepository<EAuth>,
-    private readonly storageService: IStorageService
+    private readonly _userRepo: IBaseRepository<EAuth>,
+    private readonly _storageService: IStorageService
   ) {}
 
   async execute(userId: string) {
-    const user = await this.userRepo.findById(userId);
+    const user = await this._userRepo.findById(userId);
 
     if (!user) {
       throw new CustomError(
@@ -22,18 +22,16 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase{
         "User not found"
       );
     }
-     console.log(user,"profileeeeee")
     const avatarUrl = user.avatarKey
-      ? await this.storageService.generateSignedGetUrl(
+      ? await this._storageService.generateSignedGetUrl(
           user.avatarKey,
           300
         )
       : null;
-      console.log(avatarUrl,"avathhhhhhha")
 
 
       return {
-        id: user.id!, // safe here
+        id: user.id!,
         displayname: user.displayname,
         email: user.email,
         role: user.role,

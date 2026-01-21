@@ -6,8 +6,8 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class SaveDiceBearAvatarUseCase {
   constructor(
-    private readonly storageService: IStorageService,
-    private readonly userRepo: IBaseRepository<EAuth>
+    private readonly _storageService: IStorageService,
+    private readonly _userRepo: IBaseRepository<EAuth>
   ) {}
 
   async execute({
@@ -18,7 +18,7 @@ export class SaveDiceBearAvatarUseCase {
     diceBearUrl: string;
   }): Promise<string> {
 
-console.log(diceBearUrl)
+
     if (!diceBearUrl.startsWith("https://api.dicebear.com/")) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
@@ -26,9 +26,7 @@ console.log(diceBearUrl)
       );
     }
 
-    // ✅ Native fetch (Node 18+)
     const response = await fetch(diceBearUrl);
-    console.log(response,"Saveeeee")
 
     if (!response.ok) {
       throw new CustomError(
@@ -40,14 +38,14 @@ console.log(diceBearUrl)
     const arrayBuffer = await response.arrayBuffer();
     const svgBuffer = Buffer.from(arrayBuffer);
 
-    const avatarUrl = await this.storageService.uploadObject({
+    const avatarUrl = await this._storageService.uploadObject({
       key: `avatars/${userId}/avatar.svg`,
       body: svgBuffer,
       contentType: "image/svg+xml",
     });
-    console.log(avatarUrl,"heyyyyy")
+  
 
-    const user = await this.userRepo.findById(userId);
+    const user = await this._userRepo.findById(userId);
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
@@ -57,8 +55,7 @@ console.log(diceBearUrl)
    
 
     user.avatarKey = avatarUrl;
-    console.log(user)
-    await this.userRepo.update(user);
+    await this._userRepo.update(user);
 
     return avatarUrl;
   }

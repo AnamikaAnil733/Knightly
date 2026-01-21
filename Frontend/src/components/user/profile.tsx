@@ -16,10 +16,10 @@ import {
 } from "lucide-react";
 
 /* ---------------- DiceBear URL Generator ---------------- */
-const generateDiceBearUrl = (userId: string) => {
+const generateDiceBearUrl = () => {
   const base = "https://api.dicebear.com/7.x/adventurer/svg";
-  const params = new URLSearchParams({ seed: userId });
-  return `${base}?${params.toString()}`;
+  const randomSeed = Math.random().toString(36).substring(2);
+  return `${base}?seed=${randomSeed}`;
 };
 
 export function ProfileUser() {
@@ -42,7 +42,7 @@ export function ProfileUser() {
     try {
       setLoading(true);
 
-      const diceBearUrl = generateDiceBearUrl(user.id);
+      const diceBearUrl = generateDiceBearUrl();
 
       
       await axios.post("/user/avatar/dicebear", {

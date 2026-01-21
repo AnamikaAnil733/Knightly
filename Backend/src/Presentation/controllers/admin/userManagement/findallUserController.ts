@@ -4,7 +4,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class GetAllUserController {
   constructor(
-    private readonly getAllUserUseCase: IGetAllUserUseCase,
+    private readonly _getAllUserUseCase: IGetAllUserUseCase,
   ) {}
 
   getallusers = async (
@@ -18,7 +18,7 @@ export class GetAllUserController {
       const search = (req.query.search)?.toString()|| "";
       const filter = (req.query.filter)?.toString()|| ""
 
-      const result = await this.getAllUserUseCase.getAllUsers(
+      const result = await this._getAllUserUseCase.getAllUsers(
         page,
         limit,
         search,

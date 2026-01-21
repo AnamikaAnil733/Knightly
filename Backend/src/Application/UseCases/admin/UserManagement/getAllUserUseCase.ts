@@ -5,7 +5,7 @@ import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../../../Domain/DTO
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
-    private readonly userManagmentRepository: IUserManagmentRepository
+    private readonly _userManagmentRepository: IUserManagmentRepository
   ) {}
 
   async getAllUsers(
@@ -18,8 +18,8 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
     const skip = (page - 1) * limit;
 
     const [users, total] = await Promise.all([
-      this.userManagmentRepository.getAll(skip, limit,search,filter),
-      this.userManagmentRepository.count(search,filter),
+      this._userManagmentRepository.getAll(skip, limit,search,filter),
+      this._userManagmentRepository.count(search,filter),
     ]);
 
     return {
