@@ -6,9 +6,9 @@ import { SearchIcon } from "lucide-react";
 import axios from "../../Service/api/axios/Adminaxios";
 import { IUser, UserRole } from "../../types/user";
 
-import { UserTable } from "../../components/admin/UserManagment/UserTable";
-import { UserProfile } from "../../components/admin/UserManagment/UserProfile";
-import { UserFilters } from "../../components/admin/UserManagment/UserFilters";
+import { UserTable } from "../../components/admin/UserManagement/UserTable";
+import { UserProfile } from "../../components/admin/UserManagement/UserProfile";
+import { UserFilters } from "../../components/admin/UserManagement/UserFilters";
 
 /* ===================== TYPES ===================== */
 

@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <PuzzleIcon size={20} />,
       name: 'Puzzle Management',
-      path: '/puzzles',
+      path: '/admin/puzzles',
     },
     {
       icon: <FileTextIcon size={20} />,

@@ -10,6 +10,7 @@ import { ForgotPassword } from "../pages/Authentication/forgetPassword";
 import { ResetPassword } from "../pages/Authentication/changePassword";
 import { Settings } from "../pages/user/setting";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import { PuzzleManagement } from "../pages/Admin/puzzleManagement";
 
 
 export default function AppRoutes() {
@@ -31,6 +32,7 @@ export default function AppRoutes() {
          <AdminLayout />
          </AdminProtectedRoute>
         }><Route path="users" element={<UserManagment />} />
+        <Route path="puzzles" element={<PuzzleManagement />} />
          </Route>
       </Routes>
     </BrowserRouter>
