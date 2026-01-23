@@ -1,3 +1,4 @@
+import { PuzzleType } from "../Types/PuzzleTypes";
 import { UserRole } from "../Types/UserRole";
 
 export interface BaseUserResponseDTO{
@@ -59,5 +60,19 @@ export interface UnBlockUserOutputDTO{
 }
 
 
+//------PuzzleManagement----
+
+export interface CreatePuzzleInputDTO{
+    fen:string;
+    difficulty:PuzzleType;
+    moves:string[];
+}
+
+export interface UpdatePuzzleInputDTO{
+    fen?:string;
+    difficulty?:PuzzleType;
+    moves?:string[];
+    isActive?:boolean;
+}
 
 
