@@ -5,7 +5,8 @@ import EAuth from "../../Domain/Entity/auth";
 import { AuthSchemaType } from "../database/Schema/authSchema";
 import {IUserManagmentRepository} from "../../Domain/Interface/Repositories/UserManagmentRepository";
 
-export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaType>implements IUserManagmentRepository{
+export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaType>
+implements IUserManagmentRepository{
   constructor() {
     super(authModel, AuthMapper);
   }

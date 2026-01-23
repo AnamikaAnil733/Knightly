@@ -3,5 +3,7 @@ export const ADMIN_ROUTES = {
   
     BAN_USER: "/users/ban/:userId",
     UNBAN_USER: "/users/unban/:userId",
+
+    CREATEPUZZLES: "/create-puzzles",
   } as const;
   

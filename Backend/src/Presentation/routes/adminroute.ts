@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getAllUserController,banUserController,unBanUserController} from "../../Infrastructure/Composition/AdminCompostion";
+import { getAllUserController,
+  banUserController,
+  unBanUserController,
+  PuzzleManagementController
+} from "../../Infrastructure/Composition/AdminCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -21,5 +25,6 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.USERS,getAllUserController.getallusers);
     this.router.patch(ADMIN_ROUTES.BAN_USER,banUserController.handleUserBan);
     this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
+    this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
   }
 }

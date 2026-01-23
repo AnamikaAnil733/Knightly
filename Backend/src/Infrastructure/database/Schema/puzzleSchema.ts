@@ -1,4 +1,4 @@
-import {model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { PuzzleType } from "../../../Domain/Types/PuzzleTypes";
 
 export interface PuzzleSchemaType{

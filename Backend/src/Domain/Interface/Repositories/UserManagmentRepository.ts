@@ -1,5 +1,5 @@
 import EAuth from "../../Entity/auth";
-import { IBaseRepository } from "./BaseReository";
+import { IBaseRepository } from "./BaseRepository";
 
 export interface IUserManagmentRepository extends IBaseRepository<EAuth,string> {
   getAll(skip:number,limit:number,search?:string,filter?:string): Promise<EAuth[]>;

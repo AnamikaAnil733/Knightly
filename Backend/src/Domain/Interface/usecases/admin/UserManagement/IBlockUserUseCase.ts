@@ -1,4 +1,4 @@
-import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../DTOs/DTOs/adminDTOs";
+import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../DTOs/adminDTOs";
 
 
 

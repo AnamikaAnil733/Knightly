@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/IBlockUserUseCase";
+import { IBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IBlockUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class BlockUserController {

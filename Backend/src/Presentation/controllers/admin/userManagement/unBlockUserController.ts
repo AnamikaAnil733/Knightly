@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/IUnBlockUserUseCase";
+import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IUnBlockUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 
 export class UnBlockUserController {

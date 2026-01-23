@@ -1,6 +1,6 @@
 // Application/UseCases/user/profileManagement/GetUserProfileUseCase.ts
 
-import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseReository";
+import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseRepository";
 import { IStorageService } from "../../../../Domain/Interface/service/S3Service";
 import EAuth from "../../../../Domain/Entity/auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";

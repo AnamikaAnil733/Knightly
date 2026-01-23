@@ -75,4 +75,14 @@ export interface UpdatePuzzleInputDTO{
     isActive?:boolean;
 }
 
+export interface PuzzleResponseDTO{
+    id: string;
+    fen: string;
+    difficulty: PuzzleType;
+    moves: string[];
+    solutionLength: number;
+    isActive: boolean;
+    createdAt: string;
+}
+
 

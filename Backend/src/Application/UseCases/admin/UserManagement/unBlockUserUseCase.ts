@@ -1,5 +1,5 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/UserManagmentRepository";
-import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/IUnBlockUserUseCase";
+import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IUnBlockUserUseCase";
 import { UnBlockUserInputDTO,UnBlockUserOutputDTO } from "../../../../Domain/DTOs/adminDTOs";
 
 

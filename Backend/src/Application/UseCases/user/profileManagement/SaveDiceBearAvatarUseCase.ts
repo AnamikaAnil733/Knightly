@@ -1,5 +1,5 @@
 import { IStorageService } from "../../../../Domain/Interface/service/S3Service";
-import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseReository";
+import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseRepository";
 import EAuth from "../../../../Domain/Entity/auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
