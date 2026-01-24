@@ -18,7 +18,7 @@ export class ResetPaswordUseCase implements IResetPasswordUseCase{
   async execute(password: string, email: string): Promise<UserRole> {
 
     const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${email}`);
-    console.log(verified);
+  
 
     if (!verified) {
       throw new CustomError(

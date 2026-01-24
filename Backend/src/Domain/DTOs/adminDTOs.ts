@@ -69,6 +69,7 @@ export interface CreatePuzzleInputDTO{
 }
 
 export interface UpdatePuzzleInputDTO{
+    id: string;
     fen?:string;
     difficulty?:PuzzleType;
     moves?:string[];

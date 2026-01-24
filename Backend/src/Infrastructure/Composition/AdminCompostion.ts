@@ -11,6 +11,7 @@ import { BlockUserUseCase } from "../../Application/UseCases/admin/UserManagemen
 import { UnBlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/unBlockUserUseCase";
 import { CreatePuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/CreatePuzzleUseCase";
 import { GetallPuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/getAllPuzzleUseCase";
+import { EditPuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/EditPuzzleUseCase";
 
 import { TokenService } from "../services/tokenService";
 
@@ -28,12 +29,13 @@ const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo)
 const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo)
+const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo)
 
 
 export const getAllUserController = new GetAllUserController(getAllUsersUseCase);
 export const banUserController = new BlockUserController(blockUserUseCase);
 export const unBanUserController = new UnBlockUserController(unBlockUserUserCase);
 
-export const PuzzleManagementController = new AdminPuzzleController(createPuzzleUseCase,getAllPuzzleUseCase);
+export const PuzzleManagementController = new AdminPuzzleController(createPuzzleUseCase,getAllPuzzleUseCase,editPuzzleUseCase);
 
 export const adminRoutes = new AdminRoutes(tokenService);

@@ -1,12 +1,14 @@
 import { Request,Response,NextFunction} from "express";
 import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/ICreatePuzzle";
-import  { HttpStatusCodes} from  "../../../../Domain/Types/statusCode";
+import { HttpStatusCodes} from  "../../../../Domain/Types/statusCode";
 import { IGetAllPuzzleUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IGetAllPuzzlesUseCase";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
+import { IEditPuzzleUsecase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IEditPuzzleUseCase";
 
 export class AdminPuzzleController{
     constructor(private readonly _createPuzzleUseCase :ICreatePuzzleUseCase,
                 private readonly _getAllPuzzleUseCase :IGetAllPuzzleUseCase,
+                private readonly _editPuzzleUseCase   :IEditPuzzleUsecase,
     ){}
 
  createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
@@ -33,7 +35,8 @@ export class AdminPuzzleController{
             : undefined;
 
             const result = await this._getAllPuzzleUseCase.execute(
-                {page:page,
+                {
+                page:page,
                 limit:limit,
                 difficulty:difficulty
                 }
@@ -41,8 +44,25 @@ export class AdminPuzzleController{
             return res.status(HttpStatusCodes.OK).json(result)
 
         }catch(error){
+
             next(error)
 
+        }
+    }
+
+    editPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+        try{
+            const puzzleId = req.params.id;
+            const result = await this._editPuzzleUseCase.execute({
+                id:puzzleId,
+                ...req.body
+            })
+
+            return res.status(HttpStatusCodes.OK).json(result)
+
+
+        }catch(error){
+            next(error)
         }
     }
 

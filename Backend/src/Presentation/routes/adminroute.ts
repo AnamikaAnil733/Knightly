@@ -15,17 +15,20 @@ export class AdminRoutes{
 
   constructor(tokenService: ITokenService){
     this.router = Router();
-    this.router.use(
-          authMiddleware([UserRole.ADMIN],tokenService),
-        );
+    // this.router.use(
+    //       authMiddleware([UserRole.ADMIN],tokenService),
+    //     );
     this.initializeRoutes();
   }
 
   private  initializeRoutes(){
+
     this.router.get(ADMIN_ROUTES.USERS,getAllUserController.getallusers);
     this.router.patch(ADMIN_ROUTES.BAN_USER,banUserController.handleUserBan);
     this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
+
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
+    this.router.patch(ADMIN_ROUTES.EDITPUZZLE,PuzzleManagementController.editPuzzles);
   }
 }
