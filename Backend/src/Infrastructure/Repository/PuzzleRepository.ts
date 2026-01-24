@@ -13,20 +13,46 @@ implements IPuzzleRepository{
         super(PuzzleModel,PuzzleMapper)
     }
 
-    async findAll(filter?: { difficulty?: PuzzleType; }): Promise<EPuzzle[]> {
-        const query: Partial<PuzzleSchemaType> & { isActive: boolean } = {
-            isActive: true,
-          };
-          if (filter?.difficulty) {
-            query.difficulty = filter.difficulty;
-          }
-          const docs = await this.model.find(query).sort("-createdAt");
-
-
-          return docs.map((doc) =>
-            PuzzleMapper.toEntityFromDocument(doc),
-          );
+    async findAll(
+      input?: {
+        page?: number;
+        limit?: number;
+        difficulty?: PuzzleType;
+      }
+    ): Promise<{
+      puzzles: EPuzzle[];
+      total: number;
+    }> {
+      const page = input?.page ?? 1;
+      const limit = input?.limit ?? 10;
+      const skip = (page - 1) * limit;
+    
+      const query: Partial<PuzzleSchemaType> & { isActive: boolean } = {
+        isActive: true,
+      };
+    
+      if (input?.difficulty) {
+        query.difficulty = input.difficulty;
+      }
+    
+      const [docs, total] = await Promise.all([
+        this.model
+          .find(query)
+          .sort("-createdAt")
+          .skip(skip)
+          .limit(limit),
+    
+        this.model.countDocuments(query),
+      ]);
+    
+      return {
+        puzzles: docs.map((doc) =>
+          PuzzleMapper.toEntityFromDocument(doc),
+        ),
+        total,
+      };
     }
+    
 
     async softDelete(id: string): Promise<boolean> {
         const puzzle = await this.findById(id);

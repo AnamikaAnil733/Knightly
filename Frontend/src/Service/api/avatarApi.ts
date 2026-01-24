@@ -1,4 +1,4 @@
-import axios from "../../Service/api/axios/Useraxios"
+import axios from "./axios/Useraxios"
 
 export const getAvatarUploadUrl = async (contentType: string) => {
   const res = await axios.post("/user/avatar/upload-avatar", {

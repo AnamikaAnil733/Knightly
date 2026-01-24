@@ -5,7 +5,7 @@ import  { HttpStatusCodes} from  "../../../../Domain/Types/statusCode"
 export class AdminPuzzleController{
     constructor(private readonly _createPuzzleUseCase :ICreatePuzzleUseCase){}
 
-    async createPuzzle(req:Request,res:Response):Promise<Response>{
+ createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
         try{
             const puzzleResponse = await this._createPuzzleUseCase.execute(req.body)
             return res.status(HttpStatusCodes.CREATED).json({

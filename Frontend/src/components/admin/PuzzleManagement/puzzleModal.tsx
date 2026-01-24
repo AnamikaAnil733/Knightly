@@ -1,26 +1,34 @@
-import React, {  useState } from 'react'
-import { Puzzle } from '../../../pages/Admin/puzzleManagement';
+import React, { useState } from 'react'
 import { ChessboardPreview } from './chessBoardPreview'
 import { XIcon } from 'lucide-react'
+
+export interface PuzzleFormData {
+  fen: string
+  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert'
+  moves: string[]
+}
+
 interface PuzzleModalProps {
   onClose: () => void
-  onSave: (puzzle: Puzzle) => void
-  puzzle: Puzzle | null
+  onSave: (data: PuzzleFormData) => void
+  initialData?: PuzzleFormData
 }
-export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
-  const [formData, setFormData] = useState<Omit<Puzzle, 'id'>>({
-    fen: '',
-    difficulty: 'Medium',
-    createdAt: new Date().toISOString().split('T')[0],
-    solutionLength: 0,
-    moves: [],
-  })
+
+export function PuzzleModal({
+  onClose,
+  onSave,
+  initialData,
+}: PuzzleModalProps) {
   const [currentMove, setCurrentMove] = useState('')
 
+  const [formData, setFormData] = useState<PuzzleFormData>(() => ({
+    fen: initialData?.fen ?? '',
+    difficulty: initialData?.difficulty ?? 'Medium',
+    moves: initialData?.moves ?? [],
+  }))
+
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target
     setFormData((prev) => ({
@@ -28,31 +36,29 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
       [name]: value,
     }))
   }
+
   const handleAddMove = () => {
     if (!currentMove.trim()) return
-    const updatedMoves = [...formData.moves, currentMove.trim()]
     setFormData((prev) => ({
       ...prev,
-      moves: updatedMoves,
-      solutionLength: updatedMoves.length,
+      moves: [...prev.moves, currentMove.trim()],
     }))
     setCurrentMove('')
   }
+
   const handleRemoveMove = (index: number) => {
-    const updatedMoves = formData.moves.filter((_, i) => i !== index)
     setFormData((prev) => ({
       ...prev,
-      moves: updatedMoves,
-      solutionLength: updatedMoves.length,
+      moves: prev.moves.filter((_, i) => i !== index),
     }))
   }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSave({
-      ...formData,
-      id: puzzle?.id || 'temp-id',
-    })
+    onSave(formData)
   }
+  console.log(formData)
+
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
       <div
@@ -61,7 +67,7 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
       >
         <div className="flex justify-between items-center p-4 border-b border-[#3A6FF7]/30">
           <h2 className="text-xl font-bold text-white">
-            {puzzle ? 'Edit Puzzle' : 'Add New Puzzle'}
+            {initialData ? 'Edit Puzzle' : 'Add New Puzzle'}
           </h2>
           <button
             onClick={onClose}
@@ -70,9 +76,11 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
             <XIcon size={20} />
           </button>
         </div>
+
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
+              {/* FEN */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-[#C9CAD9] mb-1">
                   FEN Position
@@ -83,11 +91,13 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
                   value={formData.fen}
                   onChange={handleChange}
                   className="w-full bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
-                            text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
+                             text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
                   placeholder="Enter FEN notation"
                   required
                 />
               </div>
+
+              {/* Difficulty */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-[#C9CAD9] mb-1">
                   Difficulty
@@ -97,7 +107,7 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
                   value={formData.difficulty}
                   onChange={handleChange}
                   className="w-full bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
-                            text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
+                             text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -105,40 +115,32 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
                   <option value="Expert">Expert</option>
                 </select>
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#C9CAD9] mb-1">
-                  Creation Date
-                </label>
-                <input
-                  type="date"
-                  name="createdAt"
-                  value={formData.createdAt}
-                  onChange={handleChange}
-                  className="w-full bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
-                            text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
-                />
-              </div>
+
+              {/* Moves */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-[#C9CAD9] mb-1">
                   Solution Moves
                 </label>
+
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={currentMove}
                     onChange={(e) => setCurrentMove(e.target.value)}
                     className="flex-1 bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
-                              text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
+                               text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
                     placeholder="e.g. e4, e5, Nf3"
                   />
                   <button
                     type="button"
                     onClick={handleAddMove}
-                    className="px-4 py-2 bg-[#6B2EFF] rounded-lg text-white hover:bg-[#6B2EFF]/80 transition-colors"
+                    className="px-4 py-2 bg-[#6B2EFF] rounded-lg text-white 
+                               hover:bg-[#6B2EFF]/80 transition-colors"
                   >
                     Add
                   </button>
                 </div>
+
                 <div className="mt-3 space-y-2">
                   {formData.moves.map((move, index) => (
                     <div
@@ -149,7 +151,7 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
                         <span className="text-[#FFD166] mr-2">
                           {index + 1}.
                         </span>
-                        <span>{move}</span>
+                        <span className="text-white">{move}</span>
                       </div>
                       <button
                         type="button"
@@ -163,32 +165,37 @@ export function PuzzleModal({ onClose, onSave, puzzle }: PuzzleModalProps) {
                 </div>
               </div>
             </div>
+
+            {/* Board Preview */}
             <div>
               <label className="block text-sm font-medium text-[#C9CAD9] mb-3">
                 Board Preview
               </label>
               <ChessboardPreview
                 fen={
-                  formData.fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+                  formData.fen ||
+                  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
                 }
               />
             </div>
           </div>
+
+          {/* Footer */}
           <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-[#3A6FF7]/30">
             <button
               type="button"
               onClick={onClose}
               className="px-5 py-2 rounded-lg bg-[#0A0F2C] border border-[#3A6FF7]/50 
-                        text-[#C9CAD9] hover:bg-[#11193F] transition-colors"
+                         text-[#C9CAD9] hover:bg-[#11193F] transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-5 py-2 rounded-lg font-medium
-                        bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] 
-                        border border-[#FFD166] hover:shadow-[0_0_15px_rgba(58,111,247,0.6)] 
-                        transition-all duration-300"
+                         bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] 
+                         border border-[#FFD166] hover:shadow-[0_0_15px_rgba(58,111,247,0.6)] 
+                         transition-all duration-300"
             >
               Save Puzzle
             </button>

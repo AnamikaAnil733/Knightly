@@ -15,7 +15,7 @@ export class AdminRoutes{
 
   constructor(tokenService: ITokenService){
     this.router = Router();
-        this.router.use(
+    this.router.use(
           authMiddleware([UserRole.ADMIN],tokenService),
         );
     this.initializeRoutes();

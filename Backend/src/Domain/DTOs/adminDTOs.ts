@@ -85,4 +85,17 @@ export interface PuzzleResponseDTO{
     createdAt: string;
 }
 
+export interface GetAllPuzzleOutputDTO{
+    puzzles: PuzzleResponseDTO[];
+    total: number;
+    page: number;
+    totalPages: number;
+}
+export interface GetallPuzzleInputDTO{
+    page?: number;
+    limit?: number;
+    difficulty?: PuzzleType;
+
+}
+
 
