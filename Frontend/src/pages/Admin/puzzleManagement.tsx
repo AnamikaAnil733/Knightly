@@ -11,6 +11,7 @@ import {
   createPuzzleApi,
   getAllPuzzlesApi,
   deletePuzzleApi,
+  editPuzzlesApi,
 } from '../../Service/api/adminPuzzleApi'
 
 /* ===================== TYPES ===================== */
@@ -51,7 +52,16 @@ export function PuzzleManagement() {
 
   const handleSavePuzzle = async (data: PuzzleFormData) => {
     try {
-      if (!editingPuzzle) {
+      if (editingPuzzle) {
+        // EDIT
+        await editPuzzlesApi({
+          id: editingPuzzle.id,
+          fen: data.fen,
+          difficulty: data.difficulty,
+          moves: data.moves,
+        })
+      } else {
+        // CREATE
         await createPuzzleApi(data)
       }
       // update flow can be added later

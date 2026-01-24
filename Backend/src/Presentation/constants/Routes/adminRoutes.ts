@@ -6,6 +6,6 @@ export const ADMIN_ROUTES = {
 
     CREATEPUZZLES: "/create-puzzles",
     PUZZLES:"/puzzles",
-    EDITPUZZLE:"/edit-puzzle",
+    EDITPUZZLE:"/edit-puzzle/:id",
   } as const;
   

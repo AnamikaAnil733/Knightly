@@ -19,3 +19,22 @@ export const getAllPuzzlesApi= async (params?:{
 export const deletePuzzleApi = async ()=>{
     
 }
+
+export interface EditPuzzleApiInput {
+    id: string;
+    fen?: string;
+    difficulty?: 'Easy' | 'Medium' | 'Hard' | 'Expert';
+    moves?: string[];
+    isActive?: boolean;
+  }
+
+export const editPuzzlesApi = async(params:EditPuzzleApiInput)=>{
+    const {id,...body} = params
+
+    const response = await axios.patch(
+        `/admin/edit-puzzle/${id}`,
+        body,
+      );
+      return response.data
+
+}
