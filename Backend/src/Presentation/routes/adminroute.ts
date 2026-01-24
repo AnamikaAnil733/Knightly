@@ -26,5 +26,6 @@ export class AdminRoutes{
     this.router.patch(ADMIN_ROUTES.BAN_USER,banUserController.handleUserBan);
     this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
+    this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
   }
 }
