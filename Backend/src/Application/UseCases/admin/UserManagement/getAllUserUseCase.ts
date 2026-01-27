@@ -22,6 +22,8 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
       this._userManagmentRepository.count(search,filter),
     ]);
 
+ 
+
     return {
       users: users.map(user => ({
         id: user.id!,
@@ -39,6 +41,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
         currentStreak: user.currentStreak,
         achievements: user.achievements,
         rewards: user.rewards,
+        avatarUrl:user.avatarKey
       })),
       total,
       page,

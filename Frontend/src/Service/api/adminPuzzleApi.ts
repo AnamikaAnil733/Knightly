@@ -16,9 +16,10 @@ export const getAllPuzzlesApi= async (params?:{
     return response.data
 }
 
-export const deletePuzzleApi = async ()=>{
-    
-}
+export const deletePuzzleApi = async (id: string) => {
+    const response = await axios.delete(`/admin/delete-puzzle/${id}`);
+    return response.data;
+  };
 
 export interface EditPuzzleApiInput {
     id: string;

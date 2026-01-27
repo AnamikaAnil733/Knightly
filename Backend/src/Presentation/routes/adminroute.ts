@@ -15,9 +15,9 @@ export class AdminRoutes{
 
   constructor(tokenService: ITokenService){
     this.router = Router();
-    // this.router.use(
-    //       authMiddleware([UserRole.ADMIN],tokenService),
-    //     );
+    this.router.use(
+          authMiddleware([UserRole.ADMIN],tokenService),
+        );
     this.initializeRoutes();
   }
 
@@ -30,5 +30,6 @@ export class AdminRoutes{
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
     this.router.patch(ADMIN_ROUTES.EDITPUZZLE,PuzzleManagementController.editPuzzles);
+    this.router.delete(ADMIN_ROUTES.DELETEPUZZLE,PuzzleManagementController.softDeletePuzzle);
   }
 }

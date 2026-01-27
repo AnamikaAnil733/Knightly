@@ -9,7 +9,8 @@ import {
   BanIcon,
   CheckCircleIcon,
   StarIcon,
-} from 'lucide-react'
+} from 'lucide-react';
+import { getAvatarUrl } from "../../../utils/getAvatarurl";
 
 interface UserProfileProps {
   user: IUser
@@ -23,8 +24,8 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
         <div className="flex items-center">
           <div className="relative">
             <img
-              // src={user.avatar}
-              alt={user.displayname}
+              src={getAvatarUrl(user)}
+              alt="hell0"
               className="w-16 h-16 rounded-full object-cover border-2 border-[#6B2EFF]"
             />
             {user.premium && (

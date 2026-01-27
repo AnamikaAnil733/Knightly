@@ -4,11 +4,15 @@ import { HttpStatusCodes} from  "../../../../Domain/Types/statusCode";
 import { IGetAllPuzzleUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IGetAllPuzzlesUseCase";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { IEditPuzzleUsecase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IEditPuzzleUseCase";
+import { ISoftDeleteUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IDeletePuzzleUseCase";
+
 
 export class AdminPuzzleController{
-    constructor(private readonly _createPuzzleUseCase :ICreatePuzzleUseCase,
+    constructor(
+                private readonly _createPuzzleUseCase :ICreatePuzzleUseCase,
                 private readonly _getAllPuzzleUseCase :IGetAllPuzzleUseCase,
                 private readonly _editPuzzleUseCase   :IEditPuzzleUsecase,
+                private readonly _softDeletePuzzleUseCase:ISoftDeleteUseCase
     ){}
 
  createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
@@ -60,6 +64,21 @@ export class AdminPuzzleController{
 
             return res.status(HttpStatusCodes.OK).json(result)
 
+
+        }catch(error){
+            next(error)
+        }
+    }
+
+    softDeletePuzzle = async (req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+        try{
+            const {id} = req.params
+            await this._softDeletePuzzleUseCase.execute(id)
+
+            return res.status(HttpStatusCodes.OK).json({
+                success:true,
+                message:"Puzzle deleted successfully"
+            })
 
         }catch(error){
             next(error)
