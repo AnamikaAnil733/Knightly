@@ -12,18 +12,18 @@ export class Board{
             )
         }
     }
-    isInside(postion:Position):boolean{
-        return postion.isValid();
+    isInside(position:Position):boolean{
+        return position.isValid();
     }
     
-    getPiece(postion:Position):Piece|null{
-        if(!this.isInside(postion)) return null;
-      return this.grid[postion.row][postion.column]
+    getPiece(position:Position):Piece|null{
+        if(!this.isInside(position)) return null;
+      return this.grid[position.row][position.column]
     }
 
-    setPiece(postion:Position,piece:Piece|null):void{
-        if(!this.isInside(postion))return;
-       this.grid[postion.row][postion.column] = piece
+    setPiece(position:Position,piece:Piece|null):void{
+        if(!this.isInside(position))return;
+       this.grid[position.row][position.column] = piece
     }
 
     move(from:Position,to:Position):void{

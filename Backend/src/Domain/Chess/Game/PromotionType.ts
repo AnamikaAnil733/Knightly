@@ -1,0 +1,1 @@
+export type PromotionType = "QUEEN"|"ROOK"|"BISHOP"|"KNIGHT";
