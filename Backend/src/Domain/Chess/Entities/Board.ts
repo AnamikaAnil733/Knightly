@@ -1,0 +1,41 @@
+import { Position } from "../Position";
+import { Piece } from "../Piece";
+
+export class Board{
+    private  grid:(Piece |null)[][];
+    constructor(grid?:(Piece |null)[][]){
+        if(grid){
+           this.grid = grid.map(row => [...row])
+        }else{
+            this.grid = Array.from({length:8},()=>
+            Array.from({length:8},()=>null)
+            )
+        }
+    }
+    isInside(postion:Position):boolean{
+        return postion.isValid();
+    }
+    
+    getPiece(postion:Position):Piece|null{
+        if(!this.isInside(postion)) return null;
+      return this.grid[postion.row][postion.column]
+    }
+
+    setPiece(postion:Position,piece:Piece|null):void{
+        if(!this.isInside(postion))return;
+       this.grid[postion.row][postion.column] = piece
+    }
+
+    move(from:Position,to:Position):void{
+        const piece = this.getPiece(from);
+        if(!piece) return;
+        this.setPiece(to,piece);
+        this.setPiece(from,null)
+    }
+
+
+    clone():Board{
+        return new Board(this.grid)
+    }
+
+}
