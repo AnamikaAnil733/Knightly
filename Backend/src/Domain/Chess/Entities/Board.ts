@@ -1,5 +1,5 @@
 import { Position } from "../Position";
-import { Piece } from "../Piece";
+import { Piece } from "../Pieces/Piece";
 
 export class Board{
     private  grid:(Piece |null)[][];

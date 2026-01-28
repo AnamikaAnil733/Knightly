@@ -1,8 +1,9 @@
-import { Piece } from "../Piece";
+import { Piece } from "./Piece";
 import { Position } from "../Position";
 
 
 export class King extends Piece{
+    readonly type = "KING";
     getPseudoLegalMoves(from: Position, board: any): Position[] {
         const moves =[
             [0,1],[1,0],[-1,0],[0,-1],
