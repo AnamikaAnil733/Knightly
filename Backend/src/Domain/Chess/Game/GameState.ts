@@ -5,6 +5,7 @@ import { Knight } from "../Pieces/Knight";
 import { Bishop } from "../Pieces/Bishop";
 import { Position } from "../Position";
 import { LegalService } from "../Service/LegalMoveService";
+import { CheckService } from "../Service/CheckService";
 import { Move } from "./Move";
 import { PromotionType } from "./PromotionType";
 
@@ -57,6 +58,59 @@ export class GameState{
         }
     }
 
+    private performCastling(
+        from:Position,
+        to:Position
+    ):void{
+        const row = from.row;
+        const isKingSide = to.column === 6
+
+        const rookfromCol = isKingSide?7:0
+        const rooktoCol = isKingSide?5:3
+
+        this._board.move(from,to);
+        const king = this._board.getPiece(to)
+        if(king) king.hasMoved = true
+
+
+        this._board.move(new Position(row,rookfromCol),new Position(row,rooktoCol))
+        const rook = this._board.getPiece(new Position(row,rooktoCol))
+        if(rook) rook.hasMoved = true
+    }
+
+    canCastle(from:Position,to:Position):boolean{
+        const king = this._board.getPiece(from);
+        if(!king || king.type !== "KING") return false;
+        if(king.hasMoved) return false
+
+        const row = from.row;
+        const isKingSide = to.column === 6;
+        const rookCol = isKingSide?7:0
+
+        const rookP = new Position(row,rookCol);
+        const rook = this._board.getPiece(rookP);
+
+        if(!rook|| rook.type !== "ROOK" || rook.hasMoved) return false;
+
+        const step = isKingSide?1:-1;
+        for(let col = from.column +step;col != rookCol;col += step){
+            if(this._board.getPiece(new Position(row,col))){
+                return false
+            }
+        }
+
+        for(let col = from.column+step;col !== to.column+step;col += step){
+            const testBoard = this._board.clone();
+            testBoard.move(from,new Position(row,col))
+            if(CheckService.isKingInCheck(king.color,testBoard)){
+                return false
+            }
+        }
+        return true
+
+    }
+
+
     makeMove(from:Position,to:Position,promotionType?:PromotionType):void{
         
         const piece = this._board.getPiece(from)
@@ -73,8 +127,23 @@ export class GameState{
         if(!isLegal){
             throw new Error("Illegal move")
         }
-      
+
+      if(piece.type == "KING" && Math.abs(to.column - from.column)===2){
+
+        if(!this.canCastle(from,to)){
+            throw new Error("Illegal Castling")
+        }
+        this.performCastling(from,to)
+
+      }else{
+
         this._board.move(from,to)
+
+        const movedPiece = this._board.getPiece(to);
+        if (movedPiece) {
+         movedPiece.hasMoved = true;
+         }
+        }
         let finalPieceType = piece.type;
 
         if(piece.type === "PAWN" &&
@@ -86,7 +155,7 @@ export class GameState{
                 this.promotePawn(piece.color,to,promotionType);
                 finalPieceType = promotionType;
             }
-
+        
 
         this._moveHistory.push(
             new Move(from,to,finalPieceType,piece.color)

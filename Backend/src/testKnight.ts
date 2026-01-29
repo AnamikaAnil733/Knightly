@@ -29,24 +29,21 @@ const board = new Board();
 // board.setPiece(new Position(7, 4), king);
 // board.setPiece(new Position(7, 0), rook);
 
-board.setPiece(new Position(0, 0), new King("BLACK"));
-board.setPiece(new Position(7, 4), new King("WHITE"));
-board.setPiece(new Position(7, 0), new Bishop("WHITE"));
-// board.setPiece(new Position(0, 4), new Rook("BLACK"));
+
+
+board.setPiece(new Position(0, 4), new King("BLACK")); // e8
+board.setPiece(new Position(7, 4), new King("WHITE")); // e1
+board.setPiece(new Position(7, 7), new Rook("WHITE")); // h1
+
 const game = new GameState(board);
-console.log(game.getTurn());
+
 game.makeMove(
-  new Position(7, 0),
-  new Position(5,2)
+  new Position(7, 4), // e1
+  new Position(7, 6)  // g1
 );
 
-
-console.log(game.getTurn()); // BLACK
-game.makeMove(
-  new Position(0,0),
-  new Position(0,1)
-)
 console.log(game.getHistory());
+
 
 
 

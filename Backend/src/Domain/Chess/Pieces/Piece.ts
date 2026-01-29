@@ -1,6 +1,9 @@
 import { Position } from "../Position";
 
 export abstract class Piece{
+
+    public hasMoved: boolean = false;
+    
     constructor(
         public readonly color:"WHITE"|"BLACK"
     ){}
