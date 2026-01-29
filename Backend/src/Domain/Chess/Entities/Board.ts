@@ -3,6 +3,7 @@ import { Piece } from "../Pieces/Piece";
 
 export class Board{
     private  grid:(Piece |null)[][];
+    private _enPassantTarget: Position | null = null;
     constructor(grid?:(Piece |null)[][]){
         if(grid){
            this.grid = grid.map(row => [...row])
@@ -37,5 +38,13 @@ export class Board{
     clone():Board{
         return new Board(this.grid)
     }
+
+    setEnPassantTarget(pos: Position | null): void {
+        this._enPassantTarget = pos;
+      }
+      
+      getEnPassantTarget(): Position | null {
+        return this._enPassantTarget;
+      }
 
 }

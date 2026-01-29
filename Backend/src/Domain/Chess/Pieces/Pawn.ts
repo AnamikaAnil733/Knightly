@@ -36,6 +36,18 @@ export class Pawn extends Piece{
             moves.push(p)
         }
        }
+
+
+       const ep = board.getEnPassantTarget?.();
+       if (
+         ep &&
+         ep.row === from.row + d &&
+         Math.abs(ep.column - from.column) === 1
+       ) {
+         moves.push(ep);
+       }
+
+
        return moves
     }
 }

@@ -8,6 +8,7 @@ import { King } from "./Domain/Chess/Pieces/King";
 import { CheckService } from "./Domain/Chess/Service/CheckService";
 import { LegalService } from "./Domain/Chess/Service/LegalMoveService";
 import { GameState } from "./Domain/Chess/Game/GameState";
+import { Pawn } from "./Domain/Chess/Pieces/Pawn";
 
 const board = new Board();
 // const knight = new Knight("WHITE");
@@ -31,18 +32,18 @@ const board = new Board();
 
 
 
-board.setPiece(new Position(0, 4), new King("BLACK")); // e8
-board.setPiece(new Position(7, 4), new King("WHITE")); // e1
-board.setPiece(new Position(7, 7), new Rook("WHITE")); // h1
+// board.setPiece(new Position(0, 4), new King("BLACK")); // e8
+// board.setPiece(new Position(7, 4), new King("WHITE")); // e1
+// board.setPiece(new Position(7, 7), new Rook("WHITE")); // h1
 
-const game = new GameState(board);
+// const game = new GameState(board);
 
-game.makeMove(
-  new Position(7, 4), // e1
-  new Position(7, 6)  // g1
-);
+// game.makeMove(
+//   new Position(7, 4), // e1
+//   new Position(7, 6)  // g1
+// );
 
-console.log(game.getHistory());
+// console.log(game.getHistory());
 
 
 
@@ -63,4 +64,48 @@ console.log(game.getHistory());
   //   "White in check:",
   //   CheckService.isKingInCheck("WHITE", board)
   // );
+
+
+
   
+// Kings (required)
+board.setPiece(new Position(7, 4), new King("WHITE")); // e1
+board.setPiece(new Position(0, 4), new King("BLACK")); // e8
+
+// Pawns
+board.setPiece(new Position(3, 4), new Pawn("WHITE")); // e5
+board.setPiece(new Position(1, 3), new Pawn("BLACK")); // d7
+
+
+
+
+const game = new GameState(board);
+
+// 1️⃣ White dummy move (because WHITE always starts)
+game.makeMove(
+  new Position(7, 4), // e1
+  new Position(6, 4)  // e2
+);
+
+// 2️⃣ Black pawn moves two squares: d7 → d5
+game.makeMove(
+  new Position(1, 3), // d7
+  new Position(3, 3)  // d5
+);
+
+// 3️⃣ White captures en passant: e5 → d6
+game.makeMove(
+  new Position(3, 4), // e5
+  new Position(2, 3)  // d6
+);
+
+console.log(
+  "White pawn at d6:",
+  board.getPiece(new Position(2, 3))?.type
+);
+
+console.log(
+  "Captured pawn removed:",
+  board.getPiece(new Position(3, 3))
+);
+

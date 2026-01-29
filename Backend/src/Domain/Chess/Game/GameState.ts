@@ -13,6 +13,7 @@ import { PromotionType } from "./PromotionType";
 export class GameState{
     private _moveHistory:Move[] = [];
     private _currentTurn:"WHITE"|"BLACK" = "WHITE";
+    private _enPassantTarget:Position|null = null;
 
     constructor(
         private readonly _board :Board
@@ -128,6 +129,24 @@ export class GameState{
             throw new Error("Illegal move")
         }
 
+        if(piece.type =="PAWN"){
+            const direction = piece.color == "WHITE"?-1:1;
+            if(Math.abs(to.row - from.row) === 2){
+                this._board.setEnPassantTarget(from.offset(direction, 0));
+            }
+        }
+
+        const ep = this._board.getEnPassantTarget();
+
+        if (piece.type === "PAWN" && ep && to.equals(ep)){
+            const direction  = piece.color == "WHITE"?-1:1;
+            const capturedPawnP= to.offset(direction,0);
+            this._board.setPiece(capturedPawnP,null)
+         }
+
+
+
+
       if(piece.type == "KING" && Math.abs(to.column - from.column)===2){
 
         if(!this.canCastle(from,to)){
@@ -160,6 +179,12 @@ export class GameState{
         this._moveHistory.push(
             new Move(from,to,finalPieceType,piece.color)
         )
+        if (
+            piece.type !== "PAWN" ||
+            Math.abs(to.row - from.row) !== 2
+          ) {
+            this._board.setEnPassantTarget(null);
+          }
         this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE"
 
 
