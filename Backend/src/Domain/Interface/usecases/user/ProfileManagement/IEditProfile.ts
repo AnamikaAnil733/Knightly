@@ -1,4 +1,4 @@
-import { EditProfileinputDto,EditProfileoutputDto } from "../../../DTOs/userDTOs";
+import { EditProfileinputDto,EditProfileoutputDto } from "../../../../DTOs/userDTOs";
 
 
 export interface IEditProfileUseCase{

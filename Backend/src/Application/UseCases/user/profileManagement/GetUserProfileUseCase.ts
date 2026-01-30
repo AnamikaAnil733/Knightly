@@ -5,7 +5,7 @@ import { IStorageService } from "../../../../Domain/Interface/service/S3Service"
 import EAuth from "../../../../Domain/Entity/auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/IGetUserProfileUseCase";
+import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetUserProfileUseCase";
 
 export class GetUserProfileUseCase implements IGetUserProfileUseCase{
   constructor(

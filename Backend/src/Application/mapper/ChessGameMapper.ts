@@ -1,12 +1,12 @@
 import { Board } from "../../Domain/Chess/Entities/Board";
-import { ChessGameSchema } from "../../Infrastructure/database/Schema/ChessGameSchema";
+import { ChessGameSchemaType } from "../../Infrastructure/database/Schema/ChessGameSchema";
 import { HydratedDocument } from "mongoose";
 import { ChessGame } from "../../Domain/Entity/chessGame"
 import { GameState } from "../../Domain/Chess/Game/GameState";
 
 export class ChessGameMapper{
     static toEntityFromDocument(
-        doc:HydratedDocument<ChessGameSchema>
+        doc:HydratedDocument<ChessGameSchemaType>
     ): ChessGame{
         const board = Board.deserialize(doc.board)
 
@@ -24,7 +24,7 @@ export class ChessGameMapper{
     }
 
 
-    static toDocumentFromEntity(entity:ChessGame):Partial<ChessGameSchema>{
+    static toDocumentFromEntity(entity:ChessGame):Partial<ChessGameSchemaType>{
         const gameState = entity.getGameState()
         const board = gameState.getBoard()
         const snapShot = gameState.getSnapshot()

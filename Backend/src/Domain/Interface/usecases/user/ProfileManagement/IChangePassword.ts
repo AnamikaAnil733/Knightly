@@ -1,4 +1,4 @@
-import { ChangePasswordInputDto,ChangePasswordOutputDto } from "../../../DTOs/userDTOs";
+import { ChangePasswordInputDto,ChangePasswordOutputDto } from "../../../../DTOs/userDTOs";
 
 
 export interface IChangePasswordUseCase{

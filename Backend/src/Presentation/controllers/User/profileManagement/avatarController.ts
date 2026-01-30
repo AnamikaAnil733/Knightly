@@ -3,7 +3,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
 import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/IGetUserProfileUseCase";
 import { ISaveDiceBearAvatarUseCase } 
-from "../../../../Domain/Interface/usecases/user/ISaveDiceBearAvatarUseCase";
+from "../../../../Domain/Interface/usecases/user/ProfileManagement/ISaveDiceBearAvatarUseCase";
 
 
 export class AvatarController{

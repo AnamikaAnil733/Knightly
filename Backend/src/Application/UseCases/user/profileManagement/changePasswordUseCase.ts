@@ -2,7 +2,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseRepository";
-import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/user/IChangePassword";
+import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IChangePassword";
 import { ChangePasswordOutputDto,ChangePasswordInputDto } from "../../../../Domain/DTOs/userDTOs";
 import EAuth from "../../../../Domain/Entity/auth";
 import { IHashService } from "../../../../Domain/Interface/service/hashpassword";

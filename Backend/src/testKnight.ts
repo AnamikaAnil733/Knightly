@@ -69,43 +69,43 @@ const board = new Board();
 
   
 // Kings (required)
-board.setPiece(new Position(7, 4), new King("WHITE")); // e1
-board.setPiece(new Position(0, 4), new King("BLACK")); // e8
+// board.setPiece(new Position(7, 4), new King("WHITE")); // e1
+// board.setPiece(new Position(0, 4), new King("BLACK")); // e8
 
-// Pawns
-board.setPiece(new Position(3, 4), new Pawn("WHITE")); // e5
-board.setPiece(new Position(1, 3), new Pawn("BLACK")); // d7
-
-
+// // Pawns
+// board.setPiece(new Position(3, 4), new Pawn("WHITE")); // e5
+// board.setPiece(new Position(1, 3), new Pawn("BLACK")); // d7
 
 
-const game = new GameState(board);
 
-// 1️⃣ White dummy move (because WHITE always starts)
-game.makeMove(
-  new Position(7, 4), // e1
-  new Position(6, 4)  // e2
-);
 
-// 2️⃣ Black pawn moves two squares: d7 → d5
-game.makeMove(
-  new Position(1, 3), // d7
-  new Position(3, 3)  // d5
-);
+// const game = new GameState(board);
 
-// 3️⃣ White captures en passant: e5 → d6
-game.makeMove(
-  new Position(3, 4), // e5
-  new Position(2, 3)  // d6
-);
+// // 1️ White dummy move (because WHITE always starts)
+// game.makeMove(
+//   new Position(7, 4), // e1
+//   new Position(6, 4)  // e2
+// );
 
-console.log(
-  "White pawn at d6:",
-  board.getPiece(new Position(2, 3))?.type
-);
+// // 2️Black pawn moves two squares: d7 → d5
+// game.makeMove(
+//   new Position(1, 3), // d7
+//   new Position(3, 3)  // d5
+// );
 
-console.log(
-  "Captured pawn removed:",
-  board.getPiece(new Position(3, 3))
-);
+// // 3️ White captures en passant: e5 → d6
+// game.makeMove(
+//   new Position(3, 4), // e5
+//   new Position(2, 3)  // d6
+// );
+
+// console.log(
+//   "White pawn at d6:",
+//   board.getPiece(new Position(2, 3))?.type
+// );
+
+// console.log(
+//   "Captured pawn removed:",
+//   board.getPiece(new Position(3, 3))
+// );
 
