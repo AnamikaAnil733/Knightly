@@ -13,7 +13,7 @@ import { PromotionType } from "./PromotionType";
 export class GameState{
     private _moveHistory:Move[] = [];
     private _currentTurn:"WHITE"|"BLACK" = "WHITE";
-    private _enPassantTarget:Position|null = null;
+   
 
     constructor(
         private readonly _board :Board
@@ -144,9 +144,6 @@ export class GameState{
             this._board.setPiece(capturedPawnP,null)
          }
 
-
-
-
       if(piece.type == "KING" && Math.abs(to.column - from.column)===2){
 
         if(!this.canCastle(from,to)){
@@ -188,6 +185,21 @@ export class GameState{
         this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE"
 
 
+    }
+
+    restore(data:{
+        turn:"WHITE"|"BLACK";
+        history:Move[];
+    }):void{
+        this._currentTurn = data.turn
+        this._moveHistory = data.history
+    }
+
+    getSnapshot(){
+        return{
+            turn:this._currentTurn,
+            history:[...this._moveHistory]
+        }
     }
     
 } 
