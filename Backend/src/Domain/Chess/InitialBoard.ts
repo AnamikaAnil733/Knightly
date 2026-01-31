@@ -14,7 +14,7 @@ export class InitialBoard{
         const board = new Board();
         for(let i =0;i<8;i++){
             board.setPiece(new Position(6,i),new Pawn("WHITE"))
-            board.setPiece(new Position(0,i),new Pawn("BLACK"))
+            board.setPiece(new Position(1,i),new Pawn("BLACK"))
         }
 
         board.setPiece(new Position(0,0),new Rook("BLACK"))

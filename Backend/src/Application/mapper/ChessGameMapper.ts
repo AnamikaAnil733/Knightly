@@ -17,9 +17,9 @@ export class ChessGameMapper{
         })
 
         return new ChessGame(
-            doc._id.toString(),
             gameState,
-            doc.status
+            doc.status,
+            doc._id.toString(),
         )
     }
 

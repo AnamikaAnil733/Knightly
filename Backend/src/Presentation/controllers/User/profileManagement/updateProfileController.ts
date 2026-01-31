@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/IEditProfile";
+import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IEditProfile";
 
 
 export class EditProfileController{

@@ -3,9 +3,10 @@ import { BaseEntity } from "./BaseEntity";
 import { GameStatus } from "../Chess/Game/GameStatus";
 
 export class ChessGame extends BaseEntity{
-    constructor(id:string,
+    constructor(
         private readonly _gameState :  GameState,
-        private _status:GameStatus = "ACTIVE"
+        private _status:GameStatus = "ACTIVE",
+        id?:string,
     ){
         super(id)
     }

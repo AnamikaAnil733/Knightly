@@ -1,7 +1,7 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
-import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/IGetUserProfileUseCase";
+import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetAvatarUseCase";
+import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetUserProfileUseCase";
 import { ISaveDiceBearAvatarUseCase } 
 from "../../../../Domain/Interface/usecases/user/ProfileManagement/ISaveDiceBearAvatarUseCase";
 

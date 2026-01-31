@@ -2,7 +2,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseRepository";
-import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/IEditProfile";
+import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IEditProfile";
 import { EditProfileinputDto,EditProfileoutputDto } from "../../../../Domain/DTOs/userDTOs";
 import EAuth from "../../../../Domain/Entity/auth";
 

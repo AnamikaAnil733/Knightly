@@ -2,7 +2,8 @@ import { Router } from "express";
 import { 
   editUserController, 
   changePasswordController,
-  avatarController  
+  avatarController ,
+  gameController, 
 } 
   from "../../Infrastructure/Composition/UserCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
@@ -14,9 +15,9 @@ export class UserRoutes{
   public readonly router:Router;
   constructor(tokenService: ITokenService){
     this.router = Router();
-    this.router.use(
-      authMiddleware([UserRole.USER],tokenService),
-    );
+    // this.router.use(
+    //   authMiddleware([UserRole.USER],tokenService),
+    // );
 
     this.initializeRoutes();
   }
@@ -27,6 +28,7 @@ export class UserRoutes{
     this.router.post(USER_ROUTES.AVATAR.UPLOAD,avatarController.getAvatarUrl);
     this.router.post(USER_ROUTES.AVATAR.DICEBEAR,avatarController.saveDiceBearAvatar);
     this.router.get(USER_ROUTES.PROFILE,avatarController.getProfile)
+    this.router.post(USER_ROUTES.CREATE_GAME,gameController.createGame)
 
   }
 }

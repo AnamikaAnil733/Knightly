@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/user/IChangePassword";
+import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IChangePassword";
 
 
 

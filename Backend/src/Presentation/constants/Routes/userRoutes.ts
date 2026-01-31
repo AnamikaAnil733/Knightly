@@ -8,5 +8,7 @@ export const USER_ROUTES = {
     },
   
     PROFILE: "/profile",
+
+    CREATE_GAME: "/create-game"
   } as const;
   

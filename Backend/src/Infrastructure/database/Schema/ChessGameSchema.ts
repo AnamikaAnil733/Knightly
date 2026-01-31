@@ -4,7 +4,7 @@ import { SerializedBoardGrid } from "../../../Domain/Chess/Types/SerializedBoard
 
 
 export interface ChessGameSchemaType {
-  _id: string;
+  _id?: string;
   turn: "WHITE" | "BLACK";
   board: SerializedBoardGrid;
   history: any[];         
@@ -15,10 +15,6 @@ export interface ChessGameSchemaType {
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
    {
-      _id:{
-         type:String,
-         required:true,
-      },
       turn:{
          type:String,
          enum:["WHITE","BLACK"],

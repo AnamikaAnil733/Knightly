@@ -10,14 +10,14 @@ export class CreateGameUseCase implements ICreateGameUseCase{
         private readonly ChessGameRepository : IBaseRepository<ChessGame>
     ){}
 
-    async execute(): Promise<{ gameId: string; }> {
+    async execute(): Promise<{ gameId: string }> {
         const board = InitialBoard.create();
         const gameState = new GameState(board);
 
         const game = new ChessGame(
-            undefined as any,
             gameState,
-            "ACTIVE"
+            "ACTIVE",
+            undefined as any,
         )
 
         const savedGame = await this.ChessGameRepository.create(game)

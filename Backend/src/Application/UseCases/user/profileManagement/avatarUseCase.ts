@@ -1,6 +1,6 @@
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
-import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/IGetAvatarUseCase";
+import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetAvatarUseCase";
 import { GetAvatarInputDto,GetAvatarOutputDto } from "../../../../Domain/DTOs/userDTOs";
 import { IStorageService} from "../../../../Domain/Interface/service/S3Service";
 
