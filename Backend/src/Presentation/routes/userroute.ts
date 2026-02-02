@@ -15,9 +15,9 @@ export class UserRoutes{
   public readonly router:Router;
   constructor(tokenService: ITokenService){
     this.router = Router();
-    // this.router.use(
-    //   authMiddleware([UserRole.USER],tokenService),
-    // );
+    this.router.use(
+      authMiddleware([UserRole.USER],tokenService),
+    );
 
     this.initializeRoutes();
   }
@@ -29,6 +29,7 @@ export class UserRoutes{
     this.router.post(USER_ROUTES.AVATAR.DICEBEAR,avatarController.saveDiceBearAvatar);
     this.router.get(USER_ROUTES.PROFILE,avatarController.getProfile)
     this.router.post(USER_ROUTES.CREATE_GAME,gameController.createGame)
+    this.router.get(USER_ROUTES.GET_GAME,gameController.getGame)
 
   }
 }

@@ -9,6 +9,7 @@ export const USER_ROUTES = {
   
     PROFILE: "/profile",
 
-    CREATE_GAME: "/create-game"
+    CREATE_GAME: "/create-game",
+    GET_GAME: "/games/:gameId"
   } as const;
   

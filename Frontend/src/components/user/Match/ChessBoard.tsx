@@ -1,0 +1,123 @@
+type ChessColor = "WHITE" | "BLACK"
+
+type ChessPiece = {
+  type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"
+  color: ChessColor
+  hasMoved: boolean
+}
+
+type ChessboardProps = {
+  board: (ChessPiece | null)[][]
+  selectedSquare?: { row: number; col: number } | null
+  legalMoves?: { row: number; col: number }[]
+  onSquareClick?: (row: number, col: number) => void
+}
+
+const PIECE_SYMBOLS: Record<
+  ChessPiece["type"],
+  Record<ChessColor, string>
+> = {
+  PAWN: { WHITE: "♙", BLACK: "♟" },
+  ROOK: { WHITE: "♖", BLACK: "♜" },
+  KNIGHT: { WHITE: "♘", BLACK: "♞" },
+  BISHOP: { WHITE: "♗", BLACK: "♝" },
+  QUEEN: { WHITE: "♕", BLACK: "♛" },
+  KING: { WHITE: "♔", BLACK: "♚" },
+}
+
+export function Chessboard({
+  board,
+  selectedSquare,
+  legalMoves = [],
+  onSquareClick,
+}: ChessboardProps) {
+  return (
+    <div className="relative">
+      {/* Glowing frame */}
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30" />
+
+      {/* Board container */}
+      <div
+        className="relative rounded-lg overflow-hidden border-2 border-[#3A6FF7]/50 shadow-2xl"
+        style={{
+          boxShadow:
+            "0 0 40px rgba(58, 111, 247, 0.3), 0 0 80px rgba(107, 46, 255, 0.2)",
+        }}
+      >
+        {/* 8x8 grid */}
+        <div className="grid grid-cols-8 w-[560px] h-[560px]">
+          {board.map((row, rowIndex) =>
+            row.map((cell, colIndex) => {
+              const isLight = (rowIndex + colIndex) % 2 === 0
+              const isSelected =
+                selectedSquare?.row === rowIndex &&
+                selectedSquare?.col === colIndex
+
+              const isLegalMove = legalMoves.some(
+                (m) => m.row === rowIndex && m.col === colIndex
+              )
+
+              const symbol = cell
+                ? PIECE_SYMBOLS[cell.type][cell.color]
+                : null
+
+              return (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  onClick={() => onSquareClick?.(rowIndex, colIndex)}
+                  className={`
+                    w-[70px] h-[70px]
+                    flex items-center justify-center
+                    cursor-pointer select-none
+                    transition-all duration-200
+                    ${isLight ? "bg-[#EEEED2]" : "bg-[#1C2445]"}
+                    ${isSelected ? "ring-4 ring-[#FFD166] ring-inset" : ""}
+                    ${isLegalMove ? "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full" : ""}
+                  `}
+                  style={{
+                    borderRight:
+                      colIndex < 7
+                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        : "none",
+                    borderBottom:
+                      rowIndex < 7
+                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        : "none",
+                  }}
+                >
+                  {symbol && (
+                    <span
+                      className="text-5xl drop-shadow-lg"
+                      style={{
+                        filter:
+                          cell?.color === "BLACK"
+                            ? "drop-shadow(0 0 8px rgba(255,255,255,0.5))"
+                            : "drop-shadow(0 0 8px rgba(255,209,102,0.4))",
+                      }}
+                    >
+                      {symbol}
+                    </span>
+                  )}
+                </div>
+              )
+            })
+          )}
+        </div>
+
+        {/* Rank labels */}
+        <div className="absolute -left-6 top-0 h-full flex flex-col justify-around text-[#C9CAD9] text-sm font-medium">
+          {["8", "7", "6", "5", "4", "3", "2", "1"].map((n) => (
+            <span key={n}>{n}</span>
+          ))}
+        </div>
+
+        {/* File labels */}
+        <div className="absolute -bottom-6 left-0 w-full flex justify-around text-[#C9CAD9] text-sm font-medium">
+          {["a", "b", "c", "d", "e", "f", "g", "h"].map((l) => (
+            <span key={l}>{l}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -1,7 +1,9 @@
+import { PieceType } from "./PieceType";
+
 export type SerializedPiece  = {
-    type: string;
+    type: PieceType;
     color: "WHITE"|"BLACK";
-    hasMoved?:boolean;
+    hasMoved:boolean;
 }|null;
 
 

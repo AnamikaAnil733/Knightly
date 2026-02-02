@@ -1,4 +1,5 @@
 import { Position } from "../Position";
+import { PieceType } from "../Types/PieceType";
 
 export abstract class Piece{
 
@@ -8,7 +9,7 @@ export abstract class Piece{
         public readonly color:"WHITE"|"BLACK"
     ){}
 
-    abstract readonly type: string;
+    abstract readonly type: PieceType;
 
     abstract getPseudoLegalMoves(
         from:Position,

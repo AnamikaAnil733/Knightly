@@ -1,4 +1,5 @@
 import { UserRole } from "../Types/UserRole";
+import { PieceType } from "../Chess/Types/PieceType";
 
 
 
@@ -76,4 +77,32 @@ export interface GetAvatarOutputDto {
     achievements: string[];
   
     avatarUrl: string | null;
+  }
+
+
+  //---------GameDTO---------
+
+  export interface SerializedPieceDTO {
+    type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"
+    color: "WHITE" | "BLACK"
+    hasMoved: boolean
+  }
+  
+  export type BoardDTO = (SerializedPieceDTO | null)[][];
+
+
+  export interface MoveDTO {
+    from: { row: number; col: number }
+    to: { row: number; col: number }
+    piece: string
+    color: "WHITE" | "BLACK"
+  }
+  
+
+  export interface GameOutputDTO{
+    gameId:string,
+    turn:"WHITE"|"BLACK",
+    board:BoardDTO,
+    history:MoveDTO[],
+    status:string
   }

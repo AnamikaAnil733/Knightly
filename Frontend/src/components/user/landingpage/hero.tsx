@@ -24,7 +24,7 @@ export function Hero() {
               progress, and rise to the top.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-3 rounded-full bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-semibold glow-button">
+              <button className="px-8 py-3 rounded-full bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-semibold glow-button" >
                 Play Now
               </button>
               <button className="px-8 py-3 rounded-full border-2 border-[#6B2EFF] text-white font-semibold hover:bg-[#6B2EFF]/10 transition-all">
