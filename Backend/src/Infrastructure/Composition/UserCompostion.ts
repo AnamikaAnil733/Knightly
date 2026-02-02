@@ -10,6 +10,8 @@ import {  EditUserUseCase } from "../../Application/UseCases/user/profileManagem
 import { ChangePasswordUseCase } from "../../Application/UseCases/user/profileManagement/changePasswordUseCase";
 import { CreateGameUseCase } from "../../Application/UseCases/user/gameManagement/createGameUseCase";
 import { GetGameUseCase } from "../../Application/UseCases/user/gameManagement/getGameUseCase";
+import { MakeMoveUsecase } from "../../Application/UseCases/user/gameManagement/makeMoveUseCase";
+import { GetLegalMovesUseCase } from "../../Application/UseCases/user/gameManagement/getLegalMovesUseCase";
 
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/user/profileManagement/avatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/user/profileManagement/SaveDiceBearAvatarUseCase";
@@ -41,11 +43,18 @@ const saveDiceBearAvatarUseCase = new SaveDiceBearAvatarUseCase( S3Service,UserR
 const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo,S3Service);
 const createGameUseCase = new CreateGameUseCase(GameRepo)
 const getGameUseCase = new GetGameUseCase(GameRepo)
+const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
+const makeMoveUseCase = new MakeMoveUsecase(GameRepo)
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(changePasswordUseCase)
 export const avatarController = new AvatarController(getAvatarUrlUseCase,getUserProfileUseCase,saveDiceBearAvatarUseCase)
-export const gameController = new GameController(createGameUseCase,getGameUseCase)
+export const gameController = new GameController(
+    createGameUseCase,
+    getGameUseCase,
+    getLegalMovesUseCase,
+    makeMoveUseCase
+)
 export const userRoutes = new UserRoutes(tokenService);
 

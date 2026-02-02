@@ -27,9 +27,11 @@ export class UserRoutes{
     this.router.patch(USER_ROUTES.CHANGE_PASSWORD,changePasswordController.handleChangePassword);
     this.router.post(USER_ROUTES.AVATAR.UPLOAD,avatarController.getAvatarUrl);
     this.router.post(USER_ROUTES.AVATAR.DICEBEAR,avatarController.saveDiceBearAvatar);
-    this.router.get(USER_ROUTES.PROFILE,avatarController.getProfile)
-    this.router.post(USER_ROUTES.CREATE_GAME,gameController.createGame)
-    this.router.get(USER_ROUTES.GET_GAME,gameController.getGame)
+    this.router.get(USER_ROUTES.PROFILE,avatarController.getProfile);
+    this.router.post(USER_ROUTES.CREATE_GAME,gameController.createGame);
+    this.router.get(USER_ROUTES.GET_GAME,gameController.getGame);
+    this.router.get(USER_ROUTES.LEGAL_MOVES,gameController.legalMove);
+    this.router.post(USER_ROUTES.MAKE_MOVE,gameController.makeMove);
 
   }
 }
