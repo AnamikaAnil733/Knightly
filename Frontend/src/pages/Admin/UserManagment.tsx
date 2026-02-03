@@ -26,7 +26,7 @@ const LIMIT = 10;
 /* ===================== COMPONENT ===================== */
 
 export function UserManagment() {
-  /* ---------- UI STATE ---------- */
+ 
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<UserFilter>("ALL");

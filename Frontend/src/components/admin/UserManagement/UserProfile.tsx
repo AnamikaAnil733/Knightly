@@ -1,4 +1,7 @@
-import { IUser } from '../../../types/user'
+import { IUser } from '../../../types/user';
+import { useState } from 'react';
+import ConfirmationModal from '../../Reuseable/conformationModel';
+
 import {
   FlameIcon,
   TrophyIcon,
@@ -17,6 +20,14 @@ interface UserProfileProps {
   onBanUser: (userId: string, ban: boolean) => void
 }
 export function UserProfile({ user, onBanUser }: UserProfileProps) {
+const [isModalOpen,setIsModalOpen] = useState(false)
+
+const handleConfirmBan = () => {
+  onBanUser(user.id, !user.isBlocked);
+  setIsModalOpen(false);
+};
+
+
   return (
     <div className="bg-[#0A0F2C] rounded-lg overflow-hidden">
       {/* Header with avatar */}
@@ -128,7 +139,7 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
       {/* Actions */}
       <div className="p-6">
         <button
-          onClick={() => onBanUser(user.id, !user.isBlocked)}
+          onClick={() => setIsModalOpen(true)}
           className={`w-full py-2 px-4 rounded-md flex items-center justify-center ${user.isBlocked ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
         >
           {user.isBlocked ? (
@@ -144,6 +155,24 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
           )}
         </button>
       </div>
+      <ConfirmationModal
+  isOpen={isModalOpen}
+  title={user.isBlocked ? "Unban User" : "Ban User"}
+  description={
+    user.isBlocked
+      ? "Are you sure you want to unban this user? They will regain full access."
+      : "Are you sure you want to ban this user? This action will restrict their access."
+  }
+  confirmText={user.isBlocked ? "Unban" : "Ban"}
+  confirmColor={
+    user.isBlocked
+      ? "bg-green-600 hover:bg-green-700"
+      : "bg-red-600 hover:bg-red-700"
+  }
+  onConfirm={handleConfirmBan}
+  onCancel={() => setIsModalOpen(false)}
+/>
+
     </div>
   )
 }

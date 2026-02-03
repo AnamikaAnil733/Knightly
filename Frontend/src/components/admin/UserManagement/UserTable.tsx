@@ -1,5 +1,6 @@
+import { useState } from 'react';
+import ConfirmationModal from "../../Reuseable/conformationModel";
 import {
-  ChevronRightIcon,
   ShieldCheckIcon,
   BanIcon,
 } from 'lucide-react'
@@ -12,7 +13,8 @@ interface UserTableProps {
   selectedUserId: string
 }
 
-export function UserTable({
+export function UserTable(
+  {
   users,
   onSelectUser,
   onBanUser,
@@ -26,6 +28,22 @@ export function UserTable({
       day: 'numeric',
     }).format(date)
   }
+
+  const [isModalOpen,setIsModalOpen] = useState(false)
+  const [selectedUserForAction, setSelectedUserForAction] =
+  useState<IUser | null>(null);
+  const handleConfirmBan = () => {
+    if (!selectedUserForAction) return;
+    onBanUser(
+      selectedUserForAction.id,
+      !selectedUserForAction.isBlocked
+    );
+  
+    setIsModalOpen(false);
+    setSelectedUserForAction(null);
+  };
+  
+
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full min-w-[800px]">
@@ -75,24 +93,21 @@ export function UserTable({
               </td>
               <td className="px-4 py-3 text-sm">
                 <div className="flex items-center space-x-2">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onBanUser(user.id, !user.isBlocked)
-                    }}
-                    className={`p-1 rounded-full ${user.isBlocked ? 'bg-green-600/20 text-green-500 hover:bg-green-600/30' : 'bg-red-600/20 text-red-500 hover:bg-red-600/30'}`}
-                  >
-                    <BanIcon className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onSelectUser(user)
-                    }}
-                    className="p-1 rounded-full bg-[#6B2EFF]/20 text-[#6B2EFF] hover:bg-[#6B2EFF]/30"
-                  >
-                    <ChevronRightIcon className="h-4 w-4" />
-                  </button>
+                <button
+         onClick={(e) => {
+         e.stopPropagation();
+         setSelectedUserForAction(user);
+         setIsModalOpen(true);
+            }}
+         className={`p-1 rounded-full ${
+         user.isBlocked
+           ? "bg-green-600/20 text-green-500 hover:bg-green-600/30"
+         : "bg-red-600/20 text-red-500 hover:bg-red-600/30"
+        }`}
+           >
+  <BanIcon className="h-4 w-4" />
+</button>
+
                 </div>
               </td>
             </tr>
@@ -104,6 +119,35 @@ export function UserTable({
           No users found matching your filters
         </div>
       )}
+
+<ConfirmationModal
+  isOpen={isModalOpen}
+  title={
+    selectedUserForAction?.isBlocked
+      ? "Unban User"
+      : "Ban User"
+  }
+  description={
+    selectedUserForAction?.isBlocked
+      ? "Are you sure you want to unban this user? They will regain full access."
+      : "Are you sure you want to ban this user? This action will restrict their access."
+  }
+  confirmText={
+    selectedUserForAction?.isBlocked ? "Unban" : "Ban"
+  }
+  confirmColor={
+    selectedUserForAction?.isBlocked
+      ? "bg-green-600 hover:bg-green-700"
+      : "bg-red-600 hover:bg-red-700"
+  }
+  onConfirm={handleConfirmBan}
+  onCancel={() => {
+    setIsModalOpen(false);
+    setSelectedUserForAction(null);
+  }}
+/>
+
+
     </div>
   )
 }
