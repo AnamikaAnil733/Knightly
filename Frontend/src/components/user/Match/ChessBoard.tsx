@@ -1,3 +1,5 @@
+import { Piece_Images } from "../../Reuseable/chessPieces"
+
 type ChessColor = "WHITE" | "BLACK"
 
 type ChessPiece = {
@@ -13,17 +15,17 @@ type ChessboardProps = {
   onSquareClick?: (row: number, col: number) => void
 }
 
-const PIECE_SYMBOLS: Record<
-  ChessPiece["type"],
-  Record<ChessColor, string>
-> = {
-  PAWN: { WHITE: "♙", BLACK: "♟" },
-  ROOK: { WHITE: "♖", BLACK: "♜" },
-  KNIGHT: { WHITE: "♘", BLACK: "♞" },
-  BISHOP: { WHITE: "♗", BLACK: "♝" },
-  QUEEN: { WHITE: "♕", BLACK: "♛" },
-  KING: { WHITE: "♔", BLACK: "♚" },
-}
+// const PIECE_SYMBOLS: Record<
+//   ChessPiece["type"],
+//   Record<ChessColor, string>
+// > = {
+//   PAWN: { WHITE: Piece_Images.WHITE.PAWN, BLACK: Piece_Images.BLACK.PAWN },
+//   ROOK: { WHITE: "♖", BLACK: "♜" },
+//   KNIGHT: { WHITE: "♘", BLACK: "♞" },
+//   BISHOP: { WHITE: "♗", BLACK: "♝" },
+//   QUEEN: { WHITE: "♕", BLACK: "♛" },
+//   KING: { WHITE: "♔", BLACK: "♚" },
+// }
 
 export function Chessboard({
   board,
@@ -42,7 +44,7 @@ export function Chessboard({
         className="relative rounded-lg overflow-hidden border-2 border-[#3A6FF7]/50 shadow-2xl"
         style={{
           boxShadow:
-            "0 0 40px rgba(58, 111, 247, 0.3), 0 0 80px rgba(107, 46, 255, 0.2)",
+            "0 0 40px rgba(106, 126, 176, 0.3), 0 0 80px rgba(107, 46, 255, 0.2)",
         }}
       >
         {/* 8x8 grid */}
@@ -58,9 +60,7 @@ export function Chessboard({
                 (m) => m.row === rowIndex && m.col === colIndex
               )
 
-              const symbol = cell
-                ? PIECE_SYMBOLS[cell.type][cell.color]
-                : null
+              
 
               return (
                 <div
@@ -75,16 +75,13 @@ export function Chessboard({
                   flex items-center justify-center
                   cursor-pointer select-none
                   transition-all duration-200
-                  ${isLight ? "bg-[#EEEED2]" : "bg-[#1C2445]"}
+                  ${isLight ? "bg-[#F2F7F9]" : "bg-[#4FB3BF]"}
                   ${isSelected ? "ring-4 ring-[#FFD166] ring-inset" : ""}
                   ${isLegalMove
                     ? "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full after:pointer-events-none"
                     : ""}
                 `}
-              
-              
-              
-              
+
                   style={{
                     borderRight:
                       colIndex < 7
@@ -96,20 +93,15 @@ export function Chessboard({
                         : "none",
                   }}
                 >
-                  {symbol && (
-              <span
-              className="text-5xl drop-shadow-lg pointer-events-none"
-              style={{
-                filter:
-                  cell?.color === "BLACK"
-                    ? "drop-shadow(0 0 8px rgba(255,255,255,0.5))"
-                    : "drop-shadow(0 0 8px rgba(255,209,102,0.4))",
-              }}
-            >
-            
-                      {symbol}
-                    </span>
+                        {cell && (
+                    <img
+                      src={Piece_Images[cell.color][cell.type]}
+                      alt={`${cell.color} ${cell.type}`}
+                      className="w-12 h-12 pointer-events-none select-none"
+                      draggable={false}
+                    />
                   )}
+             
                 </div>
               )
             })

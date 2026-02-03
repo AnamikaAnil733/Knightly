@@ -32,9 +32,7 @@ export function Match() {
   const [legalMoves, setLegalMoves] =
     useState<{ row: number; col: number }[]>([]);
 
-  /* ----------------------------------------
-     Load existing game OR create new game
-  -----------------------------------------*/
+
   useEffect(() => {
     const init = async () => {
       // If no gameId → create game
@@ -54,9 +52,6 @@ export function Match() {
     init();
   }, [gameId, navigate]);
 
-  /* ----------------------------------------
-     Handle board clicks
-  -----------------------------------------*/
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;
 
@@ -98,17 +93,13 @@ export function Match() {
     setLegalMoves([]);
   };
 
-  /* ----------------------------------------
-     Reset UI on turn change
-  -----------------------------------------*/
+
   useEffect(() => {
     setSelected(null);
     setLegalMoves([]);
   }, [turn]);
 
-  /* ----------------------------------------
-     Loading state
-  -----------------------------------------*/
+
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
@@ -117,9 +108,6 @@ export function Match() {
     );
   }
 
-  /* ----------------------------------------
-     Render
-  -----------------------------------------*/
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col">
       {/* Header */}
