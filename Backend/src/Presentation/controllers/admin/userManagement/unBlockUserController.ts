@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IUnBlockUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class UnBlockUserController {
   constructor(
@@ -13,7 +14,7 @@ export class UnBlockUserController {
       if (!userId) {
         res.status(HttpStatusCodes.BAD_REQUEST).json({
           success: false,
-          message: "User ID is required",
+          message: MESSAGES.USER_ID_REQUIRED,
         });
         return;
       }
@@ -23,7 +24,7 @@ export class UnBlockUserController {
       console.error("BLOCK USER ERROR:", error);
       res.status(HttpStatusCodes.BAD_REQUEST).json({
         success: false,
-        message: error.message || "Error while unblocking the user",
+        message: error.message || MESSAGES.ERROR_UNBLOCKING_USER,
       });
     }
   };

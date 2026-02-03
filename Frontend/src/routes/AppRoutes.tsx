@@ -18,7 +18,7 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/" element={<SignupPage />} />
         <Route path="/verify-otp" element={<OTPVerify mode="signup" />} />
         <Route path="/landing-page" element={<LandingPage />} />
         <Route path="/admin/login" element={<LoginPage role="ADMIN" />} />

@@ -18,6 +18,12 @@ export class LoginUseCase implements ILoginUseCase{
   async execute(data: AuthRequestDTO): Promise<AuthResponseDTO> {
     const {email,password} = data;
     const user = await this._authRepository.findByEmail(email);
+    if(user?.isBlocked){
+      throw new CustomError(
+        HttpStatusCodes.FORBIDDEN,
+        MESSAGES.USER_BLOCKED
+      )
+    }
     if(!user?.passwordHash){
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,

@@ -1,6 +1,7 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IChangePassword";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 
@@ -21,7 +22,7 @@ export class ChangePassswordController{
 
             return res.status(HttpStatusCodes.OK).json({
                 success:true,
-                message:"Password Updated sucessfully"
+                message:MESSAGES.PASSWORD_UPDATE_SUCCESS,
             })
 
         }catch(error){

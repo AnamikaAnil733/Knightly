@@ -2,6 +2,7 @@ import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/
 import { Position } from "../../../../Domain/Chess/Position";
 import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/usecases/user/gameManagement/IGetLegalMovesUseCase";
 import { LegalService } from "../../../../Domain/Chess/Service/LegalMoveService";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 
@@ -13,7 +14,7 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{
     async execute(gameId: string, p: { row: number; col: number; }): Promise<{ row: number; col: number }[]> {
         const game = await this._gameRepo.findById(gameId);
         if(!game){
-            throw new Error("Game is not found")
+            throw new Error(MESSAGES.GAME_NOT_FOUND)
         }
 
         const gameState = game.getGameState();

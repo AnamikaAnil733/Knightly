@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IBlockUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class BlockUserController {
   constructor(
@@ -13,17 +14,16 @@ export class BlockUserController {
       if (!userId) {
         res.status(HttpStatusCodes.BAD_REQUEST).json({
           success: false,
-          message: "User ID is required",
+          message: MESSAGES.USER_ID_REQUIRED ,
         });
         return;
       }
       const result = await this._userBlockUseCase.blockUser({ userId });
       res.status(HttpStatusCodes.OK).json(result);
     } catch (error: any) {
-      console.error("BLOCK USER ERROR:", error);
       res.status(HttpStatusCodes.BAD_REQUEST).json({
         success: false,
-        message: error.message || "Error while blocking the user",
+        message: error.message || MESSAGES.ERROR_BLOCKING_USER,
       });
     }
   };

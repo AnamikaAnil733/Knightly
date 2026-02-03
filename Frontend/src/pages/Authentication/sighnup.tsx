@@ -103,7 +103,7 @@ export function SignupPage() {
       dispatch(setuserAccessToken(accessToken))
       dispatch(setUser(user))
 
-      navigate("/landing-page")
+      navigate("/landing-page",{ replace: true })
     } catch{
       toast.error("Google login failed")
     }

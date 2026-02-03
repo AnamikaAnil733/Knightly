@@ -60,7 +60,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "OTP verified successfully. Please login.",
+        message: MESSAGES.OTP_VERIFY_SUCCESS,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - verifyOtp");
@@ -82,7 +82,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.CREATED).json({
         success: true,
-        message: "User registered successfully",
+        message: MESSAGES.USER_REGISTER_SUCCESS,
         user,
       });
     } catch (error) {
@@ -121,7 +121,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "Logged in successfully",
+        message: MESSAGES.LOGIN_SUCCESS,
         userInfo: user,
       });
     } catch (error) {
@@ -146,7 +146,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "OTP sent successfully",
+        message: MESSAGES.OTP_SENT_SUCCESS,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - resendOTP");
@@ -169,7 +169,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "OTP sent to email",
+        message:MESSAGES.OTP_SENT_EMAIL,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - forgetPassword");
@@ -193,7 +193,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "Password reset successfully",
+        message: MESSAGES.PASSWORD_RESET,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - resetPassword");
@@ -235,7 +235,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "Logged in successfully",
+        message: MESSAGES.LOGIN_SUCCESS,
         userInfo: user,
         accessToken,
       });
@@ -252,7 +252,7 @@ export class AuthController {
 
       if (!refreshToken) {
         return res.status(HttpStatusCodes.UNAUTHORIZED).json({
-          message: "Refresh token missing",
+          message: MESSAGES.REFRESH_TOKEN_MISSING,
         });
       }
 
@@ -283,7 +283,7 @@ export class AuthController {
     } catch (error) {
       logger.error("REFRESH TOKEN FAILED");
       return res.status(HttpStatusCodes.UNAUTHORIZED).json({
-        message: "Invalid refresh token",
+        message: MESSAGES.INVALID_REFRESH_TOKEN,
       });
     }
   };

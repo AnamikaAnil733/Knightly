@@ -17,7 +17,7 @@ export function Navbar() {
     localStorage.removeItem("userAccessToken");
     localStorage.removeItem("user");
     dispatch(logout());       // clears redux state
-    navigate("/user/login");  // redirect page
+    navigate("/user/login",{replace:true});  // redirect page
   };
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A0F2C]/80 backdrop-blur-md border-b border-white/10">
@@ -92,7 +92,7 @@ export function Navbar() {
               </Link>
 
               <Link 
-                to="/signup" 
+                to="/" 
                 className="px-6 py-2 rounded-full bg-[#6B2EFF] text-white font-semibold hover:bg-[#5620d4]"
               >
                 Signup

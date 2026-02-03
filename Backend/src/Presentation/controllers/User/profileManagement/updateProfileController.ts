@@ -1,6 +1,7 @@
 import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IEditProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IEditProfile";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 export class EditProfileController{
@@ -22,7 +23,7 @@ export class EditProfileController{
 
       return res.status(HttpStatusCodes.OK).json({
         success: true,
-        message: "Profile updated sucessfully",
+        message:MESSAGES.PROFILE_UPDATE_SUCCESS ,
         data: result,
       });
     } catch (error) {

@@ -5,6 +5,7 @@ import { IGetAllPuzzleUseCase } from "../../../../Domain/Interface/usecases/admi
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { IEditPuzzleUsecase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IEditPuzzleUseCase";
 import { ISoftDeleteUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IDeletePuzzleUseCase";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 export class AdminPuzzleController{
@@ -25,7 +26,7 @@ export class AdminPuzzleController{
         }catch(error:any){
            return res.status(HttpStatusCodes.BAD_REQUEST).json({
             success:false,
-            message:error.message || "failed to create puzzle"
+            message:error.message || MESSAGES.FAILD_CREATE_PUZZLE
            })
         }
     }
@@ -77,7 +78,7 @@ export class AdminPuzzleController{
 
             return res.status(HttpStatusCodes.OK).json({
                 success:true,
-                message:"Puzzle deleted successfully"
+                message:MESSAGES.PUZZLE_DELETE_SUCCESS
             })
 
         }catch(error){

@@ -21,13 +21,33 @@ export class King extends Piece{
               moves.push(to);
             }
           }
-      
-         
-          if (!this.hasMoved) {
-            const row = from.row;
-            moves.push(new Position(row, 6));
-            moves.push(new Position(row, 2));
-          }
+    
+if (!this.hasMoved) {
+  const row = from.row;
+
+  const rookK = board.getPiece(new Position(row, 7));
+  if (rookK && rookK.type === "ROOK" && !rookK.hasMoved) {
+
+    if (
+      !board.getPiece(new Position(row, 5)) &&
+      !board.getPiece(new Position(row, 6))
+    ) {
+      moves.push(new Position(row, 6));
+    }
+  }
+
+  const rookQ = board.getPiece(new Position(row, 0));
+  if (rookQ && rookQ.type === "ROOK" && !rookQ.hasMoved) {
+    if (
+      !board.getPiece(new Position(row, 1)) &&
+      !board.getPiece(new Position(row, 2)) &&
+      !board.getPiece(new Position(row, 3))
+    ) {
+      moves.push(new Position(row, 2));
+    }
+  }
+}
+
       
           return moves;
     }

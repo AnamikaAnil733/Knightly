@@ -3,6 +3,7 @@ import { IBaseRepository } from "../../../../Domain/Interface/Repositories/BaseR
 import EAuth from "../../../../Domain/Entity/auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class SaveDiceBearAvatarUseCase {
   constructor(
@@ -22,7 +23,7 @@ export class SaveDiceBearAvatarUseCase {
     if (!diceBearUrl.startsWith("https://api.dicebear.com/")) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        "Invalid avatar source"
+        MESSAGES.INVALID_SOURCE
       );
     }
 
@@ -31,7 +32,7 @@ export class SaveDiceBearAvatarUseCase {
     if (!response.ok) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        "Failed to fetch avatar from DiceBear"
+        MESSAGES.FAILED_FETCH_AVATAR_DICEBEAR,
       );
     }
 
@@ -49,7 +50,7 @@ export class SaveDiceBearAvatarUseCase {
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        "User not found"
+        MESSAGES.USER_DOESNT_EXIST,
       );
     }
    

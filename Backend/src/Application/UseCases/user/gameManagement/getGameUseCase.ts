@@ -1,6 +1,7 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
 import { GameOutputDTO } from "../../../../Domain/DTOs/userDTOs";
 import { IGetGameUseCase } from "../../../../Domain/Interface/usecases/user/gameManagement/IGetGameUseCase";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class GetGameUseCase implements IGetGameUseCase{
     constructor(
@@ -12,7 +13,7 @@ export class GetGameUseCase implements IGetGameUseCase{
         const game = await this._chessGameRepository.findById(gameId);
 
         if(!game){
-            throw new Error("game is not found")
+            throw new Error(MESSAGES.GAME_NOT_FOUND)
         }
 
         const gameState = game.getGameState()

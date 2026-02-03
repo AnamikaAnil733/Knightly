@@ -27,7 +27,7 @@ export class GameController{
            return res.status(HttpStatusCodes.BAD_REQUEST)
            .json({
             success:false,
-            message:"failed to create Game"
+            message:MESSAGES.FAILED_CREATE_GAME,
         })
         }
     }

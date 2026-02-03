@@ -15,17 +15,7 @@ type ChessboardProps = {
   onSquareClick?: (row: number, col: number) => void
 }
 
-// const PIECE_SYMBOLS: Record<
-//   ChessPiece["type"],
-//   Record<ChessColor, string>
-// > = {
-//   PAWN: { WHITE: Piece_Images.WHITE.PAWN, BLACK: Piece_Images.BLACK.PAWN },
-//   ROOK: { WHITE: "♖", BLACK: "♜" },
-//   KNIGHT: { WHITE: "♘", BLACK: "♞" },
-//   BISHOP: { WHITE: "♗", BLACK: "♝" },
-//   QUEEN: { WHITE: "♕", BLACK: "♛" },
-//   KING: { WHITE: "♔", BLACK: "♚" },
-// }
+
 
 export function Chessboard({
   board,

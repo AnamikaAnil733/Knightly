@@ -3,6 +3,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetAvatarUseCase";
 import { GetAvatarInputDto,GetAvatarOutputDto } from "../../../../Domain/DTOs/userDTOs";
 import { IStorageService} from "../../../../Domain/Interface/service/S3Service";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 
@@ -14,7 +15,7 @@ export class GetAvatarUrlUseCase implements IGetAvatarUseCase{
         if(!contentType.startsWith("image/")){
             throw new CustomError(
                 HttpStatusCodes.BAD_REQUEST,
-                "only image files are allowed"
+                MESSAGES.ONLY_IMAGE_FILES
             )
         }
     const key = `avatars/${userId}/${Date.now()}`;

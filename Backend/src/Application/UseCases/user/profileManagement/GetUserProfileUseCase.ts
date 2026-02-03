@@ -6,6 +6,7 @@ import EAuth from "../../../../Domain/Entity/auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/statusCode";
 import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/user/ProfileManagement/IGetUserProfileUseCase";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class GetUserProfileUseCase implements IGetUserProfileUseCase{
   constructor(
@@ -19,7 +20,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase{
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        "User not found"
+        MESSAGES.USER_DOESNT_EXIST,
       );
     }
     const avatarUrl = user.avatarKey

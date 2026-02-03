@@ -224,7 +224,7 @@ export function LoginPage({ role }: LoginPageProps) {
             <p className="text-center text-sm text-[#C9CAD9] mt-6">
               Don’t have an account?{" "}
               <a
-                href="/signup"
+                href="/"
                 className="text-[#FFD166] hover:text-[#6B2EFF] font-semibold"
               >
                 Sign Up

@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
 
-
-
-
 export function Hero() {
 const navigate = useNavigate()
 

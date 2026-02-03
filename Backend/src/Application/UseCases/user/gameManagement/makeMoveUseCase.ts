@@ -2,6 +2,7 @@ import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/
 import { IMakeMoveUseCase } from "../../../../Domain/Interface/usecases/user/gameManagement/IMakeMoveUseCase";
 import { LegalService } from "../../../../Domain/Chess/Service/LegalMoveService";
 import { Position } from "../../../../Domain/Chess/Position";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 export class MakeMoveUsecase implements IMakeMoveUseCase{
@@ -11,28 +12,26 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
     async execute(gameId: string, from: { row: never; col: number; }, to: { row: number; col: number; }): Promise<void> {
         const game = await this._gameRepo.findById(gameId)
         if(!game){
-            throw new Error("Game is not found")
+            throw new Error(MESSAGES.GAME_NOT_FOUND)
         }
 
         const gameState = game.getGameState();
         const board = gameState.getBoard();
-        console.log("BOARD BEFORE MOVE:", board.serialize());
 
 
 
         const fromP = new Position(from.row,from.col);
         const toP = new Position(to.row,to.col);
-        console.log("FROM PIECE:", board.getPiece(fromP));
-        console.log(fromP,toP)
+  
 
         const piece = board.getPiece(fromP);
-        console.log(piece)
+
         if(!piece){
-            throw new Error("No piece is found")
+            throw new Error(MESSAGES.PIECE_NOT_FOUND)
         }
 
         if(piece.color !== gameState.getTurn()){
-            throw new Error("not your turn")
+            throw new Error(MESSAGES.NOT_YOUR_TURN)
         }
 
         const LegalMoves = LegalService.getLegalMove(fromP,board);

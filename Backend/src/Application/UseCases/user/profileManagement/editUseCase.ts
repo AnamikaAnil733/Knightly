@@ -20,7 +20,7 @@ export class EditUserUseCase implements IEditProfileUseCase{
       if (!displayname || displayname.trim().length < 3) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          "invalid user name",
+          MESSAGES.INVALID_USERNAME,
         );
       }
 
@@ -38,7 +38,7 @@ export class EditUserUseCase implements IEditProfileUseCase{
       if (!updatedUser) {
         throw new CustomError(
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          "failed to update the username",
+          MESSAGES.FAILED_UPDATE_USERNAME,
         );
       }
 
@@ -59,7 +59,6 @@ export class EditUserUseCase implements IEditProfileUseCase{
         achievements: updatedUser.achievements,
       };
     }catch(error){
-      console.log("error in profile update",error);
       throw error;
 
     }

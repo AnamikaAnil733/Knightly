@@ -24,16 +24,16 @@ export class RegisterUserUseCase implements IRegisterUserUseCase{
 
 
     const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${data.email}`);
-    if (!verified) throw new Error("Please verify email first.");
+    if (!verified) throw new Error(MESSAGES.EMAIL_VERIFY);
 
     const existingUser = await this._userRepo.findByEmail(data.email);
-    if (existingUser) throw new Error("User already exists");
+    if (existingUser) throw new Error(MESSAGES.USER_ALREADY_EXISTS);
 
     let hashedPassword: string | undefined = undefined;
 
     if (!data.googleId) {
       if (!data.password) {
-        throw new Error("Password is required for email registration.");
+        throw new Error(MESSAGES.PASSWORD_AND_EMAIL_REQUIRED);
       }
       hashedPassword = await this._hashService.hash(data.password);
     }
