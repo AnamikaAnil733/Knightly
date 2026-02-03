@@ -28,7 +28,8 @@ export default function AppRoutes() {
         <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
-        <Route path="/match" element={<Match/>}/>
+        <Route path="/match" element={<Match />} />
+        <Route path="/match/:gameId" element={<Match/>}/>
 
         <Route path="/admin" element={
           <AdminProtectedRoute>

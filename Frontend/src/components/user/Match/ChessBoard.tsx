@@ -34,7 +34,8 @@ export function Chessboard({
   return (
     <div className="relative">
       {/* Glowing frame */}
-      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30" />
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30 pointer-events-none" />
+
 
       {/* Board container */}
       <div
@@ -63,17 +64,27 @@ export function Chessboard({
 
               return (
                 <div
-                  key={`${rowIndex}-${colIndex}`}
-                  onClick={() => onSquareClick?.(rowIndex, colIndex)}
-                  className={`
-                    w-[70px] h-[70px]
-                    flex items-center justify-center
-                    cursor-pointer select-none
-                    transition-all duration-200
-                    ${isLight ? "bg-[#EEEED2]" : "bg-[#1C2445]"}
-                    ${isSelected ? "ring-4 ring-[#FFD166] ring-inset" : ""}
-                    ${isLegalMove ? "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full" : ""}
-                  `}
+                key={`${rowIndex}-${colIndex}`}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  onSquareClick?.(rowIndex, colIndex);
+                }}
+                className={`
+                  relative
+                  w-[70px] h-[70px]
+                  flex items-center justify-center
+                  cursor-pointer select-none
+                  transition-all duration-200
+                  ${isLight ? "bg-[#EEEED2]" : "bg-[#1C2445]"}
+                  ${isSelected ? "ring-4 ring-[#FFD166] ring-inset" : ""}
+                  ${isLegalMove
+                    ? "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full after:pointer-events-none"
+                    : ""}
+                `}
+              
+              
+              
+              
                   style={{
                     borderRight:
                       colIndex < 7
@@ -86,15 +97,16 @@ export function Chessboard({
                   }}
                 >
                   {symbol && (
-                    <span
-                      className="text-5xl drop-shadow-lg"
-                      style={{
-                        filter:
-                          cell?.color === "BLACK"
-                            ? "drop-shadow(0 0 8px rgba(255,255,255,0.5))"
-                            : "drop-shadow(0 0 8px rgba(255,209,102,0.4))",
-                      }}
-                    >
+              <span
+              className="text-5xl drop-shadow-lg pointer-events-none"
+              style={{
+                filter:
+                  cell?.color === "BLACK"
+                    ? "drop-shadow(0 0 8px rgba(255,255,255,0.5))"
+                    : "drop-shadow(0 0 8px rgba(255,209,102,0.4))",
+              }}
+            >
+            
                       {symbol}
                     </span>
                   )}
@@ -105,14 +117,16 @@ export function Chessboard({
         </div>
 
         {/* Rank labels */}
-        <div className="absolute -left-6 top-0 h-full flex flex-col justify-around text-[#C9CAD9] text-sm font-medium">
+        <div className="absolute -left-6 top-0 h-full flex flex-col justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
+
           {["8", "7", "6", "5", "4", "3", "2", "1"].map((n) => (
             <span key={n}>{n}</span>
           ))}
         </div>
 
         {/* File labels */}
-        <div className="absolute -bottom-6 left-0 w-full flex justify-around text-[#C9CAD9] text-sm font-medium">
+        <div className="absolute -bottom-6 left-0 w-full flex justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
+
           {["a", "b", "c", "d", "e", "f", "g", "h"].map((l) => (
             <span key={l}>{l}</span>
           ))}

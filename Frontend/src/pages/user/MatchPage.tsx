@@ -1,73 +1,134 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { Chessboard } from "../../components/user/Match/ChessBoard";
 import { PlayerPanel } from "../../components/user/Match/PlayerPanel";
 import { MoveList } from "../../components/user/Match/History";
 import { ChatPanel } from "../../components/user/Match/chat";
 import { ControlBar } from "../../components/user/Match/controlBar";
 
-import { createGameUrl ,getGame} from "../../Service/api/chessApi";
-
+import {
+  createGameUrl,
+  getGame,
+  getLegalMoves,
+  makeMove,
+} from "../../Service/api/chessApi";
 
 import { BoardGrid } from "../../types/chess";
 
-export function Match() {
-  const [gameId, setGameId] = useState<string | null>(null);
-  const [board, setBoard] = useState<BoardGrid>([]);
-  // const [selected, setSelected] = useState<{ row: number; col: number } | null>(null);
-  // const [legalMoves, setLegalMoves] = useState<{ row: number; col: number }[]>([]);
+type Turn = "WHITE" | "BLACK";
 
-  // 1️⃣ Create game on mount
+export function Match() {
+  const { gameId } = useParams<{ gameId: string }>();
+  const navigate = useNavigate();
+
+  const [board, setBoard] = useState<BoardGrid>([]);
+  const [turn, setTurn] = useState<Turn>("WHITE");
+  const [history, setHistory] = useState<any[]>([]);
+
+  const [selected, setSelected] =
+    useState<{ row: number; col: number } | null>(null);
+
+  const [legalMoves, setLegalMoves] =
+    useState<{ row: number; col: number }[]>([]);
+
+  /* ----------------------------------------
+     Load existing game OR create new game
+  -----------------------------------------*/
   useEffect(() => {
     const init = async () => {
-      const id = await createGameUrl();
-      setGameId(id);
+      // If no gameId → create game
+      if (!gameId) {
+        const newGameId = await createGameUrl();
+        navigate(`/match/${newGameId}`, { replace: true });
+        return;
+      }
 
-      const game = await getGame(id);
-      console.log(game)
+      // Load game
+      const game = await getGame(gameId);
       setBoard(game.board);
+      setTurn(game.turn);
+      setHistory(game.history);
     };
 
     init();
-  }, []);
+  }, [gameId, navigate]);
 
-// //   // 2️⃣ Handle square click
-//   const handleSquareClick = async (row: number, col: number) => {
-//     if (!gameId) return;
+  /* ----------------------------------------
+     Handle board clicks
+  -----------------------------------------*/
+  const handleSquareClick = async (row: number, col: number) => {
+    if (!gameId) return;
 
-//     // First click → select piece
-//     if (!selected) {
-//       const moves = await getLegalMoves(gameId, row, col);
-//       setSelected({ row, col });
-//       setLegalMoves(moves);
-//       return;
-//     }
+    // First click → select piece
+    if (!selected) {
+      const piece = board[row][col];
 
-//     // Second click → move
-//     await makeMove(gameId, selected, { row, col });
+      // Allow only current turn piece
+      if (!piece || piece.color !== turn) return;
 
-//     const game = await getGame(gameId);
-//     setBoard(game.board);
+      const moves = await getLegalMoves(gameId, row, col);
+      if (moves.length === 0) return;
 
-//     // Reset UI state
-//     setSelected(null);
-//     setLegalMoves([]);
-//   };
+      setSelected({ row, col });
+      setLegalMoves(moves);
+      return;
+    }
 
-  // 3️⃣ Prevent render until board loads
+    // Second click → move
+    const isLegal = legalMoves.some(
+      (m) => m.row === row && m.col === col
+    );
+
+    if (!isLegal) {
+      setSelected(null);
+      setLegalMoves([]);
+      return;
+    }
+
+    await makeMove(gameId, selected, { row, col });
+
+    // Re-sync game state
+    const game = await getGame(gameId);
+    setBoard(game.board);
+    setTurn(game.turn);
+    setHistory(game.history);
+
+    setSelected(null);
+    setLegalMoves([]);
+  };
+
+  /* ----------------------------------------
+     Reset UI on turn change
+  -----------------------------------------*/
+  useEffect(() => {
+    setSelected(null);
+    setLegalMoves([]);
+  }, [turn]);
+
+  /* ----------------------------------------
+     Loading state
+  -----------------------------------------*/
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
-        Creating game...
+        Loading game...
       </div>
     );
   }
 
+  /* ----------------------------------------
+     Render
+  -----------------------------------------*/
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col">
       {/* Header */}
       <div className="w-full px-8 py-4 bg-[#11193F]/40 backdrop-blur-sm border-b border-[#FFD166]/20">
         <div className="max-w-7xl mx-auto flex justify-between items-center text-white">
           <h1 className="text-2xl font-bold text-[#FFD166]">Knightly</h1>
+          <span className="text-sm opacity-80">
+            {turn} to move
+          </span>
         </div>
       </div>
 
@@ -85,11 +146,13 @@ export function Match() {
               isOpponent
             />
 
+            {/* 🔑 key={turn} forces clean re-render */}
             <Chessboard
+              key={turn}
               board={board}
-              // selectedSquare={selected}
-              // legalMoves={legalMoves}
-            //   onSquareClick={handleSquareClick}
+              selectedSquare={selected}
+              legalMoves={legalMoves}
+              onSquareClick={handleSquareClick}
             />
 
             <PlayerPanel
@@ -97,13 +160,13 @@ export function Match() {
               rating={2200}
               avatar=""
               time="6:15"
-              isYourTurn
+              isYourTurn={turn === "WHITE"}
             />
 
             <ControlBar />
           </div>
 
-          <MoveList />
+          <MoveList history={history} />
         </div>
       </div>
     </div>

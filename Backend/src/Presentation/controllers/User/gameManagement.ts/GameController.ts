@@ -71,6 +71,7 @@ export class GameController{
         try{
             const {gameId} = req.params;
             const {from,to} = req.body;
+            console.log(from,to)
             if(!gameId 
                 ||!from 
                 ||!to 
@@ -84,6 +85,7 @@ export class GameController{
                 }
 
                 await this._makeMoveUseCase.execute(gameId,from,to)
+                res.status(200).json({message:"success"})
 
         }catch(error){
             next(error)

@@ -14,7 +14,7 @@ export class Knight extends Piece{
                     .filter(p=>board.isInside(p))
                     .filter((p)=>{
             const target = board.getPiece(p);
-            return !target || target.color ! == this.color
+            return !target || target.color !== this.color
         })
     }
 }

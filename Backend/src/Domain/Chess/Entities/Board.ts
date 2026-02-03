@@ -41,10 +41,14 @@ export class Board{
         this.setPiece(from,null)
     }
 
-
     clone(): Board {
-        return Board.deserialize(this.serialize(), this._enPassantTarget);
+        const ep = this._enPassantTarget
+          ? new Position(this._enPassantTarget.row, this._enPassantTarget.column)
+          : null;
+      
+        return Board.deserialize(this.serialize(), ep);
       }
+      
       
 
     setEnPassantTarget(pos: Position | null): void {

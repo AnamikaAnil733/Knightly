@@ -16,11 +16,17 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
 
         const gameState = game.getGameState();
         const board = gameState.getBoard();
+        console.log("BOARD BEFORE MOVE:", board.serialize());
+
+
 
         const fromP = new Position(from.row,from.col);
         const toP = new Position(to.row,to.col);
+        console.log("FROM PIECE:", board.getPiece(fromP));
+        console.log(fromP,toP)
 
         const piece = board.getPiece(fromP);
+        console.log(piece)
         if(!piece){
             throw new Error("No piece is found")
         }
