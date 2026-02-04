@@ -1,6 +1,7 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/UserManagmentRepository";
 import { IBlockUserUseCase } from "../../../../Domain/Interface/usecases/admin/UserManagement/IBlockUserUseCase";
 import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../Domain/DTOs/adminDTOs";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 
@@ -12,11 +13,11 @@ export class BlockUserUseCase implements IBlockUserUseCase{
   async blockUser(input: BlockUserInputDTO): Promise<BlockUserOutputDTO> {
 
     const banUser = await this._UserManagmentRepository.ban(input.userId);
-    if(!banUser) throw new Error("User not found with the given ID");
+    if(!banUser) throw new Error(MESSAGES.USER_DOESNT_EXIST);
 
     return {
       success:true,
-      message:"User is blocked Sucessfully",
+      message:MESSAGES.USER_BLOCKED,
     };
   }
 }
