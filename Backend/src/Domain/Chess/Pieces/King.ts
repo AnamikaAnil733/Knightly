@@ -2,6 +2,7 @@ import { Piece } from "./Piece";
 import { Position } from "../Position";
 
 
+
 export class King extends Piece{
     readonly type = "KING";
     getPseudoLegalMoves(from: Position, board: any): Position[] {

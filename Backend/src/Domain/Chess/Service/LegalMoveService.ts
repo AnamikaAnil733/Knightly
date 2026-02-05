@@ -16,6 +16,20 @@ export class LegalService{
     const pseudoMoves = piece.getPseudoLegalMoves(from,board);
 
     return pseudoMoves.filter(to =>{
+        if(piece.type === "KING" && Math.abs(to.column-from.column)===2){
+            if (CheckService.isKingInCheck(piece.color, board)) {
+                return false;
+              }
+              const direction = to.column > from.column ? 1 : -1;
+              const middle = new Position(from.row, from.column + direction);
+
+              const middleBoard = board.clone();
+              middleBoard.move(from, middle);
+          
+              if (CheckService.isKingInCheck(piece.color, middleBoard)) {
+                return false;
+              }
+        }
         const simulatedBoard = board.clone()
         simulatedBoard.move(from,to)
         return !CheckService.isKingInCheck(
