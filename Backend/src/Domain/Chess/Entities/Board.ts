@@ -45,7 +45,6 @@ export class Board{
         const ep = this._enPassantTarget
           ? new Position(this._enPassantTarget.row, this._enPassantTarget.column)
           : null;
-      
         return Board.deserialize(this.serialize(), ep);
       }
       
@@ -58,7 +57,9 @@ export class Board{
     getEnPassantTarget(): Position | null {
         return this._enPassantTarget;
       }
-
+      clearEnPassantTarget(): void {
+        this._enPassantTarget = null;
+      }
 
     serialize():SerializedBoardGrid{
     return this.grid.map(row =>

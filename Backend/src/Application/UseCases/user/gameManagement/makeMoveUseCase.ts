@@ -9,7 +9,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
     constructor(
         private readonly _gameRepo:IChessGameRepository,
     ){}
-    async execute(gameId: string, from: { row: never; col: number; }, to: { row: number; col: number; }): Promise<void> {
+    async execute(gameId: string, from: { row: number; col: number; }, to: { row: number; col: number; }): Promise<void> {
         const game = await this._gameRepo.findById(gameId)
         if(!game){
             throw new Error(MESSAGES.GAME_NOT_FOUND)
@@ -38,6 +38,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
         const isLegal = LegalMoves.some(
             m=>m.row === toP.row && m.column === toP.column
         )
+        console.log(LegalMoves,"LLLMMMM")
 
         if(!isLegal){
             throw new Error("Illegal move")

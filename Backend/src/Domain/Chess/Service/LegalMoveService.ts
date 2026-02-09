@@ -14,7 +14,6 @@ export class LegalService{
     if(!piece) return[]
 
     const pseudoMoves = piece.getPseudoLegalMoves(from,board);
-
     return pseudoMoves.filter(to =>{
         if(piece.type === "KING" && Math.abs(to.column-from.column)===2){
             if (CheckService.isKingInCheck(piece.color, board)) {
@@ -31,6 +30,14 @@ export class LegalService{
               }
         }
         const simulatedBoard = board.clone()
+        const ep =board.getEnPassantTarget()
+        if(piece.type == "PAWN" 
+          && ep !== null
+          && to.equals(ep)){
+          const direction = piece.color === "WHITE"?-1:1;
+          const capturedPawnP = to.offset(-direction,0)
+          simulatedBoard.setPiece(capturedPawnP,null)
+        }
         simulatedBoard.move(from,to)
         return !CheckService.isKingInCheck(
             piece.color,

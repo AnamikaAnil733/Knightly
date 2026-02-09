@@ -36,17 +36,20 @@ export class Pawn extends Piece{
             moves.push(p)
         }
        }
+    
+       const ep = board.getEnPassantTarget();
 
-
-       const ep = board.getEnPassantTarget?.();
-       if (
-         ep &&
-         ep.row === from.row + d &&
-         Math.abs(ep.column - from.column) === 1
-       ) {
-         moves.push(ep);
+       if (ep) {
+         const direction = this.color === "WHITE" ? -1 : 1;
+       
+         const isCorrectRow = ep.row === from.row + direction;
+         const isAdjacentFile = Math.abs(ep.column - from.column) === 1;
+       
+         if (isCorrectRow && isAdjacentFile) {
+           moves.push(ep);
+         }
        }
-
+       
 
        return moves
     }

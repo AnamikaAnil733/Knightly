@@ -112,8 +112,7 @@ export class GameState{
     }
 
 
-    makeMove(from:Position,to:Position,promotionType?:PromotionType):void{
-        
+    makeMove(from:Position,to:Position,promotionType?:PromotionType):void{        
         const piece = this._board.getPiece(from)
         if(!piece){
             throw new Error("No piece at the square")
@@ -128,22 +127,24 @@ export class GameState{
         if(!isLegal){
             throw new Error("Illegal move")
         }
-
-        if(piece.type =="PAWN"){
-            const direction = piece.color == "WHITE"?-1:1;
-            if(Math.abs(to.row - from.row) === 2){
-                this._board.setEnPassantTarget(from.offset(direction, 0));
-            }
-        }
-
+        
         const ep = this._board.getEnPassantTarget();
 
-        if (piece.type === "PAWN" && ep && to.equals(ep)){
-            const direction  = piece.color == "WHITE"?-1:1;
-            const capturedPawnP= to.offset(direction,0);
-            this._board.setPiece(capturedPawnP,null)
-         }
+        if (piece.type === "PAWN" && ep && to.equals(ep)) {
+            const capturedPawnP = new Position(from.row, to.column);
+            this._board.setPiece(capturedPawnP, null);
+          }
 
+          
+        
+        if (piece.type === "PAWN" && Math.abs(to.row - from.row) === 2) {
+            const passedSquare = new Position(
+              (from.row + to.row) / 2,
+              from.column
+            );
+            this._board.setEnPassantTarget(passedSquare);
+          }
+          
       if(piece.type == "KING" && Math.abs(to.column - from.column)===2){
 
         if(!this.canCastle(from,to)){
@@ -176,15 +177,7 @@ export class GameState{
         this._moveHistory.push(
             new Move(from,to,finalPieceType,piece.color)
         )
-        if (
-            piece.type !== "PAWN" ||
-            Math.abs(to.row - from.row) !== 2
-          ) {
-            this._board.setEnPassantTarget(null);
-          }
         this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE"
-
-
     }
 
     restore(data:{
@@ -193,6 +186,7 @@ export class GameState{
     }):void{
         this._currentTurn = data.turn
         this._moveHistory = data.history
+        this.reconstructEnPassantFromLastMove();
     }
 
     getSnapshot(){
@@ -201,5 +195,23 @@ export class GameState{
             history:[...this._moveHistory]
         }
     }
-    
+    private reconstructEnPassantFromLastMove(): void {
+        this._board.clearEnPassantTarget();
+      
+        const lastMove = this._moveHistory.at(-1);
+        if (!lastMove) return;
+      
+        if (
+          lastMove.pieceType === "PAWN" &&
+          Math.abs(lastMove.from.row - lastMove.to.row) === 2 &&
+          lastMove.color !== this._currentTurn
+        ) {
+          const passedSquare = new Position(
+            (lastMove.from.row + lastMove.to.row) / 2,
+            lastMove.from.column
+          );
+          this._board.setEnPassantTarget(passedSquare);
+        }
+      }
+      
 } 

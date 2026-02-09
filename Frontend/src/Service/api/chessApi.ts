@@ -14,7 +14,7 @@ export const getGame = async (gameId:string)=>{
   return res.data
 }
 
-export const getLegalMoves = async (gameId:string,row:number,col:number):Promise<{ row: number; col: number }[]>=>{
+export const getLegalMoves = async (gameId:string,row:number,col:number):Promise<{ row: number; col: number; type:"NORMAL" |"EN_PASSANT" }[]>=>{
     const res = await axios.get(`/user/games/${gameId}/legal-moves`,
         {params:{row,col}}
     );

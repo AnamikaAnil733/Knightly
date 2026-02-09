@@ -11,7 +11,7 @@ type ChessPiece = {
 type ChessboardProps = {
   board: (ChessPiece | null)[][]
   selectedSquare?: { row: number; col: number } | null
-  legalMoves?: { row: number; col: number }[]
+  legalMoves?: { row: number; col: number,type?: "EN_PASSANT" | "NORMAL"  }[]
   onSquareClick?: (row: number, col: number) => void
 }
 
@@ -50,7 +50,13 @@ export function Chessboard({
                 (m) => m.row === rowIndex && m.col === colIndex
               )
 
-              
+              const isEnPassant = legalMoves.some(
+                (m) =>
+                  m.row === rowIndex &&
+                  m.col === colIndex &&
+                  m.type === "EN_PASSANT"
+              )
+            
 
               return (
                 <div
@@ -68,8 +74,11 @@ export function Chessboard({
                   ${isLight ? "bg-[#F2F7F9]" : "bg-[#4FB3BF]"}
                   ${isSelected ? "ring-4 ring-[#FFD166] ring-inset" : ""}
                   ${isLegalMove
-                    ? "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full after:pointer-events-none"
+                    ? isEnPassant
+                      ? "after:absolute after:w-5 after:h-5 after:border-2 after:border-[#FFD166] after:rounded-full after:pointer-events-none"
+                      : "after:absolute after:w-4 after:h-4 after:bg-[#FFD166]/80 after:rounded-full after:pointer-events-none"
                     : ""}
+                  
                 `}
 
                   style={{

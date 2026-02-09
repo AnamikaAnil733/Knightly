@@ -30,7 +30,7 @@ export function Match() {
     useState<{ row: number; col: number } | null>(null);
 
   const [legalMoves, setLegalMoves] =
-    useState<{ row: number; col: number }[]>([]);
+    useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
 
 
   useEffect(() => {

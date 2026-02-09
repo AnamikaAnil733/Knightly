@@ -6,12 +6,13 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 
+
 export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{ 
     constructor(
         private readonly _gameRepo:IChessGameRepository,
     ){}
 
-    async execute(gameId: string, p: { row: number; col: number; }): Promise<{ row: number; col: number }[]> {
+    async execute(gameId: string, p: { row: number; col: number; }): Promise<{ row: number; col: number;type:"NORMAL"|"EN_PASSANT"}[]> {
         const game = await this._gameRepo.findById(gameId);
         if(!game){
             throw new Error(MESSAGES.GAME_NOT_FOUND)
@@ -19,6 +20,7 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{
 
         const gameState = game.getGameState();
         const board = gameState.getBoard()
+        console.log(board.getEnPassantTarget(),"Usecase board.....");
 
         const from = new Position(p.row,p.col);
         const piece = board.getPiece(from)
@@ -30,11 +32,22 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{
         }
 
         const legalMoves = LegalService.getLegalMove(from,board);
+        console.log("LEGAL MOVES FROM USECASE:", legalMoves);
 
-        return legalMoves.map(m=>({
+        const epTarget = board.getEnPassantTarget();
+        console.log(epTarget,"eptarget....")
+
+        return legalMoves.map(m=>{
+            const isEnPassant =
+            epTarget &&
+            m.row === epTarget.row &&
+            m.column === epTarget.column;
+            return{
             row :m.row,
-            col :m.column
-        }))
+            col :m.column,
+            type:isEnPassant ?"EN_PASSANT":"NORMAL"
+            }
+        })
 
     }
 }
