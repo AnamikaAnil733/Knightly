@@ -17,6 +17,17 @@ import {
 import { BoardGrid } from "../../types/chess";
 
 type Turn = "WHITE" | "BLACK";
+type GameStatus = "ACTIVE" | "CHECK" | "CHECKMATE" | "STALEMATE";
+
+type Position = { row: number; col: number };
+
+type MoveDTO = {
+  from: Position;
+  to: Position;
+  piece: string;
+  color: "WHITE" | "BLACK";
+  promotion?: string;
+};
 
 export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -24,15 +35,14 @@ export function Match() {
 
   const [board, setBoard] = useState<BoardGrid>([]);
   const [turn, setTurn] = useState<Turn>("WHITE");
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<MoveDTO[]>([]);
+  const [status, setStatus] = useState<GameStatus>("ACTIVE");
 
   const [selected, setSelected] =
     useState<{ row: number; col: number } | null>(null);
 
   const [legalMoves, setLegalMoves] =
     useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
-
-
   useEffect(() => {
     const init = async () => {
       // If no gameId → create game
@@ -42,11 +52,12 @@ export function Match() {
         return;
       }
 
-      // Load game
+      // load game
       const game = await getGame(gameId);
       setBoard(game.board);
       setTurn(game.turn);
       setHistory(game.history);
+      setStatus(game.status)
     };
 
     init();
@@ -88,6 +99,7 @@ export function Match() {
     setBoard(game.board);
     setTurn(game.turn);
     setHistory(game.history);
+    setStatus(game.status)
 
     setSelected(null);
     setLegalMoves([]);
@@ -134,7 +146,7 @@ export function Match() {
               isOpponent
             />
 
-            {/* 🔑 key={turn} forces clean re-render */}
+            {/*key={turn} forces clean re-render */}
             <Chessboard
               key={turn}
               board={board}
@@ -154,7 +166,7 @@ export function Match() {
             <ControlBar />
           </div>
 
-          <MoveList history={history} />
+          <MoveList history={history} status={status}  />
         </div>
       </div>
     </div>

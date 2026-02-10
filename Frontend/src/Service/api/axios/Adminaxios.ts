@@ -32,7 +32,7 @@ interface FailedRequest {
 /* ===================== AXIOS INSTANCE ===================== */
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://78gjphmv-5000.inc1.devtunnels.ms/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

@@ -1,5 +1,4 @@
 import axios from "./axios/Useraxios";
-// import { BoardGrid } from "../../types/chess";
 
 
 export const createGameUrl = async ()=>{
@@ -10,7 +9,7 @@ export const createGameUrl = async ()=>{
 
 export const getGame = async (gameId:string)=>{
     const res = await axios.get(`/user/games/${gameId}`)
-    console.log(res)
+    console.log(res.data)
   return res.data
 }
 
@@ -27,7 +26,6 @@ export const makeMove = async (
     from:{row:number,col:number},
     to:{row:number,col:number}
 ):Promise<void>=>{
-    console.log(from,to)
 await axios.post(`/user/games/${gameId}/move`,{from,to})
 
 }

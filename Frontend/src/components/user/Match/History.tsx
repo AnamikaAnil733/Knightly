@@ -1,67 +1,35 @@
+import {formatMove} from  "../../../utils/moveFormat"
 
-const moves = [
-  {
-    number: 1,
-    white: 'e4',
-    black: 'e5',
-  },
-  {
-    number: 2,
-    white: 'Nf3',
-    black: 'Nc6',
-  },
-  {
-    number: 3,
-    white: 'd4',
-    black: 'exd4',
-  },
-  {
-    number: 4,
-    white: 'Nxd4',
-    black: 'Nf6',
-  },
-  {
-    number: 5,
-    white: 'Nc3',
-    black: 'Bb4',
-  },
-  {
-    number: 6,
-    white: 'Nxc6',
-    black: 'bxc6',
-  },
-  {
-    number: 7,
-    white: 'Bd3',
-    black: 'd5',
-  },
-  {
-    number: 8,
-    white: 'exd5',
-    black: 'cxd5',
-  },
-  {
-    number: 9,
-    white: 'O-O',
-    black: 'O-O',
-  },
-  {
-    number: 10,
-    white: 'Bg5',
-    black: 'c6',
-  },
-  {
-    number: 11,
-    white: 'Qf3',
-    black: 'Be7',
-  },
-  {
-    number: 12,
-    white: 'Rfe1',
-    black: '',
-  },
-]
-export function MoveList() {
+type MoveDTO = {
+  from: { row: number; col: number };
+  to: { row: number; col: number };
+  piece: string;
+  color: "WHITE" | "BLACK";
+  promotion?: string;
+};
+
+
+export function MoveList({history,status}:{history :MoveDTO[];status:"ACTIVE"|"CHECK"|"CHECKMATE"|"STALEMATE"}) {
+  const moves = []
+  const lastMoveIndex = history.length - 1;
+  for (let i = 0; i < history.length; i += 2) {
+    moves.push({
+      number: i / 2 + 1,
+      white: history[i] ? formatMove(history[i],{
+            isCheck:
+              status === "CHECK" && i === lastMoveIndex,
+            isCheckmate:
+              status === "CHECKMATE" && i === lastMoveIndex,
+          }): "",
+      black: history[i + 1] ? formatMove(history[i + 1],{
+        isCheck:
+          status === "CHECK" && i+1 === lastMoveIndex,
+        isCheckmate:
+          status === "CHECKMATE" && i+1=== lastMoveIndex,
+      }) : "",
+    });
+  }
+
   return (
     <div
       className="w-64 rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#3A6FF7]/30 p-6 h-[700px] flex flex-col"

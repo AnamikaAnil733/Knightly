@@ -209,6 +209,7 @@ export class GameState{
             status:this._status
         }
     }
+    
   private calculateStatus():void{
     if (GameEndService.isCheckMate(this._currentTurn, this._board)) {
         this._status = "CHECKMATE";

@@ -20,7 +20,6 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{
 
         const gameState = game.getGameState();
         const board = gameState.getBoard()
-        console.log(board.getEnPassantTarget(),"Usecase board.....");
 
         const from = new Position(p.row,p.col);
         const piece = board.getPiece(from)
@@ -32,10 +31,8 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase{
         }
 
         const legalMoves = LegalService.getLegalMove(from,board);
-        console.log("LEGAL MOVES FROM USECASE:", legalMoves);
 
         const epTarget = board.getEnPassantTarget();
-        console.log(epTarget,"eptarget....")
 
         return legalMoves.map(m=>{
             const isEnPassant =

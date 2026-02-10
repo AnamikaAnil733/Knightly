@@ -34,7 +34,7 @@ interface FailedRequest {
 /* ===================== AXIOS INSTANCE ===================== */
 
 const userApi = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://78gjphmv-5000.inc1.devtunnels.ms/api",
   withCredentials: true, // REQUIRED for refresh cookies
   headers: {
     "Content-Type": "application/json",

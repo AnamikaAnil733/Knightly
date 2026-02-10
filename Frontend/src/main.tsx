@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client';
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -13,7 +12,7 @@ const queryClient = new QueryClient();
 const ClintId = import.meta.env.VITE_GOOGLE_CLIENT_ID 
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  
     <Provider store= {Store}>
     <PersistGate loading={null} persistor={persistor}>
     <GoogleOAuthProvider clientId={ClintId}>
@@ -23,5 +22,5 @@ createRoot(document.getElementById('root')!).render(
     </GoogleOAuthProvider>
     </PersistGate>
     </Provider>
-  </StrictMode>,
+
 )
