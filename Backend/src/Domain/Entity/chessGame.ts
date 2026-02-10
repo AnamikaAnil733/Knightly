@@ -21,5 +21,8 @@ export class ChessGame extends BaseEntity{
     setStatus(status:GameStatus):void{
        this._status = status;
     }
+    statusFromGameState():void{
+        this._status = this._gameState.getStatus()
+    }
   
 }

@@ -8,11 +8,14 @@ import { LegalService } from "../Service/LegalMoveService";
 import { CheckService } from "../Service/CheckService";
 import { Move } from "./Move";
 import { PromotionType } from "./PromotionType";
+import { GameEndService } from "../Service/GameEndService";
 
 
 export class GameState{
     private _moveHistory:Move[] = [];
     private _currentTurn:"WHITE"|"BLACK" = "WHITE";
+    private _status: "ACTIVE" | "CHECKMATE" | "STALEMATE" |"CHECK" = "ACTIVE";
+
    
 
     constructor(
@@ -38,6 +41,10 @@ export class GameState{
         return LegalService.getLegalMove(from,this._board)
     }
 
+    getStatus() {
+        return this._status;
+      }
+      
     private promotePawn(
         color:"WHITE"|"BLACK",
         to:Position,
@@ -135,6 +142,7 @@ export class GameState{
             this._board.setPiece(capturedPawnP, null);
           }
 
+          this._board.clearEnPassantTarget();
           
         
         if (piece.type === "PAWN" && Math.abs(to.row - from.row) === 2) {
@@ -177,7 +185,11 @@ export class GameState{
         this._moveHistory.push(
             new Move(from,to,finalPieceType,piece.color)
         )
-        this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE"
+        this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE";
+
+
+       this.calculateStatus()
+        console.log(this._status,"isendddd")
     }
 
     restore(data:{
@@ -187,14 +199,28 @@ export class GameState{
         this._currentTurn = data.turn
         this._moveHistory = data.history
         this.reconstructEnPassantFromLastMove();
+        this.calculateStatus()
     }
 
     getSnapshot(){
         return{
             turn:this._currentTurn,
-            history:[...this._moveHistory]
+            history:[...this._moveHistory],
+            status:this._status
         }
     }
+  private calculateStatus():void{
+    if (GameEndService.isCheckMate(this._currentTurn, this._board)) {
+        this._status = "CHECKMATE";
+      } else if (GameEndService.isStaleMate(this._currentTurn, this._board)) {
+        this._status = "STALEMATE";
+      } else if (CheckService.isKingInCheck(this._currentTurn, this._board)) {
+        this._status = "CHECK";
+      } else {
+        this._status = "ACTIVE";
+      }
+  }
+
     private reconstructEnPassantFromLastMove(): void {
         this._board.clearEnPassantTarget();
       

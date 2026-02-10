@@ -8,7 +8,7 @@ export interface ChessGameSchemaType {
   turn: "WHITE" | "BLACK";
   board: SerializedBoardGrid;
   history: any[];         
-  status: "ACTIVE" | "CHECKMATE" | "STALEMATE";
+  status: "ACTIVE" | "CHECKMATE" | "STALEMATE"|"CHECK";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,7 +31,7 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
       },
       status:{
          type:String,
-         enum:["ACTIVE","CHECKMATE","STALEMATE"],
+         enum:["ACTIVE","CHECKMATE","STALEMATE","CHECK"],
          required:true,
          default:"ACTIVE"
       },

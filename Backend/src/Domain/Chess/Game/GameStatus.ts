@@ -1,1 +1,1 @@
-export type GameStatus = "ACTIVE" | "CHECKMATE" | "STALEMATE";
+export type GameStatus = "ACTIVE" | "CHECKMATE" | "STALEMATE"| "CHECK" ;

@@ -17,6 +17,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
 
         const gameState = game.getGameState();
         const board = gameState.getBoard();
+        const status = gameState.getStatus();
 
 
 
@@ -38,13 +39,15 @@ export class MakeMoveUsecase implements IMakeMoveUseCase{
         const isLegal = LegalMoves.some(
             m=>m.row === toP.row && m.column === toP.column
         )
-        console.log(LegalMoves,"LLLMMMM")
+     
 
         if(!isLegal){
             throw new Error("Illegal move")
         }
 
         gameState.makeMove(fromP,toP)
+        game.statusFromGameState()
+        
         await this._gameRepo.update(game)
 
     }
