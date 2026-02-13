@@ -24,8 +24,9 @@ export const getLegalMoves = async (gameId:string,row:number,col:number):Promise
 export const makeMove = async (
     gameId:string,
     from:{row:number,col:number},
-    to:{row:number,col:number}
+    to:{row:number,col:number},
+    promotionType?:"QUEEN"|"ROOK"|"BISHOP"|"KNIGHT"
 ):Promise<void>=>{
-await axios.post(`/user/games/${gameId}/move`,{from,to})
+await axios.post(`/user/games/${gameId}/move`,{from,to,promotionType})
 
 }

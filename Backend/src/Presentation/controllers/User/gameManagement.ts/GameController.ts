@@ -73,8 +73,8 @@ export class GameController {
   makeMove = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { gameId } = req.params;
-      const { from, to } = req.body;
-      console.log(from, to);
+      const { from, to ,promotionType } = req.body;
+      console.log(from, to,promotionType);
       if (
         !gameId ||
         !from ||
@@ -90,7 +90,7 @@ export class GameController {
         return;
       }
 
-      await this._makeMoveUseCase.execute(gameId, from, to);
+      await this._makeMoveUseCase.execute(gameId, from, to,promotionType);
       res.status(200).json({ message: "success" });
     } catch (error) {
       next(error);

@@ -6,6 +6,8 @@ import { PlayerPanel } from "../../components/user/Match/PlayerPanel";
 import { MoveList } from "../../components/user/Match/History";
 import { ChatPanel } from "../../components/user/Match/chat";
 import { ControlBar } from "../../components/user/Match/controlBar";
+import { PromotionModal } from "../../components/user/Match/PromotionModal";
+import { GameOver } from "../../components/user/Match/GameOver";
 
 import {
   createGameUrl,
@@ -37,6 +39,11 @@ export function Match() {
   const [turn, setTurn] = useState<Turn>("WHITE");
   const [history, setHistory] = useState<MoveDTO[]>([]);
   const [status, setStatus] = useState<GameStatus>("ACTIVE");
+  const [promotion,setPromotion] = useState<{
+    from:{row:number;col:number},
+    to:{row:number;col:number},
+    color:"WHITE"|"BLACK";}
+    |null>(null)
 
   const [selected, setSelected] =
     useState<{ row: number; col: number } | null>(null);
@@ -92,6 +99,18 @@ export function Match() {
       return;
     }
 
+    const piece = board[selected.row][selected.col]
+
+    const Promotion = piece?.type === "PAWN" && ((piece.color === "WHITE" && row ===0)||(piece.color === "BLACK" && row === 7));
+    if(Promotion){
+      setPromotion({
+        from:selected,
+        to:{row,col},
+        color:piece.color
+      });
+      return;
+    }
+
     await makeMove(gameId, selected, { row, col });
 
     // Re-sync game state
@@ -100,7 +119,6 @@ export function Match() {
     setTurn(game.turn);
     setHistory(game.history);
     setStatus(game.status)
-
     setSelected(null);
     setLegalMoves([]);
   };
@@ -147,6 +165,13 @@ export function Match() {
             />
 
             {/*key={turn} forces clean re-render */}
+            <div
+  className={`relative transition-all duration-300 ${
+    status === "CHECKMATE" || status === "STALEMATE"
+      ? "blur-[6px] scale-[0.98] opacity-80"
+      : ""
+  }`}
+>
             <Chessboard
               key={turn}
               board={board}
@@ -154,6 +179,39 @@ export function Match() {
               legalMoves={legalMoves}
               onSquareClick={handleSquareClick}
             />
+            </div>
+{(status === "CHECKMATE" || status === "STALEMATE") && (
+  <GameOver status={status} turn={turn} />
+)}
+
+
+            {promotion && (
+  <PromotionModal
+    color={promotion.color}
+    onSelect={async (type) => {
+      if (!gameId) return;
+
+      await makeMove(
+        gameId,
+        promotion.from,
+        promotion.to,
+        type   // 🔥 send promotionType
+      );
+
+      const game = await getGame(gameId);
+      setBoard(game.board);
+      setTurn(game.turn);
+      setHistory(game.history);
+      setStatus(game.status);
+
+      setPromotion(null);
+      setSelected(null);
+      setLegalMoves([]);
+    }}
+  />
+)}
+
+            
 
             <PlayerPanel
               name="You"
