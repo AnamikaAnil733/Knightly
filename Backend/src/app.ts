@@ -3,11 +3,17 @@ dotenv.config();
 
 import { corsOptions } from "../src/Presentation/constants/corsOption";
 import express, { Application } from "express";
+import http from "http";
+import {Server} from "socket.io";
 import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
 import { AuthRoutes } from "../src/Presentation/routes/authroute";
-
 import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
 import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
+import { SocketHandler } from "./Infrastructure/socket/SocketHandler";
+
+import { MakeMoveUsecase } from "./Application/UseCases/user/gameManagement/makeMoveUseCase";
+import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository";
+import { GameModel } from "./Infrastructure/database/model/gameModel";
 
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
 import cors from "cors";
@@ -15,12 +21,35 @@ import cookieParser from "cookie-parser";
 
 export class App {
   private app: Application;
+  private _server:http.Server;
+  private _io:Server;
 
   constructor() {
     this.app = express();
+    this._server = http.createServer(this.app);
+
+    this._io = new Server(this._server,{
+      cors:{
+        origin:"http://localhost:5173",
+        methods:["GET","POST"]
+      }
+    })
+
     this.initializeMiddlewares();
     this.initializeDatabase();
     this.initializeRoutes();
+
+    const gameRepo = new ChessGameRepository(GameModel);
+    const makeMoveUseCase = new MakeMoveUsecase(gameRepo);
+
+    const socketHandler = new SocketHandler(
+      this._io,
+      makeMoveUseCase,
+      gameRepo
+    );
+
+    socketHandler.initialize();
+
     this.setErrorHandlerMiddleware();
   }
   private initializeMiddlewares(): void {
@@ -48,7 +77,7 @@ export class App {
   }
 
   public listen(port:any): void {
-    this.app.listen(port, () => {
+    this._server.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
   }

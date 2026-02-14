@@ -9,6 +9,8 @@ import { ControlBar } from "../../components/user/Match/controlBar";
 import { PromotionModal } from "../../components/user/Match/PromotionModal";
 import { GameOver } from "../../components/user/Match/GameOver";
 
+import { socket } from "../../Service/socket";
+
 import {
   createGameUrl,
   getGame,
@@ -50,6 +52,32 @@ export function Match() {
 
   const [legalMoves, setLegalMoves] =
     useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
+
+   // 🔹 Join socket room
+   useEffect(() => {
+    if (!gameId) return;
+
+    socket.emit("joinGame", gameId);
+  }, [gameId]);
+
+  // 🔹 Listen for real-time updates
+  useEffect(() => {
+    socket.on("gameUpdated", (game) => {
+      setBoard(game.board);
+      setTurn(game.turn);
+      setHistory(game.history);
+      setStatus(game.status);
+    });
+
+    socket.on("moveError", (message) => {
+      alert(message);
+    });
+
+    return () => {
+      socket.off("gameUpdated");
+      socket.off("moveError");
+    };
+  }, []);
   useEffect(() => {
     const init = async () => {
       // If no gameId → create game
@@ -111,24 +139,20 @@ export function Match() {
       return;
     }
 
-    await makeMove(gameId, selected, { row, col });
+    socket.emit("move", {
+      gameId,
+      from: selected,
+      to: { row, col },
+    });
 
-    // Re-sync game state
-    const game = await getGame(gameId);
-    setBoard(game.board);
-    setTurn(game.turn);
-    setHistory(game.history);
-    setStatus(game.status)
     setSelected(null);
     setLegalMoves([]);
   };
-
 
   useEffect(() => {
     setSelected(null);
     setLegalMoves([]);
   }, [turn]);
-
 
   if (!gameId || board.length === 0) {
     return (
@@ -195,7 +219,7 @@ export function Match() {
         gameId,
         promotion.from,
         promotion.to,
-        type   // 🔥 send promotionType
+        type   
       );
 
       const game = await getGame(gameId);
