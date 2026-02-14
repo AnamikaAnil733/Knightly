@@ -4,7 +4,7 @@ import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { GetAllUserController } from "../../Presentation/controllers/admin/userManagement/findallUserController";
 import {  BlockUserController }  from "../../Presentation/controllers/admin/userManagement/blockUserController";
 import {  UnBlockUserController } from "../../Presentation/controllers/admin/userManagement/unBlockUserController";
-import { AdminPuzzleController } from "../../Presentation/controllers/admin/puzzleManagment/puzzleManagementAdmin"
+import { AdminPuzzleController } from "../../Presentation/controllers/admin/puzzleManagment/puzzleManagementAdmin";
 
 import { GetAllUserUseCase }  from "../../Application/UseCases/admin/UserManagement/getAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/blockUserUseCase";
@@ -16,22 +16,22 @@ import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/admin/Puzzle
 
 import { TokenService } from "../services/tokenService";
 
-import {AdminRoutes} from "../../Presentation/routes/adminroute"
+import {AdminRoutes} from "../../Presentation/routes/adminroute";
 
 const UserManagmentRepo = new UserManagmentRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();
 
 //service
-const tokenService = new TokenService()
+const tokenService = new TokenService();
 
 //useCase
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagmentRepo);
 const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo);
-const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo)
-const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo)
-const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo)
-const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(puzzleMangementRepo)
+const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo);
+const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo);
+const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo);
+const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(puzzleMangementRepo);
 
 
 export const getAllUserController = new GetAllUserController(getAllUsersUseCase);
@@ -39,10 +39,10 @@ export const banUserController = new BlockUserController(blockUserUseCase);
 export const unBanUserController = new UnBlockUserController(unBlockUserUserCase);
 
 export const PuzzleManagementController = new AdminPuzzleController(
-    createPuzzleUseCase,
-    getAllPuzzleUseCase,
-    editPuzzleUseCase,
-    softDeletePuzzleUseCase
+  createPuzzleUseCase,
+  getAllPuzzleUseCase,
+  editPuzzleUseCase,
+  softDeletePuzzleUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

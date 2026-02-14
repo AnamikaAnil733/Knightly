@@ -4,7 +4,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { AvatarURLtypes } from "../../Domain/Types/avatarURLtypes"
+import { AvatarURLtypes } from "../../Domain/Types/avatarURLtypes";
 
 import { IStorageService } from "../../Domain/Interface/service/S3Service";
 
@@ -24,18 +24,18 @@ export class S3StorageService implements IStorageService {
 
   async generateAvatarUploadUrl(
     key: string,
-    contentType: string
+    contentType: string,
   ): Promise<AvatarURLtypes> {
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,
       ContentType: contentType,
     });
-  
+
     const uploadUrl = await getSignedUrl(this._s3, command, {
       expiresIn: 60,
     });
-  
+
     return { uploadUrl, key };
   }
 
@@ -54,7 +54,7 @@ export class S3StorageService implements IStorageService {
         Key: key,
         Body: body,
         ContentType: contentType,
-      })
+      }),
     );
 
     return key;
@@ -62,7 +62,7 @@ export class S3StorageService implements IStorageService {
 
   async generateSignedGetUrl(
     key: string,
-    expiresIn = 300
+    expiresIn = 300,
   ): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,

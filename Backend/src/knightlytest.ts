@@ -28,7 +28,7 @@ const game = new GameState(board);
 console.log("WHITE moves e2 → e4");
 game.makeMove(
   new Position(6, 4),
-  new Position(4, 4)
+  new Position(4, 4),
 );
 
 // Check en passant target

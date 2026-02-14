@@ -1,7 +1,7 @@
 import { UpdatePuzzleInputDTO,
-    PuzzleResponseDTO} from "../../../../DTOs/adminDTOs";
+  PuzzleResponseDTO} from "../../../../DTOs/adminDTOs";
 
 
-    export interface IEditPuzzleUsecase{
+export interface IEditPuzzleUsecase{
         execute(input:UpdatePuzzleInputDTO):Promise<PuzzleResponseDTO>
     }

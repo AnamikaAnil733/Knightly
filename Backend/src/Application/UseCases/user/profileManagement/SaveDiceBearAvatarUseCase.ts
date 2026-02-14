@@ -8,7 +8,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class SaveDiceBearAvatarUseCase {
   constructor(
     private readonly _storageService: IStorageService,
-    private readonly _userRepo: IBaseRepository<EAuth>
+    private readonly _userRepo: IBaseRepository<EAuth>,
   ) {}
 
   async execute({
@@ -23,7 +23,7 @@ export class SaveDiceBearAvatarUseCase {
     if (!diceBearUrl.startsWith("https://api.dicebear.com/")) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_SOURCE
+        MESSAGES.INVALID_SOURCE,
       );
     }
 
@@ -44,7 +44,7 @@ export class SaveDiceBearAvatarUseCase {
       body: svgBuffer,
       contentType: "image/svg+xml",
     });
-  
+
 
     const user = await this._userRepo.findById(userId);
     if (!user) {
@@ -53,7 +53,7 @@ export class SaveDiceBearAvatarUseCase {
         MESSAGES.USER_DOESNT_EXIST,
       );
     }
-   
+
 
     user.avatarKey = avatarUrl;
     await this._userRepo.update(user);

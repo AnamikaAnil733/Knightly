@@ -4,7 +4,7 @@ import { PieceType } from "../Chess/Types/PieceType";
 
 
 //------------Edit-Profile-------------
- 
+
 export interface EditProfileinputDto{
     userId:string;
     displayname:string
@@ -52,54 +52,54 @@ export interface GetAvatarOutputDto {
     uploadUrl: string;
     key: string;
   }
-  
 
-  export interface GetUserProfileOutputDto {
+
+export interface GetUserProfileOutputDto {
     id: string;
 
     displayname: string;
     email: string;
-  
+
     role: UserRole;
     isBlocked: boolean;
-  
+
     createdAt: string;
-  
+
     gamesPlayed: number;
     gamesWin: number;
     rating: number;
     premium: boolean;
-  
+
     longestStreak: number;
     currentStreak: number;
-  
+
     rewards: string[];
     achievements: string[];
-  
+
     avatarUrl: string | null;
   }
 
 
-  //---------GameDTO---------
+//---------GameDTO---------
 
-  export interface SerializedPieceDTO {
+export interface SerializedPieceDTO {
     type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"
     color: "WHITE" | "BLACK"
     hasMoved: boolean
   }
-  
-  export type BoardDTO = (SerializedPieceDTO | null)[][];
+
+export type BoardDTO = (SerializedPieceDTO | null)[][];
 
 
-  export interface MoveDTO {
+export interface MoveDTO {
     from: { row: number; col: number }
     to: { row: number; col: number }
     piece: string
     color: "WHITE" | "BLACK"
   }
-  
 
-  export interface GameOutputDTO{
+
+export interface GameOutputDTO{
     gameId:string,
     turn:"WHITE"|"BLACK",
     board:BoardDTO,

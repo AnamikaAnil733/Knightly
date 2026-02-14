@@ -4,109 +4,122 @@ import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameR
 
 export class SocketHandler{
 
-    private rooms = new Map<
+  private rooms = new Map<
     string,
     { white?: string; black?: string }
   >();
 
-    constructor(
+  constructor(
         private readonly _io:Server,
         private readonly _makeMoveUseCase:IMakeMoveUseCase,
         private readonly _gameRepo:IChessGameRepository,
-    ){}
+  ){}
 
-public initialize(){
-    
+  public initialize(){
+
     this._io.on("connection",(socket:Socket)=>{
-        console.log("socket connected",socket.id)
-        socket.on("joinGame",(gameId:string)=>{
-            socket.join(gameId);
-        
-            if(!this.rooms.has(gameId)){
-                this.rooms.set(gameId,{})
-            }
+      console.log("socket connected",socket.id);
+      socket.on("joinGame",(gameId:string)=>{
+        socket.join(gameId);
 
-            const room = this.rooms.get(gameId)!;
+        if(!this.rooms.has(gameId)){
+          this.rooms.set(gameId,{});
+        }
 
-            let role:"WHITE"|"BLACK"|"SPECTATOR";
+        const room = this.rooms.get(gameId)!;
 
-            if(!room.white){
-                room.white = socket.id;
-                role = "WHITE"
-            }else if(!room.black){
-                room.black = socket.id;
-                role = "BLACK"
-            }else{
-                role = "SPECTATOR"
-            }
+        let role:"WHITE"|"BLACK"|"SPECTATOR";
 
-            socket.emit("roleAssigned",role);
+        if(!room.white){
+          room.white = socket.id;
+          role = "WHITE";
+        }else if(!room.black){
+          room.black = socket.id;
+          role = "BLACK";
+        }else{
+          role = "SPECTATOR";
+        }
 
-            console.log("joined",gameId);
-        });
+        socket.emit("roleAssigned",role);
 
-        socket.on("move",async ({gameId,from, to, promotionType})=>{
-            try{
+        console.log("joined",gameId);
+      });
 
-              const room = this.rooms.get(gameId);
-              if(!room)return;
+      socket.on("move",async ({gameId,from, to, promotionType})=>{
+        try{
 
-              let playerColor :"WHITE"|"BLACK"|null = null;
+          const room = this.rooms.get(gameId);
+          if(!room)return;
 
-              if(room.white === socket.id) playerColor = "WHITE";
-              if(room.black === socket.id) playerColor = "BLACK";
+          let playerColor :"WHITE"|"BLACK"|null = null;
 
-              if(!playerColor){
-                socket.emit("moveError","Spectators cannot move");
-                return;
-              }
-              const game = await this._gameRepo.findById(gameId);
-              if(!game) return;
+          if(room.white === socket.id) playerColor = "WHITE";
+          if(room.black === socket.id) playerColor = "BLACK";
 
-              const gameState = game.getGameState();
+          if(!playerColor){
+            socket.emit("moveError","Spectators cannot move");
+            return;
+          }
+          const game = await this._gameRepo.findById(gameId);
+          if(!game) return;
+
+          const gameState = game.getGameState();
 
 
-              if(gameState.getTurn() !== playerColor){
-                socket.emit("moveError","Not your Turn")
-                return
-              }
+          if(gameState.getTurn() !== playerColor){
+            socket.emit("moveError","Not your Turn");
+            return;
+          }
 
-                await this._makeMoveUseCase.execute(
-                    gameId,
-                    from,
-                    to,
-                    promotionType,
-                );
+          await this._makeMoveUseCase.execute(
+            gameId,
+            from,
+            to,
+            promotionType,
+          );
 
-                const updatedGame = await this._gameRepo.findById(gameId)
-                if(!updatedGame) return;
+          const updatedGame = await this._gameRepo.findById(gameId);
+          if(!updatedGame) return;
 
-                const updatedState = updatedGame.getGameState()
+          const updatedState = updatedGame.getGameState();
 
-                this._io.to(gameId).emit("gameUpdated",{
-                    board:updatedState.getBoard().serialize(),
-                    turn:updatedState.getTurn(),
-                    history:updatedState.getHistory(),
-                    status:updatedState.getStatus(),
-                })
+          this._io.to(gameId).emit("gameUpdated",{
+            board:updatedState.getBoard().serialize(),
+            turn:updatedState.getTurn(),
+            history: updatedState.getHistory().map((move: any) => ({
+              from: {
+                row: move.from.row,
+                col: move.from.column,
+              },
+              to: {
+                row: move.to.row,
+                col: move.to.column,
+              },
+              piece: move.pieceType,
+              color: move.color,
+              promotion: move.promotionType ?? undefined,
+            }))
+            ,
+            status:updatedState.getStatus(),
+          });
 
-            }catch{
-                socket.emit("moveError");
-            }
-        })
-        socket.on("disconnect",()=>{
-            for(const [gameId,room] of this.rooms.entries()){
-                if(room.white === socket.id){
-                    room.white = undefined
-                }
-                if(room.black === socket.id){
-                    room.black = undefined
-                }
-            }
 
-                console.log("Socket disconnected",socket.id)
-            })
-    })
-}
+        }catch{
+          socket.emit("moveError");
+        }
+      });
+      socket.on("disconnect",()=>{
+        for(const [gameId,room] of this.rooms.entries()){
+          if(room.white === socket.id){
+            room.white = undefined;
+          }
+          if(room.black === socket.id){
+            room.black = undefined;
+          }
+        }
+        console.log("Socket disconnected",socket.id);
+      });
+    });
+  }
 
 }

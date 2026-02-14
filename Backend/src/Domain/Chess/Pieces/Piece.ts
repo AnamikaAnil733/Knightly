@@ -3,11 +3,11 @@ import { PieceType } from "../Types/PieceType";
 
 export abstract class Piece{
 
-    public hasMoved: boolean = false;
-    
-    constructor(
-        public readonly color:"WHITE"|"BLACK"
-    ){}
+  public hasMoved: boolean = false;
+
+  constructor(
+        public readonly color:"WHITE"|"BLACK",
+  ){}
 
     abstract readonly type: PieceType;
 

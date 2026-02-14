@@ -7,31 +7,31 @@ import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/admi
 
 
 export class CreatePuzzleUseCase implements ICreatePuzzleUseCase{
-    constructor( private readonly _puzzleRepository:IPuzzleRepository){}
+  constructor( private readonly _puzzleRepository:IPuzzleRepository){}
 
-    async execute(input: CreatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
+  async execute(input: CreatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
 
-        //validation
-        if(!input.fen || !input.fen.trim()){
-            throw new Error("fen is required");
-        }
-        if(!input.moves||input.moves.length === 0 ){
-            throw new Error("Atleast one move is required")
-        }
-        if(!Object.values(PuzzleType).includes(input.difficulty)){
-            throw new Error("Invaild Puzzle Difficulty")
-        }
-
-        const Puzzle = new EPuzzle({
-            fen:input.fen,
-            difficulty:input.difficulty,
-            moves:input.moves
-        })
-
-        const createPuzzle = await this._puzzleRepository.create(Puzzle)
-
-        return PuzzleMapper.toPuzzleResposeDTO(createPuzzle)
-
-
+    //validation
+    if(!input.fen || !input.fen.trim()){
+      throw new Error("fen is required");
     }
+    if(!input.moves||input.moves.length === 0 ){
+      throw new Error("Atleast one move is required");
+    }
+    if(!Object.values(PuzzleType).includes(input.difficulty)){
+      throw new Error("Invaild Puzzle Difficulty");
+    }
+
+    const Puzzle = new EPuzzle({
+      fen:input.fen,
+      difficulty:input.difficulty,
+      moves:input.moves,
+    });
+
+    const createPuzzle = await this._puzzleRepository.create(Puzzle);
+
+    return PuzzleMapper.toPuzzleResposeDTO(createPuzzle);
+
+
+  }
 }

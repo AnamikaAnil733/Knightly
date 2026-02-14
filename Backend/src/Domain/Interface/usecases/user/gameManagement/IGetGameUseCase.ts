@@ -1,4 +1,4 @@
-import { GameOutputDTO } from "../../../../DTOs/userDTOs"
+import { GameOutputDTO } from "../../../../DTOs/userDTOs";
 
 export interface IGetGameUseCase{
     execute(gameId:string):Promise<GameOutputDTO>

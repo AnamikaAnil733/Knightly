@@ -21,8 +21,8 @@ export class LoginUseCase implements ILoginUseCase{
     if(user?.isBlocked){
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USER_BLOCKED
-      )
+        MESSAGES.USER_BLOCKED,
+      );
     }
     if(!user?.passwordHash){
       throw new CustomError(

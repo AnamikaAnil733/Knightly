@@ -9,82 +9,82 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 export class AdminPuzzleController{
-    constructor(
+  constructor(
                 private readonly _createPuzzleUseCase :ICreatePuzzleUseCase,
                 private readonly _getAllPuzzleUseCase :IGetAllPuzzleUseCase,
                 private readonly _editPuzzleUseCase   :IEditPuzzleUsecase,
-                private readonly _softDeletePuzzleUseCase:ISoftDeleteUseCase
-    ){}
+                private readonly _softDeletePuzzleUseCase:ISoftDeleteUseCase,
+  ){}
 
- createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
-        try{
-            const puzzleResponse = await this._createPuzzleUseCase.execute(req.body)
-            return res.status(HttpStatusCodes.CREATED).json({
-                success: true,
-                data: puzzleResponse,
-              });
-        }catch(error:any){
-           return res.status(HttpStatusCodes.BAD_REQUEST).json({
-            success:false,
-            message:error.message || MESSAGES.FAILD_CREATE_PUZZLE
-           })
-        }
+  createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
+    try{
+      const puzzleResponse = await this._createPuzzleUseCase.execute(req.body);
+      return res.status(HttpStatusCodes.CREATED).json({
+        success: true,
+        data: puzzleResponse,
+      });
+    }catch(error:any){
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({
+        success:false,
+        message:error.message || MESSAGES.FAILD_CREATE_PUZZLE,
+      });
     }
+  };
 
-    getAllPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
-        try{
-            const page = Number(req.query.page)||1;
-            const limit = Number(req.query.limit)||10;
-            const difficulty = req.query.difficulty
-            ? (req.query.difficulty as PuzzleType)
-            : undefined;
+  getAllPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+    try{
+      const page = Number(req.query.page)||1;
+      const limit = Number(req.query.limit)||10;
+      const difficulty = req.query.difficulty
+        ? (req.query.difficulty as PuzzleType)
+        : undefined;
 
-            const result = await this._getAllPuzzleUseCase.execute(
-                {
-                page:page,
-                limit:limit,
-                difficulty:difficulty
-                }
-            )
-            return res.status(HttpStatusCodes.OK).json(result)
+      const result = await this._getAllPuzzleUseCase.execute(
+        {
+          page,
+          limit,
+          difficulty,
+        },
+      );
+      return res.status(HttpStatusCodes.OK).json(result);
 
-        }catch(error){
+    }catch(error){
 
-            next(error)
+      next(error);
 
-        }
     }
+  };
 
-    editPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
-        try{
-            const puzzleId = req.params.id;
-            const result = await this._editPuzzleUseCase.execute({
-                id:puzzleId,
-                ...req.body
-            })
+  editPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+    try{
+      const puzzleId = req.params.id;
+      const result = await this._editPuzzleUseCase.execute({
+        id:puzzleId,
+        ...req.body,
+      });
 
-            return res.status(HttpStatusCodes.OK).json(result)
+      return res.status(HttpStatusCodes.OK).json(result);
 
 
-        }catch(error){
-            next(error)
-        }
+    }catch(error){
+      next(error);
     }
+  };
 
-    softDeletePuzzle = async (req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
-        try{
-            const {id} = req.params
-            await this._softDeletePuzzleUseCase.execute(id)
+  softDeletePuzzle = async (req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+    try{
+      const {id} = req.params;
+      await this._softDeletePuzzleUseCase.execute(id);
 
-            return res.status(HttpStatusCodes.OK).json({
-                success:true,
-                message:MESSAGES.PUZZLE_DELETE_SUCCESS
-            })
+      return res.status(HttpStatusCodes.OK).json({
+        success:true,
+        message:MESSAGES.PUZZLE_DELETE_SUCCESS,
+      });
 
-        }catch(error){
-            next(error)
-        }
+    }catch(error){
+      next(error);
     }
+  };
 
-    
+
 }

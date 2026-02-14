@@ -22,16 +22,16 @@ export class UserRoutes {
   private initializeRoutes() {
     this.router.patch(
       USER_ROUTES.EDIT_PROFILE,
-      editUserController.handleEditProfile
+      editUserController.handleEditProfile,
     );
     this.router.patch(
       USER_ROUTES.CHANGE_PASSWORD,
-      changePasswordController.handleChangePassword
+      changePasswordController.handleChangePassword,
     );
     this.router.post(USER_ROUTES.AVATAR.UPLOAD, avatarController.getAvatarUrl);
     this.router.post(
       USER_ROUTES.AVATAR.DICEBEAR,
-      avatarController.saveDiceBearAvatar
+      avatarController.saveDiceBearAvatar,
     );
     this.router.get(USER_ROUTES.PROFILE, avatarController.getProfile);
     this.router.post(USER_ROUTES.CREATE_GAME, gameController.createGame);

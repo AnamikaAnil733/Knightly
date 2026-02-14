@@ -4,42 +4,42 @@ import { PuzzleSchemaType } from "../../Infrastructure/database/Schema/puzzleSch
 import { PuzzleResponseDTO } from "../../Domain/DTOs/adminDTOs";
 
 export class PuzzleMapper{
-    static toEntityFromDocument(
-        doc:HydratedDocument<PuzzleSchemaType>,
-    ):EPuzzle{
-        return new EPuzzle({
-            id:doc._id.toString(),
-            fen:doc.fen,
-            difficulty:doc.difficulty,
-            moves:doc.moves,
-            solutionLength: doc.solutionLength,
-            isActive: doc.isActive,
-            
-        })
-    }
+  static toEntityFromDocument(
+    doc:HydratedDocument<PuzzleSchemaType>,
+  ):EPuzzle{
+    return new EPuzzle({
+      id:doc._id.toString(),
+      fen:doc.fen,
+      difficulty:doc.difficulty,
+      moves:doc.moves,
+      solutionLength: doc.solutionLength,
+      isActive: doc.isActive,
 
-    static toDocumentFromEntity(puzzle:EPuzzle){
-        return{
-            fen:puzzle.fen,
-            difficulty:puzzle.difficulty,
-            moves:puzzle.moves,
-            solutionLength: puzzle.solutionLength,
-            isActive:puzzle.isActive,
-        }
-    }
+    });
+  }
 
-static toPuzzleResposeDTO(puzzle:EPuzzle):PuzzleResponseDTO{
+  static toDocumentFromEntity(puzzle:EPuzzle){
     return{
-  id: puzzle.id!,
-  fen: puzzle.fen,
-  difficulty: puzzle.difficulty,
-  moves: puzzle.moves,
-  solutionLength: puzzle.solutionLength,
-  isActive: puzzle.isActive,
-  createdAt: puzzle.createdAt
+      fen:puzzle.fen,
+      difficulty:puzzle.difficulty,
+      moves:puzzle.moves,
+      solutionLength: puzzle.solutionLength,
+      isActive:puzzle.isActive,
+    };
+  }
+
+  static toPuzzleResposeDTO(puzzle:EPuzzle):PuzzleResponseDTO{
+    return{
+      id: puzzle.id!,
+      fen: puzzle.fen,
+      difficulty: puzzle.difficulty,
+      moves: puzzle.moves,
+      solutionLength: puzzle.solutionLength,
+      isActive: puzzle.isActive,
+      createdAt: puzzle.createdAt
         ? puzzle.createdAt.toISOString()
         : "",
-    }
-}
+    };
+  }
 
 }

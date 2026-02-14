@@ -5,7 +5,7 @@ import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../../../Domain/DTO
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
-    private readonly _userManagmentRepository: IUserManagmentRepository
+    private readonly _userManagmentRepository: IUserManagmentRepository,
   ) {}
 
   async getAllUsers(
@@ -22,7 +22,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
       this._userManagmentRepository.count(search,filter),
     ]);
 
- 
+
 
     return {
       users: users.map(user => ({
@@ -41,7 +41,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
         currentStreak: user.currentStreak,
         achievements: user.achievements,
         rewards: user.rewards,
-        avatarUrl:user.avatarKey
+        avatarUrl:user.avatarKey,
       })),
       total,
       page,

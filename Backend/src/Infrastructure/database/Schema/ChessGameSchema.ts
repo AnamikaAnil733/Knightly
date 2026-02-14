@@ -7,36 +7,36 @@ export interface ChessGameSchemaType {
   _id?: string;
   turn: "WHITE" | "BLACK";
   board: SerializedBoardGrid;
-  history: any[];         
+  history: any[];
   status: "ACTIVE" | "CHECKMATE" | "STALEMATE"|"CHECK";
   createdAt: Date;
   updatedAt: Date;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
-   {
-      turn:{
-         type:String,
-         enum:["WHITE","BLACK"],
-         required:true,
-      },
-      board:{
-         type:Schema.Types.Mixed,
-         required:true,
-      },
-      history:{
-         type:Schema.Types.Mixed,
-         required:true,
-         default:[]
-      },
-      status:{
-         type:String,
-         enum:["ACTIVE","CHECKMATE","STALEMATE","CHECK"],
-         required:true,
-         default:"ACTIVE"
-      },
-   },
-   {
-      timestamps:true
-   }
-)
+  {
+    turn:{
+      type:String,
+      enum:["WHITE","BLACK"],
+      required:true,
+    },
+    board:{
+      type:Schema.Types.Mixed,
+      required:true,
+    },
+    history:{
+      type:Schema.Types.Mixed,
+      required:true,
+      default:[],
+    },
+    status:{
+      type:String,
+      enum:["ACTIVE","CHECKMATE","STALEMATE","CHECK"],
+      required:true,
+      default:"ACTIVE",
+    },
+  },
+  {
+    timestamps:true,
+  },
+);

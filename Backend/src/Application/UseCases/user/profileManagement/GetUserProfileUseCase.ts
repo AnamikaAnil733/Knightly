@@ -11,7 +11,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class GetUserProfileUseCase implements IGetUserProfileUseCase{
   constructor(
     private readonly _userRepo: IBaseRepository<EAuth>,
-    private readonly _storageService: IStorageService
+    private readonly _storageService: IStorageService,
   ) {}
 
   async execute(userId: string) {
@@ -25,32 +25,32 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase{
     }
     const avatarUrl = user.avatarKey
       ? await this._storageService.generateSignedGetUrl(
-          user.avatarKey,
-          300
-        )
+        user.avatarKey,
+        300,
+      )
       : null;
 
 
-      return {
-        id: user.id!,
-        displayname: user.displayname,
-        email: user.email,
-        role: user.role,
-        isBlocked: user.isBlocked,
-        createdAt: user.createdAt.toISOString(),
-  
-        gamesPlayed: user.gamesPlayed,
-        gamesWin: user.gamesWin,
-        rating: user.rating,
-        premium: user.premium,
-  
-        longestStreak: user.longestStreak,
-        currentStreak: user.currentStreak,
-  
-        rewards: user.rewards,
-        achievements: user.achievements,
-  
-        avatarUrl,
-      };
+    return {
+      id: user.id!,
+      displayname: user.displayname,
+      email: user.email,
+      role: user.role,
+      isBlocked: user.isBlocked,
+      createdAt: user.createdAt.toISOString(),
+
+      gamesPlayed: user.gamesPlayed,
+      gamesWin: user.gamesWin,
+      rating: user.rating,
+      premium: user.premium,
+
+      longestStreak: user.longestStreak,
+      currentStreak: user.currentStreak,
+
+      rewards: user.rewards,
+      achievements: user.achievements,
+
+      avatarUrl,
+    };
   }
 }

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getAllUserController,
   banUserController,
   unBanUserController,
-  PuzzleManagementController
+  PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
@@ -16,8 +16,8 @@ export class AdminRoutes{
   constructor(tokenService: ITokenService){
     this.router = Router();
     this.router.use(
-          authMiddleware([UserRole.ADMIN],tokenService),
-        );
+      authMiddleware([UserRole.ADMIN],tokenService),
+    );
     this.initializeRoutes();
   }
 

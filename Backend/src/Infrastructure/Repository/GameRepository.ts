@@ -7,11 +7,11 @@ import { Model } from "mongoose";
 
 
 
-export class ChessGameRepository 
-extends BaseRepository<ChessGame,ChessGameSchemaType>
- implements IChessGameRepository{
-    constructor(model:Model<ChessGameSchemaType>){
-        super(model,ChessGameMapper)
-    }
+export class ChessGameRepository
+  extends BaseRepository<ChessGame,ChessGameSchemaType>
+  implements IChessGameRepository{
+  constructor(model:Model<ChessGameSchemaType>){
+    super(model,ChessGameMapper);
+  }
 
 }

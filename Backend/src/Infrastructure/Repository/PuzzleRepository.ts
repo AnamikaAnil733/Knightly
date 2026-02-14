@@ -9,64 +9,64 @@ import { getPagination } from "../database/utils/pagination";
 
 
 export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSchemaType>
-implements IPuzzleRepository{
-    constructor(){
-        super(PuzzleModel,PuzzleMapper)
-    }
+  implements IPuzzleRepository{
+  constructor(){
+    super(PuzzleModel,PuzzleMapper);
+  }
 
-    async findAll(
-      input?: {
+  async findAll(
+    input?: {
         page?: number;
         limit?: number;
         difficulty?: PuzzleType;
-      }
-    ): Promise<{
+      },
+  ): Promise<{
       puzzles: EPuzzle[];
       total: number;
     }> {
 
-      const { page, limit, skip } = getPagination(input);
-      
-      const query: Partial<PuzzleSchemaType> & { isActive: boolean } = {
-        isActive: true,
-      };
-    
-      if (input?.difficulty) {
-        query.difficulty = input.difficulty;
-      }
-    
-      const [docs, total] = await Promise.all([
-        this.model
-          .find(query)
-          .sort("-createdAt")
-          .skip(skip)
-          .limit(limit),
-    
-        this.model.countDocuments(query),
-      ]);
-    
-      return {
-        puzzles: docs.map((doc) =>
-          PuzzleMapper.toEntityFromDocument(doc),
-        ),
-        total,
-      };
-    }
-    
+    const { page, limit, skip } = getPagination(input);
 
-    async softDelete(id: string): Promise<boolean> {
-        const puzzle = await this.findById(id);
-      
-        if (!puzzle) {
-          return false;
-        }
-      
-        puzzle.deactivate();    
-        await this.update(puzzle);  
-      
-        return true;
-      }
-      
+    const query: Partial<PuzzleSchemaType> & { isActive: boolean } = {
+      isActive: true,
+    };
+
+    if (input?.difficulty) {
+      query.difficulty = input.difficulty;
+    }
+
+    const [docs, total] = await Promise.all([
+      this.model
+        .find(query)
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit),
+
+      this.model.countDocuments(query),
+    ]);
+
+    return {
+      puzzles: docs.map((doc) =>
+        PuzzleMapper.toEntityFromDocument(doc),
+      ),
+      total,
+    };
+  }
+
+
+  async softDelete(id: string): Promise<boolean> {
+    const puzzle = await this.findById(id);
+
+    if (!puzzle) {
+      return false;
+    }
+
+    puzzle.deactivate();
+    await this.update(puzzle);
+
+    return true;
+  }
+
 
 
 

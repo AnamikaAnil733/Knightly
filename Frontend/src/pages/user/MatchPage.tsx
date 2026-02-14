@@ -53,14 +53,14 @@ export function Match() {
   const [legalMoves, setLegalMoves] =
     useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
 
-   // 🔹 Join socket room
+   //  Join socket room
    useEffect(() => {
     if (!gameId) return;
 
     socket.emit("joinGame", gameId);
   }, [gameId]);
 
-  // 🔹 Listen for real-time updates
+  //Listen for real-time updates
   useEffect(() => {
     socket.on("gameUpdated", (game) => {
       setBoard(game.board);
@@ -215,18 +215,13 @@ export function Match() {
     onSelect={async (type) => {
       if (!gameId) return;
 
-      await makeMove(
+      socket.emit("move", {
         gameId,
-        promotion.from,
-        promotion.to,
-        type   
-      );
+        from: promotion.from,
+        to: promotion.to,
+        promotionType: type,
+      });
 
-      const game = await getGame(gameId);
-      setBoard(game.board);
-      setTurn(game.turn);
-      setHistory(game.history);
-      setStatus(game.status);
 
       setPromotion(null);
       setSelected(null);

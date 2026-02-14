@@ -31,9 +31,9 @@ export class App {
     this._io = new Server(this._server,{
       cors:{
         origin:"http://localhost:5173",
-        methods:["GET","POST"]
-      }
-    })
+        methods:["GET","POST"],
+      },
+    });
 
     this.initializeMiddlewares();
     this.initializeDatabase();
@@ -45,7 +45,7 @@ export class App {
     const socketHandler = new SocketHandler(
       this._io,
       makeMoveUseCase,
-      gameRepo
+      gameRepo,
     );
 
     socketHandler.initialize();

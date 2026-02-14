@@ -2,17 +2,17 @@ import { IPuzzleRepository } from "../../../../Domain/Interface/Repositories/IPu
 import { ISoftDeleteUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IDeletePuzzleUseCase";
 
 export class SoftDeletePuzzleUseCase implements ISoftDeleteUseCase{
-    constructor(private readonly _puzzleRepo:IPuzzleRepository){}
+  constructor(private readonly _puzzleRepo:IPuzzleRepository){}
 
-    async execute(id: string): Promise<boolean> {
-        if(!id){
-            throw new Error("Puzzle id is required")
-        }
-        const deleted = await this._puzzleRepo.softDelete(id);
-
-        if(!deleted){
-            throw new Error("Puzzle not found")
-        }
-        return true
+  async execute(id: string): Promise<boolean> {
+    if(!id){
+      throw new Error("Puzzle id is required");
     }
+    const deleted = await this._puzzleRepo.softDelete(id);
+
+    if(!deleted){
+      throw new Error("Puzzle not found");
+    }
+    return true;
+  }
 }

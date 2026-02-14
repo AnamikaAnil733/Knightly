@@ -4,40 +4,40 @@ import { IGetGameUseCase } from "../../../../Domain/Interface/usecases/user/game
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class GetGameUseCase implements IGetGameUseCase{
-    constructor(
-        private readonly _chessGameRepository:IChessGameRepository
-    ){}
+  constructor(
+        private readonly _chessGameRepository:IChessGameRepository,
+  ){}
 
-    async execute(gameId: string): Promise<GameOutputDTO> {
+  async execute(gameId: string): Promise<GameOutputDTO> {
 
-        const game = await this._chessGameRepository.findById(gameId);
+    const game = await this._chessGameRepository.findById(gameId);
 
-        if(!game){
-            throw new Error(MESSAGES.GAME_NOT_FOUND)
-        }
-
-        const gameState = game.getGameState()
-        const board = gameState.getBoard()
-        return{
-            gameId:game.id!,
-            turn:gameState.getTurn(),
-            board:board.serialize(),
-            history: gameState.getHistory().map(move => ({
-                from: {
-                  row: move.from.row,
-                  col: move.from.column,
-                },
-                to: {
-                  row: move.to.row,
-                  col: move.to.column,
-                },
-                piece: move.pieceType,
-                color: move.color,
-              })),
-              
-            status:game.getStatus(),
-
-        }
-
+    if(!game){
+      throw new Error(MESSAGES.GAME_NOT_FOUND);
     }
+
+    const gameState = game.getGameState();
+    const board = gameState.getBoard();
+    return{
+      gameId:game.id!,
+      turn:gameState.getTurn(),
+      board:board.serialize(),
+      history: gameState.getHistory().map(move => ({
+        from: {
+          row: move.from.row,
+          col: move.from.column,
+        },
+        to: {
+          row: move.to.row,
+          col: move.to.column,
+        },
+        piece: move.pieceType,
+        color: move.color,
+      })),
+
+      status:game.getStatus(),
+
+    };
+
+  }
 }

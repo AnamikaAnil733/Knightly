@@ -1,4 +1,4 @@
-import { GetAvatarInputDto,GetAvatarOutputDto} from "../../../../DTOs/userDTOs"
+import { GetAvatarInputDto,GetAvatarOutputDto} from "../../../../DTOs/userDTOs";
 
 export interface IGetAvatarUseCase{
     execute(

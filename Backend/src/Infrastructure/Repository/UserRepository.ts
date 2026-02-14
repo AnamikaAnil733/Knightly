@@ -6,7 +6,7 @@ import { AuthSchemaType } from "../database/Schema/authSchema";
 import {IUserManagmentRepository} from "../../Domain/Interface/Repositories/UserManagmentRepository";
 
 export class UserManagmentRepository extends BaseRepository<EAuth, AuthSchemaType>
-implements IUserManagmentRepository{
+  implements IUserManagmentRepository{
   constructor() {
     super(authModel, AuthMapper);
   }
@@ -42,7 +42,7 @@ implements IUserManagmentRepository{
     if (filter === "BLOCKED") {
       query.isBlocked = true;
     }
-  
+
     if (filter === "UNBLOCKED") {
       query.isBlocked = false;
     }
@@ -52,9 +52,9 @@ implements IUserManagmentRepository{
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
-  
+
     return docs.map(doc =>
-      this.mapper.toEntityFromDocument(doc)
+      this.mapper.toEntityFromDocument(doc),
     );
   }
 
@@ -67,13 +67,13 @@ implements IUserManagmentRepository{
     if (filter === "BLOCKED") {
       query.isBlocked = true;
     }
-  
+
     if (filter === "UNBLOCKED") {
       query.isBlocked = false;
     }
     return this.model.countDocuments(query);
   }
-  
-  
+
+
 
 }

@@ -11,7 +11,7 @@ export class GameController {
     private readonly _createGameUseCase: ICreateGameUseCase,
     private readonly _getGameUseCase: IGetGameUseCase,
     private readonly _getLegalMovesUseCase: IGetLegalMovesUseCase,
-    private readonly _makeMoveUseCase: IMakeMoveUseCase
+    private readonly _makeMoveUseCase: IMakeMoveUseCase,
   ) {}
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
