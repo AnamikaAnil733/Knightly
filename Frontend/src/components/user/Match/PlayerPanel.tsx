@@ -18,7 +18,7 @@ export function PlayerPanel({
   return (
     <div
       className={`
-        w-full max-w-[560px] px-6 py-4 rounded-xl backdrop-blur-md
+        w-full px-4 py-2 rounded-xl backdrop-blur-md
         bg-[#11193F]/70 border border-[#3A6FF7]/30
         flex items-center justify-between
         ${isYourTurn ? 'ring-2 ring-[#3A6FF7] animate-pulse' : ''}
@@ -30,31 +30,31 @@ export function PlayerPanel({
       }}
     >
       {/* Player Info */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <img
           src={avatar}
           alt={name}
-          className="w-14 h-14 rounded-full border-2 border-[#FFD166]/50"
+          className="w-10 h-10 rounded-full border-2 border-[#FFD166]/50"
         />
         <div>
           <div className="flex items-center gap-2">
             <h3
-              className="text-white font-semibold text-lg"
+              className="text-white font-semibold text-base"
               style={{
                 fontFamily: 'Poppins, sans-serif',
               }}
             >
               {name}
             </h3>
-            {rating > 2400 && <CrownIcon className="w-4 h-4 text-[#FFD166]" />}
+            {rating > 2400 && <CrownIcon className="w-3 h-3 text-[#FFD166]" />}
           </div>
-          <p className="text-[#C9CAD9] text-sm">Rating: {rating}</p>
+          <p className="text-[#C9CAD9] text-xs">Rating: {rating}</p>
         </div>
       </div>
       {/* Timer */}
       <div
         className={`
-          px-6 py-3 rounded-lg font-bold text-2xl
+          px-4 py-2 rounded-lg font-bold text-xl
           ${isOpponent ? 'bg-[#FFD166]/10 text-[#FFD166]' : 'bg-[#3A6FF7]/10 text-[#3A6FF7]'}
         `}
         style={{

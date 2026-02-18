@@ -54,7 +54,7 @@ export function MoveList({
 
   return (
     <div
-      className="w-64 rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#3A6FF7]/30 p-6 h-[700px] flex flex-col"
+      className="w-full h-full rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#3A6FF7]/30 p-6 flex flex-col"
       style={{
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
       }}

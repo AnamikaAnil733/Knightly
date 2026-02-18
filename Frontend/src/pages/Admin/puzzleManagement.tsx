@@ -45,8 +45,18 @@ export function PuzzleManagement() {
   }, [])
 
   useEffect(() => {
-    fetchPuzzles()
-  }, [fetchPuzzles])
+    let mounted = true;
+    const load = async () => {
+      try {
+        const res = await getAllPuzzlesApi()
+        if (mounted) setPuzzles(res.puzzles)
+      } catch (error) {
+        console.error('Failed to fetch puzzles', error)
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [])
 
   /* ===================== CREATE ===================== */
 

@@ -21,7 +21,7 @@ export function ChatPanel() {
   const [message, setMessage] = useState('')
   return (
     <div
-      className="w-64 rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#6B2EFF]/30 p-6 h-[700px] flex flex-col"
+      className="w-full h-full rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#6B2EFF]/30 p-6 flex flex-col"
       style={{
         boxShadow: '0 4px 20px rgba(107, 46, 255, 0.2)',
       }}

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 
 type Particle = {
@@ -15,13 +15,17 @@ interface KnightlyParticlesProps {
 export const KnightlyParticles: React.FC<KnightlyParticlesProps> = ({
   count = 20,
 }) => {
-  const particles = useMemo<Particle[]>(() => {
-    return [...Array(count)].map(() => ({
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay:  2*3,
-      duration:  2*4,
-    }));
+  const [particles, setParticles] = React.useState<Particle[]>([]);
+
+  React.useEffect(() => {
+    setParticles(
+      [...Array(count)].map(() => ({
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        delay: 6,
+        duration: 8,
+      }))
+    );
   }, [count]);
 
   return (

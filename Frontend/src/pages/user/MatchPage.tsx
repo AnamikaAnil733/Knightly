@@ -15,7 +15,7 @@ import {
   createGameUrl,
   getGame,
   getLegalMoves,
-  makeMove,
+
 } from "../../Service/api/chessApi";
 
 import { BoardGrid } from "../../types/chess";
@@ -45,13 +45,13 @@ export function Match() {
     from:{row:number;col:number},
     to:{row:number;col:number},
     color:"WHITE"|"BLACK";}
-    |null>(null)
-
+    |null>(null);
   const [selected, setSelected] =
     useState<{ row: number; col: number } | null>(null);
-
   const [legalMoves, setLegalMoves] =
-    useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
+useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
+  
+  const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(null);
 
    //  Join socket room
    useEffect(() => {
@@ -67,15 +67,19 @@ export function Match() {
       setTurn(game.turn);
       setHistory(game.history);
       setStatus(game.status);
+      setSelected(null);
+      setLegalMoves([]);
     });
 
-    socket.on("moveError", (message) => {
-      alert(message);
+    socket.on("roleAssigned", (role: "WHITE" | "BLACK" | "SPECTATOR") => {
+        console.log("Assigned role:", role);
+        setMyRole(role);
     });
 
     return () => {
       socket.off("gameUpdated");
       socket.off("moveError");
+      socket.off("roleAssigned");
     };
   }, []);
   useEffect(() => {
@@ -100,6 +104,10 @@ export function Match() {
 
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;
+
+    // Prevent interaction if it's not your turn or you are a spectator
+    if (myRole === "SPECTATOR") return;
+    if (myRole && myRole !== turn) return;
 
     // First click → select piece
     if (!selected) {
@@ -149,11 +157,6 @@ export function Match() {
     setLegalMoves([]);
   };
 
-  useEffect(() => {
-    setSelected(null);
-    setLegalMoves([]);
-  }, [turn]);
-
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
@@ -162,88 +165,115 @@ export function Match() {
     );
   }
 
+  const orientation = myRole === "BLACK" ? "black" : "white";
+
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col">
+    <div className="w-full h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="w-full px-8 py-4 bg-[#11193F]/40 backdrop-blur-sm border-b border-[#FFD166]/20">
-        <div className="max-w-7xl mx-auto flex justify-between items-center text-white">
-          <h1 className="text-2xl font-bold text-[#FFD166]">Knightly</h1>
-          <span className="text-sm opacity-80">
+      <div className="w-full px-6 py-3 bg-[#11193F]/40 backdrop-blur-sm border-b border-[#FFD166]/20 shrink-0 z-50">
+        <div className="max-w-[1920px] mx-auto flex justify-between items-center text-white">
+          <h1 className="text-2xl font-bold text-[#FFD166] tracking-tight">Knightly</h1>
+          <span className="text-sm font-medium opacity-80 bg-[#ffffff]/10 px-3 py-1 rounded-full border border-[#ffffff]/10">
             {turn} to move
           </span>
         </div>
       </div>
 
-      {/* Main */}
-      <div className="flex-1 flex items-center justify-center px-8 py-8">
-        <div className="w-full max-w-7xl flex gap-6">
-          <ChatPanel />
-
-          <div className="flex-1 flex flex-col items-center gap-6">
-            <PlayerPanel
-              name="Opponent"
-              rating={2400}
-              avatar=""
-              time="5:32"
-              isOpponent
-            />
-
-            {/*key={turn} forces clean re-render */}
-            <div
-  className={`relative transition-all duration-300 ${
-    status === "CHECKMATE" || status === "STALEMATE"
-      ? "blur-[6px] scale-[0.98] opacity-80"
-      : ""
-  }`}
->
-            <Chessboard
-              key={turn}
-              board={board}
-              selectedSquare={selected}
-              legalMoves={legalMoves}
-              onSquareClick={handleSquareClick}
-            />
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        {/* LEFT/CENTER: Game Area (Board + Players) */}
+        <div className="flex-1 flex flex-col items-center justify-center p-2 lg:p-4 overflow-hidden relative">
+          
+          <div className="flex flex-col items-center gap-2 w-full h-full justify-center max-w-[1200px]">
+            {/* Top Player (Opponent) */}
+            <div className="w-full max-w-[800px] shrink-0">
+               <PlayerPanel
+                 name={myRole === "BLACK" ? "White" : "Black"}
+                 rating={2400}
+                 avatar=""
+                 time="5:32"
+                 isOpponent
+               />
             </div>
-{(status === "CHECKMATE" || status === "STALEMATE") && (
-  <GameOver status={status} turn={turn} />
-)}
 
+            {/* Chess Board */}
+            {/* Flex-1 to take available space, aspect-square to keep shape, min-h-0 for flex scrolling */}
+            <div className="relative flex-1 min-h-0 aspect-square max-w-full">
+               <div
+                  className={`relative w-full h-full transition-all duration-500 ${
+                    status === "CHECKMATE" || status === "STALEMATE"
+                      ? "blur-[2px] grayscale-[0.3]"
+                      : ""
+                  }`}
+                >
+                  <Chessboard
+                    key={turn}
+                    board={board}
+                    selectedSquare={selected}
+                    legalMoves={legalMoves}
+                    onSquareClick={handleSquareClick}
+                    orientation={orientation}
+                  />
+               </div>
 
-            {promotion && (
-  <PromotionModal
-    color={promotion.color}
-    onSelect={async (type) => {
-      if (!gameId) return;
+               {/* Overlays */}
+               {(status === "CHECKMATE" || status === "STALEMATE") && (
+                 <GameOver status={status} turn={turn} myRole={myRole} />
+               )}
 
-      socket.emit("move", {
-        gameId,
-        from: promotion.from,
-        to: promotion.to,
-        promotionType: type,
-      });
+               {promotion && (
+                  <PromotionModal
+                    color={promotion.color}
+                    onSelect={async (type) => {
+                      if (!gameId) return;
+                      socket.emit("move", { gameId, from: promotion.from, to: promotion.to, promotionType: type });
+                      setPromotion(null);
+                      setSelected(null);
+                      setLegalMoves([]);
+                    }}
+                  />
+               )}
+            </div>
 
-
-      setPromotion(null);
-      setSelected(null);
-      setLegalMoves([]);
-    }}
-  />
-)}
-
+            {/* Bottom Player (You) */}
+            <div className="w-full max-w-[800px] shrink-0">
+               <PlayerPanel
+                 name={myRole === "SPECTATOR" ? "White" : "You"}
+                 rating={2200}
+                 avatar=""
+                 time="6:15"
+                 isYourTurn={myRole === turn}
+                 isOpponent={false}
+               />
+            </div>
             
-
-            <PlayerPanel
-              name="You"
-              rating={2200}
-              avatar=""
-              time="6:15"
-              isYourTurn={turn === "WHITE"}
-            />
-
-            <ControlBar />
           </div>
+        </div>
 
-          <MoveList history={history} status={status}  />
+        {/* RIGHT: Sidebar (Moves + Chat + Controls) */}
+        <div className="hidden lg:flex w-96 flex-col bg-[#11193F]/30 border-l border-[#ffffff]/10 h-full shrink-0 backdrop-blur-sm">
+            {/* Moves: Top Section */}
+            <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
+                 <MoveList history={history} status={status} />
+            </div>
+
+            {/* Chat: Middle Section */}
+            <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
+                 <ChatPanel />
+            </div>
+            
+            {/* Controls: Bottom Section */}
+            <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
+                <ControlBar />
+            </div>
+        </div>
+
+        {/* Mobile/Tablet View for Sidebar */}
+        <div className="lg:hidden w-full flex flex-col gap-4 p-4 bg-[#0A0F2C]">
+          <div className="flex justify-center"><ControlBar /></div>
+          <div className="h-64"><MoveList history={history} status={status} /></div>
+          <div className="h-64"><ChatPanel /></div>
         </div>
       </div>
     </div>
