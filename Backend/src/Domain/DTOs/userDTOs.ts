@@ -20,7 +20,12 @@ export interface EditProfileoutputDto{
         createdAt?: Date;
         gamesPlayed: number;
         premium: boolean;
-        rating: number;
+        rating: {
+          BULLET: number;
+          BLITZ: number;
+          RAPID: number;
+          CLASSICAL: number;
+        }
         gamesWin: number;
         longestStreak: number;
         currentStreak: number;
@@ -67,7 +72,12 @@ export interface GetUserProfileOutputDto {
 
     gamesPlayed: number;
     gamesWin: number;
-    rating: number;
+    rating: {
+      BULLET: number;
+      BLITZ: number;
+      RAPID: number;
+      CLASSICAL: number;
+    }
     premium: boolean;
 
     longestStreak: number;
@@ -104,5 +114,11 @@ export interface GameOutputDTO{
     turn:"WHITE"|"BLACK",
     board:BoardDTO,
     history:MoveDTO[],
-    status:string
+    status:string,
+    clock: {
+      whiteTime: number;
+      blackTime: number;
+      increment: number;
+      turn: "WHITE" | "BLACK";
+    };
   }

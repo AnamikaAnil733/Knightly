@@ -81,7 +81,14 @@ export class SocketHandler{
           const updatedGame = await this._gameRepo.findById(gameId);
           if(!updatedGame) return;
 
+          // Passive timeout check
+          if (updatedGame.checkPassiveTimeout()) {
+            await this._gameRepo.update(updatedGame);
+          }
+
           const updatedState = updatedGame.getGameState();
+          const clock = updatedGame.getClock();
+          const liveTimes = clock.getLiveTimes();
 
           this._io.to(gameId).emit("gameUpdated",{
             board:updatedState.getBoard().serialize(),
@@ -98,9 +105,14 @@ export class SocketHandler{
               piece: move.pieceType,
               color: move.color,
               promotion: move.promotionType ?? undefined,
-            }))
-            ,
-            status:updatedState.getStatus(),
+            })),
+            status:updatedGame.getStatus(),
+            clock: {
+              whiteTime: liveTimes.whiteTime,
+              blackTime: liveTimes.blackTime,
+              increment: clock.increment,
+              turn: clock.turn,
+            }
           });
 
 

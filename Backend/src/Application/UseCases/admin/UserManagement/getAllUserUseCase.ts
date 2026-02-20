@@ -35,7 +35,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
         createdAt: user.createdAt,
         gamesPlayed: user.gamesPlayed,
         premium: user.premium,
-        rating: user.rating,
+        rating: user.rating.getAll(),
         gamesWin: user.gamesWin,
         longestStreak: user.longestStreak,
         currentStreak: user.currentStreak,

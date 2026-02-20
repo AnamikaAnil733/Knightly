@@ -5,7 +5,7 @@ import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
 
 type Props = {
-  status: "CHECKMATE" | "STALEMATE";
+  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
   turn: "WHITE" | "BLACK";
   myRole: "WHITE" | "BLACK" | "SPECTATOR" | null;
 };
@@ -18,7 +18,11 @@ export function GameOver({ status, turn, myRole }: Props) {
       ? turn === "WHITE"
         ? "BLACK"
         : "WHITE"
-      : null;
+      : status === "WHITE_TIMEOUT"
+        ? "BLACK"
+        : status === "BLACK_TIMEOUT"
+          ? "WHITE"
+          : null;
 
   // Determine outcome from the current player's perspective
   const getOutcome = (): Outcome => {

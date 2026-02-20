@@ -3,6 +3,7 @@ import { ChessGameSchemaType } from "../../Infrastructure/database/Schema/ChessG
 import { HydratedDocument } from "mongoose";
 import { ChessGame } from "../../Domain/Entity/chessGame";
 import { GameState } from "../../Domain/Chess/Game/GameState";
+import { GameClock } from "../../Domain/Entity/GameClock";
 
 export class ChessGameMapper{
   static toEntityFromDocument(
@@ -15,10 +16,18 @@ export class ChessGameMapper{
       turn:doc.turn,
       history:doc.history,
     });
+    const clock = new GameClock(
+      doc.clock.whiteTime,
+      doc.clock.blackTime,
+      doc.clock.increment,
+      doc.clock.turn,
+      doc.clock.lastMoveTimestamp
+    );
 
     return new ChessGame(
       gameState,
       doc.status,
+      clock,
       doc._id.toString(),
     );
   }
@@ -29,11 +38,20 @@ export class ChessGameMapper{
     const board = gameState.getBoard();
     const snapShot = gameState.getSnapshot();
 
+   const clock = entity.getClock();
+
     return {
       board : board.serialize(),
       turn : snapShot.turn,
       history : snapShot.history,
       status : entity.getStatus(),
+      clock: {
+        whiteTime: clock.whiteTime,
+        blackTime: clock.blackTime,
+        increment: clock.increment,
+        turn: clock.turn,
+        lastMoveTimestamp: clock.lastMoveTimestamp,
+      },
     };
   }
 

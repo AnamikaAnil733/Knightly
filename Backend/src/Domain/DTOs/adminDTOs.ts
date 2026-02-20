@@ -11,7 +11,12 @@ export interface BaseUserResponseDTO{
     createdAt?: Date;
     gamesPlayed: number;
     premium: boolean;
-    rating: number;
+    rating: {
+        BULLET: number;
+        BLITZ: number;
+        RAPID: number;
+        CLASSICAL: number;
+      };
     gamesWin: number;
     longestStreak: number;
     currentStreak: number;

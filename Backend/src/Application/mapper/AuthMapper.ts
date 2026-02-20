@@ -35,7 +35,7 @@ export class AuthMapper {
       createdAt:auth.createdAt,
       gamesPlayed: auth.gamesPlayed,
       gamesWin: auth.gamesWin,
-      rating: auth.rating,
+      rating: auth.rating.getAll(),
       premium: auth.premium,
       longestStreak: auth.longestStreak,
       currentStreak: auth.currentStreak,
@@ -58,7 +58,7 @@ export class AuthMapper {
       isNewUser: auth.isNewUser,
       accessToken: token,
 
-      rating: auth.rating,
+      rating: auth.rating.getAll(),
       gamesPlayed: auth.gamesPlayed,
       gamesWin: auth.gamesWin,
       longestStreak: auth.longestStreak,

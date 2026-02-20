@@ -1,4 +1,5 @@
 import { UserRole } from "../Types/UserRole";
+import { UserRating } from "./RatingEntity";
 
 export default class EAuth {
   private _id?: string;
@@ -13,7 +14,7 @@ export default class EAuth {
   // Additional player profile fields
   private _gamesPlayed: number;
   private _gamesWin: number;
-  private _rating: number;
+  private _rating: UserRating;
   private _premium: boolean;
   private _longestStreak: number;
   private _currentStreak: number;
@@ -44,7 +45,7 @@ export default class EAuth {
 
         gamesPlayed?: number;
         gamesWin?: number;
-        rating?: number;
+        rating?: UserRating;
         premium?: boolean;
         longestStreak?: number;
         currentStreak?: number;
@@ -74,7 +75,7 @@ export default class EAuth {
     // default profile values
     this._gamesPlayed = params.gamesPlayed ?? 0;
     this._gamesWin = params.gamesWin ?? 0;
-    this._rating = params.rating ?? 0;
+    this._rating = params.rating ?? new UserRating();
     this._premium = params.premium ?? false;
     this._longestStreak = params.longestStreak ?? 0;
     this._currentStreak = params.currentStreak ?? 0;
@@ -103,7 +104,7 @@ export default class EAuth {
 
   get gamesPlayed(): number { return this._gamesPlayed; }
   get gamesWin(): number { return this._gamesWin; }
-  get rating(): number { return this._rating; }
+  get rating(): UserRating { return this._rating; }
   get premium(): boolean { return this._premium; }
   get longestStreak(): number { return this._longestStreak; }
   get currentStreak(): number { return this._currentStreak; }
@@ -129,5 +130,17 @@ export default class EAuth {
   set avatarKey(value: string) {
     this._avatarKey = value;
   }
+
+  
+
+  getRating(type: "BULLET" | "BLITZ" | "RAPID"|"CLASSICAL"): number {
+    return this._rating.get(type);
+  }
+  
+  updateRating(type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", newRating: number): void {
+    this._rating.set(type, newRating);
+  }
+
+
 
 }

@@ -1,4 +1,5 @@
 import { UserRole } from "../Types/UserRole";
+import { TimeControl } from "../Entity/RatingEntity";
 
 export interface AuthRequestDTO{
     displayname?:string;
@@ -14,7 +15,12 @@ export interface AuthResponseDTO{
     role:UserRole;
     isNewUser:boolean;
     accessToken:string;
-    rating: number;
+    rating: {
+        BULLET: number;
+        BLITZ: number;
+        RAPID: number;
+        CLASSICAL: number;
+      };      
     gamesPlayed: number;
     gamesWin: number;
     longestStreak: number;

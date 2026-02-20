@@ -51,7 +51,7 @@ export class EditUserUseCase implements IEditProfileUseCase{
         createdAt: updatedUser.createdAt,
         gamesPlayed: updatedUser.gamesPlayed,
         premium: updatedUser.premium,
-        rating: updatedUser.rating,
+        rating: updatedUser.rating.getAll(),
         gamesWin: updatedUser.gamesWin,
         longestStreak: updatedUser.longestStreak,
         currentStreak: updatedUser.currentStreak,

@@ -18,6 +18,14 @@ export class GetGameUseCase implements IGetGameUseCase{
 
     const gameState = game.getGameState();
     const board = gameState.getBoard();
+    const clock = game.getClock();
+    const liveTimes = clock.getLiveTimes();
+    
+    // Auto-update status if time expired
+    if (game.checkPassiveTimeout()) {
+      await this._chessGameRepository.update(game);
+    }
+    
     return{
       gameId:game.id!,
       turn:gameState.getTurn(),
@@ -36,6 +44,13 @@ export class GetGameUseCase implements IGetGameUseCase{
       })),
 
       status:game.getStatus(),
+
+      clock: {
+        whiteTime: liveTimes.whiteTime,
+        blackTime: liveTimes.blackTime,
+        increment: clock.increment,
+        turn: clock.turn,
+      }
 
     };
 

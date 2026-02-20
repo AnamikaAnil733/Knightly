@@ -41,7 +41,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase{
 
       gamesPlayed: user.gamesPlayed,
       gamesWin: user.gamesWin,
-      rating: user.rating,
+      rating: user.rating.getAll(),
       premium: user.premium,
 
       longestStreak: user.longestStreak,

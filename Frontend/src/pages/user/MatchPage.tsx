@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { Chessboard } from "../../components/user/Match/ChessBoard";
@@ -21,7 +21,12 @@ import {
 import { BoardGrid } from "../../types/chess";
 
 type Turn = "WHITE" | "BLACK";
-type GameStatus = "ACTIVE" | "CHECK" | "CHECKMATE" | "STALEMATE";
+type GameStatus = "ACTIVE" |
+ "CHECK" |
+  "CHECKMATE" |
+   "STALEMATE"|
+   "WHITE_TIMEOUT"|
+   "BLACK_TIMEOUT";
 
 type Position = { row: number; col: number };
 
@@ -53,6 +58,12 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
   
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(null);
 
+  const [whiteTime, setWhiteTime] = useState<number>(0);
+  const [blackTime, setBlackTime] = useState<number>(0);
+  const lastUpdate = useRef<number>(Date.now());
+  const serverWhite = useRef<number>(0);
+  const serverBlack = useRef<number>(0);
+
    //  Join socket room
    useEffect(() => {
     if (!gameId) return;
@@ -67,6 +78,13 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
       setTurn(game.turn);
       setHistory(game.history);
       setStatus(game.status);
+      
+      serverWhite.current = game.clock.whiteTime;
+      serverBlack.current = game.clock.blackTime;
+      lastUpdate.current = Date.now();
+      setWhiteTime(game.clock.whiteTime);
+      setBlackTime(game.clock.blackTime);
+
       setSelected(null);
       setLegalMoves([]);
     });
@@ -96,11 +114,34 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
       setBoard(game.board);
       setTurn(game.turn);
       setHistory(game.history);
-      setStatus(game.status)
+      setStatus(game.status);
+      
+      serverWhite.current = game.clock.whiteTime;
+      serverBlack.current = game.clock.blackTime;
+      lastUpdate.current = Date.now();
+      setWhiteTime(game.clock.whiteTime);
+      setBlackTime(game.clock.blackTime);
     };
 
     init();
   }, [gameId, navigate]);
+
+  useEffect(() => {
+    if (status !== "ACTIVE" && status !== "CHECK") return;
+  
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - lastUpdate.current;
+      if (turn === "WHITE") {
+        setWhiteTime(Math.max(serverWhite.current - elapsed, 0));
+        setBlackTime(serverBlack.current);
+      } else {
+        setBlackTime(Math.max(serverBlack.current - elapsed, 0));
+        setWhiteTime(serverWhite.current);
+      }
+    }, 100);
+  
+    return () => clearInterval(interval);
+  }, [turn, status]);
 
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;
@@ -165,6 +206,17 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
     );
   }
 
+  const formatTime = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+  
+    const mm = minutes.toString().padStart(2, "0");
+    const ss = seconds.toString().padStart(2, "0");
+  
+    return `${mm}:${ss}`;
+  };
+
   const orientation = myRole === "BLACK" ? "black" : "white";
 
   return (
@@ -192,7 +244,9 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
                  name={myRole === "BLACK" ? "White" : "Black"}
                  rating={2400}
                  avatar=""
-                 time="5:32"
+                 time={formatTime(
+                  myRole === "BLACK" ? whiteTime : blackTime
+                )}
                  isOpponent
                />
             </div>
@@ -218,9 +272,9 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
                </div>
 
                {/* Overlays */}
-               {(status === "CHECKMATE" || status === "STALEMATE") && (
-                 <GameOver status={status} turn={turn} myRole={myRole} />
-               )}
+               {status !== "ACTIVE" && status !== "CHECK" && (
+  <GameOver status={status} turn={turn} myRole={myRole} />
+)}
 
                {promotion && (
                   <PromotionModal
@@ -242,7 +296,9 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
                  name={myRole === "SPECTATOR" ? "White" : "You"}
                  rating={2200}
                  avatar=""
-                 time="6:15"
+                 time={formatTime(
+                  myRole === "BLACK" ? blackTime : whiteTime
+                )}
                  isYourTurn={myRole === turn}
                  isOpponent={false}
                />
