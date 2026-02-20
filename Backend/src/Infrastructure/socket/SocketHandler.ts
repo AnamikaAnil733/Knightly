@@ -1,6 +1,7 @@
 import {Server,Socket} from "socket.io";
 import { IMakeMoveUseCase } from "../../Domain/Interface/usecases/user/gameManagement/IMakeMoveUseCase";
 import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameRepository";
+import { IMatchmakingUseCase } from "../../Domain/Interface/usecases/user/gameManagement/IMatchmakingUseCase";
 
 export class SocketHandler{
 
@@ -13,12 +14,74 @@ export class SocketHandler{
         private readonly _io:Server,
         private readonly _makeMoveUseCase:IMakeMoveUseCase,
         private readonly _gameRepo:IChessGameRepository,
+        private readonly _matchmakingUseCase: IMatchmakingUseCase, 
+        private readonly _userRepo: IChessGameRepository, // Treating AuthRepo as IChessGameRepository for now or better as generic
   ){}
 
   public initialize(){
 
     this._io.on("connection",(socket:Socket)=>{
+
       console.log("socket connected",socket.id);
+
+      socket.on("findMatch", async (userId: string) => {
+        try {
+          // Fetch actual rating from DB to prevent client-side spoofing
+          const user = await this._userRepo.findById(userId) as any;
+          if (!user) return;
+
+          const rating = user.getRating ? user.getRating("BLITZ") : (user.rating?.BLITZ || 1200);
+
+          const result = await this._matchmakingUseCase.findMatch({
+            userId,
+            socketId: socket.id,
+            rating: rating,
+            joinedAt: Date.now()
+          });
+    
+          if (result.type === "WAITING") {
+            socket.emit("waiting", {
+              queueSize: this._matchmakingUseCase.getQueueSize(),
+            });
+            return;
+          }
+    
+          if (result.type === "MATCH_FOUND") {
+            const { gameId, white, black } = result;
+    
+            this.rooms.set(gameId, {
+              white: white.socketId,
+              black: black.socketId,
+            });
+    
+            this._io.sockets.sockets.get(white.socketId)?.join(gameId);
+            this._io.sockets.sockets.get(black.socketId)?.join(gameId);
+    
+            this._io.to(white.socketId).emit("matchFound", {
+              gameId,
+              role: "WHITE",
+            });
+    
+            this._io.to(black.socketId).emit("matchFound", {
+              gameId,
+              role: "BLACK",
+            });
+    
+            console.log("Match created:", gameId);
+          }
+    
+        } catch (error) {
+          console.error("Matchmaking error:", error);
+        }
+      });
+    
+
+
+      socket.on("cancelSearch", () => {
+        this._matchmakingUseCase.removeFromQueue(socket.id);
+        socket.emit("searchCancelled");
+      });
+
       socket.on("joinGame",(gameId:string)=>{
         socket.join(gameId);
 
@@ -30,7 +93,14 @@ export class SocketHandler{
 
         let role:"WHITE"|"BLACK"|"SPECTATOR";
 
-        if(!room.white){
+        // Prioritize existing assignment (from matchmaking)
+        if (room.white === socket.id) {
+          role = "WHITE";
+        } else if (room.black === socket.id) {
+          role = "BLACK";
+        } 
+        // Otherwise fill empty seats (direct joins)
+        else if(!room.white){
           room.white = socket.id;
           role = "WHITE";
         }else if(!room.black){
@@ -42,7 +112,7 @@ export class SocketHandler{
 
         socket.emit("roleAssigned",role);
 
-        console.log("joined",gameId);
+        console.log(`Socket ${socket.id} joined ${gameId} as ${role}`);
       });
 
       socket.on("move",async ({gameId,from, to, promotionType})=>{
@@ -121,6 +191,9 @@ export class SocketHandler{
         }
       });
       socket.on("disconnect",()=>{
+
+        this._matchmakingUseCase.removeFromQueue(socket.id);
+
         for(const [gameId,room] of this.rooms.entries()){
           if(room.white === socket.id){
             room.white = undefined;

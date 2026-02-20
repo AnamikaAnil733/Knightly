@@ -1,5 +1,5 @@
 export interface ICreateGameUseCase{
-    execute():Promise<{
+    execute(whitePlayerId?: string, blackPlayerId?: string):Promise<{
         gameId:string;
     }>
 }

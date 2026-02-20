@@ -11,7 +11,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
         private readonly ChessGameRepository : IBaseRepository<ChessGame>,
   ){}
 
-  async execute(): Promise<{ gameId: string }> {
+  async execute(whitePlayerId?: string, blackPlayerId?: string): Promise<{ gameId: string }> {
     const board = InitialBoard.create();
     const gameState = new GameState(board);
     const clock = new GameClock(
@@ -26,7 +26,8 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       gameState,
       "ACTIVE",
       clock,
-            undefined as any,
+      whitePlayerId,
+      blackPlayerId
     );
 
     const savedGame = await this.ChessGameRepository.create(game);

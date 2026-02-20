@@ -8,6 +8,8 @@ export class ChessGame extends BaseEntity{
         private readonly _gameState :  GameState,
         private _status: GameStatus = "ACTIVE",
         private clock: GameClock,
+        private _whitePlayerId?: string,
+        private _blackPlayerId?: string,
         id?: string,
   ){
     super(id);
@@ -85,6 +87,14 @@ export class ChessGame extends BaseEntity{
 
   getClock(): GameClock {
     return this.clock;
+  }
+
+  getWhitePlayerId(): string | undefined {
+    return this._whitePlayerId;
+  }
+
+  getBlackPlayerId(): string | undefined {
+    return this._blackPlayerId;
   }
 
 }

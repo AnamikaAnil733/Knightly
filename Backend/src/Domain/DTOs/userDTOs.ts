@@ -121,4 +121,14 @@ export interface GameOutputDTO{
       increment: number;
       turn: "WHITE" | "BLACK";
     };
+    whitePlayer?: {
+        name: string;
+        rating: number;
+        avatar: string | null;
+    };
+    blackPlayer?: {
+        name: string;
+        rating: number;
+        avatar: string | null;
+    };
   }

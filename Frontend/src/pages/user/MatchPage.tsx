@@ -60,6 +60,8 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
 
   const [whiteTime, setWhiteTime] = useState<number>(0);
   const [blackTime, setBlackTime] = useState<number>(0);
+  const [whitePlayer, setWhitePlayer] = useState<{name:string, rating:number, avatar:string|null} | null>(null);
+  const [blackPlayer, setBlackPlayer] = useState<{name:string, rating:number, avatar:string|null} | null>(null);
   const lastUpdate = useRef<number>(Date.now());
   const serverWhite = useRef<number>(0);
   const serverBlack = useRef<number>(0);
@@ -121,6 +123,8 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
       lastUpdate.current = Date.now();
       setWhiteTime(game.clock.whiteTime);
       setBlackTime(game.clock.blackTime);
+      setWhitePlayer(game.whitePlayer);
+      setBlackPlayer(game.blackPlayer);
     };
 
     init();
@@ -241,9 +245,9 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
             {/* Top Player (Opponent) */}
             <div className="w-full max-w-[800px] shrink-0">
                <PlayerPanel
-                 name={myRole === "BLACK" ? "White" : "Black"}
-                 rating={2400}
-                 avatar=""
+                 name={myRole === "BLACK" ? (whitePlayer?.name || "White") : (blackPlayer?.name || "Black")}
+                 rating={myRole === "BLACK" ? (whitePlayer?.rating || 0) : (blackPlayer?.rating || 0)}
+                 avatar={myRole === "BLACK" ? (whitePlayer?.avatar || "") : (blackPlayer?.avatar || "")}
                  time={formatTime(
                   myRole === "BLACK" ? whiteTime : blackTime
                 )}
@@ -293,9 +297,9 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
             {/* Bottom Player (You) */}
             <div className="w-full max-w-[800px] shrink-0">
                <PlayerPanel
-                 name={myRole === "SPECTATOR" ? "White" : "You"}
-                 rating={2200}
-                 avatar=""
+                 name={myRole === "BLACK" ? (blackPlayer?.name || "You") : (whitePlayer?.name || "You")}
+                 rating={myRole === "BLACK" ? (blackPlayer?.rating || 0) : (whitePlayer?.rating || 0)}
+                 avatar={myRole === "BLACK" ? (blackPlayer?.avatar || "") : (whitePlayer?.avatar || "")}
                  time={formatTime(
                   myRole === "BLACK" ? blackTime : whiteTime
                 )}

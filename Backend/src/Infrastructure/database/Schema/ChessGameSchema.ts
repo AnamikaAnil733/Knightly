@@ -17,11 +17,15 @@ export interface ChessGameSchemaType {
     increment: number;
     turn: "WHITE" | "BLACK";
     lastMoveTimestamp: number;
-  }
+  },
+  whitePlayerId?: string;
+  blackPlayerId?: string;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
   {
+    whitePlayerId: { type: String },
+    blackPlayerId: { type: String },
     turn:{
       type:String,
       enum:["WHITE","BLACK"],

@@ -29,11 +29,11 @@ const navigate = useNavigate()
             </p>
             <div className="flex flex-wrap gap-4">
             <button
-  onClick={() => navigate("/match")}
-  className="px-8 py-3 rounded-full bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-semibold glow-button"
->
-  Play Now
-</button>
+              onClick={() => navigate("/waiting")}
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-semibold glow-button"
+            >
+              Play Now
+            </button>
               <button className="px-8 py-3 rounded-full border-2 border-[#6B2EFF] text-white font-semibold hover:bg-[#6B2EFF]/10 transition-all">
                 Learn Chess
               </button>

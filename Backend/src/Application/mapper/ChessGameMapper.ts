@@ -28,6 +28,8 @@ export class ChessGameMapper{
       gameState,
       doc.status,
       clock,
+      doc.whitePlayerId,
+      doc.blackPlayerId,
       doc._id.toString(),
     );
   }
@@ -52,6 +54,8 @@ export class ChessGameMapper{
         turn: clock.turn,
         lastMoveTimestamp: clock.lastMoveTimestamp,
       },
+      whitePlayerId: entity.getWhitePlayerId(),
+      blackPlayerId: entity.getBlackPlayerId(),
     };
   }
 

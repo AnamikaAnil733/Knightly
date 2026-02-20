@@ -42,7 +42,7 @@ const getAvatarUrlUseCase = new GetAvatarUrlUseCase(S3Service);
 const saveDiceBearAvatarUseCase = new SaveDiceBearAvatarUseCase( S3Service,UserRepo);
 const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo,S3Service);
 const createGameUseCase = new CreateGameUseCase(GameRepo);
-const getGameUseCase = new GetGameUseCase(GameRepo);
+const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, S3Service);
 const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
 const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
 

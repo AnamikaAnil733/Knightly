@@ -12,7 +12,10 @@ import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
 import { SocketHandler } from "./Infrastructure/socket/SocketHandler";
 
 import { MakeMoveUsecase } from "./Application/UseCases/user/gameManagement/makeMoveUseCase";
+import { CreateGameUseCase } from "./Application/UseCases/user/gameManagement/createGameUseCase";
+import { MatchmakingUseCase } from "./Application/UseCases/user/gameManagement/matchmakingUseCase";
 import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository";
+import { AuthRepository } from "./Infrastructure/Repository/AuthRepository";
 import { GameModel } from "./Infrastructure/database/model/gameModel";
 
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
@@ -41,11 +44,18 @@ export class App {
 
     const gameRepo = new ChessGameRepository(GameModel);
     const makeMoveUseCase = new MakeMoveUsecase(gameRepo);
+    
+    // Matchmaking Setup
+    const createGameUseCase = new CreateGameUseCase(gameRepo);
+    const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
+    const authRepo = new AuthRepository();
 
     const socketHandler = new SocketHandler(
       this._io,
       makeMoveUseCase,
       gameRepo,
+      matchmakingUseCase,
+      authRepo as any
     );
 
     socketHandler.initialize();
