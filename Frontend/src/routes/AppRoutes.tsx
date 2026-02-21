@@ -13,6 +13,7 @@ import AdminProtectedRoute from "./AdminProtectedRoute";
 import { PuzzleManagement } from "../pages/Admin/puzzleManagement";
 import { Match } from "../pages/user/MatchPage";
 import { WaitingRoom } from "../pages/user/WaitingRoom";
+import { GameSelectionPage } from "../pages/user/GameSelectionPage";
 
 
 export default function AppRoutes() {
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/play" element={<GameSelectionPage />} />
         <Route path="/waiting" element={<WaitingRoom />} />
         <Route path="/match" element={<Match />} />
         <Route path="/match/:gameId" element={<Match/>}/>

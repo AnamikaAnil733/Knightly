@@ -1,3 +1,5 @@
+import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
 import { Piece_Images } from "../../Reuseable/chessPieces"
 
 type ChessColor = "WHITE" | "BLACK"
@@ -11,9 +13,15 @@ type ChessPiece = {
 type ChessboardProps = {
   board: (ChessPiece | null)[][]
   selectedSquare?: { row: number; col: number } | null
-  legalMoves?: { row: number; col: number,type?: "EN_PASSANT" | "NORMAL"  }[]
+  legalMoves?: { row: number; col: number, type?: "EN_PASSANT" | "NORMAL" }[]
   onSquareClick?: (row: number, col: number) => void
   orientation?: "white" | "black"
+}
+
+interface PositionedPiece extends ChessPiece {
+  id: string;
+  row: number;
+  col: number;
 }
 
 export function Chessboard({
@@ -70,6 +78,103 @@ export function Chessboard({
   const displayFiles = isFlipped ? [...files].reverse() : files;
   const displayRanks = isFlipped ? [...ranks].reverse() : ranks;
 
+  // --- Piece Tracking Logic ---
+  const [pieces, setPieces] = useState<PositionedPiece[]>([]);
+  const prevBoardRef = useRef<(ChessPiece | null)[][] | null>(null);
+
+  useEffect(() => {
+    if (!board || board.length === 0) return;
+
+    if (!prevBoardRef.current) {
+      // Initialize pieces
+      const initialPieces: PositionedPiece[] = [];
+      board.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          if (cell) {
+            initialPieces.push({
+              ...cell,
+              id: `${cell.color}-${cell.type}-${r}-${c}`,
+              row: r,
+              col: c
+            });
+          }
+        });
+      });
+      setPieces(initialPieces);
+      prevBoardRef.current = board;
+      return;
+    }
+
+    // 1. Identify what moved
+    // We'll simplify: if a piece of type T and color C moved from (r1, c1) to (r2, c2)
+    // we find the piece in our current state that was at (r1, c1).
+    
+    // Create a temporary map of current pieces by their current position
+    const pieceMap = new Map<string, PositionedPiece>();
+    pieces.forEach(p => pieceMap.set(`${p.row}-${p.col}`, p));
+
+    const updatedPieces: PositionedPiece[] = [];
+    
+    // We need to match pieces on the new board to pieces in our state
+    // First, find exact matches (unmoved pieces)
+    // Then find moved pieces
+    // Then handle new pieces (promotions)
+    
+    const matchedFromNew = new Set<string>(); // "r-c" on new board
+    const matchedFromOld = new Set<string>(); // id of piece in state
+
+    // 1. Exact matches (same piece, same spot)
+    board.forEach((row, r) => {
+      row.forEach((cell, c) => {
+        if (!cell) return;
+        const oldPiece = pieceMap.get(`${r}-${c}`);
+        if (oldPiece && oldPiece.type === cell.type && oldPiece.color === cell.color) {
+          updatedPieces.push({ ...oldPiece, ...cell, row: r, col: c });
+          matchedFromNew.add(`${r}-${c}`);
+          matchedFromOld.add(oldPiece.id);
+        }
+      });
+    });
+
+    // 2. Moved pieces
+    // Find pieces that disappeared from old spots and appeared in new spots
+    const disappeared = pieces.filter(p => !matchedFromOld.has(p.id));
+    const appeared: {cell: ChessPiece, r: number, c: number}[] = [];
+    board.forEach((row, r) => {
+      row.forEach((cell, c) => {
+        if (cell && !matchedFromNew.has(`${r}-${c}`)) {
+          appeared.push({ cell, r, c });
+        }
+      });
+    });
+
+    // Try to match disappeared to appeared
+    // Simple heuristic: if only one piece of a type/color disappeared and one appeared, it's a move
+    // For multiple (like multiple pawns), we can be less precise or use proximity
+    appeared.forEach(app => {
+      let foundMatch = false;
+      for (let i = 0; i < disappeared.length; i++) {
+        const dis = disappeared[i];
+        if (dis.type === app.cell.type && dis.color === app.cell.color && !matchedFromOld.has(dis.id)) {
+          updatedPieces.push({ ...dis, ...app.cell, row: app.r, col: app.c });
+          matchedFromOld.add(dis.id);
+          matchedFromNew.add(`${app.r}-${app.c}`);
+          foundMatch = true;
+          break;
+        }
+      }
+      if (!foundMatch) {
+         // It's a brand new piece (e.g. promotion) or we couldn't match it
+         const newId = `${app.cell.color}-${app.cell.type}-${app.r}-${app.c}-${Date.now()}`;
+         updatedPieces.push({ ...app.cell, id: newId, row: app.r, col: app.c });
+         matchedFromNew.add(`${app.r}-${app.c}`);
+      }
+    });
+
+    setPieces(updatedPieces);
+    prevBoardRef.current = board;
+  }, [board]);
+
 
   return (
     <div className="relative w-full max-w-[800px] aspect-square mx-auto">
@@ -90,11 +195,9 @@ export function Chessboard({
           {/* We iterate 0..7 for display rows */}
           {Array.from({ length: 8 }).map((_, displayRowIndex) => {
              const actualRowIndex = getVisualRow(displayRowIndex);
-             const row = board[actualRowIndex] || []; // Defensive, though board should be full
 
              return Array.from({ length: 8 }).map((_, displayColIndex) => {
                 const actualColIndex = getVisualCol(displayColIndex);
-                const cell = row[actualColIndex];
 
                 const isLight = (actualRowIndex + actualColIndex) % 2 === 0;
                 
@@ -160,20 +263,52 @@ export function Chessboard({
                 {displayFiles[displayColIndex]}
               </span>
             )}
-
-            {cell && (
-                     <img
-                       src={Piece_Images[cell.color][cell.type]}
-                       alt={`${cell.color} ${cell.type}`}
-                       className="w-[85%] h-[85%] object-contain pointer-events-none select-none drop-shadow-md"
-                       draggable={false}
-                     />
-                   )}
               
                  </div>
                )
              });
           })}
+        </div>
+
+        {/* Pieces Layer - Animate pieces across the board */}
+        <div className="absolute inset-0 pointer-events-none">
+          <AnimatePresence>
+            {pieces.map((piece) => {
+              const visualRow = isFlipped ? 7 - piece.row : piece.row;
+              const visualCol = isFlipped ? 7 - piece.col : piece.col;
+
+              return (
+                <motion.div
+                  key={piece.id}
+                  layoutId={piece.id}
+                  initial={false}
+                  animate={{
+                    x: `${visualCol * 100}%`,
+                    y: `${visualRow * 100}%`,
+                    opacity: 1,
+                    scale: 1,
+                  }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 35,
+                    mass: 0.8,
+                  }}
+                  className="absolute top-0 left-0 w-[12.5%] h-[12.5%] flex items-center justify-center pointer-events-none"
+                >
+                  <motion.img
+                    src={Piece_Images[piece.color][piece.type]}
+                    alt={`${piece.color} ${piece.type}`}
+                    className="w-[90%] h-[90%] object-contain drop-shadow-xl select-none"
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    whileHover={{ scale: 1.1 }}
+                  />
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
         {/* Rank labels */}

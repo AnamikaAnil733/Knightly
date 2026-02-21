@@ -24,6 +24,42 @@ export class SocketHandler{
 
       console.log("socket connected",socket.id);
 
+      socket.on("checkTimeout", async (gameId: string) => {
+        try {
+          const game = await this._gameRepo.findById(gameId);
+          if (!game || (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")) return;
+
+          if (game.checkPassiveTimeout()) {
+            await this._gameRepo.update(game);
+            
+            const updatedState = game.getGameState();
+            const clock = game.getClock();
+            const liveTimes = clock.getLiveTimes();
+
+            this._io.to(gameId).emit("gameUpdated", {
+              board: updatedState.getBoard().serialize(),
+              turn: updatedState.getTurn(),
+              history: updatedState.getHistory().map((move: any) => ({
+                from: { row: move.from.row, col: move.from.column },
+                to: { row: move.to.row, col: move.to.column },
+                piece: move.pieceType,
+                color: move.color,
+                promotion: move.promotionType ?? undefined,
+              })),
+              status: game.getStatus(),
+              clock: {
+                whiteTime: liveTimes.whiteTime,
+                blackTime: liveTimes.blackTime,
+                increment: clock.increment,
+                turn: clock.turn,
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Timeout check error:", error);
+        }
+      });
+
       socket.on("findMatch", async (userId: string) => {
         try {
           // Fetch actual rating from DB to prevent client-side spoofing
@@ -61,7 +97,7 @@ export class SocketHandler{
               gameId,
               role: "WHITE",
             });
-    
+      
             this._io.to(black.socketId).emit("matchFound", {
               gameId,
               role: "BLACK",
@@ -149,7 +185,10 @@ export class SocketHandler{
           );
 
           const updatedGame = await this._gameRepo.findById(gameId);
-          if(!updatedGame) return;
+          if(!updatedGame) {
+            console.error("Game not found after move:", gameId);
+            return;
+          }
 
           // Passive timeout check
           if (updatedGame.checkPassiveTimeout()) {
@@ -159,6 +198,8 @@ export class SocketHandler{
           const updatedState = updatedGame.getGameState();
           const clock = updatedGame.getClock();
           const liveTimes = clock.getLiveTimes();
+
+          console.log(`Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`);
 
           this._io.to(gameId).emit("gameUpdated",{
             board:updatedState.getBoard().serialize(),
@@ -186,8 +227,9 @@ export class SocketHandler{
           });
 
 
-        }catch{
-          socket.emit("moveError");
+        }catch(err){
+          console.error("Move processing error:", err);
+          socket.emit("moveError", (err as Error).message);
         }
       });
       socket.on("disconnect",()=>{

@@ -136,11 +136,19 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
     const interval = setInterval(() => {
       const elapsed = Date.now() - lastUpdate.current;
       if (turn === "WHITE") {
-        setWhiteTime(Math.max(serverWhite.current - elapsed, 0));
+        const remaining = Math.max(serverWhite.current - elapsed, 0);
+        setWhiteTime(remaining);
         setBlackTime(serverBlack.current);
+        if (remaining === 0) {
+          socket.emit("checkTimeout", gameId);
+        }
       } else {
-        setBlackTime(Math.max(serverBlack.current - elapsed, 0));
+        const remaining = Math.max(serverBlack.current - elapsed, 0);
+        setBlackTime(remaining);
         setWhiteTime(serverWhite.current);
+        if (remaining === 0) {
+          socket.emit("checkTimeout", gameId);
+        }
       }
     }, 100);
   
@@ -266,7 +274,6 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
                   }`}
                 >
                   <Chessboard
-                    key={turn}
                     board={board}
                     selectedSquare={selected}
                     legalMoves={legalMoves}

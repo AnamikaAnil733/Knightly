@@ -29,7 +29,7 @@ const navigate = useNavigate()
             </p>
             <div className="flex flex-wrap gap-4">
             <button
-              onClick={() => navigate("/waiting")}
+              onClick={() => navigate("/play")}
               className="px-8 py-3 rounded-full bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-semibold glow-button"
             >
               Play Now
