@@ -1,11 +1,12 @@
 import { BaseRepository } from "./BaseRepository";
-import { PuzzleModel } from "../database/model/puzzleModel";
+import { ProgressPuzzleModel, PuzzleModel } from "../database/model/puzzleModel";
 import { EPuzzle } from "../../Domain/Entity/puzzle";
 import { PuzzleSchemaType } from "../database/Schema/puzzleSchema";
 import { IPuzzleRepository } from "../../Domain/Interface/Repositories/IPuzzleRepository";
 import { PuzzleMapper } from "../../Application/mapper/PuzzleMapper";
 import { PuzzleType } from "Domain/Types/PuzzleTypes";
 import { getPagination } from "../database/utils/pagination";
+import mongoose from "mongoose";
 
 
 export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSchemaType>
@@ -67,6 +68,35 @@ export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSch
     return true;
   }
 
+  async getPuzzleByDifficulty(userId: string, difficulty: PuzzleType): Promise<EPuzzle | null> {
+    const solvedPuzzleId = await ProgressPuzzleModel.find({userId,solved:true}).distinct("puzzleId");
+    const objectIds = solvedPuzzleId.map(id=>new mongoose.Types.ObjectId(id));
+    const docs = await PuzzleModel.aggregate([
+      {
+        $match:{
+          difficulty,
+          isActive:true,
+          _id:{$nin:objectIds}
+        }
+      },
+      {$sample:{size:1}}
+    ]);
+
+    if(!docs.length){
+      return null
+    }
+    const doc = docs[0]
+    return new EPuzzle({
+      id:doc._id.toString(),
+      fen:doc.fen,
+      difficulty:doc.difficulty,
+      moves:doc.moves,
+      solutionLength:doc.solutionLength,
+      isActive:doc.isActive,
+      createdAt:doc.createdAt
+    })
+
+  }
 
 
 

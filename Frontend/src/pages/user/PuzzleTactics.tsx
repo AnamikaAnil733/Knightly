@@ -202,6 +202,7 @@ export function PuzzleTactics() {
                     </div>
                     <motion.button
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => navigate(`/puzzle/solve/${level.id}`)}
                       className={`px-4 py-2 rounded-lg bg-gradient-to-r ${level.color} text-white text-xs font-bold shadow-lg shadow-black/20 hover:shadow-black/40 transition-all`}
                     >
                       Start Solving

@@ -15,6 +15,7 @@ import { Match } from "../pages/user/MatchPage";
 import { WaitingRoom } from "../pages/user/WaitingRoom";
 import { GameSelectionPage } from "../pages/user/GameSelectionPage";
 import { PuzzleTactics } from "../pages/user/PuzzleTactics";
+import { PuzzleSolvingPage } from "../pages/user/PuzzleSolvingPage";
 
 
 export default function AppRoutes() {
@@ -36,6 +37,7 @@ export default function AppRoutes() {
         <Route path="/match" element={<Match />} />
         <Route path="/match/:gameId" element={<Match/>}/>
         <Route path="/puzzles" element={<PuzzleTactics />} />
+        <Route path="/puzzle/solve/:difficulty" element={<PuzzleSolvingPage />} />
 
         <Route path="/admin" element={
           <AdminProtectedRoute>

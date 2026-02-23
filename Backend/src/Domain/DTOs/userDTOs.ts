@@ -1,5 +1,6 @@
 import { UserRole } from "../Types/UserRole";
 import { PieceType } from "../Chess/Types/PieceType";
+import { PuzzleType } from "../Types/PuzzleTypes";
 
 
 
@@ -131,4 +132,12 @@ export interface GameOutputDTO{
         rating: number;
         avatar: string | null;
     };
+  }
+
+
+  //-----PuzzleDTO-----
+  export interface UserPuzzleResponseDTO {
+    id: string;
+    fen: string;
+    difficulty: PuzzleType;
   }

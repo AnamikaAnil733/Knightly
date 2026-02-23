@@ -4,6 +4,7 @@ import {
   changePasswordController,
   avatarController,
   gameController,
+  userPuzzleController,
 } from "../../Infrastructure/Composition/UserCompostion";
 import { authMiddleware } from "../Middleware/authMiddleware";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
@@ -38,5 +39,7 @@ export class UserRoutes {
     this.router.get(USER_ROUTES.GET_GAME, gameController.getGame);
     this.router.get(USER_ROUTES.LEGAL_MOVES, gameController.legalMove);
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);
+    this.router.get(USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY, userPuzzleController.getPuzzle);
+    this.router.post(USER_ROUTES.VALIDATE_PUZZLE_MOVE, userPuzzleController.validateMove);
   }
 }

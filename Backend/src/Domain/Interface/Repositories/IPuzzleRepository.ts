@@ -7,5 +7,8 @@ export interface IPuzzleRepository extends IBaseRepository<EPuzzle,string>{
         input?: { page?: number; limit?: number; difficulty?: PuzzleType }
       ): Promise<{ puzzles: EPuzzle[]; total: number }>;
 
-    softDelete(id:string):Promise<boolean>
+    softDelete(id:string):Promise<boolean>;
+
+    getPuzzleByDifficulty(userId:string,difficulty:PuzzleType):Promise<EPuzzle|null>
+
 }
