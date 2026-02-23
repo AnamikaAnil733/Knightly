@@ -32,43 +32,9 @@ export function Chessboard({
   orientation = "white",
 }: ChessboardProps) {
 
-  // We want to render:
-  // If WHITE: rows 0..7, cols 0..7
-  // If BLACK: rows 7..0, cols 7..0  -> actually, usually visual board is 7 at top for White..
-  // Wait.
-  // Standard array: board[0] is row 0 (Top, usually Black pieces start here in standard representation if 0 is top)
-  // Let's check initial board setup or usage.
-  // In `MatchPage.tsx`:
-  //    board[row][col]
-  // Usually in chess engines:
-  // Row 0, Col 0 is top-left (a8 in standard algebraic? Or a1?)
-  
-  // Let's assume standard visual:
-  // If White: Top row is index 0. Bottom row is 7.
-  // Users usually see White at bottom (rows 6,7) and Black at top (rows 0,1).
-  // So for White view: Render row 0 at top, row 7 at bottom.
-  // for Black view: Render row 7 at top, row 0 at bottom.
-
-  // Let's verify existing rendering:
-  // className="grid grid-cols-8 ..."
-  // board.map((row, rowIndex) ...
-  // This renders row 0, then row 1... down to row 7.
-  // So Row 0 is at the Top.
-  // If standard chess array:
-  // Row 0 = Black Pieces (Rook Knight Bishop...)
-  // Row 7 = White Pieces.
-  
-  // If White view:
-  // We want Row 0 (Black) at Top. Row 7 (White) at Bottom.
-  // Defaults valid.
-  
-  // If Black view:
-  // We want Row 7 (White) at Top. Row 0 (Black) at Bottom.
-  // So we need to reverse the outer array (rows) and inner array (cols) visually.
-
   const isFlipped = orientation === "black";
 
-  // Helper to map visual index to actual board index
+
   const getVisualRow = (idx: number) => isFlipped ? 7 - idx : idx;
   const getVisualCol = (idx: number) => isFlipped ? 7 - idx : idx;
 

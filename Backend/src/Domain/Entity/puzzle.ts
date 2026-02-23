@@ -19,6 +19,12 @@ export class EPuzzle extends BaseEntity{
     createdAt?: Date;
   }) {
     super(props.id);
+    if (!props.fen || props.fen.trim() === "") {
+      throw new Error("FEN cannot be empty");
+    }
+    if (!props.moves || props.moves.length === 0) {
+      throw new Error("Puzzle must contain at least one move");
+    }
 
     this.fen = props.fen;
     this.difficulty = props.difficulty;
@@ -33,6 +39,9 @@ export class EPuzzle extends BaseEntity{
   }
 
   updateMoves(moves: string[]) {
+    if (!moves || moves.length === 0) {
+      throw new Error("Moves cannot be empty");
+    }
     this.moves = [...moves];
     this.solutionLength = moves.length;
   }

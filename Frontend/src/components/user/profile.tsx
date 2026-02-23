@@ -92,11 +92,17 @@ export function ProfileUser() {
                 {user.displayname}
               </h1>
 
-              <p className="mt-3 text-3xl font-bold text-gold">
-                {user.rating}
-              </p>
+              <div className="mt-3">
+                <p className="text-3xl font-bold text-gold">
+                  {user.rating?.RAPID || 1200}
+                </p>
+                <div className="flex gap-4 mt-2 text-xs text-gray-400">
+                  <span>Blitz: {user.rating?.BLITZ || 1200}</span>
+                  <span>Bullet: {user.rating?.BULLET || 1200}</span>
+                </div>
+              </div>
 
-              <span className="text-sm text-gray-light">Rating</span>
+              <span className="text-sm text-gray-light">Active Rating</span>
 
               <button
                 onClick={handleGenerateAvatar}

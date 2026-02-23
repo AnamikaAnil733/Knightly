@@ -1,6 +1,9 @@
 
 import { BookOpenIcon, PuzzleIcon, BotIcon, SparklesIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
 export function LearningZone() {
+  const navigate = useNavigate()
   const cards = [
     {
       title: 'Learn Chess',
@@ -39,6 +42,7 @@ export function LearningZone() {
           {cards.map((card, index) => (
             <div
               key={index}
+              onClick={() => card.title === 'Tactics Puzzles' && navigate('/puzzles')}
               className="bg-[#11193F]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#FFD166]/50 transition-all card-glow text-center group cursor-pointer"
             >
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">

@@ -48,15 +48,19 @@ const handleConfirmBan = () => {
           <div className="ml-4">
             <h2 className="text-xl font-bold text-white">{user.displayname}</h2>
             <p className="text-gray-400 text-sm">{user.email}</p>
-            <div className="flex items-center mt-1">
-              <StarIcon className="h-4 w-4 text-[#FFD166]" />
-              <span className="text-white text-sm ml-1">
-                {user.rating} Rating
-              </span>
-              <span className="mx-2 text-gray-600">•</span>
-              <span className="text-gray-300 text-sm">
-                {user.gamesPlayed} Games
-              </span>
+            <div className="flex flex-col mt-1">
+              <div className="flex items-center">
+                <StarIcon className="h-4 w-4 text-[#FFD166]" />
+                <span className="text-white text-sm ml-1 font-semibold">
+                  {user.rating?.RAPID || 1200}
+                </span>
+                <span className="text-gray-400 text-xs ml-1">Rapid</span>
+              </div>
+              <div className="flex items-center mt-1">
+                 <span className="text-gray-500 text-xs">Blitz: {user.rating?.BLITZ || 1200}</span>
+                 <span className="mx-1 text-gray-700">|</span>
+                 <span className="text-gray-500 text-xs">Bullet: {user.rating?.BULLET || 1200}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -71,7 +75,7 @@ const handleConfirmBan = () => {
               <span className="text-sm font-medium">Streak</span>
             </div>
             <p className="text-white text-xl font-bold mt-1">
-              {user.longestStreak} days
+              {user.longestStreak || 0} days
             </p>
           </div>
           <div className="bg-[#11193F] p-3 rounded-lg">
@@ -79,63 +83,56 @@ const handleConfirmBan = () => {
               <TrophyIcon className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">Rewards</span>
             </div>
-            <p className="text-white text-xl font-bold mt-1">{user.rewards}</p>
+            <p className="text-white text-lg font-bold mt-1 truncate">
+               {user.rewards && user.rewards.length > 0 ? user.rewards[0] : "No rewards"}
+            </p>
           </div>
         </div>
       </div>
       {/* Achievements */}
       <div className="p-6 border-b border-gray-800">
         <h3 className="text-sm font-medium text-gray-400 mb-3">ACHIEVEMENTS</h3>
-        {/* <div className="space-y-2">
-          {user.achievements.map((achievement, index) => (
-            <div key={index} className="flex items-center">
-              <AwardIcon className="h-4 w-4 text-[#6B2EFF] mr-2" />
-              <span className="text-sm text-gray-300">{achievement}</span>
-            </div>
-          ))}
-          {user.achievements.length === 0 && (
-            <p className="text-sm text-gray-500">No achievements yet</p>
+        <div className="space-y-1">
+          {user.achievements && user.achievements.length > 0 ? (
+            user.achievements.slice(0, 3).map((achievement, index) => (
+              <div key={index} className="flex items-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#6B2EFF] mr-2"></div>
+                <span className="text-xs text-gray-300">{achievement}</span>
+              </div>
+            ))
+          ) : (
+            <p className="text-xs text-gray-500 italic">No achievements unlocked yet</p>
           )}
-        </div> */}
+        </div>
       </div>
       {/* Saved Games */}
       <div className="p-6 border-b border-gray-800">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-400">SAVED GAMES</h3>
+          <h3 className="text-sm font-medium text-gray-400">GAMES HISTORY</h3>
           <span className="text-[#6B2EFF] text-sm font-medium">
-            {user. gamesPlayed}
+            {user.gamesPlayed || 0}
           </span>
         </div>
         <div className="flex items-center mt-2">
           <SaveIcon className="h-4 w-4 text-gray-400 mr-2" />
           <span className="text-sm text-gray-300">
-            {user. gamesPlayed > 0
-              ? `${user. gamesPlayed} games played`
-              : 'No games played'}
+            {(user.gamesPlayed || 0) > 0
+              ? `${user.gamesPlayed} matches completed`
+              : 'No games recorded'}
           </span>
         </div>
       </div>
-      {/* Report History */}
+      {/* Account Info */}
       <div className="p-6 border-b border-gray-800">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-400">REPORT HISTORY</h3>
-          {/* <span
-            className={`${user.reports > 0 ? 'text-red-400' : 'text-green-400'} text-sm font-medium`}
-          >
-            {user.reports}
-          </span>
-        </div>
-        <div className="flex items-center mt-2">
-          <AlertTriangleIcon
-            className={`h-4 w-4 ${user.reports > 0 ? 'text-red-400' : 'text-gray-400'} mr-2`}
-          />
-          <span className="text-sm text-gray-300">
-            {user.reports > 0
-              ? `${user.reports} reports received`
-              : 'No reports'}
-          </span> */}
+        <h3 className="text-sm font-medium text-gray-400 mb-2">ACCOUNT STATUS</h3>
+        <div className="flex items-center">
+           <div className={`w-2 h-2 rounded-full mr-2 ${user.isBlocked ? 'bg-red-500' : 'bg-green-500'}`}></div>
+           <span className="text-sm text-gray-300">
+             {user.isBlocked ? 'Account Restricted' : 'Active Account'}
+           </span>
         </div>
       </div>
+
       {/* Actions */}
       <div className="p-6">
         <button

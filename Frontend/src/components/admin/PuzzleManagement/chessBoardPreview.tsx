@@ -1,40 +1,53 @@
+import { Piece_Images } from "../../Reuseable/chessPieces"
+import { useMemo } from "react"
 
 interface ChessboardPreviewProps {
   fen: string
 }
+
 export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
-  // Simple FEN parser to render a basic chessboard
-  const rows = fen.split(' ')[0].split('/')
-  // Map piece characters to symbols
-  const pieceMap: Record<string, string> = {
-    p: '♟',
-    r: '♜',
-    n: '♞',
-    b: '♝',
-    q: '♛',
-    k: '♚',
-    P: '♙',
-    R: '♖',
-    N: '♘',
-    B: '♗',
-    Q: '♕',
-    K: '♔',
-  }
-  // Process FEN string to create board representation
-  const board = rows.map((row) => {
-    const cells = []
-    for (let i = 0; i < row.length; i++) {
-      const char = row[i]
-      if (isNaN(parseInt(char))) {
-        cells.push(pieceMap[char])
-      } else {
-        for (let j = 0; j < parseInt(char); j++) {
-          cells.push('')
+
+  const pieceMap = {
+    p: Piece_Images.BLACK.PAWN,
+    r: Piece_Images.BLACK.ROOK,
+    n: Piece_Images.BLACK.KNIGHT,
+    b: Piece_Images.BLACK.BISHOP,
+    q: Piece_Images.BLACK.QUEEN,
+    k: Piece_Images.BLACK.KING,
+    P: Piece_Images.WHITE.PAWN,
+    R: Piece_Images.WHITE.ROOK,
+    N: Piece_Images.WHITE.KNIGHT,
+    B: Piece_Images.WHITE.BISHOP,
+    Q: Piece_Images.WHITE.QUEEN,
+    K: Piece_Images.WHITE.KING,
+  } as const
+
+  // Memoized FEN parsing
+  const board = useMemo(() => {
+    if (!fen) return []
+
+    const rows = fen.split(" ")[0].split("/")
+
+    return rows.map((row) => {
+      const cells: (string | null)[] = []
+
+      for (let i = 0; i < row.length; i++) {
+        const char = row[i]
+
+        if (Number.isNaN(Number(char))) {
+          cells.push(pieceMap[char as keyof typeof pieceMap] ?? null)
+        } else {
+          const emptySquares = Number(char)
+          for (let j = 0; j < emptySquares; j++) {
+            cells.push(null)
+          }
         }
       }
-    }
-    return cells
-  })
+
+      return cells
+    })
+  }, [fen])
+
   return (
     <div className="w-full max-w-[320px] aspect-square mx-auto">
       <div className="grid grid-cols-8 grid-rows-8 h-full w-full border border-[#3A6FF7]/50 shadow-[0_0_15px_rgba(58,111,247,0.3)]">
@@ -42,18 +55,22 @@ export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
           row.map((piece, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
-              className={`flex items-center justify-center text-2xl
-                ${(rowIndex + colIndex) % 2 === 0 ? 'bg-[#11193F]' : 'bg-[#0A0F2C]'}`}
+              className={`flex items-center justify-center
+                ${(rowIndex + colIndex) % 2 === 0
+                  ? "bg-[#6a92a5]"
+                  : "bg-[#305375]"
+                }`}
             >
-              <span
-                className={
-                  piece.match(/[A-Z]/) ? 'text-white' : 'text-[#FFD166]'
-                }
-              >
-                {piece}
-              </span>
+              {piece && (
+                <img
+                  src={piece}
+                  alt="chess-piece"
+                  className="w-8 h-8 object-contain select-none pointer-events-none"
+                  draggable={false}
+                />
+              )}
             </div>
-          )),
+          ))
         )}
       </div>
     </div>

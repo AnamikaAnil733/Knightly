@@ -34,12 +34,12 @@ export function Navbar() {
           </span>
         </div>
         <div className="hidden md:flex items-center gap-8">
-          <a
-            href="/landing-page"
+          <Link
+            to="/landing-page"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
             Home
-          </a>
+          </Link>
           <a
             href="#"
             className="text-white hover:text-[#FFD166] transition-colors"
@@ -53,6 +53,12 @@ export function Navbar() {
           >
             Leaderboard
           </a>
+          <Link
+            to="/puzzles"
+            className="text-white hover:text-[#FFD166] transition-colors"
+          >
+            Puzzles
+          </Link>
           <a
             href="#"
             className="text-white hover:text-[#FFD166] transition-colors"
@@ -60,12 +66,12 @@ export function Navbar() {
             About
           </a>
         
-        <a
-            href="/settings"
+        <Link
+            to="/settings"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
-            settings
-          </a>
+            Settings
+          </Link>
           </div>
         
         <div>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { PuzzleTable } from '../../components/admin/PuzzleManagement/puzzleTable'
 import {
   PuzzleModal,
@@ -32,33 +32,37 @@ export function PuzzleManagement() {
   const [puzzles, setPuzzles] = useState<Puzzle[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null)
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   /* ===================== FETCH ===================== */
+  
 
-  const fetchPuzzles = useCallback(async () => {
+  useEffect(() => {
+    const fetchPuzzles = async ()=>{
     try {
-      const res = await getAllPuzzlesApi()
+      const res = await getAllPuzzlesApi({ page, limit: 10 })
       setPuzzles(res.puzzles)
+      setTotalPages(res.totalPages)
     } catch (error) {
       console.error('Failed to fetch puzzles', error)
     }
-  }, [])
+  }
+  fetchPuzzles()
+  }, [page])
 
-  useEffect(() => {
-    let mounted = true;
-    const load = async () => {
-      try {
-        const res = await getAllPuzzlesApi()
-        if (mounted) setPuzzles(res.puzzles)
-      } catch (error) {
-        console.error('Failed to fetch puzzles', error)
-      }
-    };
-    load();
-    return () => { mounted = false; };
-  }, [])
+ 
 
   /* ===================== CREATE ===================== */
+  const fetchPuzzles = async (pageNumber = page) => {
+    try {
+      const res = await getAllPuzzlesApi({ page: pageNumber, limit: 10 })
+      setPuzzles(res.puzzles)
+      setTotalPages(res.totalPages)
+    } catch (error) {
+      console.error('Failed to fetch puzzles', error)
+    }
+  }
 
   const handleSavePuzzle = async (data: PuzzleFormData) => {
     try {
@@ -74,8 +78,6 @@ export function PuzzleManagement() {
         // CREATE
         await createPuzzleApi(data)
       }
-      // update flow can be added later
-
       setIsModalOpen(false)
       setEditingPuzzle(null)
       fetchPuzzles()
@@ -96,7 +98,7 @@ export function PuzzleManagement() {
   const handleDeletePuzzle = async (id: string) => {
     try {
       await deletePuzzleApi(id)
-      fetchPuzzles()
+      await fetchPuzzles()
     } catch (error) {
       console.error('Failed to delete puzzle', error)
     }
@@ -132,6 +134,9 @@ export function PuzzleManagement() {
             puzzles={puzzles}
             onEdit={handleEditPuzzle}
             onDelete={handleDeletePuzzle}
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
           />
         </div>
 
