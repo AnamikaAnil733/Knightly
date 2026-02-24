@@ -8,7 +8,12 @@ export interface User {
   isBlocked: boolean;
   gamesPlayed: number;
   gamesWin: number;
-  rating: number;
+  rating: {
+    BULLET: number;
+    BLITZ: number;
+    RAPID: number;
+    CLASSICAL: number;
+  };
   premium: boolean;
   longestStreak: number;
   currentStreak: number;

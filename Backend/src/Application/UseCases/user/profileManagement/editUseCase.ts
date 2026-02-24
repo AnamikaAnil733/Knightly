@@ -16,6 +16,7 @@ export class EditUserUseCase implements IEditProfileUseCase{
   async editUser(input: EditProfileinputDto): Promise<EditProfileoutputDto> {
     try{
       const {userId,displayname}  = input;
+      console.log(displayname,"usecase")
 
       if (!displayname || displayname.trim().length < 3) {
         throw new CustomError(

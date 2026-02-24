@@ -15,6 +15,7 @@ export class EditProfileController{
     try {
       const userId = (req as any).user.id;
       const { displayname } = req.body;
+      console.log(displayname)
 
       const result = await this._editUserUsecase.editUser({
         userId,

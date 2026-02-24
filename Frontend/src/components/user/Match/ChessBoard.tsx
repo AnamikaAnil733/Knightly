@@ -280,7 +280,7 @@ export function Chessboard({
 
           {displayRanks.map((n) => (
             <span key={n}>{n}</span>
-          ))}
+          ))}  
         </div>
 
         {/* File labels */}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { ChessboardPreview } from './chessBoardPreview'
 import { XIcon, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { Chess } from 'chess.js'
@@ -8,6 +8,30 @@ export interface PuzzleFormData {
   fen: string
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert'
   moves: string[]
+}
+
+function validatePuzzle(fen: string, moves: string[]) {
+  if (!fen) return { isValid: false as const, error: 'FEN is required' }
+
+  const chess = new Chess()
+  try {
+    chess.load(fen)
+  } catch (e: unknown) {
+    return { isValid: false as const, error: `Invalid FEN: ${e instanceof Error ? e.message : 'Unknown error'}` }
+  }
+
+  for (let i = 0; i < moves.length; i++) {
+    try {
+      const moveResult = chess.move(moves[i])
+      if (!moveResult) {
+        return { isValid: false as const, error: `Move ${i + 1} (${moves[i]}) is illegal` }
+      }
+    } catch {
+      return { isValid: false as const, error: `Invalid move format: ${moves[i]}` }
+    }
+  }
+
+  return { isValid: true as const, finalFen: chess.fen() }
 }
 
 interface PuzzleModalProps {
@@ -30,31 +54,8 @@ export function PuzzleModal({
     moves: initialData?.moves ?? [],
   }))
 
-  // Real-time validation
-  const validation = useMemo(() => {
-    if (!formData.fen) return { isValid: false, error: 'FEN is required' }
-    
-    const chess = new Chess()
-    try {
-      chess.load(formData.fen)
-    } catch (e: unknown) {
-      return { isValid: false, error: `Invalid FEN: ${e instanceof Error ? e.message : 'Unknown error'}` }
-    }
-
-    const moves = formData.moves
-    for (let i = 0; i < moves.length; i++) {
-      try {
-        const moveResult = chess.move(moves[i])
-        if (!moveResult) {
-          return { isValid: false, error: `Move ${i + 1} (${moves[i]}) is illegal` }
-        }
-      } catch {
-        return { isValid: false, error: `Invalid move format: ${moves[i]}` }
-      }
-    }
-
-    return { isValid: true, finalFen: chess.fen() }
-  }, [formData.fen, formData.moves])
+  // Real-time validation — let React Compiler handle memoization automatically
+  const validation = validatePuzzle(formData.fen, formData.moves)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,

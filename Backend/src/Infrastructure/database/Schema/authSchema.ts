@@ -13,7 +13,12 @@ export interface AuthSchemaType{
 
     gamesPlayed: number;
     gamesWin: number;
-    rating: number;
+    rating: {
+      BULLET: number;
+      BLITZ: number;
+      RAPID: number;
+      CLASSICAL: number;
+    };
     premium: boolean;
     longestStreak: number;
     currentStreak: number;
@@ -56,7 +61,15 @@ export const authSchema = new Schema<AuthSchemaType>(
     },
     gamesPlayed: { type: Number, default: 0 },
     gamesWin: { type: Number, default: 0 },
-    rating: { type: Number, default: 0 },
+    rating: {
+      type: {
+        BULLET: { type: Number, default: 1200 },
+        BLITZ: { type: Number, default: 1200 },
+        RAPID: { type: Number, default: 1200 },
+        CLASSICAL: { type: Number, default: 1200 },
+      },
+      default: { BULLET: 1200, BLITZ: 1200, RAPID: 1200, CLASSICAL: 1200 },
+    },
     premium: { type: Boolean, default: false },
     longestStreak: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },
