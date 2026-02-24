@@ -118,15 +118,21 @@ export function PuzzleSolvingPage() {
       const fromSquare = `${files[selectedSquare.col]}${8 - selectedSquare.row}`;
       
       try {
-        const moveAttempt = game.move({
+        // Clone the game so we never mutate the state object in-place
+        const gameCopy = new Chess(game.fen());
+        const moveAttempt = gameCopy.move({
           from: fromSquare,
           to: square,
-          promotion: "q" // always promote to queen for simplicity in puzzles
+          promotion: "q" 
         });
 
         if (moveAttempt) {
-          // If valid chess move, validate with backend
-          setGame(new Chess(game.fen()));
+          // Save the FEN before this move so we can undo cleanly
+          const fenBeforeMove = game.fen();
+          const fenAfterMove = gameCopy.fen();
+
+          // Apply the move to the board
+          setGame(new Chess(fenAfterMove));
           setSelectedSquare(null);
           
           if (puzzleId) {
@@ -137,9 +143,9 @@ export function PuzzleSolvingPage() {
               if (result.nextMove) {
                 // Play engine response
                 setTimeout(() => {
-                  const updatedGame = new Chess(game.fen());
+                  const updatedGame = new Chess(fenAfterMove);
                   updatedGame.move(result.nextMove);
-                  setGame(updatedGame);
+                  setGame(new Chess(updatedGame.fen()));
                   if (result.solved) {
                     setIsSolved(true);
                     toast.success("Puzzle Solved!");
@@ -150,13 +156,11 @@ export function PuzzleSolvingPage() {
                 toast.success("Puzzle Solved!");
               }
             } else {
-              // Wrong move according to puzzle
+              // Wrong move — revert to position before the bad move
               setIsWrong(true);
               toast.error("Not the best move. Try again!");
               setTimeout(() => {
-                setGame(new Chess(game.fen())); // Force state update
-                game.undo();
-                setGame(new Chess(game.fen()));
+                setGame(new Chess(fenBeforeMove));
                 setIsWrong(false);
               }, 1000);
             }
@@ -170,7 +174,7 @@ export function PuzzleSolvingPage() {
             setSelectedSquare(null);
           }
         }
-      } catch (e) {
+      } catch {
         setSelectedSquare(null);
       }
     } else {
@@ -258,10 +262,23 @@ export function PuzzleSolvingPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
                 >
-                  <div className="bg-emerald-500/20 backdrop-blur-md border border-emerald-500/50 p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4">
-                    <CheckCircle2 className="w-16 h-16 text-emerald-400" />
-                    <span className="text-2xl font-bold text-white">Perfectly Solved!</span>
-                  </div>
+                  <div className="relative 
+  bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900
+  border border-indigo-500/40
+  p-8 rounded-2xl
+  shadow-[0_0_30px_rgba(99,102,241,0.15)]
+  flex flex-col items-center gap-4
+  backdrop-blur-sm">
+  <div className="absolute inset-0 rounded-2xl bg-indigo-500/5 pointer-events-none" />
+  <CheckCircle2 className="w-14 h-14 text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]" />
+  <span className="text-2xl font-semibold text-indigo-300 tracking-wide">
+    Puzzle Solved
+  </span>
+
+  <span className="text-sm text-zinc-400 tracking-wide">
+    Tactical precision achieved ♞
+  </span>
+</div>
                 </motion.div>
               )}
               {isWrong && (

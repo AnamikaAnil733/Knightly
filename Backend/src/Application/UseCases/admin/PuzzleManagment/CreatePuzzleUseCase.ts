@@ -4,6 +4,8 @@ import { EPuzzle } from "../../../../Domain/Entity/puzzle";
 import { PuzzleMapper } from "../../../mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/ICreatePuzzle";
+import { PuzzleValidationService } from "../../../Services/PuzzleValidationService";
+
 
 
 export class CreatePuzzleUseCase implements ICreatePuzzleUseCase{
@@ -21,6 +23,12 @@ export class CreatePuzzleUseCase implements ICreatePuzzleUseCase{
     if(!Object.values(PuzzleType).includes(input.difficulty)){
       throw new Error("Invaild Puzzle Difficulty");
     }
+
+    const validation = PuzzleValidationService.validatePuzzle(input.fen, input.moves);
+    if (!validation.isValid) {
+      throw new Error(validation.error);
+    }
+
 
     const Puzzle = new EPuzzle({
       fen:input.fen,

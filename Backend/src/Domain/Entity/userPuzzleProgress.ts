@@ -30,7 +30,7 @@ export class EUserPuzzleprogress extends BaseEntity{
         this.attempts += 1
     }
 
-    markSoved():void{
+    markSolved():void{
         this.solved = true;
         this.solvedAt = new Date()
     }

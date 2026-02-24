@@ -4,7 +4,7 @@ import { IUserPuzzleProgressRepository } from "../../../../Domain/Interface/Repo
 import { EUserPuzzleprogress } from "../../../../Domain/Entity/userPuzzleProgress";
 
 
-export class validatePuzzlesMoves implements IValidateMoveusecase{
+export class ValidatePuzzlesMoves implements IValidateMoveusecase{
     constructor(
         private readonly _puzzleRepository:IPuzzleRepository,
         private readonly _progressRepository:IUserPuzzleProgressRepository
@@ -46,7 +46,7 @@ export class validatePuzzlesMoves implements IValidateMoveusecase{
         // Check if there are no more moves after this user move
         if (engineResponseIndex >= puzzle.moves.length) {
             progress.incrementAttempts(); // Total moves made matches puzzle moves
-            progress.markSoved();
+            progress.markSolved();
             await this._progressRepository.save(progress);
             return {
                 correct: true,
@@ -61,7 +61,7 @@ export class validatePuzzlesMoves implements IValidateMoveusecase{
         // Check if the engine move was the last move in the puzzle
         const nextUserMoveIndex = currentIndex + 2;
         if (nextUserMoveIndex >= puzzle.moves.length) {
-            progress.markSoved();
+            progress.markSolved();
             await this._progressRepository.save(progress);
             return {
                 correct: true,

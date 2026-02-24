@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion"
-import { useState, useEffect, useRef } from "react"
+import { motion } from "framer-motion"
+import { useMemo, useState } from "react"
 import { Piece_Images } from "../../Reuseable/chessPieces"
 
 type ChessColor = "WHITE" | "BLACK"
@@ -24,6 +24,9 @@ interface PositionedPiece extends ChessPiece {
   col: number;
 }
 
+// Module-level counter so piece IDs are globally unique and never reset
+let pieceIdCounter = 0;
+
 export function Chessboard({
   board,
   selectedSquare,
@@ -34,7 +37,6 @@ export function Chessboard({
 
   const isFlipped = orientation === "black";
 
-
   const getVisualRow = (idx: number) => isFlipped ? 7 - idx : idx;
   const getVisualCol = (idx: number) => isFlipped ? 7 - idx : idx;
 
@@ -44,101 +46,108 @@ export function Chessboard({
   const displayFiles = isFlipped ? [...files].reverse() : files;
   const displayRanks = isFlipped ? [...ranks].reverse() : ranks;
 
-  // --- Piece Tracking Logic ---
-  const [pieces, setPieces] = useState<PositionedPiece[]>([]);
-  const prevBoardRef = useRef<(ChessPiece | null)[][] | null>(null);
+  // --- Piece Tracking Logic (using useState instead of refs to avoid ref access during render) ---
+  const [prevPieces, setPrevPieces] = useState<PositionedPiece[]>([]);
+  const [prevBoard, setPrevBoard] = useState<(ChessPiece | null)[][] | null>(null);
 
-  useEffect(() => {
-    if (!board || board.length === 0) return;
+  const pieces = useMemo(() => {
+    if (!board || board.length === 0) return prevPieces;
 
-    if (!prevBoardRef.current) {
-      // Initialize pieces
-      const initialPieces: PositionedPiece[] = [];
+    // If the board reference hasn't changed, return the previous pieces as-is.
+    // This is the key fix: clicking a square only changes selectedSquare,
+    // NOT board, so pieces stay perfectly stable.
+    if (prevBoard === board) return prevPieces;
+
+    const currentPieces = prevPieces;
+
+    if (currentPieces.length === 0) {
+      // First render — initialize with stable IDs
+      const initial: PositionedPiece[] = [];
       board.forEach((row, r) => {
         row.forEach((cell, c) => {
           if (cell) {
-            initialPieces.push({
+            initial.push({
               ...cell,
-              id: `${cell.color}-${cell.type}-${r}-${c}`,
+              id: `piece-${pieceIdCounter++}`,
               row: r,
               col: c
             });
           }
         });
       });
-      setPieces(initialPieces);
-      prevBoardRef.current = board;
-      return;
+      setPrevBoard(board);
+      setPrevPieces(initial);
+      return initial;
     }
 
-    // 1. Identify what moved
-    // We'll simplify: if a piece of type T and color C moved from (r1, c1) to (r2, c2)
-    // we find the piece in our current state that was at (r1, c1).
-    
-    // Create a temporary map of current pieces by their current position
+    // --- Diff-based matching against previous pieces ---
     const pieceMap = new Map<string, PositionedPiece>();
-    pieces.forEach(p => pieceMap.set(`${p.row}-${p.col}`, p));
+    currentPieces.forEach(p => pieceMap.set(`${p.row}-${p.col}`, p));
 
-    const updatedPieces: PositionedPiece[] = [];
-    
-    // We need to match pieces on the new board to pieces in our state
-    // First, find exact matches (unmoved pieces)
-    // Then find moved pieces
-    // Then handle new pieces (promotions)
-    
-    const matchedFromNew = new Set<string>(); // "r-c" on new board
-    const matchedFromOld = new Set<string>(); // id of piece in state
+    const result: PositionedPiece[] = [];
+    const matchedNew = new Set<string>();
+    const matchedOld = new Set<string>();
 
-    // 1. Exact matches (same piece, same spot)
+    // 1. Exact position matches (unmoved pieces)
     board.forEach((row, r) => {
       row.forEach((cell, c) => {
         if (!cell) return;
-        const oldPiece = pieceMap.get(`${r}-${c}`);
-        if (oldPiece && oldPiece.type === cell.type && oldPiece.color === cell.color) {
-          updatedPieces.push({ ...oldPiece, ...cell, row: r, col: c });
-          matchedFromNew.add(`${r}-${c}`);
-          matchedFromOld.add(oldPiece.id);
+        const old = pieceMap.get(`${r}-${c}`);
+        if (old && old.type === cell.type && old.color === cell.color) {
+          result.push({ ...old, ...cell, row: r, col: c });
+          matchedNew.add(`${r}-${c}`);
+          matchedOld.add(old.id);
         }
       });
     });
 
-    // 2. Moved pieces
-    // Find pieces that disappeared from old spots and appeared in new spots
-    const disappeared = pieces.filter(p => !matchedFromOld.has(p.id));
-    const appeared: {cell: ChessPiece, r: number, c: number}[] = [];
+    // 2. Moved pieces — match disappeared to appeared by type/color + proximity
+    const disappeared = currentPieces.filter(p => !matchedOld.has(p.id));
+    const appeared: { cell: ChessPiece; r: number; c: number }[] = [];
     board.forEach((row, r) => {
       row.forEach((cell, c) => {
-        if (cell && !matchedFromNew.has(`${r}-${c}`)) {
+        if (cell && !matchedNew.has(`${r}-${c}`)) {
           appeared.push({ cell, r, c });
         }
       });
     });
 
-    // Try to match disappeared to appeared
-    // Simple heuristic: if only one piece of a type/color disappeared and one appeared, it's a move
-    // For multiple (like multiple pawns), we can be less precise or use proximity
     appeared.forEach(app => {
-      let foundMatch = false;
+      let bestIdx = -1;
+      let bestDist = Infinity;
       for (let i = 0; i < disappeared.length; i++) {
         const dis = disappeared[i];
-        if (dis.type === app.cell.type && dis.color === app.cell.color && !matchedFromOld.has(dis.id)) {
-          updatedPieces.push({ ...dis, ...app.cell, row: app.r, col: app.c });
-          matchedFromOld.add(dis.id);
-          matchedFromNew.add(`${app.r}-${app.c}`);
-          foundMatch = true;
-          break;
+        if (
+          dis.type === app.cell.type &&
+          dis.color === app.cell.color &&
+          !matchedOld.has(dis.id)
+        ) {
+          const dist = Math.abs(dis.row - app.r) + Math.abs(dis.col - app.c);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestIdx = i;
+          }
         }
       }
-      if (!foundMatch) {
-         // It's a brand new piece (e.g. promotion) or we couldn't match it
-         const newId = `${app.cell.color}-${app.cell.type}-${app.r}-${app.c}-${Date.now()}`;
-         updatedPieces.push({ ...app.cell, id: newId, row: app.r, col: app.c });
-         matchedFromNew.add(`${app.r}-${app.c}`);
+      if (bestIdx >= 0) {
+        const dis = disappeared[bestIdx];
+        result.push({ ...dis, ...app.cell, row: app.r, col: app.c });
+        matchedOld.add(dis.id);
+      } else {
+        // Brand new piece (e.g. promotion)
+        result.push({
+          ...app.cell,
+          id: `piece-${pieceIdCounter++}`,
+          row: app.r,
+          col: app.c,
+        });
       }
     });
 
-    setPieces(updatedPieces);
-    prevBoardRef.current = board;
+    setPrevBoard(board);
+    setPrevPieces(result);
+    return result;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board]);
 
 
@@ -146,7 +155,6 @@ export function Chessboard({
     <div className="relative w-full max-w-[800px] aspect-square mx-auto">
       {/* Glowing frame */}
       <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30 pointer-events-none" />
-
 
       {/* Board container */}
       <div
@@ -158,7 +166,6 @@ export function Chessboard({
       >
         {/* 8x8 grid */}
         <div className="grid grid-cols-8 grid-rows-8 w-full h-full">
-          {/* We iterate 0..7 for display rows */}
           {Array.from({ length: 8 }).map((_, displayRowIndex) => {
              const actualRowIndex = getVisualRow(displayRowIndex);
 
@@ -236,45 +243,36 @@ export function Chessboard({
           })}
         </div>
 
-        {/* Pieces Layer - Animate pieces across the board */}
+        {/* Pieces Layer */}
         <div className="absolute inset-0 pointer-events-none">
-          <AnimatePresence>
-            {pieces.map((piece) => {
-              const visualRow = isFlipped ? 7 - piece.row : piece.row;
-              const visualCol = isFlipped ? 7 - piece.col : piece.col;
+          {pieces.map((piece) => {
+            const visualRow = isFlipped ? 7 - piece.row : piece.row;
+            const visualCol = isFlipped ? 7 - piece.col : piece.col;
 
-              return (
-                <motion.div
-                  key={piece.id}
-                  layoutId={piece.id}
-                  initial={false}
-                  animate={{
-                    x: `${visualCol * 100}%`,
-                    y: `${visualRow * 100}%`,
-                    opacity: 1,
-                    scale: 1,
-                  }}
-                  exit={{ opacity: 0, scale: 0.5 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 35,
-                    mass: 0.8,
-                  }}
-                  className="absolute top-0 left-0 w-[12.5%] h-[12.5%] flex items-center justify-center pointer-events-none"
-                >
-                  <motion.img
-                    src={Piece_Images[piece.color][piece.type]}
-                    alt={`${piece.color} ${piece.type}`}
-                    className="w-[90%] h-[90%] object-contain drop-shadow-xl select-none"
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    whileHover={{ scale: 1.1 }}
-                  />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+            return (
+              <motion.div
+                key={piece.id}
+                initial={false}
+                animate={{
+                  x: `${visualCol * 100}%`,
+                  y: `${visualRow * 100}%`,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 35,
+                  mass: 0.8,
+                }}
+                className="absolute top-0 left-0 w-[12.5%] h-[12.5%] flex items-center justify-center pointer-events-none"
+              >
+                <img
+                  src={Piece_Images[piece.color][piece.type]}
+                  alt={`${piece.color} ${piece.type}`}
+                  className="w-[90%] h-[90%] object-contain drop-shadow-xl select-none"
+                />
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Rank labels */}

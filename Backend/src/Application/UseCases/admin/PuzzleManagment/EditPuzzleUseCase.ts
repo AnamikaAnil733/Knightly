@@ -3,6 +3,8 @@ import { UpdatePuzzleInputDTO,PuzzleResponseDTO } from "../../../../Domain/DTOs/
 import { PuzzleMapper } from "../../../mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import {IEditPuzzleUsecase} from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IEditPuzzleUseCase";
+import { PuzzleValidationService } from "../../../Services/PuzzleValidationService";
+
 
 
 export class EditPuzzleUseCase implements IEditPuzzleUsecase{
@@ -30,6 +32,12 @@ export class EditPuzzleUseCase implements IEditPuzzleUsecase{
     if(input.difficulty&&!Object.values(PuzzleType).includes(input.difficulty)){
       throw new Error("Invaild Puzzle Difficulty");
     }
+
+    const validation = PuzzleValidationService.validatePuzzle(input.fen, input.moves);
+    if (!validation.isValid) {
+      throw new Error(validation.error);
+    }
+
 
     if (input.fen !== undefined) {
       puzzle.fen = input.fen;

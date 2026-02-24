@@ -17,7 +17,7 @@ import { MakeMoveUsecase } from "../../Application/UseCases/user/gameManagement/
 import { GetLegalMovesUseCase } from "../../Application/UseCases/user/gameManagement/getLegalMovesUseCase";
 
 import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/user/puzzleManagement/GetPuzzleByDiffiicultyUseCase";
-import { validatePuzzlesMoves } from "../../Application/UseCases/user/puzzleManagement/ValidatePuzzleUseCase";
+import { ValidatePuzzlesMoves } from "../../Application/UseCases/user/puzzleManagement/ValidatePuzzleUseCase";
 
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/user/profileManagement/avatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/user/profileManagement/SaveDiceBearAvatarUseCase";
@@ -54,7 +54,7 @@ const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, S3Service);
 const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
 const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
 const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(PuzzleRepo);
-const validatePuzzleUsecase = new validatePuzzlesMoves(PuzzleRepo,ProgressPuzzleRepo) 
+const validatePuzzleUsecase = new ValidatePuzzlesMoves(PuzzleRepo,ProgressPuzzleRepo) 
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
