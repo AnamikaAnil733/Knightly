@@ -14,10 +14,12 @@ import {
   Zap,
   Star,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Sparkles
 } from "lucide-react";
 import { Chessboard } from "../../components/user/Match/ChessBoard";
 import { fetchPuzzleByDifficulty, validatePuzzleMove } from "../../Service/api/userPuzzleApi";
+import { isTodaysDifficulty } from "../../utils/getDailyDifficulty";
 import toast from "react-hot-toast";
 
 // Difficulty configuration
@@ -65,6 +67,7 @@ export function PuzzleSolvingPage() {
   const { difficulty = "easy" } = useParams<{ difficulty: string }>();
   const navigate = useNavigate();
   const config = difficultyConfig[difficulty as keyof typeof difficultyConfig] || difficultyConfig.easy;
+  const isDailyChallenge = isTodaysDifficulty(difficulty);
 
   const [game, setGame] = useState(new Chess());
   const [puzzleId, setPuzzleId] = useState<string | null>(null);
@@ -234,6 +237,12 @@ export function PuzzleSolvingPage() {
         </div>
 
         <div className="flex items-center gap-4">
+            {isDailyChallenge && (
+              <div className="flex items-center gap-2 bg-[#FFD166]/10 px-4 py-2 rounded-xl border border-[#FFD166]/20">
+                <Sparkles className="w-4 h-4 text-[#FFD166]" />
+                <span className="text-[#FFD166] font-bold text-sm">Daily Challenge</span>
+              </div>
+            )}
           <button 
             onClick={loadNewPuzzle}
             className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all font-semibold text-sm"
@@ -357,7 +366,14 @@ export function PuzzleSolvingPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
                 <span className="text-[#C9CAD9] text-sm">Difficulty Level</span>
-                <span className={`font-bold ${config.accent}`}>{config.name}</span>
+                <div className="flex items-center gap-2">
+                  {isDailyChallenge && (
+                    <span className="text-[10px] font-bold text-[#FFD166] uppercase tracking-wider bg-[#FFD166]/10 px-2 py-0.5 rounded-full border border-[#FFD166]/20">
+                      Daily
+                    </span>
+                  )}
+                  <span className={`font-bold ${config.accent}`}>{config.name}</span>
+                </div>
               </div>
               <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
                 <span className="text-[#C9CAD9] text-sm">Status</span>

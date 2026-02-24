@@ -10,8 +10,11 @@ import {
   Star,
   Flame,
   Lightbulb,
-  ShieldCheck
+  ShieldCheck,
+  Calendar,
+  Sparkles
 } from "lucide-react";
+import { getDailyDifficulty, getTodayLabel, isTodaysDifficulty } from "../../utils/getDailyDifficulty";
 
 interface DifficultyLevel {
   id: string;
@@ -69,6 +72,9 @@ const levels: DifficultyLevel[] = [
 
 export function PuzzleTactics() {
   const navigate = useNavigate();
+  const todayDifficulty = getDailyDifficulty();
+  const todayLabel = getTodayLabel();
+  const todayConfig = levels.find(l => l.id === todayDifficulty)!;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -153,6 +159,44 @@ export function PuzzleTactics() {
           </motion.p>
         </div>
 
+        {/* Today's Challenge Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-16 relative"
+        >
+          <div className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-r ${todayConfig.color} p-[1px]`}>
+            <div className="bg-[#0A0F2C]/90 backdrop-blur-2xl rounded-[2rem] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${todayConfig.color} flex items-center justify-center shadow-2xl shadow-black/40 animate-pulse`}>
+                  <Calendar className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Sparkles className="w-4 h-4 text-[#FFD166]" />
+                    <span className="text-xs font-bold text-[#FFD166] uppercase tracking-widest">Today's Challenge</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white">
+                    {todayLabel} — <span className={todayConfig.accent}>{todayConfig.name}</span> Difficulty
+                  </h3>
+                  <p className="text-[#C9CAD9] text-sm mt-1 opacity-80">
+                    Difficulty rotates daily. Come back each day for a fresh challenge!
+                  </p>
+                </div>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate(`/puzzle/solve/${todayDifficulty}`)}
+                className={`px-8 py-4 rounded-2xl bg-gradient-to-r ${todayConfig.color} text-white font-bold text-base shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transition-all whitespace-nowrap`}
+              >
+                Start Today's Puzzle
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Levels Grid */}
         <motion.div 
           variants={containerVariants}
@@ -168,10 +212,22 @@ export function PuzzleTactics() {
               className="group relative h-full"
             >
               {/* Card Container */}
-              <div className="h-full flex flex-col p-8 rounded-[2rem] bg-[#11193F]/40 backdrop-blur-2xl border border-white/5 group-hover:border-[#3A6FF7]/40 transition-all duration-500 relative overflow-hidden">
+              <div className={`h-full flex flex-col p-8 rounded-[2rem] bg-[#11193F]/40 backdrop-blur-2xl border transition-all duration-500 relative overflow-hidden ${
+                isTodaysDifficulty(level.id)
+                  ? 'border-[#FFD166]/40 ring-1 ring-[#FFD166]/20 group-hover:border-[#FFD166]/60'
+                  : 'border-white/5 group-hover:border-[#3A6FF7]/40'
+              }`}>
                 
+                {/* TODAY Badge */}
+                {isTodaysDifficulty(level.id) && (
+                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/30 z-10">
+                    <Sparkles className="w-3 h-3 text-[#FFD166]" />
+                    <span className="text-[10px] font-bold text-[#FFD166] uppercase tracking-widest">Today</span>
+                  </div>
+                )}
+
                 {/* Background Glow */}
-                <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${level.color} opacity-0 group-hover:opacity-10 blur-3xl transition-opacity duration-500`} />
+                <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${level.color} ${isTodaysDifficulty(level.id) ? 'opacity-10' : 'opacity-0'} group-hover:opacity-10 blur-3xl transition-opacity duration-500`} />
 
                 {/* Level Icon */}
                 <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center mb-8 shadow-2xl shadow-black/40 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
