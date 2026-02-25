@@ -42,7 +42,7 @@ export class GameClock {
     return null;
   }
 
-  // Returns live times by calculating drift since last move
+  // returns live times by calculating drift since last move
   getLiveTimes(now: number = Date.now()) {
     if (!this.running) {
       return { whiteTime: this.whiteTime, blackTime: this.blackTime };

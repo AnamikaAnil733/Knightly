@@ -18,7 +18,6 @@ export class UserPuzzleController{
       const difficultyParam = req.params.difficulty;
       if (!difficultyParam) throw new Error("Difficulty is required");
 
-      // Convert "easy" to "Easy", "medium" to "Medium" to match Enum/DB
       const difficulty = (difficultyParam.charAt(0).toUpperCase() +
                                   difficultyParam.slice(1).toLowerCase()) as PuzzleType;
 

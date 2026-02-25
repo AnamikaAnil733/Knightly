@@ -13,7 +13,6 @@ export class ChessGame extends BaseEntity{
         id?: string,
   ){
     super(id);
-    // Sync initial status if the DB status is ACTIVE but GameState says otherwise
     if (this._status === "ACTIVE" || this._status === "CHECK") {
       const stateStatus = this._gameState.getStatus();
       if (stateStatus !== "ACTIVE") {
@@ -38,9 +37,7 @@ export class ChessGame extends BaseEntity{
     this._status = this._gameState.getStatus();
   }
 
-  /**
-   * Updates the clock for an active move.
-   */
+
   updateClock(now: number) {
     if (this._status !== "ACTIVE" && this._status !== "CHECK") {
       return;
@@ -51,18 +48,15 @@ export class ChessGame extends BaseEntity{
     const timeoutWinner = this.clock.isTimeout();
 
     if (timeoutWinner === "WHITE") {
-      this._status = "BLACK_TIMEOUT"; // Black's time expired, White win
+      this._status = "BLACK_TIMEOUT"; 
       this.clock.stop();
     } else if (timeoutWinner === "BLACK") {
-      this._status = "WHITE_TIMEOUT"; // White's time expired, Black win
+      this._status = "WHITE_TIMEOUT"; 
       this.clock.stop();
     }
   }
 
-  /**
-   * Passive timeout check (used when no move is being made).
-   * Returns true if status changed.
-   */
+
   checkPassiveTimeout(now: number = Date.now()): boolean {
     if (this._status !== "ACTIVE" && this._status !== "CHECK") {
       return false;
@@ -71,13 +65,13 @@ export class ChessGame extends BaseEntity{
     const liveTimes = this.clock.getLiveTimes(now);
 
     if (liveTimes.whiteTime <= 0) {
-      this._status = "WHITE_TIMEOUT"; // White's time expired
+      this._status = "WHITE_TIMEOUT";
       this.clock.stop();
       return true;
     }
 
     if (liveTimes.blackTime <= 0) {
-      this._status = "BLACK_TIMEOUT"; // Black's time expired
+      this._status = "BLACK_TIMEOUT"; 
       this.clock.stop();
       return true;
     }
