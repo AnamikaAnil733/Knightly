@@ -14,7 +14,7 @@ export class SocketHandler{
         private readonly _io:Server,
         private readonly _makeMoveUseCase:IMakeMoveUseCase,
         private readonly _gameRepo:IChessGameRepository,
-        private readonly _matchmakingUseCase: IMatchmakingUseCase, 
+        private readonly _matchmakingUseCase: IMatchmakingUseCase,
         private readonly _userRepo: IChessGameRepository, // Treating AuthRepo as IChessGameRepository for now or better as generic
   ){}
 
@@ -31,7 +31,7 @@ export class SocketHandler{
 
           if (game.checkPassiveTimeout()) {
             await this._gameRepo.update(game);
-            
+
             const updatedState = game.getGameState();
             const clock = game.getClock();
             const liveTimes = clock.getLiveTimes();
@@ -52,7 +52,7 @@ export class SocketHandler{
                 blackTime: liveTimes.blackTime,
                 increment: clock.increment,
                 turn: clock.turn,
-              }
+              },
             });
           }
         } catch (error) {
@@ -71,46 +71,46 @@ export class SocketHandler{
           const result = await this._matchmakingUseCase.findMatch({
             userId,
             socketId: socket.id,
-            rating: rating,
-            joinedAt: Date.now()
+            rating,
+            joinedAt: Date.now(),
           });
-    
+
           if (result.type === "WAITING") {
             socket.emit("waiting", {
               queueSize: this._matchmakingUseCase.getQueueSize(),
             });
             return;
           }
-    
+
           if (result.type === "MATCH_FOUND") {
             const { gameId, white, black } = result;
-    
+
             this.rooms.set(gameId, {
               white: white.socketId,
               black: black.socketId,
             });
-    
+
             this._io.sockets.sockets.get(white.socketId)?.join(gameId);
             this._io.sockets.sockets.get(black.socketId)?.join(gameId);
-    
+
             this._io.to(white.socketId).emit("matchFound", {
               gameId,
               role: "WHITE",
             });
-      
+
             this._io.to(black.socketId).emit("matchFound", {
               gameId,
               role: "BLACK",
             });
-    
+
             console.log("Match created:", gameId);
           }
-    
+
         } catch (error) {
           console.error("Matchmaking error:", error);
         }
       });
-    
+
 
 
       socket.on("cancelSearch", () => {
@@ -134,7 +134,7 @@ export class SocketHandler{
           role = "WHITE";
         } else if (room.black === socket.id) {
           role = "BLACK";
-        } 
+        }
         // Otherwise fill empty seats (direct joins)
         else if(!room.white){
           room.white = socket.id;
@@ -223,7 +223,7 @@ export class SocketHandler{
               blackTime: liveTimes.blackTime,
               increment: clock.increment,
               turn: clock.turn,
-            }
+            },
           });
 
 

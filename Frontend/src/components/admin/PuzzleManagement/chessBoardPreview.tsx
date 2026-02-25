@@ -5,22 +5,22 @@ interface ChessboardPreviewProps {
   fen: string
 }
 
-export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
+const pieceMap = {
+  p: Piece_Images.BLACK.PAWN,
+  r: Piece_Images.BLACK.ROOK,
+  n: Piece_Images.BLACK.KNIGHT,
+  b: Piece_Images.BLACK.BISHOP,
+  q: Piece_Images.BLACK.QUEEN,
+  k: Piece_Images.BLACK.KING,
+  P: Piece_Images.WHITE.PAWN,
+  R: Piece_Images.WHITE.ROOK,
+  N: Piece_Images.WHITE.KNIGHT,
+  B: Piece_Images.WHITE.BISHOP,
+  Q: Piece_Images.WHITE.QUEEN,
+  K: Piece_Images.WHITE.KING,
+} as const
 
-  const pieceMap = {
-    p: Piece_Images.BLACK.PAWN,
-    r: Piece_Images.BLACK.ROOK,
-    n: Piece_Images.BLACK.KNIGHT,
-    b: Piece_Images.BLACK.BISHOP,
-    q: Piece_Images.BLACK.QUEEN,
-    k: Piece_Images.BLACK.KING,
-    P: Piece_Images.WHITE.PAWN,
-    R: Piece_Images.WHITE.ROOK,
-    N: Piece_Images.WHITE.KNIGHT,
-    B: Piece_Images.WHITE.BISHOP,
-    Q: Piece_Images.WHITE.QUEEN,
-    K: Piece_Images.WHITE.KING,
-  } as const
+export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
 
   // Memoized FEN parsing
   const board = useMemo(() => {

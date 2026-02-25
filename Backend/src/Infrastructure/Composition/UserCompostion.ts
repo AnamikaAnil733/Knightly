@@ -34,8 +34,8 @@ import { UserRoutes } from "../../Presentation/routes/userroute";
 
 const UserRepo = new UserManagmentRepository();
 const GameRepo = new ChessGameRepository(GameModel);
-const PuzzleRepo = new PuzzleManagementRepository()
-const ProgressPuzzleRepo = new UserPuzzleProgressRepository()
+const PuzzleRepo = new PuzzleManagementRepository();
+const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 
 //service
 const tokenService = new TokenService();
@@ -54,7 +54,7 @@ const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, S3Service);
 const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
 const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
 const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(PuzzleRepo);
-const validatePuzzleUsecase = new ValidatePuzzlesMoves(PuzzleRepo,ProgressPuzzleRepo) 
+const validatePuzzleUsecase = new ValidatePuzzlesMoves(PuzzleRepo,ProgressPuzzleRepo);
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
@@ -66,6 +66,6 @@ export const gameController = new GameController(
   getLegalMovesUseCase,
   makeMoveUseCase,
 );
-export const userPuzzleController = new UserPuzzleController(getpuzzleUseCase,validatePuzzleUsecase)
+export const userPuzzleController = new UserPuzzleController(getpuzzleUseCase,validatePuzzleUsecase);
 export const userRoutes = new UserRoutes(tokenService);
 

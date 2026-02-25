@@ -135,8 +135,8 @@ export interface GameOutputDTO{
   }
 
 
-  //-----PuzzleDTO-----
-  export interface UserPuzzleResponseDTO {
+//-----PuzzleDTO-----
+export interface UserPuzzleResponseDTO {
     id: string;
     fen: string;
     difficulty: PuzzleType;

@@ -25,7 +25,7 @@ export class GetGameUseCase implements IGetGameUseCase{
     const board = gameState.getBoard();
     const clock = game.getClock();
     const liveTimes = clock.getLiveTimes();
-    
+
     // Auto-update status if time expired
     if (game.checkPassiveTimeout()) {
       await this._chessGameRepository.update(game);
@@ -42,7 +42,7 @@ export class GetGameUseCase implements IGetGameUseCase{
         whitePlayer = {
           name: user.displayname,
           rating: user.getRating("BLITZ"),
-          avatar: user.avatarKey ? await this._storageService.generateSignedGetUrl(user.avatarKey, 3600) : null
+          avatar: user.avatarKey ? await this._storageService.generateSignedGetUrl(user.avatarKey, 3600) : null,
         };
       }
     }
@@ -53,11 +53,11 @@ export class GetGameUseCase implements IGetGameUseCase{
         blackPlayer = {
           name: user.displayname,
           rating: user.getRating("BLITZ"),
-          avatar: user.avatarKey ? await this._storageService.generateSignedGetUrl(user.avatarKey, 3600) : null
+          avatar: user.avatarKey ? await this._storageService.generateSignedGetUrl(user.avatarKey, 3600) : null,
         };
       }
     }
-    
+
     return{
       gameId:game.id!,
       turn:gameState.getTurn(),
@@ -84,7 +84,7 @@ export class GetGameUseCase implements IGetGameUseCase{
         turn: clock.turn,
       },
       whitePlayer,
-      blackPlayer
+      blackPlayer,
     };
 
   }

@@ -19,7 +19,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       5 * 60 * 1000,   // blackTime
       2000,            // increment (2 seconds)
       "WHITE",         // starting turn
-      Date.now()       // lastMoveTimestamp
+      Date.now(),       // lastMoveTimestamp
     );
 
     const game = new ChessGame(
@@ -27,7 +27,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       "ACTIVE",
       clock,
       whitePlayerId,
-      blackPlayerId
+      blackPlayerId,
     );
 
     const savedGame = await this.ChessGameRepository.create(game);

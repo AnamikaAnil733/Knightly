@@ -58,7 +58,7 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
       turn: {
         type: String,
         enum: ["WHITE", "BLACK"],
-        required: true, 
+        required: true,
       },
       lastMoveTimestamp: { type: Number, required: true },
     },

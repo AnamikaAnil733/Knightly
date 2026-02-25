@@ -4,7 +4,6 @@ export class PuzzleValidationService {
   static validatePuzzle(fen: string, moves: string[]): { isValid: boolean; error?: string } {
     const chess = new Chess();
 
-    // 1. Validate FEN format and position legality
     try {
       chess.load(fen);
     } catch (e: unknown) {
@@ -12,11 +11,9 @@ export class PuzzleValidationService {
       return { isValid: false, error: `Invalid FEN: ${errorMessage}` };
     }
 
-    // 2. Validate move sequence
     for (let i = 0; i < moves.length; i++) {
       const move = moves[i];
       try {
-        // Try to make the move. chess.move() accepts SAN (Standard Algebraic Notation)
         const result = chess.move(move);
         if (!result) {
           return {
@@ -31,7 +28,6 @@ export class PuzzleValidationService {
         };
       }
     }
-
     return { isValid: true };
   }
 }

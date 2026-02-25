@@ -69,13 +69,13 @@ export class ChessGame extends BaseEntity{
     }
 
     const liveTimes = this.clock.getLiveTimes(now);
-    
+
     if (liveTimes.whiteTime <= 0) {
       this._status = "WHITE_TIMEOUT"; // White's time expired
       this.clock.stop();
       return true;
     }
-    
+
     if (liveTimes.blackTime <= 0) {
       this._status = "BLACK_TIMEOUT"; // Black's time expired
       this.clock.stop();

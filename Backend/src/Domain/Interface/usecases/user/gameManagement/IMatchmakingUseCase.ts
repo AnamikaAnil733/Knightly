@@ -4,8 +4,8 @@ export type QueuePlayer = {
     rating: number;
     joinedAt: number;
   };
-  
-  export type MatchResult =
+
+export type MatchResult =
     | { type: "WAITING" }
     | {
         type: "MATCH_FOUND";
@@ -13,8 +13,8 @@ export type QueuePlayer = {
         white: QueuePlayer;
         black: QueuePlayer;
       };
-  
-  export interface IMatchmakingUseCase {
+
+export interface IMatchmakingUseCase {
     findMatch(player: QueuePlayer): Promise<MatchResult>;
     removeFromQueue(socketId: string): void;
     getQueueSize(): number;

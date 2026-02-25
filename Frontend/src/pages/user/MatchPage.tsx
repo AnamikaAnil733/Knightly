@@ -62,7 +62,7 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
   const [blackTime, setBlackTime] = useState<number>(0);
   const [whitePlayer, setWhitePlayer] = useState<{name:string, rating:number, avatar:string|null} | null>(null);
   const [blackPlayer, setBlackPlayer] = useState<{name:string, rating:number, avatar:string|null} | null>(null);
-  const lastUpdate = useRef<number>(Date.now());
+  const lastUpdate = useRef<number>(0);
   const serverWhite = useRef<number>(0);
   const serverBlack = useRef<number>(0);
 
@@ -134,6 +134,7 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
     if (status !== "ACTIVE" && status !== "CHECK") return;
   
     const interval = setInterval(() => {
+      if (lastUpdate.current === 0) return;
       const elapsed = Date.now() - lastUpdate.current;
       if (turn === "WHITE") {
         const remaining = Math.max(serverWhite.current - elapsed, 0);
@@ -153,7 +154,7 @@ useState<{ row: number; col: number,type: "NORMAL" | "EN_PASSANT" }[]>([]);
     }, 100);
   
     return () => clearInterval(interval);
-  }, [turn, status]);
+  }, [turn, status, gameId]);
 
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;

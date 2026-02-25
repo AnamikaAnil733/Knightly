@@ -10,7 +10,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
     gameId: string,
     from: { row: number; col: number },
     to: { row: number; col: number },
-    promotionType?: "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT"
+    promotionType?: "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT",
   ): Promise<void> {
     const game = await this._gameRepo.findById(gameId);
 
@@ -37,22 +37,22 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
 
     if(game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK"){
       await this._gameRepo.update(game);
-      return
+      return;
     }
 
     const LegalMoves = LegalService.getLegalMove(fromP, board);
     const isLegal = LegalMoves.some(
-      (m) => m.row === toP.row && m.column === toP.column
+      (m) => m.row === toP.row && m.column === toP.column,
     );
 
     if (!isLegal) {
       throw new Error("Illegal move");
     }
-    game.updateClock(Date.now())
+    game.updateClock(Date.now());
 
     if (game.getStatus() === "WHITE_TIMEOUT" || game.getStatus() === "BLACK_TIMEOUT") {
-        await this._gameRepo.update(game);
-        return;
+      await this._gameRepo.update(game);
+      return;
     }
 
     gameState.makeMove(fromP, toP, promotionType);

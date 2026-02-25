@@ -20,7 +20,7 @@ export interface AuthResponseDTO{
         BLITZ: number;
         RAPID: number;
         CLASSICAL: number;
-      };      
+      };
     gamesPlayed: number;
     gamesWin: number;
     longestStreak: number;

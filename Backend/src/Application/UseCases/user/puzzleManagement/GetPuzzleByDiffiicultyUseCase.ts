@@ -5,20 +5,20 @@ import { UserPuzzleResponseDTO } from "../../../../Domain/DTOs/userDTOs";
 
 export class GetPuzzleDifficultyUsecase implements IGetPuzzleByDifficulty{
 
-    constructor(private readonly _puzzleRepository:IPuzzleRepository){}
+  constructor(private readonly _puzzleRepository:IPuzzleRepository){}
 
-   async execute(userId: string, difficulty: PuzzleType): Promise<UserPuzzleResponseDTO> {
-       if(!userId) throw new Error("userId is Required")
-       if(!difficulty)throw new Error("difficulty is required")
+  async execute(userId: string, difficulty: PuzzleType): Promise<UserPuzzleResponseDTO> {
+    if(!userId) throw new Error("userId is Required");
+    if(!difficulty)throw new Error("difficulty is required");
 
-        const puzzle= await this._puzzleRepository.getPuzzleByDifficulty(userId,difficulty)
-        if(!puzzle) throw new Error("all puzzles are completed")
-            return {
-           id:puzzle.id!,
-           fen:puzzle.fen,
-           difficulty:puzzle.difficulty,
-            }
-        
-   }
+    const puzzle= await this._puzzleRepository.getPuzzleByDifficulty(userId,difficulty);
+    if(!puzzle) throw new Error("all puzzles are completed");
+    return {
+      id:puzzle.id!,
+      fen:puzzle.fen,
+      difficulty:puzzle.difficulty,
+    };
+
+  }
 
 }

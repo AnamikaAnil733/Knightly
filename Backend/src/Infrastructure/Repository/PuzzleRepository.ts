@@ -76,16 +76,16 @@ export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSch
         $match:{
           difficulty,
           isActive:true,
-          _id:{$nin:objectIds}
-        }
+          _id:{$nin:objectIds},
+        },
       },
-      {$sample:{size:1}}
+      {$sample:{size:1}},
     ]);
 
     if(!docs.length){
-      return null
+      return null;
     }
-    const doc = docs[0]
+    const doc = docs[0];
     return new EPuzzle({
       id:doc._id.toString(),
       fen:doc.fen,
@@ -93,8 +93,8 @@ export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSch
       moves:doc.moves,
       solutionLength:doc.solutionLength,
       isActive:doc.isActive,
-      createdAt:doc.createdAt
-    })
+      createdAt:doc.createdAt,
+    });
 
   }
 

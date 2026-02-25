@@ -44,7 +44,7 @@ export class App {
 
     const gameRepo = new ChessGameRepository(GameModel);
     const makeMoveUseCase = new MakeMoveUsecase(gameRepo);
-    
+
     // Matchmaking Setup
     const createGameUseCase = new CreateGameUseCase(gameRepo);
     const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
@@ -55,7 +55,7 @@ export class App {
       makeMoveUseCase,
       gameRepo,
       matchmakingUseCase,
-      authRepo as any
+      authRepo as any,
     );
 
     socketHandler.initialize();

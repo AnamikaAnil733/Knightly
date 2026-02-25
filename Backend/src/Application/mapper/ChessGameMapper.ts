@@ -21,7 +21,7 @@ export class ChessGameMapper{
       doc.clock.blackTime,
       doc.clock.increment,
       doc.clock.turn,
-      doc.clock.lastMoveTimestamp
+      doc.clock.lastMoveTimestamp,
     );
 
     return new ChessGame(
@@ -40,7 +40,7 @@ export class ChessGameMapper{
     const board = gameState.getBoard();
     const snapShot = gameState.getSnapshot();
 
-   const clock = entity.getClock();
+    const clock = entity.getClock();
 
     return {
       board : board.serialize(),

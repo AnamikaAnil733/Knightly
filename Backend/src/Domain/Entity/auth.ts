@@ -131,12 +131,12 @@ export default class EAuth {
     this._avatarKey = value;
   }
 
-  
+
 
   getRating(type: "BULLET" | "BLITZ" | "RAPID"|"CLASSICAL"): number {
     return this._rating.get(type);
   }
-  
+
   updateRating(type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", newRating: number): void {
     this._rating.set(type, newRating);
   }

@@ -9,17 +9,17 @@ export interface UserPuzzleProgressSchemaType {
 }
 
 export const UserPuzzleProgressSchema = new Schema<UserPuzzleProgressSchemaType>(
-    {
-        userId:{type:String,required:true},
-        puzzleId:{type:String,required:true},
-        solved:{type:Boolean,default:false},
-        attempts:{type:Number,default:0},
-        solvedAt:{type:Date}
-    },
-    {timestamps:true}
-)
+  {
+    userId:{type:String,required:true},
+    puzzleId:{type:String,required:true},
+    solved:{type:Boolean,default:false},
+    attempts:{type:Number,default:0},
+    solvedAt:{type:Date},
+  },
+  {timestamps:true},
+);
 
 UserPuzzleProgressSchema.index(
-    { userId: 1, puzzleId: 1 },
-    { unique: true }
-  );
+  { userId: 1, puzzleId: 1 },
+  { unique: true },
+);
