@@ -15,6 +15,7 @@ import { EditPuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagm
 import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/DeletePuzzleUseCase";
 
 import { TokenService } from "../services/tokenService";
+import { PuzzleValidationService } from "../services/PuzzleValidationService";
 
 import {AdminRoutes} from "../../Presentation/routes/adminroute";
 
@@ -23,14 +24,15 @@ const puzzleMangementRepo = new PuzzleManagementRepository();
 
 //service
 const tokenService = new TokenService();
+const puzzleValidationService = new PuzzleValidationService();
 
 //useCase
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagmentRepo);
 const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo);
-const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo);
+const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo,puzzleValidationService);
 const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo);
-const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo);
+const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo,puzzleValidationService);
 const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(puzzleMangementRepo);
 
 

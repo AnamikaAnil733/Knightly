@@ -3,12 +3,17 @@ import { UpdatePuzzleInputDTO,PuzzleResponseDTO } from "../../../../Domain/DTOs/
 import { PuzzleMapper } from "../../../mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import {IEditPuzzleUsecase} from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/IEditPuzzleUseCase";
-import { PuzzleValidationService } from "../../../Services/PuzzleValidationService";
+import { IPuzzleValidationService } from "../../../../Domain/Interface/service/IPuzzleValidationService";
 
 
 
 export class EditPuzzleUseCase implements IEditPuzzleUsecase{
-  constructor(private readonly _puzzleRepository:IPuzzleRepository){}
+  constructor(
+    private readonly _puzzleRepository:IPuzzleRepository,
+    private readonly puzzleValidationService: IPuzzleValidationService
+
+
+  ){}
 
   async execute(input: UpdatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
 
@@ -33,7 +38,7 @@ export class EditPuzzleUseCase implements IEditPuzzleUsecase{
       throw new Error("Invaild Puzzle Difficulty");
     }
 
-    const validation = PuzzleValidationService.validatePuzzle(input.fen, input.moves);
+    const validation = this.puzzleValidationService.validatePuzzle(input.fen, input.moves);
     if (!validation.isValid) {
       throw new Error(validation.error);
     }

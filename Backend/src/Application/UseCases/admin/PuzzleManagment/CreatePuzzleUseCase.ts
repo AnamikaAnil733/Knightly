@@ -4,12 +4,15 @@ import { EPuzzle } from "../../../../Domain/Entity/puzzle";
 import { PuzzleMapper } from "../../../mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/admin/PuzzleManagement/ICreatePuzzle";
-import { PuzzleValidationService } from "../../../Services/PuzzleValidationService";
+import { IPuzzleValidationService } from "../../../../Domain/Interface/service/IPuzzleValidationService";
 
 
 
 export class CreatePuzzleUseCase implements ICreatePuzzleUseCase{
-  constructor( private readonly _puzzleRepository:IPuzzleRepository){}
+  constructor( 
+    private readonly _puzzleRepository:IPuzzleRepository,
+    private readonly puzzleValidationService: IPuzzleValidationService, 
+  ){}
 
   async execute(input: CreatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
 
@@ -24,7 +27,7 @@ export class CreatePuzzleUseCase implements ICreatePuzzleUseCase{
       throw new Error("Invaild Puzzle Difficulty");
     }
 
-    const validation = PuzzleValidationService.validatePuzzle(input.fen, input.moves);
+    const validation = this.puzzleValidationService.validatePuzzle(input.fen, input.moves);
     if (!validation.isValid) {
       throw new Error(validation.error);
     }
