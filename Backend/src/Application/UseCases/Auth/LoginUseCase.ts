@@ -1,11 +1,11 @@
-import { AuthRequestDTO,AuthResponseDTO } from "../../../Domain/DTOs/authDTO";
-import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
-import { IHashService } from "../../../Domain/Interface/service/hashpassword";
-import { ILoginUseCase } from "../../../Domain/Interface/usecases/authentication/ILoginUseCases";
+import { AuthRequestDTO,AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
+import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
+import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
+import { ILoginUseCase } from "../../../Domain/Interface/usecases/Authentication/ILoginUseCases";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
-import { AuthMapper } from "../../mapper/AuthMapper";
-import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
+import { AuthMapper } from "../../Mapper/AuthMapper";
+import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { ITokenService } from "../../../Domain/Interface/service/ITokenService";
 
 export class LoginUseCase implements ILoginUseCase{

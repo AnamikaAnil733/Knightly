@@ -1,11 +1,11 @@
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { CustomError } from "../../../Domain/Entity/CustomError";
-import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
+import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { UserRole } from "../../../Domain/Types/UserRole";
-import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
-import { ICachingService } from "../../../Domain/Interface/service/cachingService";
-import { IHashService } from "../../../Domain/Interface/service/hashpassword";
-import { IResetPasswordUseCase } from "../../../Domain/Interface/usecases/authentication/IResetPasswordUseCase";
+import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
+import { ICachingService } from "../../../Domain/Interface/service/ICachingService";
+import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
+import { IResetPasswordUseCase } from "../../../Domain/Interface/usecases/Authentication/IResetPasswordUseCase";
 
 
 export class ResetPaswordUseCase implements IResetPasswordUseCase{

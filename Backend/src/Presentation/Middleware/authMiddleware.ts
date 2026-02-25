@@ -1,8 +1,8 @@
 import { NextFunction,Request,Response } from "express";
 import { UserRole } from "../../Domain/Types/UserRole";
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
-import { logger } from "../../Infrastructure/logger/logger";
-import { HttpStatusCodes } from "../../Domain/Types/statusCode";
+import { logger } from "../../Infrastructure/Logger/Logger";
+import { HttpStatusCodes } from "../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../Domain/Constants/Messages/Messages";
 
 

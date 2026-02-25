@@ -2,7 +2,7 @@ import {
   AccessTokenData,
   GenerateRefreshTokenReturnType,
   RefreshTokenData,
-} from "../../../Domain/Types/tokentypes";
+} from "../../Types/Tokentypes";
 
 export interface ITokenService {
     generateAccessToken(data: AccessTokenData): string;

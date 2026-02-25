@@ -1,22 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import { corsOptions } from "../src/Presentation/constants/corsOption";
+import { corsOptions } from "./Presentation/Constants/corsOption";
 import express, { Application } from "express";
 import http from "http";
 import {Server} from "socket.io";
-import { MongoDB } from "../src/Infrastructure/database/mongodbconnection";
-import { AuthRoutes } from "../src/Presentation/routes/authroute";
+import { MongoDB } from "./Infrastructure/Database/Mongodbconnection";
+import { AuthRoutes } from "./Presentation/Routes/authroute";
 import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
 import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
-import { SocketHandler } from "./Infrastructure/socket/SocketHandler";
+import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
 
-import { MakeMoveUsecase } from "./Application/UseCases/user/gameManagement/makeMoveUseCase";
-import { CreateGameUseCase } from "./Application/UseCases/user/gameManagement/createGameUseCase";
-import { MatchmakingUseCase } from "./Application/UseCases/user/gameManagement/matchmakingUseCase";
+import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/makeMoveUseCase";
+import { CreateGameUseCase } from "./Application/UseCases/User/GameManagement/createGameUseCase";
+import { MatchmakingUseCase } from "./Application/UseCases/User/GameManagement/matchmakingUseCase";
 import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository";
 import { AuthRepository } from "./Infrastructure/Repository/AuthRepository";
-import { GameModel } from "./Infrastructure/database/model/gameModel";
+import { GameModel } from "./Infrastructure/Database/Model/GameModel";
 
 import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
 import cors from "cors";

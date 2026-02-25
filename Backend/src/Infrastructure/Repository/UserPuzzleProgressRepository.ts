@@ -1,6 +1,6 @@
 import { IUserPuzzleProgressRepository } from "../../Domain/Interface/Repositories/IUserPuzzleProgressRepository";
-import { EUserPuzzleprogress } from "../../Domain/Entity/userPuzzleProgress";
-import { ProgressPuzzleModel } from "../database/model/puzzleModel";
+import { EUserPuzzleprogress } from "../../Domain/Entity/UserPuzzleProgress";
+import { ProgressPuzzleModel } from "../Database/Model/PuzzleModel";
 
 
 

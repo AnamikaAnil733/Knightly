@@ -1,10 +1,10 @@
-import { AuthRequestDTO } from "../../../Domain/DTOs/authDTO";
-import { IEmailService } from "../../../Domain/Interface/service/emailService";
-import { IOtpService } from "../../../Domain/Interface/service/otpService";
-import { IResendOtpUsecase } from "../../../Domain/Interface/usecases/authentication/IResendOtpUseCases";
-import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
+import { AuthRequestDTO } from "../../../Domain/DTOs/AuthDTO";
+import { IEmailService } from "../../../Domain/Interface/service/IEmailService";
+import { IOtpService } from "../../../Domain/Interface/service/IOtpService";
+import { IResendOtpUsecase } from "../../../Domain/Interface/usecases/Authentication/IResendOtpUseCases";
+import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
 import { CustomError } from "../../../Domain/Entity/CustomError";
-import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
+import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 
 
