@@ -11,7 +11,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase{
   ) {}
 
   async findMatch(player: QueuePlayer): Promise<MatchResult> {
-    // Prevent duplicate userId or socketId in queue
+    // prevent duplicate userId or socketId in queue
     if (this.queue.some(p => p.socketId === player.socketId || p.userId === player.userId)) {
       return { type: "WAITING" };
     }
@@ -23,8 +23,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase{
       const timeInQueue = (now - qPlayer.joinedAt) / 1000;
       const myTimeInQueue = (now - player.joinedAt) / 1000;
 
-      // Allowed rating difference increases with time spent waiting
-      // Start at 100, increase by 50 every 5 seconds wait (of the longest waiting player)
+     
       const maxWait = Math.max(timeInQueue, myTimeInQueue);
       const allowedDiff = 100 + Math.floor(maxWait / 5) * 50;
 
@@ -37,7 +36,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase{
       return { type: "WAITING" };
     }
 
-    // Match found! Remove opponent from queue
+    // match found remove opponent from queue
     const opponent = this.queue.splice(opponentIndex, 1)[0];
 
     const whiteFirst = Math.random() < 0.5;

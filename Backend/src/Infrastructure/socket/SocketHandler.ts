@@ -15,7 +15,7 @@ export class SocketHandler{
         private readonly _makeMoveUseCase:IMakeMoveUseCase,
         private readonly _gameRepo:IChessGameRepository,
         private readonly _matchmakingUseCase: IMatchmakingUseCase,
-        private readonly _userRepo: IChessGameRepository, // Treating AuthRepo as IChessGameRepository for now or better as generic
+        private readonly _userRepo: IChessGameRepository,
   ){}
 
   public initialize(){
@@ -62,7 +62,7 @@ export class SocketHandler{
 
       socket.on("findMatch", async (userId: string) => {
         try {
-          // Fetch actual rating from DB to prevent client-side spoofing
+         
           const user = await this._userRepo.findById(userId) as any;
           if (!user) return;
 
