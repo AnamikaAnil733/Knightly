@@ -48,10 +48,10 @@ export class ChessGame extends BaseEntity{
     const timeoutWinner = this.clock.isTimeout();
 
     if (timeoutWinner === "WHITE") {
-      this._status = "BLACK_TIMEOUT"; 
+      this._status = "BLACK_TIMEOUT";
       this.clock.stop();
     } else if (timeoutWinner === "BLACK") {
-      this._status = "WHITE_TIMEOUT"; 
+      this._status = "WHITE_TIMEOUT";
       this.clock.stop();
     }
   }
@@ -71,7 +71,7 @@ export class ChessGame extends BaseEntity{
     }
 
     if (liveTimes.blackTime <= 0) {
-      this._status = "BLACK_TIMEOUT"; 
+      this._status = "BLACK_TIMEOUT";
       this.clock.stop();
       return true;
     }

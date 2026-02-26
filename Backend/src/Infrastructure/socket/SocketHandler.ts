@@ -62,7 +62,7 @@ export class SocketHandler{
 
       socket.on("findMatch", async (userId: string) => {
         try {
-         
+
           const user = await this._userRepo.findById(userId) as any;
           if (!user) return;
 

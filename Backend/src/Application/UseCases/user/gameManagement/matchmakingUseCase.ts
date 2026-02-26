@@ -23,7 +23,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase{
       const timeInQueue = (now - qPlayer.joinedAt) / 1000;
       const myTimeInQueue = (now - player.joinedAt) / 1000;
 
-     
+
       const maxWait = Math.max(timeInQueue, myTimeInQueue);
       const allowedDiff = 100 + Math.floor(maxWait / 5) * 50;
 

@@ -10,7 +10,7 @@ import { IPuzzleValidationService } from "../../../../Domain/Interface/service/I
 export class EditPuzzleUseCase implements IEditPuzzleUsecase{
   constructor(
     private readonly _puzzleRepository:IPuzzleRepository,
-    private readonly puzzleValidationService: IPuzzleValidationService
+    private readonly puzzleValidationService: IPuzzleValidationService,
 
 
   ){}

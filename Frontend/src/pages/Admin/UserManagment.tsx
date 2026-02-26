@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { SearchIcon } from "lucide-react";
 
@@ -26,22 +31,22 @@ const LIMIT = 10;
 /* ===================== COMPONENT ===================== */
 
 export function UserManagment() {
- 
+  const queryClient = useQueryClient();
+
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<UserFilter>("ALL");
   const [page, setPage] = useState(1);
 
-  /* ===================== FETCH USERS (BACKEND PAGINATION) ===================== */
+  /* ===================== FETCH USERS ===================== */
 
   const {
     data,
     isLoading,
     isError,
-    refetch,
   } = useQuery<UsersResponse>({
     queryKey: ["admin-users", page, searchTerm, filter],
-    queryFn: async () => {
+    queryFn: async (): Promise<UsersResponse> => {
       const res = await axios.get("/admin/users", {
         params: {
           page,
@@ -52,7 +57,7 @@ export function UserManagment() {
       });
       return res.data;
     },
-    placeholderData: (previousData) => previousData,
+    placeholderData: keepPreviousData,
   });
 
   /* ===================== ERROR HANDLING ===================== */
@@ -67,45 +72,92 @@ export function UserManagment() {
 
   const users = useMemo(() => {
     return (data?.users ?? []).filter(
-      (u) => u.role !== UserRole.ADMIN
+      (u: IUser) => u.role !== UserRole.ADMIN
     );
   }, [data]);
 
   const totalPages = data?.totalPages ?? 1;
 
-  /* ===================== BAN / UNBAN ===================== */
+  /* ===================== BAN / UNBAN (OPTIMISTIC) ===================== */
 
   const banMutation = useMutation({
-    mutationFn: async ({ id, block }: { id: string; block: boolean }) =>
-      axios.patch(`/admin/users/${block ? "ban" : "unban"}/${id}`),
+    mutationFn: async ({ id, block }: { id: string; block: boolean }) => {
+      const res = await axios.patch(
+        `/admin/users/${block ? "ban" : "unban"}/${id}`
+      );
+      return res.data;
+    },
+
+    /* Optimistic Update */
+    onMutate: async ({ id, block }) => {
+      await queryClient.cancelQueries({
+        queryKey: ["admin-users"],
+      });
+
+      const previousData = queryClient.getQueryData<UsersResponse>([
+        "admin-users",
+        page,
+        searchTerm,
+        filter,
+      ]);
+
+      queryClient.setQueryData<UsersResponse>(
+        ["admin-users", page, searchTerm, filter],
+        (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            users: oldData.users.map((user) =>
+              user.id === id
+                ? { ...user, isBlocked: block }
+                : user
+            ),
+          };
+        }
+      );
+
+      // Update selected user panel immediately
+      if (selectedUser?.id === id) {
+        setSelectedUser({
+          ...selectedUser,
+          isBlocked: block,
+        });
+      }
+
+      return { previousData };
+    },
+
+    /* 🔥 Rollback if error */
+    onError: (_err, _vars, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["admin-users", page, searchTerm, filter],
+          context.previousData
+        );
+      }
+
+      toast.error("Failed to update user");
+    },
 
     onSuccess: () => {
       toast.success("User status updated");
-      refetch();
-    },
-
-    onError: () => {
-      toast.error("Failed to update user");
     },
   });
 
   const handleBanUser = (userId: string, block: boolean) => {
     banMutation.mutate({ id: userId, block });
-
-    if (selectedUser?.id === userId) {
-      setSelectedUser({ ...selectedUser, isBlocked: block });
-    }
   };
 
   /* ===================== COUNTS ===================== */
 
   const blockedCount = useMemo(
-    () => users.filter((u) => u.isBlocked).length,
+    () => users.filter((u: IUser) => u.isBlocked).length,
     [users]
   );
 
   const unblockedCount = useMemo(
-    () => users.filter((u) => !u.isBlocked).length,
+    () => users.filter((u: IUser) => !u.isBlocked).length,
     [users]
   );
 
@@ -170,7 +222,7 @@ export function UserManagment() {
               )}
             </div>
 
-            {/* PAGINATION UI */}
+            {/* PAGINATION */}
             {totalPages > 1 && (
               <div className="flex justify-between items-center mt-4 px-4 py-2 bg-[#0A0F2C] rounded-lg">
                 <button
@@ -186,7 +238,9 @@ export function UserManagment() {
                 </span>
 
                 <button
-                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                  onClick={() =>
+                    setPage((p) => Math.min(p + 1, totalPages))
+                  }
                   disabled={page === totalPages}
                   className="px-4 py-2 bg-[#11193F] text-white rounded disabled:opacity-40"
                 >
