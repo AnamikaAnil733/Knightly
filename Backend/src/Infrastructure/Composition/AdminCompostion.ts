@@ -1,23 +1,23 @@
 import { UserManagmentRepository } from "../Repository/UserRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 
-import { GetAllUserController } from "../../Presentation/controllers/admin/userManagement/findallUserController";
-import {  BlockUserController }  from "../../Presentation/controllers/admin/userManagement/blockUserController";
-import {  UnBlockUserController } from "../../Presentation/controllers/admin/userManagement/unBlockUserController";
-import { AdminPuzzleController } from "../../Presentation/controllers/admin/puzzleManagment/puzzleManagementAdmin";
+import { GetAllUserController } from "../../Presentation/Controllers/Admin/UserManagement/FindallUserController";
+import {  BlockUserController }  from "../../Presentation/Controllers/Admin/UserManagement/BlockUserController";
+import {  UnBlockUserController } from "../../Presentation/Controllers/Admin/UserManagement/UnBlockUserController";
+import { AdminPuzzleController } from "../../Presentation/Controllers/Admin/PuzzleManagment/PuzzleManagementAdmin";
 
-import { GetAllUserUseCase }  from "../../Application/UseCases/admin/UserManagement/getAllUserUseCase";
-import { BlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/blockUserUseCase";
-import { UnBlockUserUseCase } from "../../Application/UseCases/admin/UserManagement/unBlockUserUseCase";
-import { CreatePuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/CreatePuzzleUseCase";
-import { GetallPuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/getAllPuzzleUseCase";
-import { EditPuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/EditPuzzleUseCase";
-import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/admin/PuzzleManagment/DeletePuzzleUseCase";
+import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
+import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
+import { UnBlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/UnBlockUserUseCase";
+import { CreatePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagment/CreatePuzzleUseCase";
+import { GetallPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagment/GetAllPuzzleUseCase";
+import { EditPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagment/EditPuzzleUseCase";
+import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagment/DeletePuzzleUseCase";
 
-import { TokenService } from "../services/tokenService";
-import { PuzzleValidationService } from "../services/PuzzleValidationService";
+import { TokenService } from "../Services/TokenService";
+import { PuzzleValidationService } from "../Services/PuzzleValidationService";
 
-import {AdminRoutes} from "../../Presentation/routes/adminroute";
+import {AdminRoutes} from "../../Presentation/Routes/Adminroute";
 
 const UserManagmentRepo = new UserManagmentRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();

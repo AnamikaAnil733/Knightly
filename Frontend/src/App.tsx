@@ -2,21 +2,21 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 
-import axios from "./Service/api/axios/Useraxios";
-import AppRoutes from "./routes/AppRoutes";
-import FullScreenLoader from "./components/FullScreenLoader";
+import axios from "./Service/Api/Axios/Useraxios";
+import AppRoutes from "./Routes/AppRoutes";
+import FullScreenLoader from "./Components/FullScreenLoader";
 
-import { RootState } from "./store/store"
+import { RootState } from "./Store/Store"
 import {
   setUser,
   setAuthLoaded,
-} from "./store/slices/auth/userAuthSlice";
+} from "./Store/Slices/Auth/UserAuthSlice";
 
 
 import {
   setAccessToken as setAdminAccessToken,
   setAuthLoaded as setAdminAuthLoaded,
-} from "./store/slices/auth/adminAuthSlice";
+} from "./Store/Slices/Auth/AdminAuthSlice";
 
 
 function App() {

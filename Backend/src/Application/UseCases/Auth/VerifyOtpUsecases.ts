@@ -1,6 +1,6 @@
-import { IOtpService } from "../../../Domain/Interface/service/otpService";
-import { ICachingService } from "../../../Domain/Interface/service/cachingService";
-import { IVerifyOtpUseCase } from "../../../Domain/Interface/usecases/authentication/IVerifyOtpUseCase";
+import { IOtpService } from "../../../Domain/Interface/Service/IOtpService";
+import { ICachingService } from "../../../Domain/Interface/Service/ICachingService";
+import { IVerifyOtpUseCase } from "../../../Domain/Interface/Usecases/Authentication/IVerifyOtpUseCase";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase{
   constructor(

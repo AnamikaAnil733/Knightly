@@ -1,4 +1,4 @@
-import { ChessGame } from "../../Entity/chessGame";
+import { ChessGame } from "../../Entity/ChessGame";
 
 export interface IChessGameRepository{
     create(game:ChessGame):Promise<ChessGame>;

@@ -1,12 +1,12 @@
-import { IUserRepository } from "../../../Domain/Interface/Repositories/UserRepository";
-import EAuth from "../../../Domain/Entity/auth";
-import { ICachingService } from "../../../Domain/Interface/service/cachingService";
-import { IHashService } from "../../../Domain/Interface/service/hashpassword";
+import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
+import EAuth from "../../../Domain/Entity/Auth";
+import { ICachingService } from "../../../Domain/Interface/Service/ICachingService";
+import { IHashService } from "../../../Domain/Interface/Service/IHashpassword";
 import { UserRole } from "../../../Domain/Types/UserRole";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
-import { IRegisterUserUseCase } from "../../../Domain/Interface/usecases/authentication/IRegisterUseCase";
-import { HttpStatusCodes } from "../../../Domain/Types/statusCode";
+import { IRegisterUserUseCase } from "../../../Domain/Interface/Usecases/Authentication/IRegisterUseCase";
+import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 
 export class RegisterUserUseCase implements IRegisterUserUseCase{
   constructor(

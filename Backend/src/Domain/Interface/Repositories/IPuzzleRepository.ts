@@ -1,6 +1,6 @@
 import { PuzzleType } from "../../Types/PuzzleTypes";
-import { IBaseRepository } from "./BaseRepository";
-import { EPuzzle } from "../../Entity/puzzle";
+import { IBaseRepository } from "./IBaseRepository";
+import { EPuzzle } from "../../Entity/Puzzle";
 
 export interface IPuzzleRepository extends IBaseRepository<EPuzzle,string>{
     findAll(

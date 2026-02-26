@@ -1,6 +1,6 @@
 import { Model, HydratedDocument, AnyKeys } from "mongoose";
 import { BaseEntity } from "../../Domain/Entity/BaseEntity";
-import {IBaseRepository} from "../../Domain/Interface/Repositories/BaseRepository";
+import {IBaseRepository} from "../../Domain/Interface/Repositories/IBaseRepository";
 
 export abstract class BaseRepository<
 TEntity extends BaseEntity,TSchema> implements IBaseRepository<TEntity>{

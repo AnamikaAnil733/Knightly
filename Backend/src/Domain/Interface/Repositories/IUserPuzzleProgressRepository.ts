@@ -1,4 +1,4 @@
-import { EUserPuzzleprogress } from "../../Entity/userPuzzleProgress";
+import { EUserPuzzleprogress } from "../../Entity/UserPuzzleProgress";
 
 export interface IUserPuzzleProgressRepository{
     findByUserAndPuzzle(userId:string,puzzleId:string):Promise<EUserPuzzleprogress|null>

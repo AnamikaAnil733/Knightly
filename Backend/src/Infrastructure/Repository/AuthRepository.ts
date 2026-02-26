@@ -1,9 +1,9 @@
 import { BaseRepository } from "./BaseRepository";
-import { authModel } from "../database/model/authmodel";
-import { AuthMapper } from "../../Application/mapper/AuthMapper";
-import EAuth from "../../Domain/Entity/auth";
-import { AuthSchemaType } from "../database/Schema/authSchema";
-import {IUserRepository} from "../../Domain/Interface/Repositories/UserRepository";
+import { authModel } from "../Database/Model/Authmodel";
+import { AuthMapper } from "../../Application/Mapper/AuthMapper";
+import EAuth from "../../Domain/Entity/Auth";
+import { AuthSchemaType } from "../Database/Schema/AuthSchema";
+import {IUserRepository} from "../../Domain/Interface/Repositories/IUserRepository";
 
 
 

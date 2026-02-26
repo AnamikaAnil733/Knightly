@@ -1,11 +1,11 @@
 import { BaseRepository } from "./BaseRepository";
-import { ProgressPuzzleModel, PuzzleModel } from "../database/model/puzzleModel";
-import { EPuzzle } from "../../Domain/Entity/puzzle";
-import { PuzzleSchemaType } from "../database/Schema/puzzleSchema";
+import { ProgressPuzzleModel, PuzzleModel } from "../Database/Model/PuzzleModel";
+import { EPuzzle } from "../../Domain/Entity/Puzzle";
+import { PuzzleSchemaType } from "../Database/Schema/PuzzleSchema";
 import { IPuzzleRepository } from "../../Domain/Interface/Repositories/IPuzzleRepository";
-import { PuzzleMapper } from "../../Application/mapper/PuzzleMapper";
+import { PuzzleMapper } from "../../Application/Mapper/PuzzleMapper";
 import { PuzzleType } from "Domain/Types/PuzzleTypes";
-import { getPagination } from "../database/utils/pagination";
+import { getPagination } from "../Database/Utils/Pagination";
 import mongoose from "mongoose";
 
 

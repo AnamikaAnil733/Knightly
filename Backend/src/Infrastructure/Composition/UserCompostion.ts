@@ -3,33 +3,33 @@ import { ChessGameRepository } from "../Repository/GameRepository";
 import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 
-import { EditProfileController } from "../../Presentation/controllers/User/profileManagement/updateProfileController";
-import { ChangePassswordController } from "../../Presentation/controllers/User/profileManagement/changePasswordController";
-import { AvatarController } from "../../Presentation/controllers/User/profileManagement/avatarController";
-import { GameController } from "../../Presentation/controllers/User/gameManagement.ts/GameController";
-import { UserPuzzleController } from "../../Presentation/controllers/User/puzzleManagement/puzzleController";
+import { EditProfileController } from "../../Presentation/Controllers/User/ProfileManagement/UpdateProfileController";
+import { ChangePassswordController } from "../../Presentation/Controllers/User/ProfileManagement/ChangePasswordController";
+import { AvatarController } from "../../Presentation/Controllers/User/ProfileManagement/AvatarController";
+import { GameController } from "../../Presentation/Controllers/User/GameManagement.ts/GameController";
+import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
 
-import {  EditUserUseCase } from "../../Application/UseCases/user/profileManagement/editUseCase";
-import { ChangePasswordUseCase } from "../../Application/UseCases/user/profileManagement/changePasswordUseCase";
-import { CreateGameUseCase } from "../../Application/UseCases/user/gameManagement/createGameUseCase";
-import { GetGameUseCase } from "../../Application/UseCases/user/gameManagement/getGameUseCase";
-import { MakeMoveUsecase } from "../../Application/UseCases/user/gameManagement/makeMoveUseCase";
-import { GetLegalMovesUseCase } from "../../Application/UseCases/user/gameManagement/getLegalMovesUseCase";
+import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
+import { ChangePasswordUseCase } from "../../Application/UseCases/User/ProfileManagement/ChangePasswordUseCase";
+import { CreateGameUseCase } from "../../Application/UseCases/User/GameManagement/CreateGameUseCase";
+import { GetGameUseCase } from "../../Application/UseCases/User/GameManagement/GetGameUseCase";
+import { MakeMoveUsecase } from "../../Application/UseCases/User/GameManagement/MakeMoveUseCase";
+import { GetLegalMovesUseCase } from "../../Application/UseCases/User/GameManagement/GetLegalMovesUseCase";
 
-import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/user/puzzleManagement/GetPuzzleByDiffiicultyUseCase";
-import { ValidatePuzzlesMoves } from "../../Application/UseCases/user/puzzleManagement/ValidatePuzzleUseCase";
+import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDiffiicultyUseCase";
+import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleManagement/ValidatePuzzleUseCase";
 
-import { GetAvatarUrlUseCase } from "../../Application/UseCases/user/profileManagement/avatarUseCase";
-import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/user/profileManagement/SaveDiceBearAvatarUseCase";
-import { GetUserProfileUseCase } from "../../Application/UseCases/user/profileManagement/GetUserProfileUseCase";
+import { GetAvatarUrlUseCase } from "../../Application/UseCases/User/ProfileManagement/AvatarUseCase";
+import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/User/ProfileManagement/SaveDiceBearAvatarUseCase";
+import { GetUserProfileUseCase } from "../../Application/UseCases/User/ProfileManagement/GetUserProfileUseCase";
 
-import { TokenService } from "../services/tokenService";
-import {  HashService } from "../services/passwordHashing";
-import { S3StorageService } from "../services/S3Service";
+import { TokenService } from "../Services/TokenService";
+import {  HashService } from "../Services/PasswordHashing";
+import { S3StorageService } from "../Services/S3Service";
 
-import {GameModel} from "../database/model/gameModel";
+import {GameModel} from "../Database/Model/GameModel";
 
-import { UserRoutes } from "../../Presentation/routes/userroute";
+import { UserRoutes } from "../../Presentation/Routes/Userroute";
 
 
 const UserRepo = new UserManagmentRepository();

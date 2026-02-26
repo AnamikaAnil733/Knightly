@@ -1,21 +1,21 @@
 import { AuthRepository } from "../Repository/AuthRepository";
 
-import { CachingService } from "../services/cachingService";
-import { OtpService } from "../services/OTPservice";
-import { EmailService } from "../services/EmailService";
-import { HashService } from "../services/passwordHashing";
-import { GoogleAuthService } from "../services/GoogleAuthService";
-import { TokenService } from "../services/tokenService";
+import { CachingService } from "../Services/CachingService";
+import { OtpService } from "../Services/OTPservice";
+import { EmailService } from "../Services/EmailService";
+import { HashService } from "../Services/PasswordHashing";
+import { GoogleAuthService } from "../Services/GoogleAuthService";
+import { TokenService } from "../Services/TokenService";
 
-import { AuthController } from "../../Presentation/controllers/Authcontroller";
+import { AuthController } from "../../Presentation/Controllers/Authcontroller";
 
 import { VerifyOtpUseCase } from "../../Application/UseCases/Auth/VerifyOtpUsecases";
 import { RegisterUserUseCase } from "../../Application/UseCases/Auth/RegisterUserCase";
 import { LoginUseCase } from "../../Application/UseCases/Auth/LoginUseCase";
 import { ResendOtpUseCase } from "../../Application/UseCases/Auth/ResendOtpUseCase";
-import { ForgetPasswordUseCase } from "../../Application/UseCases/Auth/forgetPasswordUsecase";
+import { ForgetPasswordUseCase } from "../../Application/UseCases/Auth/ForgetPasswordUsecase";
 import { ResetPaswordUseCase } from "../../Application/UseCases/Auth/ResetPasswordUseCase";
-import { GoogleAuthUseCase } from "../../Application/UseCases/Auth/googleAuthUseCase";
+import { GoogleAuthUseCase } from "../../Application/UseCases/Auth/GoogleAuthUseCase";
 
 
 const UserRepo = new AuthRepository();
