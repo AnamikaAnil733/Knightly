@@ -15,14 +15,11 @@ export function UserFilters({
 }: Props) {
   return (
     <div className="flex gap-3 flex-wrap">
-
       {/* BLOCKED */}
       <button
         disabled={blockedCount === 0}
         onClick={() =>
-          setFilter((prev) =>
-            prev === "BLOCKED" ? "ALL" : "BLOCKED"
-          )
+          setFilter((prev) => (prev === "BLOCKED" ? "ALL" : "BLOCKED"))
         }
         className={`px-4 py-2 rounded-md text-sm border transition
           ${
@@ -40,9 +37,7 @@ export function UserFilters({
       <button
         disabled={unblockedCount === 0}
         onClick={() =>
-          setFilter((prev) =>
-            prev === "UNBLOCKED" ? "ALL" : "UNBLOCKED"
-          )
+          setFilter((prev) => (prev === "UNBLOCKED" ? "ALL" : "UNBLOCKED"))
         }
         className={`px-4 py-2 rounded-md text-sm border transition
           ${

@@ -1,7 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import { GoogleUserPayload } from "../../Domain/Types/GoogleUserPayload";
 
-
 export class GoogleAuthService {
   private _client: OAuth2Client;
 

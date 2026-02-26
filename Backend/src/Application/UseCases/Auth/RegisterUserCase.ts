@@ -8,11 +8,11 @@ import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { IRegisterUserUseCase } from "../../../Domain/Interface/usecases/Authentication/IRegisterUseCase";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 
-export class RegisterUserUseCase implements IRegisterUserUseCase{
+export class RegisterUserUseCase implements IRegisterUserUseCase {
   constructor(
     private _userRepo: IUserRepository,
     private _cachingService: ICachingService,
-    private _hashService: IHashService,
+    private _hashService: IHashService
   ) {}
 
   async execute(data: {
@@ -21,9 +21,9 @@ export class RegisterUserUseCase implements IRegisterUserUseCase{
     password?: string;
     googleId?: string;
   }) {
-
-
-    const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${data.email}`);
+    const verified = await this._cachingService.getData<boolean>(
+      `VERIFIED_USER:${data.email}`
+    );
     if (!verified) throw new Error(MESSAGES.EMAIL_VERIFY);
 
     const existingUser = await this._userRepo.findByEmail(data.email);
@@ -48,7 +48,6 @@ export class RegisterUserUseCase implements IRegisterUserUseCase{
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-
 
     return await this._userRepo.create(newUser);
   }

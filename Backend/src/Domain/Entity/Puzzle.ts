@@ -1,7 +1,7 @@
 import { BaseEntity } from "./BaseEntity";
 import { PuzzleType } from "../Types/PuzzleTypes";
 
-export class EPuzzle extends BaseEntity{
+export class EPuzzle extends BaseEntity {
   fen: string;
   difficulty: PuzzleType;
   moves: string[];
@@ -31,7 +31,7 @@ export class EPuzzle extends BaseEntity{
     this.moves = props.moves;
     this.solutionLength = props.solutionLength ?? props.moves.length;
     this.isActive = props.isActive ?? true;
-    this.createdAt= props.createdAt;
+    this.createdAt = props.createdAt;
   }
 
   deactivate() {

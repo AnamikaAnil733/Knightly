@@ -1,1 +1,1 @@
-export type PromotionType = "QUEEN"|"ROOK"|"BISHOP"|"KNIGHT";
+export type PromotionType = "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT";

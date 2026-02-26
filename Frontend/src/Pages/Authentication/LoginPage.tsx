@@ -20,8 +20,6 @@ import {
   setUser,
 } from "../../Store/Slices/Auth/UserAuthSlice";
 
-
-
 /* ===================== TYPES ===================== */
 
 type FormValues = {
@@ -59,18 +57,18 @@ export function LoginPage({ role }: LoginPageProps) {
       const res = await api.post("/auth/login", data);
 
       const { userInfo } = res.data;
-      const {accessToken} = userInfo
-      console.log(accessToken)
-      console.log(userInfo)
+      const { accessToken } = userInfo;
+      console.log(accessToken);
+      console.log(userInfo);
 
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));
         dispatch(setAdmin(userInfo));
-        navigate("/admin/users",{ replace: true });
+        navigate("/admin/users", { replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
         dispatch(setUser(userInfo));
-        navigate("/landing-page",{ replace: true });
+        navigate("/landing-page", { replace: true });
       }
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
@@ -99,11 +97,11 @@ export function LoginPage({ role }: LoginPageProps) {
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));
         dispatch(setAdmin(userInfo));
-        navigate("/admin/users",{ replace: true });
+        navigate("/admin/users", { replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
         dispatch(setUser(userInfo));
-        navigate("/landing-page",{ replace: true });
+        navigate("/landing-page", { replace: true });
       }
     } catch {
       toast.error("Google authentication failed");
@@ -125,7 +123,9 @@ export function LoginPage({ role }: LoginPageProps) {
             </div>
 
             <h1 className="text-2xl font-bold text-white mb-1">
-              {role === "ADMIN" ? "Knightly Admin Login" : "Knightly User Login"}
+              {role === "ADMIN"
+                ? "Knightly Admin Login"
+                : "Knightly User Login"}
             </h1>
             <p className="text-[#C9CAD9] text-sm">
               Enter your credentials to continue
@@ -136,9 +136,7 @@ export function LoginPage({ role }: LoginPageProps) {
           <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8">
             {/* Email */}
             <div className="mb-5">
-              <label className="block text-sm text-[#C9CAD9] mb-2">
-                Email
-              </label>
+              <label className="block text-sm text-[#C9CAD9] mb-2">Email</label>
               <input
                 type="email"
                 className={`w-full px-4 py-3 bg-[#0A0F2C] border rounded-lg text-white ${

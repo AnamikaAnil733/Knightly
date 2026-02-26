@@ -5,9 +5,7 @@ import { AuthResponseDTO } from "../../Domain/DTOs/AuthDTO";
 
 export class AuthMapper {
   // DB → Domain
-  static toEntityFromDocument(
-    doc: HydratedDocument<AuthSchemaType>,
-  ): Auth {
+  static toEntityFromDocument(doc: HydratedDocument<AuthSchemaType>): Auth {
     return new Auth({
       id: doc._id.toString(),
       email: doc.email,
@@ -15,7 +13,7 @@ export class AuthMapper {
       passwordHash: doc.passwordHash,
       googleId: doc.googleId,
       role: doc.role,
-      createdAt:doc.createdAt,
+      createdAt: doc.createdAt,
       isBlocked: doc.isBlocked,
       isNewUser: doc.isNewUser,
       avatarKey: doc.avatarKey ?? null,
@@ -32,7 +30,7 @@ export class AuthMapper {
       role: auth.role,
       isBlocked: auth.isBlocked,
       isNewUser: auth.isNewUser,
-      createdAt:auth.createdAt,
+      createdAt: auth.createdAt,
       gamesPlayed: auth.gamesPlayed,
       gamesWin: auth.gamesWin,
       rating: auth.rating.getAll(),
@@ -48,7 +46,7 @@ export class AuthMapper {
 
   static toAuthResponseDTOfromEntity(
     auth: Auth,
-    token: string,
+    token: string
   ): AuthResponseDTO {
     return {
       id: auth.id!,
@@ -66,8 +64,7 @@ export class AuthMapper {
       rewards: auth.rewards ?? [],
       achievements: auth.achievements,
       premium: auth.premium ?? false,
-      avatarUrl:auth.avatarUrl!,
-
+      avatarUrl: auth.avatarUrl!,
     };
   }
 }

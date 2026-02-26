@@ -6,20 +6,18 @@ import { LiveMatches } from "../../Components/user/landingpage/liveMatches";
 import { TopPlayers } from "../../Components/user/landingpage/topPlayers";
 import { CommunityNews } from "../../Components/user/landingpage/commununtitynews";
 
-
-
-export function LandingPage(){
-    return(
-        <div className="w-full min-h-screen bg-[#0A0F2C] text-white overflow-x-hidden">
+export function LandingPage() {
+  return (
+    <div className="w-full min-h-screen bg-[#0A0F2C] text-white overflow-x-hidden">
       <div className="sparkle-background">
-        <Navbar/>
-        <Hero/>
-        <TopPlayers/>
-        <LearningZone/>
-        <LiveMatches/>
-        <CommunityNews/>
-        <Footer/>
+        <Navbar />
+        <Hero />
+        <TopPlayers />
+        <LearningZone />
+        <LiveMatches />
+        <CommunityNews />
+        <Footer />
       </div>
-      </div>
-    )
+    </div>
+  );
 }

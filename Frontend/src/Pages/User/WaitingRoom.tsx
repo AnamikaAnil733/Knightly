@@ -79,7 +79,11 @@ export function WaitingRoom() {
               />
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute inset-0 flex items-center justify-center"
               >
                 <div className="w-20 h-20 bg-gradient-to-tr from-[#3A6FF7] to-[#6B2EFF] rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(58,111,247,0.4)]">
@@ -93,14 +97,17 @@ export function WaitingRoom() {
               Finding Opponent{dots}
             </h2>
             <p className="text-[#C9CAD9] text-sm mb-8 font-inter">
-              Estimated wait time: <span className="text-[#FFD166]">&lt; 30s</span>
+              Estimated wait time:{" "}
+              <span className="text-[#FFD166]">&lt; 30s</span>
             </p>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-4 w-full mb-8">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center">
                 <Users className="w-5 h-5 text-[#3A6FF7] mb-2" />
-                <span className="text-white font-bold text-lg">{queueSize}</span>
+                <span className="text-white font-bold text-lg">
+                  {queueSize}
+                </span>
                 <span className="text-[#C9CAD9] text-xs">Waiting</span>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center">
@@ -130,11 +137,22 @@ export function WaitingRoom() {
             className="mt-6 flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-6 py-3 w-fit mx-auto"
           >
             <div className="w-10 h-10 rounded-full border-2 border-[#FFD166] overflow-hidden">
-               <img src={user.avatarUrl || "/default-avatar.png"} alt="avatar" className="w-full h-full object-cover" />
+              <img
+                src={user.avatarUrl || "/default-avatar.png"}
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="text-left">
-              <p className="text-white font-semibold text-sm leading-tight">{user.displayname}</p>
-              <p className="text-[#C9CAD9] text-xs">Rating: {typeof user.rating === 'number' ? user.rating : (user.rating?.BLITZ || 1200)}</p>
+              <p className="text-white font-semibold text-sm leading-tight">
+                {user.displayname}
+              </p>
+              <p className="text-[#C9CAD9] text-xs">
+                Rating:{" "}
+                {typeof user.rating === "number"
+                  ? user.rating
+                  : user.rating?.BLITZ || 1200}
+              </p>
             </div>
           </motion.div>
         )}

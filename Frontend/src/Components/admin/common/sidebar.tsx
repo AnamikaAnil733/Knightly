@@ -1,10 +1,9 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { logout} from "../../../Store/Slices/Auth/AdminAuthSlice"
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../Store/Slices/Auth/AdminAuthSlice";
 import { AppDispatch } from "../../../Store/Store";
-
 
 import {
   LayoutDashboardIcon,
@@ -20,12 +19,12 @@ import {
   BarChartIcon,
   SettingsIcon,
   LogOutIcon,
-} from 'lucide-react'
+} from "lucide-react";
 interface SidebarProps {
-  collapsed: boolean
+  collapsed: boolean;
 }
 const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   function handleLogout() {
@@ -34,74 +33,74 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     dispatch(logout());
     navigate("/admin/login", { replace: true });
   }
-  
-  
 
   const navItems = [
     {
       icon: <LayoutDashboardIcon size={20} />,
-      name: 'Dashboard',
-      path: '/dashboard',
+      name: "Dashboard",
+      path: "/dashboard",
     },
     {
       icon: <UsersIcon size={20} />,
-      name: 'User Management',
-      path: '/admin/users',
+      name: "User Management",
+      path: "/admin/users",
     },
     {
       icon: <PuzzleIcon size={20} />,
-      name: 'Puzzle Management',
-      path: '/admin/puzzles',
+      name: "Puzzle Management",
+      path: "/admin/puzzles",
     },
     {
       icon: <FileTextIcon size={20} />,
-      name: 'Blog Management',
-      path: '/blog',
+      name: "Blog Management",
+      path: "/blog",
     },
     {
       icon: <FlagIcon size={20} />,
-      name: 'Report Center',
-      path: '/reports',
+      name: "Report Center",
+      path: "/reports",
     },
     {
       icon: <AwardIcon size={20} />,
-      name: 'Rewards & Achievements',
-      path: '/rewards',
+      name: "Rewards & Achievements",
+      path: "/rewards",
     },
     {
       icon: <CreditCardIcon size={20} />,
-      name: 'Subscriptions',
-      path: '/subscriptions',
+      name: "Subscriptions",
+      path: "/subscriptions",
     },
     {
       icon: <DollarSignIcon size={20} />,
-      name: 'Transactions',
-      path: '/transactions',
+      name: "Transactions",
+      path: "/transactions",
     },
     {
       icon: <GraduationCapIcon size={20} />,
-      name: 'Learning Lessons',
-      path: '/learning',
+      name: "Learning Lessons",
+      path: "/learning",
     },
     {
       icon: <GamepadIcon size={20} />,
-      name: 'Live Game Monitor',
-      path: '/live-games',
+      name: "Live Game Monitor",
+      path: "/live-games",
     },
     {
       icon: <BarChartIcon size={20} />,
-      name: 'Analytics',
-      path: '/analytics',
+      name: "Analytics",
+      path: "/analytics",
     },
     {
       icon: <SettingsIcon size={20} />,
-      name: 'System Settings',
-      path: '/settings-123',
+      name: "System Settings",
+      path: "/settings-123",
     },
-  ]
+  ];
   return (
     <aside
-      className={`${collapsed ? 'w-20' : 'w-64'} transition-all duration-300 ease-in-out h-screen bg-[#0A0F2C] border-r border-[#1e2547] shadow-lg`}
+      className={`${
+        collapsed ? "w-20" : "w-64"
+      } transition-all duration-300 ease-in-out h-screen bg-[#0A0F2C] border-r border-[#1e2547] shadow-lg`}
     >
       <div className="p-4 flex items-center justify-center">
         {!collapsed && (
@@ -122,7 +121,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center p-3 rounded-lg transition-all duration-200 ${isActive ? 'bg-[#1e2547] text-[#FFD166] shadow-[0_0_10px_rgba(107,46,255,0.3)]' : 'text-gray-300 hover:bg-[#1e2547] hover:text-[#FFD166]'}`
+                  `flex items-center p-3 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#1e2547] text-[#FFD166] shadow-[0_0_10px_rgba(107,46,255,0.3)]"
+                      : "text-gray-300 hover:bg-[#1e2547] hover:text-[#FFD166]"
+                  }`
                 }
               >
                 <span className="text-[#FFD166]">{item.icon}</span>
@@ -133,7 +136,10 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         </ul>
       </nav>
       <div className="absolute bottom-0 w-full p-4">
-        <button className="flex items-center w-full p-3 text-gray-300 rounded-lg hover:bg-[#1e2547] hover:text-[#FFD166] transition-all duration-200" onClick={handleLogout}>
+        <button
+          className="flex items-center w-full p-3 text-gray-300 rounded-lg hover:bg-[#1e2547] hover:text-[#FFD166] transition-all duration-200"
+          onClick={handleLogout}
+        >
           <span className="text-[#FFD166]">
             <LogOutIcon size={20} />
           </span>
@@ -141,6 +147,6 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         </button>
       </div>
     </aside>
-  )
-}
-export default Sidebar
+  );
+};
+export default Sidebar;

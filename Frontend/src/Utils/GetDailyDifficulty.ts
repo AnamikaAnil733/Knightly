@@ -14,13 +14,13 @@
 export type DailyDifficulty = "easy" | "medium" | "hard" | "expert";
 
 const DAY_DIFFICULTY_MAP: Record<number, DailyDifficulty> = {
-  0: "expert",  
-  1: "easy",    
-  2: "medium",   
-  3: "hard",     
-  4: "medium",  
-  5: "hard",     
-  6: "expert",   
+  0: "expert",
+  1: "easy",
+  2: "medium",
+  3: "hard",
+  4: "medium",
+  5: "hard",
+  6: "expert",
 };
 
 const DAY_LABELS: Record<number, string> = {

@@ -1,6 +1,8 @@
-import { GetAllPuzzleOutputDTO,GetallPuzzleInputDTO } from "../../../../DTOs/AdminDTOs";
+import {
+  GetAllPuzzleOutputDTO,
+  GetallPuzzleInputDTO,
+} from "../../../../DTOs/AdminDTOs";
 
-export interface IGetAllPuzzleUseCase{
-    execute(input?:GetallPuzzleInputDTO):Promise<GetAllPuzzleOutputDTO>
+export interface IGetAllPuzzleUseCase {
+  execute(input?: GetallPuzzleInputDTO): Promise<GetAllPuzzleOutputDTO>;
 }
-

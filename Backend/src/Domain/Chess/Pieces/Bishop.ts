@@ -1,25 +1,27 @@
 import { Piece } from "./Piece";
 import { Position } from "../Position";
 
-export class Bishop extends Piece{
+export class Bishop extends Piece {
   readonly type = "BISHOP";
   getPseudoLegalMoves(from: Position, board: any): Position[] {
-    const moves:Position[]= [];
+    const moves: Position[] = [];
     const direction = [
-      [-1,-1],[1,1],
-      [-1,1],[1,-1],
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1],
     ];
-    for(const [r,c] of direction){
+    for (const [r, c] of direction) {
       let current = from;
-      while(true){
-        current = current.offset(r,c);
-        if(!board.isInside(current)) break;
+      while (true) {
+        current = current.offset(r, c);
+        if (!board.isInside(current)) break;
         const target = board.getPiece(current);
-        if(!target){
+        if (!target) {
           moves.push(current);
           continue;
         }
-        if(target.color !== this.color){
+        if (target.color !== this.color) {
           moves.push(current);
         }
         break;

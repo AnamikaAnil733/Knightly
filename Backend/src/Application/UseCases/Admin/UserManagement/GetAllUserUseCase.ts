@@ -1,31 +1,31 @@
-import  EAuth from "../../../../Domain/Entity/Auth";
+import EAuth from "../../../../Domain/Entity/Auth";
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagmentRepository";
 import { IGetAllUserUseCase } from "../../../../Domain/Interface/usecases/Admin/UserManagement/IGetAllUserUseCase";
-import { GetAllUsersInputDto,GetAllUsersOutputDTO } from "../../../../Domain/DTOs/AdminDTOs";
+import {
+  GetAllUsersInputDto,
+  GetAllUsersOutputDTO,
+} from "../../../../Domain/DTOs/AdminDTOs";
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
-    private readonly _userManagmentRepository: IUserManagmentRepository,
+    private readonly _userManagmentRepository: IUserManagmentRepository
   ) {}
 
   async getAllUsers(
     page: number,
     limit: number,
-    search?:string,
-    filter?:string,
+    search?: string,
+    filter?: string
   ): Promise<GetAllUsersOutputDTO> {
-
     const skip = (page - 1) * limit;
 
     const [users, total] = await Promise.all([
-      this._userManagmentRepository.getAll(skip, limit,search,filter),
-      this._userManagmentRepository.count(search,filter),
+      this._userManagmentRepository.getAll(skip, limit, search, filter),
+      this._userManagmentRepository.count(search, filter),
     ]);
 
-
-
     return {
-      users: users.map(user => ({
+      users: users.map((user) => ({
         id: user.id!,
         displayname: user.displayname,
         email: user.email,
@@ -41,7 +41,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
         currentStreak: user.currentStreak,
         achievements: user.achievements,
         rewards: user.rewards,
-        avatarUrl:user.avatarKey,
+        avatarUrl: user.avatarKey,
       })),
       total,
       page,

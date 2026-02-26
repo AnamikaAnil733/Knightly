@@ -1,4 +1,4 @@
-import { AuthRequestDTO,AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
+import { AuthRequestDTO, AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
 import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
 import { ILoginUseCase } from "../../../Domain/Interface/usecases/Authentication/ILoginUseCases";
@@ -8,50 +8,46 @@ import { AuthMapper } from "../../Mapper/AuthMapper";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { ITokenService } from "../../../Domain/Interface/service/ITokenService";
 
-export class LoginUseCase implements ILoginUseCase{
+export class LoginUseCase implements ILoginUseCase {
   constructor(
-    private _authRepository:IUserRepository,
-    private _hashservice:IHashService,
-    private _tokenservice:ITokenService,
-  ){}
+    private _authRepository: IUserRepository,
+    private _hashservice: IHashService,
+    private _tokenservice: ITokenService
+  ) {}
 
   async execute(data: AuthRequestDTO): Promise<AuthResponseDTO> {
-    const {email,password} = data;
+    const { email, password } = data;
     const user = await this._authRepository.findByEmail(email);
-    if(user?.isBlocked){
-      throw new CustomError(
-        HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USER_BLOCKED,
-      );
+    if (user?.isBlocked) {
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_BLOCKED);
     }
-    if(!user?.passwordHash){
+    if (!user?.passwordHash) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INCORRECT_AUTH_CREDENTIALS,
+        MESSAGES.INCORRECT_AUTH_CREDENTIALS
       );
     }
-    if(user && !user.isBlocked){
-
+    if (user && !user.isBlocked) {
       const verified = await this._hashservice.compare(
-                password!,
-                user.passwordHash,
+        password!,
+        user.passwordHash
       );
       const accessToken = this._tokenservice.generateAccessToken({
         userId: user.id!,
         role: user.role,
       });
-      if(verified){
-        return AuthMapper.toAuthResponseDTOfromEntity(user,accessToken);
-      }else{
+      if (verified) {
+        return AuthMapper.toAuthResponseDTOfromEntity(user, accessToken);
+      } else {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INCORRECT_AUTH_CREDENTIALS,
+          MESSAGES.INCORRECT_AUTH_CREDENTIALS
         );
       }
-    }else{
+    } else {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INCORRECT_AUTH_CREDENTIALS,
+        MESSAGES.INCORRECT_AUTH_CREDENTIALS
       );
     }
   }

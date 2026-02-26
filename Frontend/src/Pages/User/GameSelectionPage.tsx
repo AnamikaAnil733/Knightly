@@ -86,31 +86,30 @@ export function GameSelectionPage() {
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </motion.button>
-          
-       
         </header>
 
         {/* Title Section */}
         <div className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-[#FFD166] bg-clip-text text-transparent font-['Poppins']"
           >
             Choose Your Battle
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-[#C9CAD9] text-lg max-w-2xl mx-auto"
           >
-            Select a time control that suits your playstyle. From lightning fast bullet to deep classical strategy.
+            Select a time control that suits your playstyle. From lightning fast
+            bullet to deep classical strategy.
           </motion.p>
         </div>
 
         {/* Game Modes Grid */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -127,17 +126,21 @@ export function GameSelectionPage() {
               {/* Card Background with Glassmorphism */}
               <div className="h-full p-8 rounded-3xl bg-[#11193F]/40 backdrop-blur-xl border border-white/5 group-hover:border-[#3A6FF7]/50 transition-all duration-300 relative overflow-hidden">
                 {/* Hover Gradient Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${mode.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${mode.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                />
+
                 {/* Icon Container */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${mode.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                <div
+                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${mode.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                >
                   {mode.icon}
                 </div>
 
                 <h3 className="text-2xl font-bold mb-2 group-hover:text-[#FFD166] transition-colors">
                   {mode.name}
                 </h3>
-                
+
                 <div className="flex items-center gap-2 mb-4 text-[#FFD166]/80 font-semibold">
                   <Clock className="w-4 h-4" />
                   <span>{mode.duration}</span>
@@ -155,13 +158,15 @@ export function GameSelectionPage() {
               </div>
 
               {/* Decorative Glow */}
-              <div className={`absolute -inset-[1px] bg-gradient-to-br ${mode.color} rounded-3xl blur-[12px] opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none`} />
+              <div
+                className={`absolute -inset-[1px] bg-gradient-to-br ${mode.color} rounded-3xl blur-[12px] opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none`}
+              />
             </motion.div>
           ))}
         </motion.div>
 
         {/* Footer Note */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}

@@ -82,7 +82,6 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    
     if (originalRequest.url?.includes("/auth/refresh")) {
       Store.dispatch(logout());
       return Promise.reject(error);

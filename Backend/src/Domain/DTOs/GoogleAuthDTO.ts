@@ -1,5 +1,4 @@
-
-export interface GoogleAuthRequestDTO{
-    token:string;
-    role?: string
+export interface GoogleAuthRequestDTO {
+  token: string;
+  role?: string;
 }

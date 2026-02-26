@@ -1,10 +1,9 @@
-export class EloCalculator{
-
+export class EloCalculator {
   static calculateNewRating(
-    ratingA:number,
-    ratingB:number,
-    score:0|0.5|1,
-  ):{newA:number,newB:number}{
+    ratingA: number,
+    ratingB: number,
+    score: 0 | 0.5 | 1
+  ): { newA: number; newB: number } {
     const expectedA = 1 / (1 + Math.pow(10, (ratingB - ratingA) / 400));
     const expectedB = 1 / (1 + Math.pow(10, (ratingA - ratingB) / 400));
     const scoreB = 1 - score;
@@ -16,7 +15,5 @@ export class EloCalculator{
       newA: Math.round(newA),
       newB: Math.round(newB),
     };
-
   }
-
 }

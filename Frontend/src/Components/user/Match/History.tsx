@@ -14,7 +14,13 @@ export function MoveList({
   status,
 }: {
   history: MoveDTO[];
-  status: "ACTIVE" | "CHECK" | "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+  status:
+    | "ACTIVE"
+    | "CHECK"
+    | "CHECKMATE"
+    | "STALEMATE"
+    | "WHITE_TIMEOUT"
+    | "BLACK_TIMEOUT";
 }) {
   const moves = [];
   const lastMoveIndex = history.length - 1;
@@ -45,8 +51,7 @@ export function MoveList({
       black: history[i + 1]
         ? formatMove(history[i + 1], {
             isCheck: status === "CHECK" && i + 1 === lastMoveIndex,
-            isCheckmate:
-              status === "CHECKMATE" && i + 1 === lastMoveIndex,
+            isCheckmate: status === "CHECKMATE" && i + 1 === lastMoveIndex,
           })
         : "",
     });
@@ -87,9 +92,7 @@ export function MoveList({
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-1 bg-[#FFD166] rounded-r" />
               )}
 
-              <span className="text-sm font-medium w-6">
-                {move.number}.
-              </span>
+              <span className="text-sm font-medium w-6">{move.number}.</span>
 
               <span className="flex-1 text-sm font-medium tracking-wide">
                 {move.white}

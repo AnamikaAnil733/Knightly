@@ -8,7 +8,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class SaveDiceBearAvatarUseCase {
   constructor(
     private readonly _storageService: IStorageService,
-    private readonly _userRepo: IBaseRepository<EAuth>,
+    private readonly _userRepo: IBaseRepository<EAuth>
   ) {}
 
   async execute({
@@ -18,12 +18,10 @@ export class SaveDiceBearAvatarUseCase {
     userId: string;
     diceBearUrl: string;
   }): Promise<string> {
-
-
     if (!diceBearUrl.startsWith("https://api.dicebear.com/")) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_SOURCE,
+        MESSAGES.INVALID_SOURCE
       );
     }
 
@@ -32,7 +30,7 @@ export class SaveDiceBearAvatarUseCase {
     if (!response.ok) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.FAILED_FETCH_AVATAR_DICEBEAR,
+        MESSAGES.FAILED_FETCH_AVATAR_DICEBEAR
       );
     }
 
@@ -45,15 +43,13 @@ export class SaveDiceBearAvatarUseCase {
       contentType: "image/svg+xml",
     });
 
-
     const user = await this._userRepo.findById(userId);
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.USER_DOESNT_EXIST,
+        MESSAGES.USER_DOESNT_EXIST
       );
     }
-
 
     user.avatarKey = avatarUrl;
     await this._userRepo.update(user);

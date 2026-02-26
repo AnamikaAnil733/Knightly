@@ -180,8 +180,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C9CAD9]"
               />
               <input
-                type={showPassword.confirmPassword
-                ? "text" : "password"}
+                type={showPassword.confirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full bg-[#11193F] border border-gray-700 rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none"

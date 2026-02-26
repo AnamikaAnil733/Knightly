@@ -1,5 +1,5 @@
-import { useState} from "react";
-import { useSelector ,useDispatch } from "react-redux";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../Types/User";
 import { SectionHeader } from "./heading/sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
@@ -10,17 +10,14 @@ import { updateUser } from "../../../Store/Slices/Auth/UserAuthSlice";
 import { ChangePasswordModal } from "./changePasswordModal";
 
 export const AccountSettings = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.userAuth.user);
-
 
   const [nameError, setNameError] = useState("");
   const [displayname, setDisplayname] = useState(() => {
     return user?.displayname || "";
   });
   const [showChangePassword, setShowChangePassword] = useState(false);
-
-  
 
   const validateDisplayName = (value: string) => {
     if (!value.trim()) {
@@ -41,18 +38,16 @@ export const AccountSettings = () => {
   const editProfile = useMutation({
     mutationFn: async ({ displayname }: { displayname: string }) =>
       axios.patch("/user/edit-profile", { displayname }),
-  
+
     onSuccess: () => {
       dispatch(updateUser({ displayname: displayname }));
       toast.success("User profile updated");
     },
-  
+
     onError: () => {
       toast.error("Failed to update user profile");
     },
   });
-  
-
 
   const handleSubmit = () => {
     const error = validateDisplayName(displayname);
@@ -60,7 +55,7 @@ export const AccountSettings = () => {
       setNameError(error);
       return;
     }
-    console.log(displayname)
+    console.log(displayname);
     editProfile.mutate({ displayname });
   };
 
@@ -113,9 +108,7 @@ export const AccountSettings = () => {
 
           {/* Email */}
           <div>
-            <label className="block text-[#C9CAD9] text-sm mb-1">
-              Email
-            </label>
+            <label className="block text-[#C9CAD9] text-sm mb-1">Email</label>
 
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C9CAD9]">
@@ -130,7 +123,7 @@ export const AccountSettings = () => {
               />
             </div>
           </div>
-        </div> 
+        </div>
       </div>
 
       {/* Security */}
@@ -138,13 +131,13 @@ export const AccountSettings = () => {
         <h3 className="text-lg font-medium mb-4">Security</h3>
 
         <div className="space-y-4">
-        <button
-  onClick={() => setShowChangePassword(true)}
-  className="flex items-center text-[#C9CAD9] hover:text-white"
->
-     <LockIcon size={18} className="mr-2" />
-       Change Password
-     </button>
+          <button
+            onClick={() => setShowChangePassword(true)}
+            className="flex items-center text-[#C9CAD9] hover:text-white"
+          >
+            <LockIcon size={18} className="mr-2" />
+            Change Password
+          </button>
 
           <button className="flex items-center text-[#C9CAD9] hover:text-white">
             <BellIcon size={18} className="mr-2" />
@@ -153,10 +146,9 @@ export const AccountSettings = () => {
         </div>
       </div>
       <ChangePasswordModal
-  isOpen={showChangePassword}
-  onClose={() => setShowChangePassword(false)}
-/>
-
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+      />
 
       {/* Actions */}
       <div className="mt-8">

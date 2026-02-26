@@ -6,19 +6,19 @@ import express, { Application } from "express";
 import http from "http";
 import {Server} from "socket.io";
 import { MongoDB } from "./Infrastructure/Database/Mongodbconnection";
-import { AuthRoutes } from "./Presentation/Routes/authroute";
+import { AuthRoutes } from "./Presentation/Routes/Authroute";
 import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
 import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
 
-import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/makeMoveUseCase";
-import { CreateGameUseCase } from "./Application/UseCases/User/GameManagement/createGameUseCase";
-import { MatchmakingUseCase } from "./Application/UseCases/User/GameManagement/matchmakingUseCase";
+import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/MakeMoveUseCase";
+import { CreateGameUseCase } from "./Application/UseCases/User/GameManagement/CreateGameUseCase";
+import { MatchmakingUseCase } from "./Application/UseCases/User/GameManagement/MatchmakingUseCase";
 import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository";
 import { AuthRepository } from "./Infrastructure/Repository/AuthRepository";
 import { GameModel } from "./Infrastructure/Database/Model/GameModel";
 
-import { errorHandler }from "../src/Presentation/Middleware/errorHandlingMiddleware";
+import { errorHandler }from "./Presentation/Middleware/ErrorHandlingMiddleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 

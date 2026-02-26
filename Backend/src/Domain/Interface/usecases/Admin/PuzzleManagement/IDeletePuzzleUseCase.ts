@@ -1,3 +1,3 @@
-export interface ISoftDeleteUseCase{
-    execute(id:string):Promise<boolean>
+export interface ISoftDeleteUseCase {
+  execute(id: string): Promise<boolean>;
 }

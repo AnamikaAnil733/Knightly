@@ -1,18 +1,18 @@
-export type TimeControl = "BULLET" | "BLITZ" | "RAPID" |"CLASSICAL";
+export type TimeControl = "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 
 export class UserRating {
-
   private _ratings: {
-      BULLET: number;
-      BLITZ: number;
-      RAPID: number;
-      CLASSICAL: number;
-    };
+    BULLET: number;
+    BLITZ: number;
+    RAPID: number;
+    CLASSICAL: number;
+  };
 
-  constructor(ratings?: Partial<Record<
-      "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL",
-      number
-    >>) {
+  constructor(
+    ratings?: Partial<
+      Record<"BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", number>
+    >
+  ) {
     this._ratings = {
       BULLET: ratings?.BULLET ?? 1200,
       BLITZ: ratings?.BLITZ ?? 1200,

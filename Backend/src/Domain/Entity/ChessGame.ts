@@ -3,15 +3,15 @@ import { BaseEntity } from "./BaseEntity";
 import { GameStatus } from "../Chess/Game/GameStatus";
 import { GameClock } from "./GameClock";
 
-export class ChessGame extends BaseEntity{
+export class ChessGame extends BaseEntity {
   constructor(
-        private readonly _gameState :  GameState,
-        private _status: GameStatus = "ACTIVE",
-        private clock: GameClock,
-        private _whitePlayerId?: string,
-        private _blackPlayerId?: string,
-        id?: string,
-  ){
+    private readonly _gameState: GameState,
+    private _status: GameStatus = "ACTIVE",
+    private clock: GameClock,
+    private _whitePlayerId?: string,
+    private _blackPlayerId?: string,
+    id?: string
+  ) {
     super(id);
     if (this._status === "ACTIVE" || this._status === "CHECK") {
       const stateStatus = this._gameState.getStatus();
@@ -37,7 +37,6 @@ export class ChessGame extends BaseEntity{
     this._status = this._gameState.getStatus();
   }
 
-
   updateClock(now: number) {
     if (this._status !== "ACTIVE" && this._status !== "CHECK") {
       return;
@@ -48,14 +47,13 @@ export class ChessGame extends BaseEntity{
     const timeoutWinner = this.clock.isTimeout();
 
     if (timeoutWinner === "WHITE") {
-      this._status = "BLACK_TIMEOUT"; 
+      this._status = "BLACK_TIMEOUT";
       this.clock.stop();
     } else if (timeoutWinner === "BLACK") {
-      this._status = "WHITE_TIMEOUT"; 
+      this._status = "WHITE_TIMEOUT";
       this.clock.stop();
     }
   }
-
 
   checkPassiveTimeout(now: number = Date.now()): boolean {
     if (this._status !== "ACTIVE" && this._status !== "CHECK") {
@@ -71,7 +69,7 @@ export class ChessGame extends BaseEntity{
     }
 
     if (liveTimes.blackTime <= 0) {
-      this._status = "BLACK_TIMEOUT"; 
+      this._status = "BLACK_TIMEOUT";
       this.clock.stop();
       return true;
     }
@@ -90,5 +88,4 @@ export class ChessGame extends BaseEntity{
   getBlackPlayerId(): string | undefined {
     return this._blackPlayerId;
   }
-
 }

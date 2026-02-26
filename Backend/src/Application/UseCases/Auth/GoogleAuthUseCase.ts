@@ -15,14 +15,14 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
   constructor(
     private _authRepository: IUserRepository,
     private _googleAuthService: IGoogleAuthService,
-    private _tokenService :ITokenService,
+    private _tokenService: ITokenService
   ) {}
 
   async execute(data: GoogleAuthRequestDTO): Promise<AuthResponseDTO> {
     if (!data.token) {
       throw new CustomError(
         HttpStatusCodes.BAD_REQUEST,
-        MESSAGES.INVALID_GOOGLE_TOKEN,
+        MESSAGES.INVALID_GOOGLE_TOKEN
       );
     }
 
@@ -31,17 +31,14 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
     if (!payload.email) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INVALID_GOOGLE_TOKEN,
+        MESSAGES.INVALID_GOOGLE_TOKEN
       );
     }
 
     let user = await this._authRepository.findByEmail(payload.email);
 
     if (user && user.isBlocked) {
-      throw new CustomError(
-        HttpStatusCodes.FORBIDDEN,
-        MESSAGES.USER_BLOCKED,
-      );
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, MESSAGES.USER_BLOCKED);
     }
 
     if (!user) {
@@ -54,9 +51,8 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
           isBlocked: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-          role:UserRole.USER,
-
-        }),
+          role: UserRole.USER,
+        })
       );
     } else {
       user.isNewUser = false;
@@ -66,6 +62,6 @@ export class GoogleAuthUseCase implements IGoogleAuthUseCase {
       role: user.role,
     });
 
-    return AuthMapper.toAuthResponseDTOfromEntity(user,accessToken);
+    return AuthMapper.toAuthResponseDTOfromEntity(user, accessToken);
   }
 }

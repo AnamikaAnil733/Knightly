@@ -1,72 +1,69 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   EyeIcon,
   EyeOffIcon,
   CheckCircleIcon,
   ShieldIcon,
   ChevronLeftIcon,
-} from 'lucide-react'
+} from "lucide-react";
 import axios from "../../Service/Api/Axios/Useraxios";
-import { useNavigate,useLocation } from 'react-router-dom'
-
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function ResetPassword() {
-  const navigate = useNavigate()
-  const { email } = useLocation().state; 
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState('')
-  const [shake, setShake] = useState(false)
+  const navigate = useNavigate();
+  const { email } = useLocation().state;
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [shake, setShake] = useState(false);
   // Password validation
-  const hasMinLength = newPassword.length >= 8
-  const hasNumber = /\d/.test(newPassword)
-  const hasCapital = /[A-Z]/.test(newPassword)
-  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword)
+  const hasMinLength = newPassword.length >= 8;
+  const hasNumber = /\d/.test(newPassword);
+  const hasCapital = /[A-Z]/.test(newPassword);
+  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
   const allRequirementsMet =
-    hasMinLength && hasNumber && hasCapital && hasSymbol
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setError("");
-    
-      if (!allRequirementsMet) {
-        setError("Please meet all password requirements");
-        setShake(true);
-        setTimeout(() => setShake(false), 500);
-        return;
-      }
-    
-      if (newPassword !== confirmPassword) {
-        setError("Passwords do not match");
-        setShake(true);
-        setTimeout(() => setShake(false), 500);
-        return;
-      }
-    
-      try {
-        await axios.post("/auth/reset-password", {
-          email,  
-          password: newPassword
-        });
-    
-        setIsSuccess(true);
-        setTimeout(() => navigate("/user/login"), 2000); // redirect to login
-    
-      } catch (error) {
-        console.log(error)
-        setError("Failed to reset password. Try again.");
-      }
-    };
-    
+    hasMinLength && hasNumber && hasCapital && hasSymbol;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!allRequirementsMet) {
+      setError("Please meet all password requirements");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
+    try {
+      await axios.post("/auth/reset-password", {
+        email,
+        password: newPassword,
+      });
+
+      setIsSuccess(true);
+      setTimeout(() => navigate("/user/login"), 2000); // redirect to login
+    } catch (error) {
+      console.log(error);
+      setError("Failed to reset password. Try again.");
+    }
+  };
+
   if (isSuccess) {
     return (
       <div
         className="w-full min-h-screen flex items-center justify-center relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0A0F2C 0%, #1B1452 100%)',
+          background: "linear-gradient(135deg, #0A0F2C 0%, #1B1452 100%)",
         }}
       >
         {/* Background decorative elements */}
@@ -75,14 +72,14 @@ export function ResetPassword() {
             className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
             style={{
               background:
-                'radial-gradient(circle, #6B2EFF 0%, transparent 70%)',
+                "radial-gradient(circle, #6B2EFF 0%, transparent 70%)",
             }}
           ></div>
           <div
             className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
             style={{
               background:
-                'radial-gradient(circle, #3A6FF7 0%, transparent 70%)',
+                "radial-gradient(circle, #3A6FF7 0%, transparent 70%)",
             }}
           ></div>
         </div>
@@ -91,16 +88,16 @@ export function ResetPassword() {
             <CheckCircleIcon
               className="w-20 h-20 mx-auto mb-4 animate-bounce"
               style={{
-                color: '#FFD166',
+                color: "#FFD166",
               }}
             />
           </div>
           <h1
             className="text-4xl font-bold mb-4"
             style={{
-              background: 'linear-gradient(90deg, #FFD166 0%, #3A6FF7 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              background: "linear-gradient(90deg, #FFD166 0%, #3A6FF7 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
             }}
           >
             Password Reset Successful!
@@ -108,7 +105,7 @@ export function ResetPassword() {
           <p
             className="text-lg mb-8"
             style={{
-              color: '#C9CAD9',
+              color: "#C9CAD9",
             }}
           >
             Your password has been reset successfully. You can now log in to
@@ -118,21 +115,21 @@ export function ResetPassword() {
             onClick={() => setIsSuccess(false)}
             className="px-8 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105"
             style={{
-              background: 'linear-gradient(90deg, #3A6FF7 0%, #6B2EFF 100%)',
-              boxShadow: '0 0 20px rgba(58, 111, 247, 0.5)',
+              background: "linear-gradient(90deg, #3A6FF7 0%, #6B2EFF 100%)",
+              boxShadow: "0 0 20px rgba(58, 111, 247, 0.5)",
             }}
           >
             Return to Login
           </button>
         </div>
       </div>
-    )
+    );
   }
   return (
     <div
       className="w-full min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4"
       style={{
-        background: 'linear-gradient(135deg, #0A0F2C 0%, #1B1452 100%)',
+        background: "linear-gradient(135deg, #0A0F2C 0%, #1B1452 100%)",
       }}
     >
       {/* Background decorative elements */}
@@ -140,13 +137,13 @@ export function ResetPassword() {
         <div
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, #6B2EFF 0%, transparent 70%)',
+            background: "radial-gradient(circle, #6B2EFF 0%, transparent 70%)",
           }}
         ></div>
         <div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl"
           style={{
-            background: 'radial-gradient(circle, #3A6FF7 0%, transparent 70%)',
+            background: "radial-gradient(circle, #3A6FF7 0%, transparent 70%)",
           }}
         ></div>
         {/* Chess knight silhouette */}
@@ -154,7 +151,7 @@ export function ResetPassword() {
           <ShieldIcon
             className="w-96 h-96"
             style={{
-              color: '#FFD166',
+              color: "#FFD166",
             }}
           />
         </div>
@@ -165,14 +162,14 @@ export function ResetPassword() {
           <ShieldIcon
             className="w-10 h-10"
             style={{
-              color: '#FFD166',
+              color: "#FFD166",
             }}
           />
           <h1
             className="text-4xl font-bold"
             style={{
-              fontFamily: 'Cinzel, serif',
-              color: '#FFD166',
+              fontFamily: "Cinzel, serif",
+              color: "#FFD166",
             }}
           >
             Knightly
@@ -181,7 +178,7 @@ export function ResetPassword() {
         <p
           className="text-lg"
           style={{
-            color: '#C9CAD9',
+            color: "#C9CAD9",
           }}
         >
           Reset your password to continue your royal journey.
@@ -191,21 +188,21 @@ export function ResetPassword() {
       <div
         className="relative z-10 w-full max-w-md p-10 rounded-2xl backdrop-blur-lg animate-fade-in"
         style={{
-          background: 'rgba(17, 25, 63, 0.85)',
-          border: '2px solid transparent',
+          background: "rgba(17, 25, 63, 0.85)",
+          border: "2px solid transparent",
           backgroundImage:
-            'linear-gradient(rgba(17, 25, 63, 0.85), rgba(17, 25, 63, 0.85)), linear-gradient(135deg, #3A6FF7, #6B2EFF)',
-          backgroundOrigin: 'border-box',
-          backgroundClip: 'padding-box, border-box',
-          boxShadow: '0 0 40px rgba(58, 111, 247, 0.3)',
+            "linear-gradient(rgba(17, 25, 63, 0.85), rgba(17, 25, 63, 0.85)), linear-gradient(135deg, #3A6FF7, #6B2EFF)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+          boxShadow: "0 0 40px rgba(58, 111, 247, 0.3)",
         }}
       >
         <h2
           className="text-3xl font-bold text-center mb-2"
           style={{
-            background: 'linear-gradient(90deg, #FFD166 0%, #3A6FF7 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            background: "linear-gradient(90deg, #FFD166 0%, #3A6FF7 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           Create New Password
@@ -213,41 +210,41 @@ export function ResetPassword() {
         <p
           className="text-center mb-8"
           style={{
-            color: '#C9CAD9',
+            color: "#C9CAD9",
           }}
         >
           Enter a new password below and confirm to secure your account.
         </p>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* New Password Field */}
-          <div className={shake ? 'animate-shake' : ''}>
+          <div className={shake ? "animate-shake" : ""}>
             <label
               className="block text-sm font-medium mb-2"
               style={{
-                color: '#C9CAD9',
+                color: "#C9CAD9",
               }}
             >
               New Password
             </label>
             <div className="relative">
               <input
-                type={showNewPassword ? 'text' : 'password'}
+                type={showNewPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Enter your new password"
                 className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-400 outline-none transition-all duration-300 focus:shadow-lg"
                 style={{
-                  background: 'rgba(10, 15, 44, 0.9)',
-                  border: '1.5px solid #6B2EFF',
-                  boxShadow: '0 0 0 0 rgba(58, 111, 247, 0)',
+                  background: "rgba(10, 15, 44, 0.9)",
+                  border: "1.5px solid #6B2EFF",
+                  boxShadow: "0 0 0 0 rgba(58, 111, 247, 0)",
                 }}
                 onFocus={(e) => {
-                  e.target.style.border = '1.5px solid #3A6FF7'
-                  e.target.style.boxShadow = '0 0 20px rgba(58, 111, 247, 0.4)'
+                  e.target.style.border = "1.5px solid #3A6FF7";
+                  e.target.style.boxShadow = "0 0 20px rgba(58, 111, 247, 0.4)";
                 }}
                 onBlur={(e) => {
-                  e.target.style.border = '1.5px solid #6B2EFF'
-                  e.target.style.boxShadow = '0 0 0 0 rgba(58, 111, 247, 0)'
+                  e.target.style.border = "1.5px solid #6B2EFF";
+                  e.target.style.boxShadow = "0 0 0 0 rgba(58, 111, 247, 0)";
                 }}
               />
               <button
@@ -264,34 +261,34 @@ export function ResetPassword() {
             </div>
           </div>
           {/* Confirm Password Field */}
-          <div className={shake ? 'animate-shake' : ''}>
+          <div className={shake ? "animate-shake" : ""}>
             <label
               className="block text-sm font-medium mb-2"
               style={{
-                color: '#C9CAD9',
+                color: "#C9CAD9",
               }}
             >
               Confirm Password
             </label>
             <div className="relative">
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your new password"
                 className="w-full px-4 py-3 rounded-xl text-white placeholder-gray-400 outline-none transition-all duration-300 focus:shadow-lg"
                 style={{
-                  background: 'rgba(10, 15, 44, 0.9)',
-                  border: '1.5px solid #6B2EFF',
-                  boxShadow: '0 0 0 0 rgba(58, 111, 247, 0)',
+                  background: "rgba(10, 15, 44, 0.9)",
+                  border: "1.5px solid #6B2EFF",
+                  boxShadow: "0 0 0 0 rgba(58, 111, 247, 0)",
                 }}
                 onFocus={(e) => {
-                  e.target.style.border = '1.5px solid #3A6FF7'
-                  e.target.style.boxShadow = '0 0 20px rgba(58, 111, 247, 0.4)'
+                  e.target.style.border = "1.5px solid #3A6FF7";
+                  e.target.style.boxShadow = "0 0 20px rgba(58, 111, 247, 0.4)";
                 }}
                 onBlur={(e) => {
-                  e.target.style.border = '1.5px solid #6B2EFF'
-                  e.target.style.boxShadow = '0 0 0 0 rgba(58, 111, 247, 0)'
+                  e.target.style.border = "1.5px solid #6B2EFF";
+                  e.target.style.boxShadow = "0 0 0 0 rgba(58, 111, 247, 0)";
                 }}
               />
               <button
@@ -311,7 +308,7 @@ export function ResetPassword() {
           <div
             className="space-y-2 text-sm"
             style={{
-              color: '#C9CAD9',
+              color: "#C9CAD9",
             }}
           >
             <p className="font-medium mb-2">Password must include:</p>
@@ -320,12 +317,12 @@ export function ResetPassword() {
                 <CheckCircleIcon
                   className="w-4 h-4"
                   style={{
-                    color: hasMinLength ? '#FFD166' : '#C9CAD9',
+                    color: hasMinLength ? "#FFD166" : "#C9CAD9",
                   }}
                 />
                 <span
                   style={{
-                    color: hasMinLength ? '#FFD166' : '#C9CAD9',
+                    color: hasMinLength ? "#FFD166" : "#C9CAD9",
                   }}
                 >
                   8+ characters
@@ -335,12 +332,12 @@ export function ResetPassword() {
                 <CheckCircleIcon
                   className="w-4 h-4"
                   style={{
-                    color: hasNumber ? '#FFD166' : '#C9CAD9',
+                    color: hasNumber ? "#FFD166" : "#C9CAD9",
                   }}
                 />
                 <span
                   style={{
-                    color: hasNumber ? '#FFD166' : '#C9CAD9',
+                    color: hasNumber ? "#FFD166" : "#C9CAD9",
                   }}
                 >
                   1 number
@@ -350,12 +347,12 @@ export function ResetPassword() {
                 <CheckCircleIcon
                   className="w-4 h-4"
                   style={{
-                    color: hasCapital ? '#FFD166' : '#C9CAD9',
+                    color: hasCapital ? "#FFD166" : "#C9CAD9",
                   }}
                 />
                 <span
                   style={{
-                    color: hasCapital ? '#FFD166' : '#C9CAD9',
+                    color: hasCapital ? "#FFD166" : "#C9CAD9",
                   }}
                 >
                   1 capital letter
@@ -365,12 +362,12 @@ export function ResetPassword() {
                 <CheckCircleIcon
                   className="w-4 h-4"
                   style={{
-                    color: hasSymbol ? '#FFD166' : '#C9CAD9',
+                    color: hasSymbol ? "#FFD166" : "#C9CAD9",
                   }}
                 />
                 <span
                   style={{
-                    color: hasSymbol ? '#FFD166' : '#C9CAD9',
+                    color: hasSymbol ? "#FFD166" : "#C9CAD9",
                   }}
                 >
                   1 symbol
@@ -389,8 +386,8 @@ export function ResetPassword() {
             type="submit"
             className="w-full py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-2xl"
             style={{
-              background: 'linear-gradient(90deg, #3A6FF7 0%, #6B2EFF 100%)',
-              boxShadow: '0 0 20px rgba(58, 111, 247, 0.5)',
+              background: "linear-gradient(90deg, #3A6FF7 0%, #6B2EFF 100%)",
+              boxShadow: "0 0 20px rgba(58, 111, 247, 0.5)",
             }}
           >
             Reset Password
@@ -399,10 +396,10 @@ export function ResetPassword() {
           <div className="text-center">
             <button
               type="button"
-              onClick={() => console.log('Navigate to login')}
+              onClick={() => console.log("Navigate to login")}
               className="inline-flex items-center gap-2 text-sm font-medium transition-all duration-300 hover:underline"
               style={{
-                color: '#FFD166',
+                color: "#FFD166",
               }}
             >
               <ChevronLeftIcon className="w-4 h-4" />
@@ -415,7 +412,7 @@ export function ResetPassword() {
       <div
         className="relative z-10 mt-8 text-center text-sm"
         style={{
-          color: '#C9CAD9',
+          color: "#C9CAD9",
         }}
       >
         <p className="mb-2">© 2025 Knightly. All Rights Reserved.</p>
@@ -423,10 +420,10 @@ export function ResetPassword() {
           <button
             className="transition-colors"
             style={{
-              color: '#C9CAD9',
+              color: "#C9CAD9",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFD166')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#C9CAD9')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD166")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#C9CAD9")}
           >
             Privacy Policy
           </button>
@@ -434,10 +431,10 @@ export function ResetPassword() {
           <button
             className="transition-colors"
             style={{
-              color: '#C9CAD9',
+              color: "#C9CAD9",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFD166')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#C9CAD9')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD166")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#C9CAD9")}
           >
             Terms
           </button>
@@ -445,10 +442,10 @@ export function ResetPassword() {
           <button
             className="transition-colors"
             style={{
-              color: '#C9CAD9',
+              color: "#C9CAD9",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#FFD166')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#C9CAD9')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#FFD166")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#C9CAD9")}
           >
             Support
           </button>
@@ -485,5 +482,5 @@ export function ResetPassword() {
         }
       `}</style>
     </div>
-  )
+  );
 }

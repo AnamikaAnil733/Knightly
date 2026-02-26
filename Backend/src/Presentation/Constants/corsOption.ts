@@ -1,6 +1,6 @@
-import {  CorsOptions } from "cors";
+import { CorsOptions } from "cors";
 
-export const corsOptions:CorsOptions = {
+export const corsOptions: CorsOptions = {
   origin: process.env.ORIGIN_URL,
   credentials: true,
 };

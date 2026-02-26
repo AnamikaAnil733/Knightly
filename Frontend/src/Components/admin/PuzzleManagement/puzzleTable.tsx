@@ -1,14 +1,13 @@
-
-import { Puzzle } from '../../../Pages/Admin/PuzzleManagement'
-import { PencilIcon, TrashIcon, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Puzzle } from "../../../Pages/Admin/PuzzleManagement";
+import { PencilIcon, TrashIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PuzzleTableProps {
-  puzzles: Puzzle[]
-  onEdit: (puzzle: Puzzle) => void
-  onDelete: (id: string) => void
-  currentPage: number
-  totalPages: number
-  onPageChange: (page: number) => void
+  puzzles: Puzzle[];
+  onEdit: (puzzle: Puzzle) => void;
+  onDelete: (id: string) => void;
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
 export function PuzzleTable({
@@ -51,13 +50,13 @@ export function PuzzleTable({
                 <td className="px-4 py-3 text-sm">
                   <span
                     className={`px-2 py-1 rounded text-xs font-medium ${
-                      puzzle.difficulty === 'Easy'
-                        ? 'bg-green-900/40 text-green-300'
-                        : puzzle.difficulty === 'Medium'
-                          ? 'bg-blue-900/40 text-blue-300'
-                          : puzzle.difficulty === 'Hard'
-                            ? 'bg-orange-900/40 text-orange-300'
-                            : 'bg-red-900/40 text-red-300'
+                      puzzle.difficulty === "Easy"
+                        ? "bg-green-900/40 text-green-300"
+                        : puzzle.difficulty === "Medium"
+                        ? "bg-blue-900/40 text-blue-300"
+                        : puzzle.difficulty === "Hard"
+                        ? "bg-orange-900/40 text-orange-300"
+                        : "bg-red-900/40 text-red-300"
                     }`}
                   >
                     {puzzle.difficulty}
@@ -92,7 +91,8 @@ export function PuzzleTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-[#3A6FF7]/30 bg-[#0A0F2C]/50">
           <div className="text-sm text-[#C9CAD9]">
-            Showing page <span className="text-white font-medium">{currentPage}</span> of{' '}
+            Showing page{" "}
+            <span className="text-white font-medium">{currentPage}</span> of{" "}
             <span className="text-white font-medium">{totalPages}</span>
           </div>
           <div className="flex gap-2">
@@ -114,5 +114,5 @@ export function PuzzleTable({
         </div>
       )}
     </div>
-  )
+  );
 }

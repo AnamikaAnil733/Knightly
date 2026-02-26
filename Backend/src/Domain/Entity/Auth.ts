@@ -22,46 +22,44 @@ export default class EAuth {
   private _achievements: string[];
   private _subscriptionStart?: Date;
 
-
   private _createdAt: Date;
   private _updatedAt: Date;
 
   //Avatar
-  private _avatarUrl:string|null;
-  private _avatarSeed!:string;
-  private _avatarStyle!:string;
-  private _avatarKey?:string;
+  private _avatarUrl: string | null;
+  private _avatarSeed!: string;
+  private _avatarStyle!: string;
+  private _avatarKey?: string;
 
   constructor(params: {
-        id?: string;
-        displayname: string;
-        email: string;
-        passwordHash?: string;
-        googleId?: string;
-        role: UserRole;
-        isBlocked?: boolean;
-        isNewUser?: boolean;
+    id?: string;
+    displayname: string;
+    email: string;
+    passwordHash?: string;
+    googleId?: string;
+    role: UserRole;
+    isBlocked?: boolean;
+    isNewUser?: boolean;
 
+    gamesPlayed?: number;
+    gamesWin?: number;
+    rating?: UserRating;
+    premium?: boolean;
+    longestStreak?: number;
+    currentStreak?: number;
+    rewards?: string[];
+    achievements?: string[];
+    subscriptionStart?: Date;
 
-        gamesPlayed?: number;
-        gamesWin?: number;
-        rating?: UserRating;
-        premium?: boolean;
-        longestStreak?: number;
-        currentStreak?: number;
-        rewards?: string[];
-        achievements?: string[];
-        subscriptionStart?: Date;
+    avatarUrl?: string | null;
+    avatarSeed?: string;
+    avatarStyle?: string;
+    avatarKey?: string;
 
-        avatarUrl?: string | null;
-        avatarSeed?: string;
-        avatarStyle?: string;
-        avatarKey?:string
-
-        createdAt?: Date;
-        updatedAt?: Date;
-    }) {
-    this._id = params.id ;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }) {
+    this._id = params.id;
     this._displayname = params.displayname;
     this._email = params.email;
 
@@ -84,7 +82,7 @@ export default class EAuth {
     this._subscriptionStart = params.subscriptionStart;
 
     this._avatarUrl = params.avatarUrl ?? null;
-    this._avatarSeed = params.avatarSeed ?? (params.id ?? params.email);
+    this._avatarSeed = params.avatarSeed ?? params.id ?? params.email;
     this._avatarStyle = params.avatarStyle ?? "bottts";
     this._avatarKey = params.avatarKey;
 
@@ -93,54 +91,106 @@ export default class EAuth {
   }
 
   // GETTERS
-  get id(): string | undefined { return this._id; }
-  get displayname(): string { return this._displayname; }
-  get email(): string { return this._email; }
-  get passwordHash(): string | undefined { return this._passwordHash; }
-  get googleId(): string | undefined { return this._googleId; }
-  get role(): UserRole { return this._role; }
-  get isBlocked(): boolean { return this._isBlocked; }
-  get isNewUser(): boolean { return this._isNewUser; }
+  get id(): string | undefined {
+    return this._id;
+  }
+  get displayname(): string {
+    return this._displayname;
+  }
+  get email(): string {
+    return this._email;
+  }
+  get passwordHash(): string | undefined {
+    return this._passwordHash;
+  }
+  get googleId(): string | undefined {
+    return this._googleId;
+  }
+  get role(): UserRole {
+    return this._role;
+  }
+  get isBlocked(): boolean {
+    return this._isBlocked;
+  }
+  get isNewUser(): boolean {
+    return this._isNewUser;
+  }
 
-  get gamesPlayed(): number { return this._gamesPlayed; }
-  get gamesWin(): number { return this._gamesWin; }
-  get rating(): UserRating { return this._rating; }
-  get premium(): boolean { return this._premium; }
-  get longestStreak(): number { return this._longestStreak; }
-  get currentStreak(): number { return this._currentStreak; }
-  get rewards(): string[] { return this._rewards; }
-  get achievements(): string[] { return this._achievements; }
+  get gamesPlayed(): number {
+    return this._gamesPlayed;
+  }
+  get gamesWin(): number {
+    return this._gamesWin;
+  }
+  get rating(): UserRating {
+    return this._rating;
+  }
+  get premium(): boolean {
+    return this._premium;
+  }
+  get longestStreak(): number {
+    return this._longestStreak;
+  }
+  get currentStreak(): number {
+    return this._currentStreak;
+  }
+  get rewards(): string[] {
+    return this._rewards;
+  }
+  get achievements(): string[] {
+    return this._achievements;
+  }
 
-  get createdAt(): Date { return this._createdAt; }
-  get updatedAt(): Date { return this._updatedAt; }
-  get subscriptionStart():Date|undefined{ return this._subscriptionStart;}
+  get createdAt(): Date {
+    return this._createdAt;
+  }
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
+  get subscriptionStart(): Date | undefined {
+    return this._subscriptionStart;
+  }
 
-  get avatarUrl(): string | null { return this._avatarUrl; }
-  get avatarSeed(): string { return this._avatarSeed; }
-  get avatarStyle(): string { return this._avatarStyle; }
-  get avatarKey(): string | undefined {return this._avatarKey;}
+  get avatarUrl(): string | null {
+    return this._avatarUrl;
+  }
+  get avatarSeed(): string {
+    return this._avatarSeed;
+  }
+  get avatarStyle(): string {
+    return this._avatarStyle;
+  }
+  get avatarKey(): string | undefined {
+    return this._avatarKey;
+  }
 
   // SETTERS
-  set passwordHash(passwordHash: string) { this._passwordHash = passwordHash; }
-  set isNewUser(isNewUser: boolean) { this._isNewUser = isNewUser; }
-  set displayname(displayname:string) { this._displayname = displayname; }
+  set passwordHash(passwordHash: string) {
+    this._passwordHash = passwordHash;
+  }
+  set isNewUser(isNewUser: boolean) {
+    this._isNewUser = isNewUser;
+  }
+  set displayname(displayname: string) {
+    this._displayname = displayname;
+  }
 
-  set avatarUrl(value: string | null) { this._avatarUrl = value; }
+  set avatarUrl(value: string | null) {
+    this._avatarUrl = value;
+  }
 
   set avatarKey(value: string) {
     this._avatarKey = value;
   }
 
-
-
-  getRating(type: "BULLET" | "BLITZ" | "RAPID"|"CLASSICAL"): number {
+  getRating(type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL"): number {
     return this._rating.get(type);
   }
 
-  updateRating(type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", newRating: number): void {
+  updateRating(
+    type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL",
+    newRating: number
+  ): void {
     this._rating.set(type, newRating);
   }
-
-
-
 }

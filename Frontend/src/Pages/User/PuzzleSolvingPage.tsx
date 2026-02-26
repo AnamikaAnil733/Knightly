@@ -57,8 +57,10 @@ const difficultyConfig = {
   },
 };
 
-
-const pieceTypeMap: Record<string, "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"> = {
+const pieceTypeMap: Record<
+  string,
+  "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"
+> = {
   p: "PAWN",
   r: "ROOK",
   n: "KNIGHT",
@@ -102,7 +104,7 @@ export function PuzzleSolvingPage() {
   const loadNewPuzzle = useCallback(async () => {
     try {
       // Only set loading to true if it's not already loading
-      setLoading(prev => prev ? prev : true);
+      setLoading((prev) => (prev ? prev : true));
       setIsSolved(false);
       setIsWrong(false);
       const data = await fetchPuzzleByDifficulty(difficulty);
@@ -112,7 +114,8 @@ export function PuzzleSolvingPage() {
       setInitialFen(data.fen);
       setLoading(false);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to load puzzle";
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to load puzzle";
       toast.error(errorMessage);
       setLoading(false);
     }

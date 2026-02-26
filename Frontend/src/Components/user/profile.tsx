@@ -8,12 +8,7 @@ import toast from "react-hot-toast";
 import axios from "../../Service/Api/Axios/Useraxios";
 
 // Icons
-import {
-  TrophyIcon,
-  FlameIcon,
-  ClockIcon,
-  TargetIcon,
-} from "lucide-react";
+import { TrophyIcon, FlameIcon, ClockIcon, TargetIcon } from "lucide-react";
 
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = () => {
@@ -27,15 +22,9 @@ export function ProfileUser() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  
-
-
-
   if (!user) {
     return <p className="text-center text-white pt-32">Loading profile...</p>;
   }
-
- 
 
   /* ---------------- Generate DiceBear Avatar ---------------- */
   const handleGenerateAvatar = async () => {
@@ -44,14 +33,12 @@ export function ProfileUser() {
 
       const diceBearUrl = generateDiceBearUrl();
 
-      
       await axios.post("/user/avatar/dicebear", {
         diceBearUrl,
       });
 
-    
       const profileRes = await axios.get("/user/profile");
-      console.log(profileRes)
+      console.log(profileRes);
 
       dispatch(updateUser(profileRes.data));
 
@@ -139,9 +126,7 @@ export function ProfileUser() {
             label: "Win Rate",
             value:
               user.gamesPlayed > 0
-                ? `${Math.round(
-                    (user.gamesWin / user.gamesPlayed) * 100
-                  )}%`
+                ? `${Math.round((user.gamesWin / user.gamesPlayed) * 100)}%`
                 : "0%",
           },
         ].map((item, i) => (

@@ -1,22 +1,22 @@
-import { motion } from "framer-motion"
-import { useMemo, useState } from "react"
-import { Piece_Images } from "../../reuseable/chessPieces"
+import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { Piece_Images } from "../../reuseable/chessPieces";
 
-type ChessColor = "WHITE" | "BLACK"
+type ChessColor = "WHITE" | "BLACK";
 
 type ChessPiece = {
-  type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING"
-  color: ChessColor
-  hasMoved: boolean
-}
+  type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING";
+  color: ChessColor;
+  hasMoved: boolean;
+};
 
 type ChessboardProps = {
-  board: (ChessPiece | null)[][]
-  selectedSquare?: { row: number; col: number } | null
-  legalMoves?: { row: number; col: number, type?: "EN_PASSANT" | "NORMAL" }[]
-  onSquareClick?: (row: number, col: number) => void
-  orientation?: "white" | "black"
-}
+  board: (ChessPiece | null)[][];
+  selectedSquare?: { row: number; col: number } | null;
+  legalMoves?: { row: number; col: number; type?: "EN_PASSANT" | "NORMAL" }[];
+  onSquareClick?: (row: number, col: number) => void;
+  orientation?: "white" | "black";
+};
 
 interface PositionedPiece extends ChessPiece {
   id: string;
@@ -34,11 +34,10 @@ export function Chessboard({
   onSquareClick,
   orientation = "white",
 }: ChessboardProps) {
-
   const isFlipped = orientation === "black";
 
-  const getVisualRow = (idx: number) => isFlipped ? 7 - idx : idx;
-  const getVisualCol = (idx: number) => isFlipped ? 7 - idx : idx;
+  const getVisualRow = (idx: number) => (isFlipped ? 7 - idx : idx);
+  const getVisualCol = (idx: number) => (isFlipped ? 7 - idx : idx);
 
   const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
   const ranks = ["8", "7", "6", "5", "4", "3", "2", "1"];
@@ -48,7 +47,9 @@ export function Chessboard({
 
   // --- Piece Tracking Logic (using useState instead of refs to avoid ref access during render) ---
   const [prevPieces, setPrevPieces] = useState<PositionedPiece[]>([]);
-  const [prevBoard, setPrevBoard] = useState<(ChessPiece | null)[][] | null>(null);
+  const [prevBoard, setPrevBoard] = useState<(ChessPiece | null)[][] | null>(
+    null
+  );
 
   const pieces = useMemo(() => {
     if (!board || board.length === 0) return prevPieces;
@@ -70,7 +71,7 @@ export function Chessboard({
               ...cell,
               id: `piece-${pieceIdCounter++}`,
               row: r,
-              col: c
+              col: c,
             });
           }
         });
@@ -82,7 +83,7 @@ export function Chessboard({
 
     // --- Diff-based matching against previous pieces ---
     const pieceMap = new Map<string, PositionedPiece>();
-    currentPieces.forEach(p => pieceMap.set(`${p.row}-${p.col}`, p));
+    currentPieces.forEach((p) => pieceMap.set(`${p.row}-${p.col}`, p));
 
     const result: PositionedPiece[] = [];
     const matchedNew = new Set<string>();
@@ -102,7 +103,7 @@ export function Chessboard({
     });
 
     // 2. Moved pieces — match disappeared to appeared by type/color + proximity
-    const disappeared = currentPieces.filter(p => !matchedOld.has(p.id));
+    const disappeared = currentPieces.filter((p) => !matchedOld.has(p.id));
     const appeared: { cell: ChessPiece; r: number; c: number }[] = [];
     board.forEach((row, r) => {
       row.forEach((cell, c) => {
@@ -112,7 +113,7 @@ export function Chessboard({
       });
     });
 
-    appeared.forEach(app => {
+    appeared.forEach((app) => {
       let bestIdx = -1;
       let bestDist = Infinity;
       for (let i = 0; i < disappeared.length; i++) {
@@ -150,7 +151,6 @@ export function Chessboard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board]);
 
-
   return (
     <div className="relative w-full max-w-[800px] aspect-square mx-auto">
       {/* Glowing frame */}
@@ -167,36 +167,36 @@ export function Chessboard({
         {/* 8x8 grid */}
         <div className="grid grid-cols-8 grid-rows-8 w-full h-full">
           {Array.from({ length: 8 }).map((_, displayRowIndex) => {
-             const actualRowIndex = getVisualRow(displayRowIndex);
+            const actualRowIndex = getVisualRow(displayRowIndex);
 
-             return Array.from({ length: 8 }).map((_, displayColIndex) => {
-                const actualColIndex = getVisualCol(displayColIndex);
+            return Array.from({ length: 8 }).map((_, displayColIndex) => {
+              const actualColIndex = getVisualCol(displayColIndex);
 
-                const isLight = (actualRowIndex + actualColIndex) % 2 === 0;
-                
-                const isSelected =
-                  selectedSquare?.row === actualRowIndex &&
-                  selectedSquare?.col === actualColIndex;
+              const isLight = (actualRowIndex + actualColIndex) % 2 === 0;
 
-                const isLegalMove = legalMoves.some(
-                  (m) => m.row === actualRowIndex && m.col === actualColIndex
-                );
+              const isSelected =
+                selectedSquare?.row === actualRowIndex &&
+                selectedSquare?.col === actualColIndex;
 
-                const isEnPassant = legalMoves.some(
-                  (m) =>
-                    m.row === actualRowIndex &&
-                    m.col === actualColIndex &&
-                    m.type === "EN_PASSANT"
-                );
+              const isLegalMove = legalMoves.some(
+                (m) => m.row === actualRowIndex && m.col === actualColIndex
+              );
 
-                return (
-                 <div
-                 key={`${actualRowIndex}-${actualColIndex}`}
-                 onPointerDown={(e) => {
-                   e.preventDefault();
-                   onSquareClick?.(actualRowIndex, actualColIndex);
-                 }}
-                 className={`
+              const isEnPassant = legalMoves.some(
+                (m) =>
+                  m.row === actualRowIndex &&
+                  m.col === actualColIndex &&
+                  m.type === "EN_PASSANT"
+              );
+
+              return (
+                <div
+                  key={`${actualRowIndex}-${actualColIndex}`}
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    onSquareClick?.(actualRowIndex, actualColIndex);
+                  }}
+                  className={`
                    relative
                    w-full h-full
                    flex items-center justify-center
@@ -204,42 +204,50 @@ export function Chessboard({
                    transition-all duration-200
                    ${isLight ? "bg-[#F2F7F9]" : "bg-[#4FB3BF]"}
                    ${isSelected ? "ring-4 ring-[#6d5bae] ring-inset" : ""}
-                   ${isLegalMove
-                     ? isEnPassant
-                       ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:pointer-events-none"
-                       : "after:absolute after:w-4 after:h-4 after:bg-[#394f64]/80 after:rounded-full after:pointer-events-none"
-                     : ""}
+                   ${
+                     isLegalMove
+                       ? isEnPassant
+                         ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:pointer-events-none"
+                         : "after:absolute after:w-4 after:h-4 after:bg-[#394f64]/80 after:rounded-full after:pointer-events-none"
+                       : ""
+                   }
                    
                  `}
+                  style={{
+                    borderRight:
+                      displayColIndex < 7
+                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        : "none",
+                    borderBottom:
+                      displayRowIndex < 7
+                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        : "none",
+                  }}
+                >
+                  {/* Rank Numbers (1-8) - Top Left of first col */}
+                  {displayColIndex === 0 && (
+                    <span
+                      className={`absolute top-0.5 left-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${
+                        isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"
+                      }`}
+                    >
+                      {displayRanks[displayRowIndex]}
+                    </span>
+                  )}
 
-                   style={{
-                     borderRight:
-                       displayColIndex < 7
-                         ? "1px solid rgba(255, 209, 102, 0.1)"
-                         : "none",
-                     borderBottom:
-                       displayRowIndex < 7
-                         ? "1px solid rgba(255, 209, 102, 0.1)"
-                         : "none",
-                   }}
-                 >
-                         {/* Rank Numbers (1-8) - Top Left of first col */}
-            {displayColIndex === 0 && (
-              <span className={`absolute top-0.5 left-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"}`}>
-                {displayRanks[displayRowIndex]}
-              </span>
-            )}
-
-            {/* File Letters (a-h) - Bottom Right of last row */}
-            {displayRowIndex === 7 && (
-              <span className={`absolute bottom-0.5 right-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"}`}>
-                {displayFiles[displayColIndex]}
-              </span>
-            )}
-              
-                 </div>
-               )
-             });
+                  {/* File Letters (a-h) - Bottom Right of last row */}
+                  {displayRowIndex === 7 && (
+                    <span
+                      className={`absolute bottom-0.5 right-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${
+                        isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"
+                      }`}
+                    >
+                      {displayFiles[displayColIndex]}
+                    </span>
+                  )}
+                </div>
+              );
+            });
           })}
         </div>
 
@@ -277,20 +285,18 @@ export function Chessboard({
 
         {/* Rank labels */}
         <div className="absolute -left-6 top-0 h-full flex flex-col justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
-
           {displayRanks.map((n) => (
             <span key={n}>{n}</span>
-          ))}  
+          ))}
         </div>
 
         {/* File labels */}
         <div className="absolute -bottom-6 left-0 w-full flex justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
-
           {displayFiles.map((l) => (
             <span key={l}>{l}</span>
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

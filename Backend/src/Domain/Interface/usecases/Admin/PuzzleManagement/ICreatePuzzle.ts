@@ -1,7 +1,8 @@
-import { PuzzleResponseDTO,
+import {
+  PuzzleResponseDTO,
   CreatePuzzleInputDTO,
 } from "../../../../DTOs/AdminDTOs";
 
-export interface ICreatePuzzleUseCase{
-    execute(input:CreatePuzzleInputDTO):Promise<PuzzleResponseDTO>
+export interface ICreatePuzzleUseCase {
+  execute(input: CreatePuzzleInputDTO): Promise<PuzzleResponseDTO>;
 }

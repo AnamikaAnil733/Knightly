@@ -1,63 +1,62 @@
-import {Schema } from "mongoose";
+import { Schema } from "mongoose";
 import { UserRole } from "../../../Domain/Types/UserRole";
 
+export interface AuthSchemaType {
+  displayname: string;
+  email: string;
+  passwordHash?: string;
+  googleId?: string;
+  role: UserRole;
+  isBlocked: boolean;
+  isNewUser: boolean;
 
-export interface AuthSchemaType{
-    displayname:string;
-    email:string;
-    passwordHash?:string;
-    googleId?:string,
-    role:UserRole;
-    isBlocked:boolean;
-    isNewUser:boolean;
-
-    gamesPlayed: number;
-    gamesWin: number;
-    rating: {
-      BULLET: number;
-      BLITZ: number;
-      RAPID: number;
-      CLASSICAL: number;
-    };
-    premium: boolean;
-    longestStreak: number;
-    currentStreak: number;
-    rewards: string[];
-    achievements: string[];
-    subscriptionStart?: Date;
-    createdAt:Date;
-    avatarKey:string;
+  gamesPlayed: number;
+  gamesWin: number;
+  rating: {
+    BULLET: number;
+    BLITZ: number;
+    RAPID: number;
+    CLASSICAL: number;
+  };
+  premium: boolean;
+  longestStreak: number;
+  currentStreak: number;
+  rewards: string[];
+  achievements: string[];
+  subscriptionStart?: Date;
+  createdAt: Date;
+  avatarKey: string;
 }
 
 export const authSchema = new Schema<AuthSchemaType>(
   {
-    displayname:{
-      type:Schema.Types.String,
-      required:true,
+    displayname: {
+      type: Schema.Types.String,
+      required: true,
     },
-    email:{
-      type:Schema.Types.String,
-      required:true,
+    email: {
+      type: Schema.Types.String,
+      required: true,
     },
-    passwordHash:{
-      type:Schema.Types.String,
+    passwordHash: {
+      type: Schema.Types.String,
     },
-    googleId:{
-      type:Schema.Types.String,
+    googleId: {
+      type: Schema.Types.String,
     },
-    role:{
-      type:Schema.Types.String,
-      enum:Object.values(UserRole),
+    role: {
+      type: Schema.Types.String,
+      enum: Object.values(UserRole),
     },
-    isBlocked:{
-      type:Boolean,
-      required:true,
-      default:false,
+    isBlocked: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
-    isNewUser:{
-      type:Boolean,
-      required:true,
-      default:true,
+    isNewUser: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
     gamesPlayed: { type: Number, default: 0 },
     gamesWin: { type: Number, default: 0 },
@@ -76,8 +75,7 @@ export const authSchema = new Schema<AuthSchemaType>(
     rewards: { type: [String], default: [] },
     achievements: { type: [String], default: [] },
     subscriptionStart: { type: Date },
-    avatarKey: { type: String,default:null },
-
+    avatarKey: { type: String, default: null },
   },
-  {timestamps:true},
+  { timestamps: true }
 );

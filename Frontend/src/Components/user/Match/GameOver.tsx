@@ -5,7 +5,7 @@ import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
 
 type Props = {
-  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+  status: "CHECKMATE" | "STALEMATE" | "WHITE_TIMEOUT" | "BLACK_TIMEOUT";
   turn: "WHITE" | "BLACK";
   myRole: "WHITE" | "BLACK" | "SPECTATOR" | null;
 };
@@ -19,10 +19,10 @@ export function GameOver({ status, turn, myRole }: Props) {
         ? "BLACK"
         : "WHITE"
       : status === "WHITE_TIMEOUT"
-        ? "BLACK"
-        : status === "BLACK_TIMEOUT"
-          ? "WHITE"
-          : null;
+      ? "BLACK"
+      : status === "BLACK_TIMEOUT"
+      ? "WHITE"
+      : null;
 
   // Determine outcome from the current player's perspective
   const getOutcome = (): Outcome => {
@@ -149,8 +149,10 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloColor: "text-green-400",
       eloText: "+24 ELO",
       eloIcon: <TrendingUp className="w-4 h-4 text-green-400" />,
-      buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
-      buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
+      buttonGradient:
+        "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
+      buttonGlow:
+        "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },
     lose: {
       title: "Defeat",
@@ -166,8 +168,10 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloColor: "text-red-400",
       eloText: "-24 ELO",
       eloIcon: <TrendingDown className="w-4 h-4 text-red-400" />,
-      buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
-      buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
+      buttonGradient:
+        "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
+      buttonGlow:
+        "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },
     draw: {
       title: "Draw",
@@ -183,8 +187,10 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloColor: "text-yellow-400",
       eloText: "+0 ELO",
       eloIcon: null,
-      buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
-      buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
+      buttonGradient:
+        "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
+      buttonGlow:
+        "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },
     spectator: {
       title: winner ? `${winner} WINS` : "Draw",
@@ -200,8 +206,10 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloColor: "text-purple-400",
       eloText: "Game Over",
       eloIcon: null,
-      buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
-      buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
+      buttonGradient:
+        "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
+      buttonGlow:
+        "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },
   };
 
@@ -232,7 +240,10 @@ export function GameOver({ status, turn, myRole }: Props) {
           background: t.cardBg,
           boxShadow: `
             0 0 60px ${t.cardGlow},
-            0 0 120px ${t.cardGlow.replace("0.3", "0.15").replace("0.25", "0.12").replace("0.2", "0.1")},
+            0 0 120px ${t.cardGlow
+              .replace("0.3", "0.15")
+              .replace("0.25", "0.12")
+              .replace("0.2", "0.1")},
             0 25px 50px rgba(0, 0, 0, 0.5),
             inset 0 1px 0 rgba(255, 255, 255, 0.05)
           `,
@@ -241,7 +252,6 @@ export function GameOver({ status, turn, myRole }: Props) {
       >
         {/* Inner Content */}
         <div className="flex flex-col items-center px-8 pt-10 pb-8">
-
           {/* Title */}
           <motion.h1
             initial={{ y: -20, opacity: 0 }}
@@ -261,7 +271,12 @@ export function GameOver({ status, turn, myRole }: Props) {
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.35 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 15,
+              delay: 0.35,
+            }}
             className="relative flex items-center justify-center"
             style={{ width: 120, height: 120 }}
           >
@@ -277,7 +292,9 @@ export function GameOver({ status, turn, myRole }: Props) {
               /* Fallback while loading */
               <div
                 className="text-6xl"
-                style={{ filter: "drop-shadow(0 4px 12px rgba(255, 193, 7, 0.4))" }}
+                style={{
+                  filter: "drop-shadow(0 4px 12px rgba(255, 193, 7, 0.4))",
+                }}
               >
                 🏆
               </div>
@@ -298,7 +315,9 @@ export function GameOver({ status, turn, myRole }: Props) {
                 animate={{ rotate: [0, -10, 10, -5, 0] }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-6xl"
-                style={{ filter: "drop-shadow(0 4px 12px rgba(239, 68, 68, 0.4))" }}
+                style={{
+                  filter: "drop-shadow(0 4px 12px rgba(239, 68, 68, 0.4))",
+                }}
               >
                 ⚔️
               </motion.div>
@@ -308,9 +327,15 @@ export function GameOver({ status, turn, myRole }: Props) {
             {isDraw && (
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="text-6xl"
-                style={{ filter: "drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3))" }}
+                style={{
+                  filter: "drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3))",
+                }}
               >
                 🤝
               </motion.div>
@@ -320,9 +345,15 @@ export function GameOver({ status, turn, myRole }: Props) {
             {outcome === "spectator" && (
               <motion.div
                 animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="text-6xl"
-                style={{ filter: "drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3))" }}
+                style={{
+                  filter: "drop-shadow(0 4px 12px rgba(139, 92, 246, 0.3))",
+                }}
               >
                 ♚
               </motion.div>
@@ -344,7 +375,12 @@ export function GameOver({ status, turn, myRole }: Props) {
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 400, damping: 20 }}
+            transition={{
+              delay: 0.6,
+              type: "spring",
+              stiffness: 400,
+              damping: 20,
+            }}
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-full mb-6"
             style={{
               background: t.eloBadgeBg,

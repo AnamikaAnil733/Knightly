@@ -11,22 +11,21 @@ import WB from "../../assets/chessPieces/png/W Bishop.png";
 import WN from "../../assets/chessPieces/png/W Knight.png";
 import WP from "../../assets/chessPieces/png/w Pawn.png";
 
-
 export const Piece_Images = {
-    WHITE :{
-        PAWN : WP,
-        ROOK : WR,
-        KING : WK,
-        QUEEN : WQ,
-        BISHOP : WB,
-        KNIGHT : WN,
-    },
-    BLACK:{
-        PAWN : BP,
-        ROOK : BR,
-        KING : BK,
-        QUEEN : BQ,
-        BISHOP : BB,
-        KNIGHT : BN,
-    }
-} as const
+  WHITE: {
+    PAWN: WP,
+    ROOK: WR,
+    KING: WK,
+    QUEEN: WQ,
+    BISHOP: WB,
+    KNIGHT: WN,
+  },
+  BLACK: {
+    PAWN: BP,
+    ROOK: BR,
+    KING: BK,
+    QUEEN: BQ,
+    BISHOP: BB,
+    KNIGHT: BN,
+  },
+} as const;

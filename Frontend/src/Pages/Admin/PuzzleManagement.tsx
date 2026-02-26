@@ -1,68 +1,65 @@
-import { useEffect, useState } from 'react'
-import { PuzzleTable } from '../../Components/admin/PuzzleManagement/puzzleTable'
+import { useEffect, useState } from "react";
+import { PuzzleTable } from "../../Components/admin/PuzzleManagement/puzzleTable";
 import {
   PuzzleModal,
   PuzzleFormData,
-} from '../../Components/admin/PuzzleManagement/puzzleModal'
-import { DailyPuzzle } from '../../Components/admin/PuzzleManagement/dailyPuzzle'
-import { PlusIcon } from 'lucide-react'
+} from "../../Components/admin/PuzzleManagement/puzzleModal";
+import { DailyPuzzle } from "../../Components/admin/PuzzleManagement/dailyPuzzle";
+import { PlusIcon } from "lucide-react";
 
 import {
   createPuzzleApi,
   getAllPuzzlesApi,
   deletePuzzleApi,
   editPuzzlesApi,
-} from '../../Service/Api/AdminPuzzleApi'
+} from "../../Service/Api/AdminPuzzleApi";
 
 /* ===================== TYPES ===================== */
 
 export interface Puzzle {
-  id: string
-  fen: string
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert'
-  moves: string[]
-  solutionLength: number
-  isActive: boolean
-  createdAt: string
+  id: string;
+  fen: string;
+  difficulty: "Easy" | "Medium" | "Hard" | "Expert";
+  moves: string[];
+  solutionLength: number;
+  isActive: boolean;
+  createdAt: string;
 }
 
 /* ===================== COMPONENT ===================== */
 
 export function PuzzleManagement() {
-  const [puzzles, setPuzzles] = useState<Puzzle[]>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   /* ===================== FETCH ===================== */
-  
 
   useEffect(() => {
-    const fetchPuzzles = async ()=>{
-    try {
-      const res = await getAllPuzzlesApi({ page, limit: 10 })
-      setPuzzles(res.puzzles)
-      setTotalPages(res.totalPages)
-    } catch (error) {
-      console.error('Failed to fetch puzzles', error)
-    }
-  }
-  fetchPuzzles()
-  }, [page])
-
- 
+    const fetchPuzzles = async () => {
+      try {
+        const res = await getAllPuzzlesApi({ page, limit: 10 });
+        setPuzzles(res.puzzles);
+        setTotalPages(res.totalPages);
+      } catch (error) {
+        console.error("Failed to fetch puzzles", error);
+      }
+    };
+    fetchPuzzles();
+  }, [page]);
 
   /* ===================== CREATE ===================== */
   const fetchPuzzles = async (pageNumber = page) => {
     try {
-      const res = await getAllPuzzlesApi({ page: pageNumber, limit: 10 })
-      setPuzzles(res.puzzles)
-      setTotalPages(res.totalPages)
+      const res = await getAllPuzzlesApi({ page: pageNumber, limit: 10 });
+      setPuzzles(res.puzzles);
+      setTotalPages(res.totalPages);
     } catch (error) {
-      console.error('Failed to fetch puzzles', error)
+      console.error("Failed to fetch puzzles", error);
     }
-  }
+  };
 
   const handleSavePuzzle = async (data: PuzzleFormData) => {
     try {
@@ -73,36 +70,36 @@ export function PuzzleManagement() {
           fen: data.fen,
           difficulty: data.difficulty,
           moves: data.moves,
-        })
+        });
       } else {
         // CREATE
-        await createPuzzleApi(data)
+        await createPuzzleApi(data);
       }
-      setIsModalOpen(false)
-      setEditingPuzzle(null)
-      fetchPuzzles()
+      setIsModalOpen(false);
+      setEditingPuzzle(null);
+      fetchPuzzles();
     } catch (error) {
-      console.error('Failed to save puzzle', error)
+      console.error("Failed to save puzzle", error);
     }
-  }
+  };
 
   /* ===================== EDIT ===================== */
 
   const handleEditPuzzle = (puzzle: Puzzle) => {
-    setEditingPuzzle(puzzle)
-    setIsModalOpen(true)
-  }
+    setEditingPuzzle(puzzle);
+    setIsModalOpen(true);
+  };
 
   /* ===================== DELETE ===================== */
 
   const handleDeletePuzzle = async (id: string) => {
     try {
-      await deletePuzzleApi(id)
-      await fetchPuzzles()
+      await deletePuzzleApi(id);
+      await fetchPuzzles();
     } catch (error) {
-      console.error('Failed to delete puzzle', error)
+      console.error("Failed to delete puzzle", error);
     }
-  }
+  };
 
   /* ===================== RENDER ===================== */
 
@@ -149,8 +146,8 @@ export function PuzzleManagement() {
       {isModalOpen && (
         <PuzzleModal
           onClose={() => {
-            setIsModalOpen(false)
-            setEditingPuzzle(null)
+            setIsModalOpen(false);
+            setEditingPuzzle(null);
           }}
           onSave={handleSavePuzzle}
           initialData={
@@ -165,5 +162,5 @@ export function PuzzleManagement() {
         />
       )}
     </div>
-  )
+  );
 }

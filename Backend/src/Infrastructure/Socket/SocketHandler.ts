@@ -1,33 +1,31 @@
-import {Server,Socket} from "socket.io";
+import { Server, Socket } from "socket.io";
 import { IMakeMoveUseCase } from "../../Domain/Interface/usecases/User/gameManagement/IMakeMoveUseCase";
 import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameRepository";
 import { IMatchmakingUseCase } from "../../Domain/Interface/usecases/User/gameManagement/IMatchmakingUseCase";
 
-export class SocketHandler{
-
-  private rooms = new Map<
-    string,
-    { white?: string; black?: string }
-  >();
+export class SocketHandler {
+  private rooms = new Map<string, { white?: string; black?: string }>();
 
   constructor(
-        private readonly _io:Server,
-        private readonly _makeMoveUseCase:IMakeMoveUseCase,
-        private readonly _gameRepo:IChessGameRepository,
-        private readonly _matchmakingUseCase: IMatchmakingUseCase,
-        private readonly _userRepo: IChessGameRepository,
-  ){}
+    private readonly _io: Server,
+    private readonly _makeMoveUseCase: IMakeMoveUseCase,
+    private readonly _gameRepo: IChessGameRepository,
+    private readonly _matchmakingUseCase: IMatchmakingUseCase,
+    private readonly _userRepo: IChessGameRepository
+  ) {}
 
-  public initialize(){
-
-    this._io.on("connection",(socket:Socket)=>{
-
-      console.log("socket connected",socket.id);
+  public initialize() {
+    this._io.on("connection", (socket: Socket) => {
+      console.log("socket connected", socket.id);
 
       socket.on("checkTimeout", async (gameId: string) => {
         try {
           const game = await this._gameRepo.findById(gameId);
-          if (!game || (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")) return;
+          if (
+            !game ||
+            (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")
+          )
+            return;
 
           if (game.checkPassiveTimeout()) {
             await this._gameRepo.update(game);
@@ -62,11 +60,12 @@ export class SocketHandler{
 
       socket.on("findMatch", async (userId: string) => {
         try {
-         
-          const user = await this._userRepo.findById(userId) as any;
+          const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
 
-          const rating = user.getRating ? user.getRating("BLITZ") : (user.rating?.BLITZ || 1200);
+          const rating = user.getRating
+            ? user.getRating("BLITZ")
+            : user.rating?.BLITZ || 1200;
 
           const result = await this._matchmakingUseCase.findMatch({
             userId,
@@ -105,29 +104,26 @@ export class SocketHandler{
 
             console.log("Match created:", gameId);
           }
-
         } catch (error) {
           console.error("Matchmaking error:", error);
         }
       });
-
-
 
       socket.on("cancelSearch", () => {
         this._matchmakingUseCase.removeFromQueue(socket.id);
         socket.emit("searchCancelled");
       });
 
-      socket.on("joinGame",(gameId:string)=>{
+      socket.on("joinGame", (gameId: string) => {
         socket.join(gameId);
 
-        if(!this.rooms.has(gameId)){
-          this.rooms.set(gameId,{});
+        if (!this.rooms.has(gameId)) {
+          this.rooms.set(gameId, {});
         }
 
         const room = this.rooms.get(gameId)!;
 
-        let role:"WHITE"|"BLACK"|"SPECTATOR";
+        let role: "WHITE" | "BLACK" | "SPECTATOR";
 
         // Prioritize existing assignment (from matchmaking)
         if (room.white === socket.id) {
@@ -136,56 +132,49 @@ export class SocketHandler{
           role = "BLACK";
         }
         // Otherwise fill empty seats (direct joins)
-        else if(!room.white){
+        else if (!room.white) {
           room.white = socket.id;
           role = "WHITE";
-        }else if(!room.black){
+        } else if (!room.black) {
           room.black = socket.id;
           role = "BLACK";
-        }else{
+        } else {
           role = "SPECTATOR";
         }
 
-        socket.emit("roleAssigned",role);
+        socket.emit("roleAssigned", role);
 
         console.log(`Socket ${socket.id} joined ${gameId} as ${role}`);
       });
 
-      socket.on("move",async ({gameId,from, to, promotionType})=>{
-        try{
-
+      socket.on("move", async ({ gameId, from, to, promotionType }) => {
+        try {
           const room = this.rooms.get(gameId);
-          if(!room)return;
+          if (!room) return;
 
-          let playerColor :"WHITE"|"BLACK"|null = null;
+          let playerColor: "WHITE" | "BLACK" | null = null;
 
-          if(room.white === socket.id) playerColor = "WHITE";
-          if(room.black === socket.id) playerColor = "BLACK";
+          if (room.white === socket.id) playerColor = "WHITE";
+          if (room.black === socket.id) playerColor = "BLACK";
 
-          if(!playerColor){
-            socket.emit("moveError","Spectators cannot move");
+          if (!playerColor) {
+            socket.emit("moveError", "Spectators cannot move");
             return;
           }
           const game = await this._gameRepo.findById(gameId);
-          if(!game) return;
+          if (!game) return;
 
           const gameState = game.getGameState();
 
-
-          if(gameState.getTurn() !== playerColor){
-            socket.emit("moveError","Not your Turn");
+          if (gameState.getTurn() !== playerColor) {
+            socket.emit("moveError", "Not your Turn");
             return;
           }
 
-          await this._makeMoveUseCase.execute(
-            gameId,
-            from,
-            to,
-            promotionType,
-          );
+          await this._makeMoveUseCase.execute(gameId, from, to, promotionType);
 
           const updatedGame = await this._gameRepo.findById(gameId);
-          if(!updatedGame) {
+          if (!updatedGame) {
             console.error("Game not found after move:", gameId);
             return;
           }
@@ -199,11 +188,13 @@ export class SocketHandler{
           const clock = updatedGame.getClock();
           const liveTimes = clock.getLiveTimes();
 
-          console.log(`Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`);
+          console.log(
+            `Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`
+          );
 
-          this._io.to(gameId).emit("gameUpdated",{
-            board:updatedState.getBoard().serialize(),
-            turn:updatedState.getTurn(),
+          this._io.to(gameId).emit("gameUpdated", {
+            board: updatedState.getBoard().serialize(),
+            turn: updatedState.getTurn(),
             history: updatedState.getHistory().map((move: any) => ({
               from: {
                 row: move.from.row,
@@ -217,7 +208,7 @@ export class SocketHandler{
               color: move.color,
               promotion: move.promotionType ?? undefined,
             })),
-            status:updatedGame.getStatus(),
+            status: updatedGame.getStatus(),
             clock: {
               whiteTime: liveTimes.whiteTime,
               blackTime: liveTimes.blackTime,
@@ -225,28 +216,24 @@ export class SocketHandler{
               turn: clock.turn,
             },
           });
-
-
-        }catch(err){
+        } catch (err) {
           console.error("Move processing error:", err);
           socket.emit("moveError", (err as Error).message);
         }
       });
-      socket.on("disconnect",()=>{
-
+      socket.on("disconnect", () => {
         this._matchmakingUseCase.removeFromQueue(socket.id);
 
-        for(const [gameId,room] of this.rooms.entries()){
-          if(room.white === socket.id){
+        for (const [gameId, room] of this.rooms.entries()) {
+          if (room.white === socket.id) {
             room.white = undefined;
           }
-          if(room.black === socket.id){
+          if (room.black === socket.id) {
             room.black = undefined;
           }
         }
-        console.log("Socket disconnected",socket.id);
+        console.log("Socket disconnected", socket.id);
       });
     });
   }
-
 }

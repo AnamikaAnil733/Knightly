@@ -2,10 +2,10 @@ import { IOtpService } from "../../../Domain/Interface/service/IOtpService";
 import { ICachingService } from "../../../Domain/Interface/service/ICachingService";
 import { IVerifyOtpUseCase } from "../../../Domain/Interface/usecases/Authentication/IVerifyOtpUseCase";
 
-export class VerifyOtpUseCase implements IVerifyOtpUseCase{
+export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
     private _otpService: IOtpService,
-    private _cachingService: ICachingService,
+    private _cachingService: ICachingService
   ) {}
 
   async execute(email: string, otp: string): Promise<boolean> {

@@ -3,13 +3,13 @@ import Auth from "../../../Domain/Entity/Auth";
 export class MongoMapper {
   static toMongo(user: Auth) {
     return {
-      displayname:user.displayname,
-      email:user.email,
-      passwordHash:user.passwordHash,
-      googleId:user.googleId,
-      role:user.role,
-      isBlocked:user.isBlocked,
-      isNewUser:user.isNewUser,
+      displayname: user.displayname,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      googleId: user.googleId,
+      role: user.role,
+      isBlocked: user.isBlocked,
+      isNewUser: user.isNewUser,
     };
   }
 }

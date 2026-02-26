@@ -1,1 +1,7 @@
-export type GameStatus = "ACTIVE" | "CHECKMATE" | "STALEMATE"| "CHECK"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+export type GameStatus =
+  | "ACTIVE"
+  | "CHECKMATE"
+  | "STALEMATE"
+  | "CHECK"
+  | "WHITE_TIMEOUT"
+  | "BLACK_TIMEOUT";

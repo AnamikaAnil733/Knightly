@@ -1,6 +1,5 @@
-import { AuthRequestDTO,AuthResponseDTO } from "../../../DTOs/AuthDTO";
+import { AuthRequestDTO, AuthResponseDTO } from "../../../DTOs/AuthDTO";
 
-
-export interface ILoginUseCase{
-    execute(data:AuthRequestDTO):Promise<AuthResponseDTO>
+export interface ILoginUseCase {
+  execute(data: AuthRequestDTO): Promise<AuthResponseDTO>;
 }

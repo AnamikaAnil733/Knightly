@@ -1,7 +1,4 @@
-import axios, {
-  AxiosError,
-  InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { Store } from "../../../Store/Store";
 import {
   setuserAccessToken,
@@ -10,12 +7,7 @@ import {
 
 /* ===================== TYPES ===================== */
 
-const PUBLIC_ROUTES = [
-  "/auth/login",
-  "/auth/register",
-  "/auth/refresh",
-];
-
+const PUBLIC_ROUTES = ["/auth/login", "/auth/register", "/auth/refresh"];
 
 interface RefreshResponse {
   success: boolean;
@@ -80,7 +72,6 @@ userApi.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
 /* ===================== RESPONSE INTERCEPTOR ===================== */
 userApi.interceptors.response.use(
   (response) => response,
@@ -126,7 +117,7 @@ userApi.interceptors.response.use(
         return userApi(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        Store.dispatch(logout()); 
+        Store.dispatch(logout());
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -136,6 +127,5 @@ userApi.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default userApi;

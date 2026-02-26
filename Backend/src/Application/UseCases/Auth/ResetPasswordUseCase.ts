@@ -7,23 +7,22 @@ import { ICachingService } from "../../../Domain/Interface/service/ICachingServi
 import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
 import { IResetPasswordUseCase } from "../../../Domain/Interface/usecases/Authentication/IResetPasswordUseCase";
 
-
-export class ResetPaswordUseCase implements IResetPasswordUseCase{
+export class ResetPaswordUseCase implements IResetPasswordUseCase {
   constructor(
-        private _cachingService: ICachingService,
-        private _hashService: IHashService,
-        private _authRepository: IUserRepository,
-  ){}
+    private _cachingService: ICachingService,
+    private _hashService: IHashService,
+    private _authRepository: IUserRepository
+  ) {}
 
   async execute(password: string, email: string): Promise<UserRole> {
-
-    const verified = await this._cachingService.getData<boolean>(`VERIFIED_USER:${email}`);
-
+    const verified = await this._cachingService.getData<boolean>(
+      `VERIFIED_USER:${email}`
+    );
 
     if (!verified) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.EMAIL_VALIDATION_EXPIRED,
+        MESSAGES.EMAIL_VALIDATION_EXPIRED
       );
     }
 
@@ -32,7 +31,7 @@ export class ResetPaswordUseCase implements IResetPasswordUseCase{
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.USER_DOESNT_EXIST,
+        MESSAGES.USER_DOESNT_EXIST
       );
     }
 

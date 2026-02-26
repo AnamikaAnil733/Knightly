@@ -1,5 +1,9 @@
 import { ITokenService } from "../../Domain/Interface/service/ITokenService";
-import { AccessTokenData, GenerateRefreshTokenReturnType, RefreshTokenData } from "../../Domain/Types/Tokentypes";
+import {
+  AccessTokenData,
+  GenerateRefreshTokenReturnType,
+  RefreshTokenData,
+} from "../../Domain/Types/Tokentypes";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,7 +37,11 @@ export class TokenService implements ITokenService {
 
   generateRefreshToken(data: RefreshTokenData): GenerateRefreshTokenReturnType {
     const tokenId = uuidv4();
-    const refreshToken = jwt.sign({ ...data, tokenId }, this._refreshTokenSecret, { expiresIn: "7d" });
+    const refreshToken = jwt.sign(
+      { ...data, tokenId },
+      this._refreshTokenSecret,
+      { expiresIn: "7d" }
+    );
     return { tokenId, refreshToken };
   }
 

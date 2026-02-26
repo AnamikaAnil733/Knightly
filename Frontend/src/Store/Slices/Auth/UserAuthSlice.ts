@@ -1,9 +1,9 @@
-import { createSlice , PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../../Types/User";
 
 interface UserAuthState {
   accesstoken: string | null;
-  user: IUser|null;
+  user: IUser | null;
   authLoaded: boolean;
 }
 
@@ -39,9 +39,14 @@ const userAuthSlice = createSlice({
         };
       }
     },
-
-  }
+  },
 });
 
-export const { setuserAccessToken, setUser, setAuthLoaded, logout,updateUser } = userAuthSlice.actions;
+export const {
+  setuserAccessToken,
+  setUser,
+  setAuthLoaded,
+  logout,
+  updateUser,
+} = userAuthSlice.actions;
 export default userAuthSlice.reducer;

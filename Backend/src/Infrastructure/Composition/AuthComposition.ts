@@ -17,7 +17,6 @@ import { ForgetPasswordUseCase } from "../../Application/UseCases/Auth/ForgetPas
 import { ResetPaswordUseCase } from "../../Application/UseCases/Auth/ResetPasswordUseCase";
 import { GoogleAuthUseCase } from "../../Application/UseCases/Auth/GoogleAuthUseCase";
 
-
 const UserRepo = new AuthRepository();
 const cache = new CachingService();
 const otpService = new OtpService(cache);
@@ -27,13 +26,29 @@ const tokenservice = new TokenService();
 const googleAuthService = new GoogleAuthService();
 
 //useCases
-const verifyOtpUseCase = new VerifyOtpUseCase(otpService,cache);
-const registerUserUseCase = new RegisterUserUseCase(UserRepo,cache,hashService);
-const loginUserCase = new LoginUseCase(UserRepo,hashService,tokenservice);
-const resendOtpUseCase  = new ResendOtpUseCase(otpService,emailService,UserRepo);
-const forgetPassword = new ForgetPasswordUseCase(emailService,otpService,UserRepo);
-const resetPassword = new ResetPaswordUseCase(cache,hashService,UserRepo);
-const googleAuthUseCase = new GoogleAuthUseCase(UserRepo,googleAuthService,tokenservice);
+const verifyOtpUseCase = new VerifyOtpUseCase(otpService, cache);
+const registerUserUseCase = new RegisterUserUseCase(
+  UserRepo,
+  cache,
+  hashService
+);
+const loginUserCase = new LoginUseCase(UserRepo, hashService, tokenservice);
+const resendOtpUseCase = new ResendOtpUseCase(
+  otpService,
+  emailService,
+  UserRepo
+);
+const forgetPassword = new ForgetPasswordUseCase(
+  emailService,
+  otpService,
+  UserRepo
+);
+const resetPassword = new ResetPaswordUseCase(cache, hashService, UserRepo);
+const googleAuthUseCase = new GoogleAuthUseCase(
+  UserRepo,
+  googleAuthService,
+  tokenservice
+);
 
 //injection
 export const authController = new AuthController(
@@ -44,6 +59,5 @@ export const authController = new AuthController(
   forgetPassword,
   resetPassword,
   googleAuthUseCase,
-  tokenservice,
+  tokenservice
 );
-

@@ -1,43 +1,52 @@
-import React, { useState } from 'react'
-import { ChessboardPreview } from './chessBoardPreview'
-import { XIcon, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { Chess } from 'chess.js'
-import toast from 'react-hot-toast'
+import React, { useState } from "react";
+import { ChessboardPreview } from "./chessBoardPreview";
+import { XIcon, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Chess } from "chess.js";
+import toast from "react-hot-toast";
 
 export interface PuzzleFormData {
-  fen: string
-  difficulty: 'Easy' | 'Medium' | 'Hard' | 'Expert'
-  moves: string[]
+  fen: string;
+  difficulty: "Easy" | "Medium" | "Hard" | "Expert";
+  moves: string[];
 }
 
 function validatePuzzle(fen: string, moves: string[]) {
-  if (!fen) return { isValid: false as const, error: 'FEN is required' }
+  if (!fen) return { isValid: false as const, error: "FEN is required" };
 
-  const chess = new Chess()
+  const chess = new Chess();
   try {
-    chess.load(fen)
+    chess.load(fen);
   } catch (e: unknown) {
-    return { isValid: false as const, error: `Invalid FEN: ${e instanceof Error ? e.message : 'Unknown error'}` }
+    return {
+      isValid: false as const,
+      error: `Invalid FEN: ${e instanceof Error ? e.message : "Unknown error"}`,
+    };
   }
 
   for (let i = 0; i < moves.length; i++) {
     try {
-      const moveResult = chess.move(moves[i])
+      const moveResult = chess.move(moves[i]);
       if (!moveResult) {
-        return { isValid: false as const, error: `Move ${i + 1} (${moves[i]}) is illegal` }
+        return {
+          isValid: false as const,
+          error: `Move ${i + 1} (${moves[i]}) is illegal`,
+        };
       }
     } catch {
-      return { isValid: false as const, error: `Invalid move format: ${moves[i]}` }
+      return {
+        isValid: false as const,
+        error: `Invalid move format: ${moves[i]}`,
+      };
     }
   }
 
-  return { isValid: true as const, finalFen: chess.fen() }
+  return { isValid: true as const, finalFen: chess.fen() };
 }
 
 interface PuzzleModalProps {
-  onClose: () => void
-  onSave: (data: PuzzleFormData) => void
-  initialData?: PuzzleFormData
+  onClose: () => void;
+  onSave: (data: PuzzleFormData) => void;
+  initialData?: PuzzleFormData;
 }
 
 export function PuzzleModal({
@@ -45,73 +54,73 @@ export function PuzzleModal({
   onSave,
   initialData,
 }: PuzzleModalProps) {
-  const [currentMove, setCurrentMove] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [currentMove, setCurrentMove] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<PuzzleFormData>(() => ({
-    fen: initialData?.fen ?? '',
-    difficulty: initialData?.difficulty ?? 'Medium',
+    fen: initialData?.fen ?? "",
+    difficulty: initialData?.difficulty ?? "Medium",
     moves: initialData?.moves ?? [],
-  }))
+  }));
 
   // Real-time validation — let React Compiler handle memoization automatically
-  const validation = validatePuzzle(formData.fen, formData.moves)
+  const validation = validatePuzzle(formData.fen, formData.moves);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-    setError(null)
-  }
+    }));
+    setError(null);
+  };
 
   const handleAddMove = () => {
-    if (!currentMove.trim()) return
-    
+    if (!currentMove.trim()) return;
+
     // Quick check if move is legal before adding
-    const chess = new Chess()
+    const chess = new Chess();
     try {
-      chess.load(formData.fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
-      for (const m of formData.moves) chess.move(m)
-      
-      const testMove = chess.move(currentMove.trim())
+      chess.load(formData.fen || "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+      for (const m of formData.moves) chess.move(m);
+
+      const testMove = chess.move(currentMove.trim());
       if (!testMove) {
-        toast.error(`"${currentMove}" is an illegal move in this position`)
-        return
+        toast.error(`"${currentMove}" is an illegal move in this position`);
+        return;
       }
     } catch {
-      toast.error("Cannot validate move: FEN is invalid")
-      return
+      toast.error("Cannot validate move: FEN is invalid");
+      return;
     }
 
     setFormData((prev) => ({
       ...prev,
       moves: [...prev.moves, currentMove.trim()],
-    }))
-    setCurrentMove('')
-    setError(null)
-  }
+    }));
+    setCurrentMove("");
+    setError(null);
+  };
 
   const handleRemoveMove = (index: number) => {
     setFormData((prev) => ({
       ...prev,
       moves: prev.moves.filter((_, i) => i !== index),
-    }))
-    setError(null)
-  }
+    }));
+    setError(null);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!validation.isValid) {
-      setError(validation.error || 'Invalid puzzle data')
-      toast.error(validation.error || 'Invalid puzzle data')
-      return
+      setError(validation.error || "Invalid puzzle data");
+      toast.error(validation.error || "Invalid puzzle data");
+      return;
     }
-    onSave(formData)
-  }
+    onSave(formData);
+  };
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
@@ -121,7 +130,7 @@ export function PuzzleModal({
       >
         <div className="flex justify-between items-center p-4 border-b border-[#3A6FF7]/30 sticky top-0 bg-[#11193F] z-10">
           <h2 className="text-xl font-bold text-white">
-            {initialData ? 'Edit Puzzle' : 'Add New Puzzle'}
+            {initialData ? "Edit Puzzle" : "Add New Puzzle"}
           </h2>
           <button
             onClick={onClose}
@@ -146,7 +155,11 @@ export function PuzzleModal({
                   onChange={handleChange}
                   className={`w-full bg-[#0A0F2C] border rounded-lg p-2.5 
                              text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none transition-colors
-                             ${error && error.includes('FEN') ? 'border-red-500' : 'border-[#3A6FF7]/50'}`}
+                             ${
+                               error && error.includes("FEN")
+                                 ? "border-red-500"
+                                 : "border-[#3A6FF7]/50"
+                             }`}
                   placeholder="Enter FEN notation"
                   required
                 />
@@ -180,7 +193,9 @@ export function PuzzleModal({
                     type="text"
                     value={currentMove}
                     onChange={(e) => setCurrentMove(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddMove())}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && (e.preventDefault(), handleAddMove())
+                    }
                     className="flex-1 bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
                                text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none"
                     placeholder="e.g. e4, Nf3"
@@ -239,7 +254,7 @@ export function PuzzleModal({
                 <ChessboardPreview
                   fen={
                     formData.fen ||
-                    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+                    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
                   }
                 />
               </div>
@@ -254,11 +269,18 @@ export function PuzzleModal({
                 {!validation.isValid ? (
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px] rounded-2xl p-6 text-center">
                     <AlertCircle className="text-red-400 mb-2 w-8 h-8" />
-                    <p className="text-xs text-red-200 font-medium">{validation.error}</p>
+                    <p className="text-xs text-red-200 font-medium">
+                      {validation.error}
+                    </p>
                   </div>
                 ) : null}
                 <ChessboardPreview
-                  fen={validation.isValid ? validation.finalFen! : (formData.fen || 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')}
+                  fen={
+                    validation.isValid
+                      ? validation.finalFen!
+                      : formData.fen ||
+                        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+                  }
                 />
               </div>
             </div>
@@ -286,15 +308,17 @@ export function PuzzleModal({
               type="submit"
               disabled={!validation.isValid}
               className={`px-8 py-2.5 rounded-xl font-bold transition-all duration-300 border border-[#FFD166]
-                         ${validation.isValid 
-                           ? 'bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] hover:shadow-[0_0_20px_rgba(58,111,247,0.6)] cursor-pointer' 
-                           : 'bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed opacity-50'}`}
+                         ${
+                           validation.isValid
+                             ? "bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] hover:shadow-[0_0_20px_rgba(58,111,247,0.6)] cursor-pointer"
+                             : "bg-gray-800 border-gray-700 text-gray-500 cursor-not-allowed opacity-50"
+                         }`}
             >
-              {initialData ? 'Update Puzzle' : 'Create Puzzle'}
+              {initialData ? "Update Puzzle" : "Create Puzzle"}
             </button>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }

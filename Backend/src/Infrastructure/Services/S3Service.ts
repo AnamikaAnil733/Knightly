@@ -21,10 +21,9 @@ export class S3StorageService implements IStorageService {
     });
   }
 
-
   async generateAvatarUploadUrl(
     key: string,
-    contentType: string,
+    contentType: string
   ): Promise<AvatarURLtypes> {
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
@@ -54,16 +53,13 @@ export class S3StorageService implements IStorageService {
         Key: key,
         Body: body,
         ContentType: contentType,
-      }),
+      })
     );
 
     return key;
   }
 
-  async generateSignedGetUrl(
-    key: string,
-    expiresIn = 300,
-  ): Promise<string> {
+  async generateSignedGetUrl(key: string, expiresIn = 300): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,

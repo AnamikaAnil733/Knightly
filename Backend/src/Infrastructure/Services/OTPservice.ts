@@ -1,11 +1,9 @@
-
 import { IOtpService } from "../../Domain/Interface/service/IOtpService";
 import { logger } from "../Logger/Logger";
 import { ICachingService } from "../../Domain/Interface/service/ICachingService";
 import { OTP_CACHE_PREFIX } from "../../Domain/Constants/EmailHtml/Otpcache";
 
 export class OtpService implements IOtpService {
-
   constructor(private _cachingService: ICachingService) {}
 
   generateOtp(length: number = 7): string {

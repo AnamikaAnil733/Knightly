@@ -1,7 +1,8 @@
-import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../DTOs/AdminDTOs";
+import {
+  BlockUserInputDTO,
+  BlockUserOutputDTO,
+} from "../../../../DTOs/AdminDTOs";
 
-
-
-export interface IBlockUserUseCase{
-    blockUser(input:BlockUserInputDTO):Promise<BlockUserOutputDTO>
+export interface IBlockUserUseCase {
+  blockUser(input: BlockUserInputDTO): Promise<BlockUserOutputDTO>;
 }

@@ -4,7 +4,7 @@ import { IVerifyOtpUseCase } from "Domain/Interface/usecases/Authentication/IVer
 import { IRegisterUserUseCase } from "Domain/Interface/usecases/Authentication/IRegisterUseCase";
 import { ILoginUseCase } from "Domain/Interface/usecases/Authentication/ILoginUseCases";
 import { IResendOtpUsecase } from "Domain/Interface/usecases/Authentication/IResendOtpUseCases";
-import { IforgetPasswordUseCase } from "Domain/Interface/usecases/Authentication/IforgetPasswordUseCase";
+import { IforgetPasswordUseCase } from "Domain/Interface/usecases/Authentication/IForgetPasswordUseCase";
 import { IResetPasswordUseCase } from "Domain/Interface/usecases/Authentication/IResetPasswordUseCase";
 import { IGoogleAuthUseCase } from "Domain/Interface/usecases/Authentication/IGoogleAuthUseCase";
 
@@ -34,7 +34,7 @@ export class AuthController {
     private _forgetPasswordUseCase: IforgetPasswordUseCase,
     private _resetPasswordUseCase: IResetPasswordUseCase,
     private _googleAuthUseCase: IGoogleAuthUseCase,
-    private _tokenService: ITokenService,
+    private _tokenService: ITokenService
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -44,7 +44,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -54,7 +54,7 @@ export class AuthController {
       if (!isValid) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INVALID_OTP,
+          MESSAGES.INVALID_OTP
         );
       }
 
@@ -75,7 +75,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
       const user = await this._registerUserUseCase.execute(result.data);
@@ -99,7 +99,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -117,7 +117,6 @@ export class AuthController {
         path: "/",
         maxAge: 24 * 60 * 60 * 1000,
       });
-
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
@@ -138,7 +137,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -161,7 +160,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -169,7 +168,7 @@ export class AuthController {
 
       res.status(HttpStatusCodes.OK).json({
         success: true,
-        message:MESSAGES.OTP_SENT_EMAIL,
+        message: MESSAGES.OTP_SENT_EMAIL,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: AuthController - forgetPassword");
@@ -184,7 +183,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -209,7 +208,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY,
+          MESSAGES.INVALID_REQUEST_BODY
         );
       }
 
@@ -287,5 +286,4 @@ export class AuthController {
       });
     }
   };
-
 }

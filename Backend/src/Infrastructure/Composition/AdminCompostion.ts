@@ -1,12 +1,12 @@
 import { UserManagmentRepository } from "../Repository/UserRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 
-import { GetAllUserController } from "../../Presentation/Controllers/admin/userManagement/findallUserController";
-import {  BlockUserController }  from "../../Presentation/Controllers/admin/userManagement/blockUserController";
-import {  UnBlockUserController } from "../../Presentation/Controllers/admin/userManagement/unBlockUserController";
-import { AdminPuzzleController } from "../../Presentation/Controllers/admin/puzzleManagment/puzzleManagementAdmin";
+import { GetAllUserController } from "../../Presentation/Controllers/Admin/UserManagement/FindallUserController";
+import { BlockUserController } from "../../Presentation/Controllers/Admin/UserManagement/BlockUserController";
+import { UnBlockUserController } from "../../Presentation/Controllers/Admin/UserManagement/UnBlockUserController";
+import { AdminPuzzleController } from "../../Presentation/Controllers/Admin/PuzzleManagment/puzzleManagementAdmin";
 
-import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
+import { GetAllUserUseCase } from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
 import { UnBlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/UnBlockUserUseCase";
 import { CreatePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagment/CreatePuzzleUseCase";
@@ -17,7 +17,7 @@ import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/Admin/Puzzle
 import { TokenService } from "../Services/TokenService";
 import { PuzzleValidationService } from "../Services/PuzzleValidationService";
 
-import {AdminRoutes} from "../../Presentation/Routes/adminroute";
+import { AdminRoutes } from "../../Presentation/Routes/Adminroute";
 
 const UserManagmentRepo = new UserManagmentRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();
@@ -30,21 +30,32 @@ const puzzleValidationService = new PuzzleValidationService();
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagmentRepo);
 const blockUserUseCase = new BlockUserUseCase(UserManagmentRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagmentRepo);
-const createPuzzleUseCase = new CreatePuzzleUseCase(puzzleMangementRepo,puzzleValidationService);
+const createPuzzleUseCase = new CreatePuzzleUseCase(
+  puzzleMangementRepo,
+  puzzleValidationService
+);
 const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo);
-const editPuzzleUseCase = new EditPuzzleUseCase(puzzleMangementRepo,puzzleValidationService);
-const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(puzzleMangementRepo);
+const editPuzzleUseCase = new EditPuzzleUseCase(
+  puzzleMangementRepo,
+  puzzleValidationService
+);
+const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(
+  puzzleMangementRepo
+);
 
-
-export const getAllUserController = new GetAllUserController(getAllUsersUseCase);
+export const getAllUserController = new GetAllUserController(
+  getAllUsersUseCase
+);
 export const banUserController = new BlockUserController(blockUserUseCase);
-export const unBanUserController = new UnBlockUserController(unBlockUserUserCase);
+export const unBanUserController = new UnBlockUserController(
+  unBlockUserUserCase
+);
 
 export const PuzzleManagementController = new AdminPuzzleController(
   createPuzzleUseCase,
   getAllPuzzleUseCase,
   editPuzzleUseCase,
-  softDeletePuzzleUseCase,
+  softDeletePuzzleUseCase
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

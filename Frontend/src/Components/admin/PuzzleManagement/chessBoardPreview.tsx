@@ -1,8 +1,8 @@
-import { Piece_Images } from "../../reuseable/chessPieces"
-import { useMemo } from "react"
+import { Piece_Images } from "../../reuseable/chessPieces";
+import { useMemo } from "react";
 
 interface ChessboardPreviewProps {
-  fen: string
+  fen: string;
 }
 
 const pieceMap = {
@@ -18,35 +18,34 @@ const pieceMap = {
   B: Piece_Images.WHITE.BISHOP,
   Q: Piece_Images.WHITE.QUEEN,
   K: Piece_Images.WHITE.KING,
-} as const
+} as const;
 
 export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
-
   // Memoized FEN parsing
   const board = useMemo(() => {
-    if (!fen) return []
+    if (!fen) return [];
 
-    const rows = fen.split(" ")[0].split("/")
+    const rows = fen.split(" ")[0].split("/");
 
     return rows.map((row) => {
-      const cells: (string | null)[] = []
+      const cells: (string | null)[] = [];
 
       for (let i = 0; i < row.length; i++) {
-        const char = row[i]
+        const char = row[i];
 
         if (Number.isNaN(Number(char))) {
-          cells.push(pieceMap[char as keyof typeof pieceMap] ?? null)
+          cells.push(pieceMap[char as keyof typeof pieceMap] ?? null);
         } else {
-          const emptySquares = Number(char)
+          const emptySquares = Number(char);
           for (let j = 0; j < emptySquares; j++) {
-            cells.push(null)
+            cells.push(null);
           }
         }
       }
 
-      return cells
-    })
-  }, [fen])
+      return cells;
+    });
+  }, [fen]);
 
   return (
     <div className="w-full max-w-[320px] aspect-square mx-auto">
@@ -56,9 +55,10 @@ export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
             <div
               key={`${rowIndex}-${colIndex}`}
               className={`flex items-center justify-center
-                ${(rowIndex + colIndex) % 2 === 0
-                  ? "bg-[#6a92a5]"
-                  : "bg-[#305375]"
+                ${
+                  (rowIndex + colIndex) % 2 === 0
+                    ? "bg-[#6a92a5]"
+                    : "bg-[#305375]"
                 }`}
             >
               {piece && (
@@ -74,5 +74,5 @@ export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

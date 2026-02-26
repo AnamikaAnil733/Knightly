@@ -1,7 +1,6 @@
-import { configureStore,combineReducers} from "@reduxjs/toolkit";
-import userAuth from  "./Slices/Auth/UserAuthSlice";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import userAuth from "./Slices/Auth/UserAuthSlice";
 import adminAuth from "./Slices/Auth/AdminAuthSlice";
-
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // localStorage
@@ -10,7 +9,7 @@ import storage from "redux-persist/lib/storage"; // localStorage
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["userAuth", "adminAuth"] // keep both logged-in after refresh
+  whitelist: ["userAuth", "adminAuth"], // keep both logged-in after refresh
 };
 
 const rootReducer = combineReducers({
@@ -27,8 +26,6 @@ export const Store = configureStore({
 
 // create persistor to use in index.tsx
 export const persistor = persistStore(Store);
-
-
 
 export type RootState = ReturnType<typeof Store.getState>;
 export type AppDispatch = typeof Store.dispatch;

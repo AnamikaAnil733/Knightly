@@ -1,5 +1,8 @@
 import { BaseRepository } from "./BaseRepository";
-import { ProgressPuzzleModel, PuzzleModel } from "../Database/Model/PuzzleModel";
+import {
+  ProgressPuzzleModel,
+  PuzzleModel,
+} from "../Database/Model/PuzzleModel";
 import { EPuzzle } from "../../Domain/Entity/Puzzle";
 import { PuzzleSchemaType } from "../Database/Schema/PuzzleSchema";
 import { IPuzzleRepository } from "../../Domain/Interface/Repositories/IPuzzleRepository";
@@ -8,24 +11,22 @@ import { PuzzleType } from "Domain/Types/PuzzleTypes";
 import { getPagination } from "../Database/Utils/Pagination";
 import mongoose from "mongoose";
 
-
-export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSchemaType>
-  implements IPuzzleRepository{
-  constructor(){
-    super(PuzzleModel,PuzzleMapper);
+export class PuzzleManagementRepository
+  extends BaseRepository<EPuzzle, PuzzleSchemaType>
+  implements IPuzzleRepository
+{
+  constructor() {
+    super(PuzzleModel, PuzzleMapper);
   }
 
-  async findAll(
-    input?: {
-        page?: number;
-        limit?: number;
-        difficulty?: PuzzleType;
-      },
-  ): Promise<{
-      puzzles: EPuzzle[];
-      total: number;
-    }> {
-
+  async findAll(input?: {
+    page?: number;
+    limit?: number;
+    difficulty?: PuzzleType;
+  }): Promise<{
+    puzzles: EPuzzle[];
+    total: number;
+  }> {
     const { page, limit, skip } = getPagination(input);
 
     const query: Partial<PuzzleSchemaType> & { isActive: boolean } = {
@@ -37,23 +38,16 @@ export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSch
     }
 
     const [docs, total] = await Promise.all([
-      this.model
-        .find(query)
-        .sort("-createdAt")
-        .skip(skip)
-        .limit(limit),
+      this.model.find(query).sort("-createdAt").skip(skip).limit(limit),
 
       this.model.countDocuments(query),
     ]);
 
     return {
-      puzzles: docs.map((doc) =>
-        PuzzleMapper.toEntityFromDocument(doc),
-      ),
+      puzzles: docs.map((doc) => PuzzleMapper.toEntityFromDocument(doc)),
       total,
     };
   }
-
 
   async softDelete(id: string): Promise<boolean> {
     const puzzle = await this.findById(id);
@@ -68,37 +62,40 @@ export class PuzzleManagementRepository extends BaseRepository<EPuzzle,PuzzleSch
     return true;
   }
 
-  async getPuzzleByDifficulty(userId: string, difficulty: PuzzleType): Promise<EPuzzle | null> {
-    const solvedPuzzleId = await ProgressPuzzleModel.find({userId,solved:true}).distinct("puzzleId");
-    const objectIds = solvedPuzzleId.map(id=>new mongoose.Types.ObjectId(id));
+  async getPuzzleByDifficulty(
+    userId: string,
+    difficulty: PuzzleType
+  ): Promise<EPuzzle | null> {
+    const solvedPuzzleId = await ProgressPuzzleModel.find({
+      userId,
+      solved: true,
+    }).distinct("puzzleId");
+    const objectIds = solvedPuzzleId.map(
+      (id) => new mongoose.Types.ObjectId(id)
+    );
     const docs = await PuzzleModel.aggregate([
       {
-        $match:{
+        $match: {
           difficulty,
-          isActive:true,
-          _id:{$nin:objectIds},
+          isActive: true,
+          _id: { $nin: objectIds },
         },
       },
-      {$sample:{size:1}},
+      { $sample: { size: 1 } },
     ]);
 
-    if(!docs.length){
+    if (!docs.length) {
       return null;
     }
     const doc = docs[0];
     return new EPuzzle({
-      id:doc._id.toString(),
-      fen:doc.fen,
-      difficulty:doc.difficulty,
-      moves:doc.moves,
-      solutionLength:doc.solutionLength,
-      isActive:doc.isActive,
-      createdAt:doc.createdAt,
+      id: doc._id.toString(),
+      fen: doc.fen,
+      difficulty: doc.difficulty,
+      moves: doc.moves,
+      solutionLength: doc.solutionLength,
+      isActive: doc.isActive,
+      createdAt: doc.createdAt,
     });
-
   }
-
-
-
-
 }

@@ -1,6 +1,8 @@
-import { EditProfileinputDto,EditProfileoutputDto } from "../../../../DTOs/UserDTOs";
+import {
+  EditProfileinputDto,
+  EditProfileoutputDto,
+} from "../../../../DTOs/UserDTOs";
 
-
-export interface IEditProfileUseCase{
-    editUser(input:EditProfileinputDto):Promise<EditProfileoutputDto>
+export interface IEditProfileUseCase {
+  editUser(input: EditProfileinputDto): Promise<EditProfileoutputDto>;
 }

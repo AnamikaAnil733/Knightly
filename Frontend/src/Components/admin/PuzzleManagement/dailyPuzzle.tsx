@@ -1,9 +1,8 @@
-
-import { Puzzle } from '../../../Pages/Admin/PuzzleManagement';
-import { ChessboardPreview } from './chessBoardPreview'
-import { CalendarIcon, TrophyIcon } from 'lucide-react'
+import { Puzzle } from "../../../Pages/Admin/PuzzleManagement";
+import { ChessboardPreview } from "./chessBoardPreview";
+import { CalendarIcon, TrophyIcon } from "lucide-react";
 interface DailyPuzzleProps {
-  puzzle: Puzzle
+  puzzle: Puzzle;
 }
 export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
   return (
@@ -31,7 +30,15 @@ export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
           <div>
             <span className="text-xs text-[#C9CAD9]">Difficulty</span>
             <span
-              className={`ml-2 px-2 py-0.5 rounded text-xs font-medium ${puzzle.difficulty === 'Easy' ? 'bg-green-900/40 text-green-300' : puzzle.difficulty === 'Medium' ? 'bg-blue-900/40 text-blue-300' : puzzle.difficulty === 'Hard' ? 'bg-orange-900/40 text-orange-300' : 'bg-red-900/40 text-red-300'}`}
+              className={`ml-2 px-2 py-0.5 rounded text-xs font-medium ${
+                puzzle.difficulty === "Easy"
+                  ? "bg-green-900/40 text-green-300"
+                  : puzzle.difficulty === "Medium"
+                  ? "bg-blue-900/40 text-blue-300"
+                  : puzzle.difficulty === "Hard"
+                  ? "bg-orange-900/40 text-orange-300"
+                  : "bg-red-900/40 text-red-300"
+              }`}
             >
               {puzzle.difficulty}
             </span>
@@ -45,5 +52,5 @@ export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

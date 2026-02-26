@@ -1,9 +1,11 @@
 import { Chess } from "chess.js";
 import { IPuzzleValidationService } from "Domain/Interface/service/IPuzzleValidationService";
 
-
-export class PuzzleValidationService implements IPuzzleValidationService{
-   validatePuzzle(fen: string, moves: string[]): { isValid: boolean; error?: string } {
+export class PuzzleValidationService implements IPuzzleValidationService {
+  validatePuzzle(
+    fen: string,
+    moves: string[]
+  ): { isValid: boolean; error?: string } {
     const chess = new Chess();
 
     try {

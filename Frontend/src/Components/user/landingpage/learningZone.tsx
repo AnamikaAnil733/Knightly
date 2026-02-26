@@ -1,31 +1,30 @@
-
-import { BookOpenIcon, PuzzleIcon, BotIcon, SparklesIcon } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { BookOpenIcon, PuzzleIcon, BotIcon, SparklesIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function LearningZone() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const cards = [
     {
-      title: 'Learn Chess',
+      title: "Learn Chess",
       icon: BookOpenIcon,
-      description: 'Master the fundamentals',
+      description: "Master the fundamentals",
     },
     {
-      title: 'Tactics Puzzles',
+      title: "Tactics Puzzles",
       icon: PuzzleIcon,
-      description: 'Sharpen your skills',
+      description: "Sharpen your skills",
     },
     {
-      title: 'AI Practice Mode',
+      title: "AI Practice Mode",
       icon: BotIcon,
-      description: 'Train with AI opponents',
+      description: "Train with AI opponents",
     },
     {
       title: "Solve Today's Puzzle",
       icon: SparklesIcon,
-      description: 'Daily challenge awaits',
+      description: "Daily challenge awaits",
     },
-  ]
+  ];
   return (
     <section className="py-20 px-6 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-[#0A0F2C] via-[#1B1452] to-[#0A0F2C]"></div>
@@ -33,7 +32,7 @@ export function LearningZone() {
         <h2
           className="text-4xl font-bold text-center mb-12 text-white"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "Poppins, sans-serif",
           }}
         >
           Learning & Practice Zone
@@ -42,7 +41,9 @@ export function LearningZone() {
           {cards.map((card, index) => (
             <div
               key={index}
-              onClick={() => card.title === 'Tactics Puzzles' && navigate('/puzzles')}
+              onClick={() =>
+                card.title === "Tactics Puzzles" && navigate("/puzzles")
+              }
               className="bg-[#11193F]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#FFD166]/50 transition-all card-glow text-center group cursor-pointer"
             >
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -57,5 +58,5 @@ export function LearningZone() {
         </div>
       </div>
     </section>
-  )
+  );
 }

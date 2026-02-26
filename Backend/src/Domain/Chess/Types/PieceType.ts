@@ -1,1 +1,7 @@
-export type PieceType = "PAWN"|"ROOK"|"BISHOP"|"KNIGHT"|"QUEEN"|"KING";
+export type PieceType =
+  | "PAWN"
+  | "ROOK"
+  | "BISHOP"
+  | "KNIGHT"
+  | "QUEEN"
+  | "KING";

@@ -1,48 +1,40 @@
-import { useState } from 'react';
+import { useState } from "react";
 import ConfirmationModal from "../../reuseable/conformationModel";
-import {
-  ShieldCheckIcon,
-  BanIcon,
-} from 'lucide-react'
-import { IUser } from '../../../Types/User';
+import { ShieldCheckIcon, BanIcon } from "lucide-react";
+import { IUser } from "../../../Types/User";
 
 interface UserTableProps {
-  users: IUser[]
-  onSelectUser: (user: IUser) => void
-  onBanUser: (userId: string, ban: boolean) => void
-  selectedUserId: string
+  users: IUser[];
+  onSelectUser: (user: IUser) => void;
+  onBanUser: (userId: string, ban: boolean) => void;
+  selectedUserId: string;
 }
 
-export function UserTable(
-  {
+export function UserTable({
   users,
   onSelectUser,
   onBanUser,
   selectedUserId,
 }: UserTableProps) {
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(date)
-  }
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(date);
+  };
 
-  const [isModalOpen,setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserForAction, setSelectedUserForAction] =
-  useState<IUser | null>(null);
+    useState<IUser | null>(null);
   const handleConfirmBan = () => {
     if (!selectedUserForAction) return;
-    onBanUser(
-      selectedUserForAction.id,
-      !selectedUserForAction.isBlocked
-    );
-  
+    onBanUser(selectedUserForAction.id, !selectedUserForAction.isBlocked);
+
     setIsModalOpen(false);
     setSelectedUserForAction(null);
   };
-  
 
   return (
     <div className="w-full overflow-x-auto">
@@ -64,7 +56,11 @@ export function UserTable(
           {users.map((user) => (
             <tr
               key={user.id}
-              className={`${selectedUserId === user.id ? 'bg-[#6B2EFF]/20' : 'hover:bg-[#11193F]/50'} cursor-pointer transition-colors`}
+              className={`${
+                selectedUserId === user.id
+                  ? "bg-[#6B2EFF]/20"
+                  : "hover:bg-[#11193F]/50"
+              } cursor-pointer transition-colors`}
               onClick={() => onSelectUser(user)}
             >
               <td className="px-4 py-3 text-sm text-gray-300">
@@ -74,7 +70,7 @@ export function UserTable(
                 {user.displayname}
               </td>
               <td className="px-4 py-3 text-sm text-gray-300">{user.email}</td>
-              
+
               <td className="px-4 py-3 text-sm text-gray-300">
                 {user.gamesPlayed}
               </td>
@@ -93,21 +89,20 @@ export function UserTable(
               </td>
               <td className="px-4 py-3 text-sm">
                 <div className="flex items-center space-x-2">
-                <button
-         onClick={(e) => {
-         e.stopPropagation();
-         setSelectedUserForAction(user);
-         setIsModalOpen(true);
-            }}
-         className={`p-1 rounded-full ${
-         user.isBlocked
-           ? "bg-green-600/20 text-green-500 hover:bg-green-600/30"
-         : "bg-red-600/20 text-red-500 hover:bg-red-600/30"
-        }`}
-           >
-  <BanIcon className="h-4 w-4" />
-</button>
-
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedUserForAction(user);
+                      setIsModalOpen(true);
+                    }}
+                    className={`p-1 rounded-full ${
+                      user.isBlocked
+                        ? "bg-green-600/20 text-green-500 hover:bg-green-600/30"
+                        : "bg-red-600/20 text-red-500 hover:bg-red-600/30"
+                    }`}
+                  >
+                    <BanIcon className="h-4 w-4" />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -120,34 +115,26 @@ export function UserTable(
         </div>
       )}
 
-<ConfirmationModal
-  isOpen={isModalOpen}
-  title={
-    selectedUserForAction?.isBlocked
-      ? "Unban User"
-      : "Ban User"
-  }
-  description={
-    selectedUserForAction?.isBlocked
-      ? "Are you sure you want to unban this user? They will regain full access."
-      : "Are you sure you want to ban this user? This action will restrict their access."
-  }
-  confirmText={
-    selectedUserForAction?.isBlocked ? "Unban" : "Ban"
-  }
-  confirmColor={
-    selectedUserForAction?.isBlocked
-      ? "bg-green-600 hover:bg-green-700"
-      : "bg-red-600 hover:bg-red-700"
-  }
-  onConfirm={handleConfirmBan}
-  onCancel={() => {
-    setIsModalOpen(false);
-    setSelectedUserForAction(null);
-  }}
-/>
-
-
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        title={selectedUserForAction?.isBlocked ? "Unban User" : "Ban User"}
+        description={
+          selectedUserForAction?.isBlocked
+            ? "Are you sure you want to unban this user? They will regain full access."
+            : "Are you sure you want to ban this user? This action will restrict their access."
+        }
+        confirmText={selectedUserForAction?.isBlocked ? "Unban" : "Ban"}
+        confirmColor={
+          selectedUserForAction?.isBlocked
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-red-600 hover:bg-red-700"
+        }
+        onConfirm={handleConfirmBan}
+        onCancel={() => {
+          setIsModalOpen(false);
+          setSelectedUserForAction(null);
+        }}
+      />
     </div>
-  )
+  );
 }

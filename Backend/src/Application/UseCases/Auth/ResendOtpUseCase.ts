@@ -7,36 +7,30 @@ import { CustomError } from "../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 
-
-
-export class ResendOtpUseCase implements IResendOtpUsecase{
-
+export class ResendOtpUseCase implements IResendOtpUsecase {
   constructor(
-        private _otpService:IOtpService,
-        private  _emailService:IEmailService,
-        private  _AuthRepository:IUserRepository,
-  ){}
+    private _otpService: IOtpService,
+    private _emailService: IEmailService,
+    private _AuthRepository: IUserRepository
+  ) {}
 
   async execute(data: AuthRequestDTO): Promise<void> {
-    const {email} = data;
+    const { email } = data;
     const existingUser = await this._AuthRepository.findByEmail(email);
-    if(existingUser){
+    if (existingUser) {
       throw new CustomError(
         HttpStatusCodes.CONFLICT,
-        MESSAGES.USER_ALREADY_EXISTS,
+        MESSAGES.USER_ALREADY_EXISTS
       );
     }
     const otp = this._otpService.generateOtp(7);
-    await this._otpService.storeOtp(email,otp);
+    await this._otpService.storeOtp(email, otp);
     await this._emailService.sendMail({
       to: email,
-      displayname:"User",
+      displayname: "User",
       otp,
       subject: "Your Knightly OTP",
       content: "Use this OTP to verify your account.",
     });
-
-
   }
 }
-

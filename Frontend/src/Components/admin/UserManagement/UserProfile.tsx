@@ -1,6 +1,6 @@
-import { IUser } from '../../../Types/User';
-import { useState } from 'react';
-import ConfirmationModal from '../../reuseable/conformationModel';
+import { IUser } from "../../../Types/User";
+import { useState } from "react";
+import ConfirmationModal from "../../reuseable/conformationModel";
 
 import {
   FlameIcon,
@@ -12,21 +12,20 @@ import {
   BanIcon,
   CheckCircleIcon,
   StarIcon,
-} from 'lucide-react';
+} from "lucide-react";
 import { getAvatarUrl } from "../../../Utils/GetAvatarurl";
 
 interface UserProfileProps {
-  user: IUser
-  onBanUser: (userId: string, ban: boolean) => void
+  user: IUser;
+  onBanUser: (userId: string, ban: boolean) => void;
 }
 export function UserProfile({ user, onBanUser }: UserProfileProps) {
-const [isModalOpen,setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const handleConfirmBan = () => {
-  onBanUser(user.id, !user.isBlocked);
-  setIsModalOpen(false);
-};
-
+  const handleConfirmBan = () => {
+    onBanUser(user.id, !user.isBlocked);
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="bg-[#0A0F2C] rounded-lg overflow-hidden">
@@ -57,9 +56,13 @@ const handleConfirmBan = () => {
                 <span className="text-gray-400 text-xs ml-1">Rapid</span>
               </div>
               <div className="flex items-center mt-1">
-                 <span className="text-gray-500 text-xs">Blitz: {user.rating?.BLITZ || 1200}</span>
-                 <span className="mx-1 text-gray-700">|</span>
-                 <span className="text-gray-500 text-xs">Bullet: {user.rating?.BULLET || 1200}</span>
+                <span className="text-gray-500 text-xs">
+                  Blitz: {user.rating?.BLITZ || 1200}
+                </span>
+                <span className="mx-1 text-gray-700">|</span>
+                <span className="text-gray-500 text-xs">
+                  Bullet: {user.rating?.BULLET || 1200}
+                </span>
               </div>
             </div>
           </div>
@@ -84,7 +87,9 @@ const handleConfirmBan = () => {
               <span className="text-sm font-medium">Rewards</span>
             </div>
             <p className="text-white text-lg font-bold mt-1 truncate">
-               {user.rewards && user.rewards.length > 0 ? user.rewards[0] : "No rewards"}
+              {user.rewards && user.rewards.length > 0
+                ? user.rewards[0]
+                : "No rewards"}
             </p>
           </div>
         </div>
@@ -101,7 +106,9 @@ const handleConfirmBan = () => {
               </div>
             ))
           ) : (
-            <p className="text-xs text-gray-500 italic">No achievements unlocked yet</p>
+            <p className="text-xs text-gray-500 italic">
+              No achievements unlocked yet
+            </p>
           )}
         </div>
       </div>
@@ -118,18 +125,24 @@ const handleConfirmBan = () => {
           <span className="text-sm text-gray-300">
             {(user.gamesPlayed || 0) > 0
               ? `${user.gamesPlayed} matches completed`
-              : 'No games recorded'}
+              : "No games recorded"}
           </span>
         </div>
       </div>
       {/* Account Info */}
       <div className="p-6 border-b border-gray-800">
-        <h3 className="text-sm font-medium text-gray-400 mb-2">ACCOUNT STATUS</h3>
+        <h3 className="text-sm font-medium text-gray-400 mb-2">
+          ACCOUNT STATUS
+        </h3>
         <div className="flex items-center">
-           <div className={`w-2 h-2 rounded-full mr-2 ${user.isBlocked ? 'bg-red-500' : 'bg-green-500'}`}></div>
-           <span className="text-sm text-gray-300">
-             {user.isBlocked ? 'Account Restricted' : 'Active Account'}
-           </span>
+          <div
+            className={`w-2 h-2 rounded-full mr-2 ${
+              user.isBlocked ? "bg-red-500" : "bg-green-500"
+            }`}
+          ></div>
+          <span className="text-sm text-gray-300">
+            {user.isBlocked ? "Account Restricted" : "Active Account"}
+          </span>
         </div>
       </div>
 
@@ -137,7 +150,11 @@ const handleConfirmBan = () => {
       <div className="p-6">
         <button
           onClick={() => setIsModalOpen(true)}
-          className={`w-full py-2 px-4 rounded-md flex items-center justify-center ${user.isBlocked ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
+          className={`w-full py-2 px-4 rounded-md flex items-center justify-center ${
+            user.isBlocked
+              ? "bg-green-600 hover:bg-green-700 text-white"
+              : "bg-red-600 hover:bg-red-700 text-white"
+          }`}
         >
           {user.isBlocked ? (
             <>
@@ -153,25 +170,22 @@ const handleConfirmBan = () => {
         </button>
       </div>
       <ConfirmationModal
-  isOpen={isModalOpen}
-  title={user.isBlocked ? "Unban User" : "Ban User"}
-  description={
-    user.isBlocked
-      ? "Are you sure you want to unban this user? They will regain full access."
-      : "Are you sure you want to ban this user? This action will restrict their access."
-  }
-  confirmText={user.isBlocked ? "Unban" : "Ban"}
-  confirmColor={
-    user.isBlocked
-      ? "bg-green-600 hover:bg-green-700"
-      : "bg-red-600 hover:bg-red-700"
-  }
-  onConfirm={handleConfirmBan}
-  onCancel={() => setIsModalOpen(false)}
-/>
-
+        isOpen={isModalOpen}
+        title={user.isBlocked ? "Unban User" : "Ban User"}
+        description={
+          user.isBlocked
+            ? "Are you sure you want to unban this user? They will regain full access."
+            : "Are you sure you want to ban this user? This action will restrict their access."
+        }
+        confirmText={user.isBlocked ? "Unban" : "Ban"}
+        confirmColor={
+          user.isBlocked
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-red-600 hover:bg-red-700"
+        }
+        onConfirm={handleConfirmBan}
+        onCancel={() => setIsModalOpen(false)}
+      />
     </div>
-  )
+  );
 }
-
-

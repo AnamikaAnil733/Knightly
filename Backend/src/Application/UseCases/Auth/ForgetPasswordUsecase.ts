@@ -1,4 +1,4 @@
-import { IforgetPasswordUseCase } from "../../../Domain/Interface/usecases/Authentication/IforgetPasswordUseCase";
+import { IforgetPasswordUseCase } from "../../../Domain/Interface/usecases/Authentication/IForgetPasswordUseCase";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
@@ -7,43 +7,38 @@ import { IEmailService } from "../../../Domain/Interface/service/IEmailService";
 import { IOtpService } from "../../../Domain/Interface/service/IOtpService";
 import { AuthRequestDTO } from "../../../Domain/DTOs/AuthDTO";
 
-export class ForgetPasswordUseCase implements IforgetPasswordUseCase{
+export class ForgetPasswordUseCase implements IforgetPasswordUseCase {
   constructor(
-        private _emailservice:IEmailService,
-        private _otpservice:IOtpService,
-        private _userRepo:IUserRepository,
-  ){}
+    private _emailservice: IEmailService,
+    private _otpservice: IOtpService,
+    private _userRepo: IUserRepository
+  ) {}
 
   async execute(data: AuthRequestDTO): Promise<void> {
-    const {email} = data;
+    const { email } = data;
     console.log(email);
     const existingUser = await this._userRepo.findByEmail(email);
-    if(existingUser && existingUser.googleId){
+    if (existingUser && existingUser.googleId) {
       throw new CustomError(
         HttpStatusCodes.CONFLICT,
-        MESSAGES.GOOGLE_RESET_PASSWORD,
+        MESSAGES.GOOGLE_RESET_PASSWORD
       );
     }
-    if(existingUser && !existingUser.isBlocked){
+    if (existingUser && !existingUser.isBlocked) {
       const otp = this._otpservice.generateOtp(7);
-      await this._otpservice.storeOtp(email,otp);
+      await this._otpservice.storeOtp(email, otp);
       await this._emailservice.sendMail({
-        to:email,
-        displayname:"User",
+        to: email,
+        displayname: "User",
         otp,
-        subject:"Your Forget Password OTP",
-        content:"Use this OTP to verfify your account",
+        subject: "Your Forget Password OTP",
+        content: "Use this OTP to verfify your account",
       });
-
-    }else{
+    } else {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.USER_DOESNT_EXIST,
+        MESSAGES.USER_DOESNT_EXIST
       );
     }
   }
-
 }
-
-
-

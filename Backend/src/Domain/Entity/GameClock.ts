@@ -1,5 +1,4 @@
 export class GameClock {
-
   private running: boolean = true;
 
   constructor(
@@ -7,7 +6,7 @@ export class GameClock {
     public blackTime: number,
     public increment: number,
     public turn: "WHITE" | "BLACK",
-    public lastMoveTimestamp: number,
+    public lastMoveTimestamp: number
   ) {}
 
   applyMove(now: number) {
