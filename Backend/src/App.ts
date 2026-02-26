@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
 import { corsOptions } from "../src/Presentation/Constants/CorsOption";
 import express, { Application } from "express";

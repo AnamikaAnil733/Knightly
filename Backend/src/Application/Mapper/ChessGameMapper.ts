@@ -15,6 +15,8 @@ export class ChessGameMapper{
     gameState.restore({
       turn:doc.turn,
       history:doc.history,
+      positionHistory: doc.positionHistory,
+      halfMoveClock: doc.halfMoveClock,
     });
     const clock = new GameClock(
       doc.clock.whiteTime,
@@ -56,6 +58,8 @@ export class ChessGameMapper{
       },
       whitePlayerId: entity.getWhitePlayerId(),
       blackPlayerId: entity.getBlackPlayerId(),
+      positionHistory: snapShot.positionHistory,
+      halfMoveClock: snapShot.halfMoveClock,
     };
   }
 

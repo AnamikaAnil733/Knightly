@@ -22,7 +22,7 @@ export class OtpService implements IOtpService {
 
   async storeOtp(email: string, otp: string): Promise<void> {
     const key = `${OTP_CACHE_PREFIX}:${email.trim()}`;
-    await this._cachingService.setData(key, otp, 300);
+    await this._cachingService.setData(key, otp, 600);
 
     logger.info(`Stored OTP - key: ${key}, otp: ${otp}`);
   }

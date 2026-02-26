@@ -13,10 +13,12 @@ export const logger = pino({
         level: "info",
       },
       {
-        // File output
-        target: "pino/file",
+        // Rotating file output
+        target: "pino-roll",
         options: {
-          destination: "./logs/app.log",
+          file: "./logs/app.log",
+          size: "10m",
+          count: 5,
           mkdir: true,
         },
         level: "info",

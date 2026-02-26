@@ -8,7 +8,7 @@ export interface ChessGameSchemaType {
   turn: "WHITE" | "BLACK";
   board: SerializedBoardGrid;
   history: any[];
-  status: "ACTIVE" | "CHECKMATE" | "STALEMATE"|"CHECK"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+  status: "ACTIVE" | "CHECKMATE" | "STALEMATE"|"CHECK"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL";
   createdAt: Date;
   updatedAt: Date;
   clock: {
@@ -20,6 +20,8 @@ export interface ChessGameSchemaType {
   },
   whitePlayerId?: string;
   blackPlayerId?: string;
+  positionHistory: string[];
+  halfMoveClock: number;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
@@ -47,7 +49,10 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         "STALEMATE",
         "CHECK",
         "WHITE_TIMEOUT",
-        "BLACK_TIMEOUT"],
+        "BLACK_TIMEOUT",
+        "DRAW_BY_REPETITION",
+        "DRAW_BY_FIFTY_MOVES",
+        "DRAW_BY_INSUFFICIENT_MATERIAL"],
       required:true,
       default:"ACTIVE",
     },
@@ -61,6 +66,14 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         required: true,
       },
       lastMoveTimestamp: { type: Number, required: true },
+    },
+    positionHistory: {
+      type: [String],
+      default: [],
+    },
+    halfMoveClock: {
+      type: Number,
+      default: 0,
     },
   },
   {
