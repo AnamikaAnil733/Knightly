@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { IValidateMoveusecase } from "../../../../Domain/Interface/usecases/User/puzzleManagement/IValidatePuzzlesMoves";
+import { IValidateMoveusecase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IValidatePuzzlesMoves";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
-import { IGetPuzzleByDifficulty } from "../../../../Domain/Interface/usecases/User/puzzleManagement/IGetPuzzleByDifficultyUseCase";
+import { IGetPuzzleByDifficulty } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetPuzzleByDifficultyUseCase";
 
 export class UserPuzzleController {
   constructor(

@@ -1,4 +1,4 @@
-import { IStorageService } from "../../../../Domain/Interface/service/IS3Service";
+import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../../Domain/Entity/Auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";

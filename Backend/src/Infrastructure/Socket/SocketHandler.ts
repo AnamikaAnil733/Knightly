@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
-import { IMakeMoveUseCase } from "../../Domain/Interface/usecases/User/gameManagement/IMakeMoveUseCase";
+import { IMakeMoveUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameRepository";
-import { IMatchmakingUseCase } from "../../Domain/Interface/usecases/User/gameManagement/IMatchmakingUseCase";
+import { IMatchmakingUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/IMatchmakingUseCase";
 
 export class SocketHandler {
   private rooms = new Map<string, { white?: string; black?: string }>();

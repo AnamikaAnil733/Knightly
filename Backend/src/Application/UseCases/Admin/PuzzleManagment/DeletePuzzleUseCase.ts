@@ -1,5 +1,5 @@
 import { IPuzzleRepository } from "../../../../Domain/Interface/Repositories/IPuzzleRepository";
-import { ISoftDeleteUseCase } from "../../../../Domain/Interface/usecases/Admin/PuzzleManagement/IDeletePuzzleUseCase";
+import { ISoftDeleteUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IDeletePuzzleUseCase";
 
 export class SoftDeletePuzzleUseCase implements ISoftDeleteUseCase {
   constructor(private readonly _puzzleRepo: IPuzzleRepository) {}

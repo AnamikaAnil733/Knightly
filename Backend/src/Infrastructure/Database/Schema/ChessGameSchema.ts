@@ -12,7 +12,10 @@ export interface ChessGameSchemaType {
     | "STALEMATE"
     | "CHECK"
     | "WHITE_TIMEOUT"
-    | "BLACK_TIMEOUT";
+    | "BLACK_TIMEOUT"
+    | "DRAW_BY_REPETITION"
+    | "DRAW_BY_FIFTY_MOVES"
+    | "DRAW_BY_INSUFFICIENT_MATERIAL";
   createdAt: Date;
   updatedAt: Date;
   clock: {
@@ -53,6 +56,9 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         "CHECK",
         "WHITE_TIMEOUT",
         "BLACK_TIMEOUT",
+        "DRAW_BY_REPETITION",
+        "DRAW_BY_FIFTY_MOVES",
+        "DRAW_BY_INSUFFICIENT_MATERIAL",
       ],
       required: true,
       default: "ACTIVE",

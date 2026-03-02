@@ -7,7 +7,7 @@ import { GameClock } from "../../Domain/Entity/GameClock";
 
 export class ChessGameMapper {
   static toEntityFromDocument(
-    doc: HydratedDocument<ChessGameSchemaType>
+    doc: HydratedDocument<ChessGameSchemaType>,
   ): ChessGame {
     const board = Board.deserialize(doc.board);
 
@@ -21,7 +21,7 @@ export class ChessGameMapper {
       doc.clock.blackTime,
       doc.clock.increment,
       doc.clock.turn,
-      doc.clock.lastMoveTimestamp
+      doc.clock.lastMoveTimestamp,
     );
 
     return new ChessGame(
@@ -30,7 +30,7 @@ export class ChessGameMapper {
       clock,
       doc.whitePlayerId,
       doc.blackPlayerId,
-      doc._id.toString()
+      doc._id.toString(),
     );
   }
 

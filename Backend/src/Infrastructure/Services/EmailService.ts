@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import {
   EmailPayload,
   IEmailService,
-} from "../../Domain/Interface/service/IEmailService";
+} from "../../Domain/Interface/Service/IEmailService";
 import { otpMailHtml } from "../../Domain/Constants/EmailHtml/OtpmailHTML";
 
 export class EmailService implements IEmailService {

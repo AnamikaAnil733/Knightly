@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ICreateGameUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/ICreateGameUseCase";
+import { ICreateGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/ICreateGameUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
-import { IGetGameUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IGetGameUseCase";
-import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IGetLegalMovesUseCase";
-import { IMakeMoveUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IMakeMoveUseCase";
+import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetGameUseCase";
+import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLegalMovesUseCase";
+import { IMakeMoveUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 
 export class GameController {
   constructor(

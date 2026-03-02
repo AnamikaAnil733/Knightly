@@ -1,11 +1,11 @@
 // Application/UseCases/user/profileManagement/GetUserProfileUseCase.ts
 
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
-import { IStorageService } from "../../../../Domain/Interface/service/IS3Service";
+import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 import EAuth from "../../../../Domain/Entity/Auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/IGetUserProfileUseCase";
+import { IGetUserProfileUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IGetUserProfileUseCase";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class GetUserProfileUseCase implements IGetUserProfileUseCase {

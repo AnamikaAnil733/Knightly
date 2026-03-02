@@ -5,8 +5,8 @@ import {
 } from "../../../../Domain/DTOs/AdminDTOs";
 import { PuzzleMapper } from "../../../Mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
-import { IEditPuzzleUsecase } from "../../../../Domain/Interface/usecases/Admin/PuzzleManagement/IEditPuzzleUseCase";
-import { IPuzzleValidationService } from "../../../../Domain/Interface/service/IPuzzleValidationService";
+import { IEditPuzzleUsecase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IEditPuzzleUseCase";
+import { IPuzzleValidationService } from "../../../../Domain/Interface/Service/IPuzzleValidationService";
 
 export class EditPuzzleUseCase implements IEditPuzzleUsecase {
   constructor(

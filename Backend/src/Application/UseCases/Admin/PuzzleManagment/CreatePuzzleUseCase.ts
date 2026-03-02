@@ -6,13 +6,13 @@ import {
 import { EPuzzle } from "../../../../Domain/Entity/Puzzle";
 import { PuzzleMapper } from "../../../Mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
-import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/Admin/PuzzleManagement/ICreatePuzzle";
+import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/ICreatePuzzle";
 import { IPuzzleValidationService } from "../../../../Domain/Interface/Service/IPuzzleValidationService";
 
 export class CreatePuzzleUseCase implements ICreatePuzzleUseCase {
   constructor(
     private readonly _puzzleRepository: IPuzzleRepository,
-    private readonly puzzleValidationService: IPuzzleValidationService
+    private readonly puzzleValidationService: IPuzzleValidationService,
   ) {}
 
   async execute(input: CreatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
@@ -29,7 +29,7 @@ export class CreatePuzzleUseCase implements ICreatePuzzleUseCase {
 
     const validation = this.puzzleValidationService.validatePuzzle(
       input.fen,
-      input.moves
+      input.moves,
     );
     if (!validation.isValid) {
       throw new Error(validation.error);

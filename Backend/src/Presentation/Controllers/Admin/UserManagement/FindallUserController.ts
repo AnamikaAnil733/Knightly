@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { IGetAllUserUseCase } from "../../../../Domain/Interface/usecases/Admin/UserManagement/IGetAllUserUseCase";
+import { IGetAllUserUseCase } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetAllUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
 export class GetAllUserController {

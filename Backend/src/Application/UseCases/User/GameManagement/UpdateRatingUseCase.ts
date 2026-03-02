@@ -1,4 +1,4 @@
-import { IUpdateRatingUseCase } from "Domain/Interface/usecases/User/gameManagement/IUpdateRatingUseCase";
+import { IUpdateRatingUseCase } from "Domain/Interface/Usecases/User/GameManagement/IUpdateRatingUseCase";
 import { IUserRepository } from "../../../../Domain/Interface/Repositories/IUserRepository";
 import { EloCalculator } from "../../../../Domain/Chess/Service/EloRatingCalculator";
 

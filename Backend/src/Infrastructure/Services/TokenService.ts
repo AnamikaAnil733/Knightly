@@ -40,7 +40,7 @@ export class TokenService implements ITokenService {
     const refreshToken = jwt.sign(
       { ...data, tokenId },
       this._refreshTokenSecret,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
     return { tokenId, refreshToken };
   }

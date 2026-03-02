@@ -1,4 +1,4 @@
-import { ICachingService } from "../../Domain/Interface/service/ICachingService";
+import { ICachingService } from "../../Domain/Interface/Service/ICachingService";
 import NodeCache from "node-cache";
 
 export class CachingService implements ICachingService {

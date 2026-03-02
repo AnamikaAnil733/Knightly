@@ -2,7 +2,7 @@ import {
   IMatchmakingUseCase,
   QueuePlayer,
   MatchResult,
-} from "../../../../Domain/Interface/usecases/User/gameManagement/IMatchmakingUseCase";
+} from "../../../../Domain/Interface/Usecases/User/GameManagement/IMatchmakingUseCase";
 
 export class MatchmakingUseCase implements IMatchmakingUseCase {
   private queue: QueuePlayer[] = [];

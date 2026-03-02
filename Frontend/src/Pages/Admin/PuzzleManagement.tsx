@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { PuzzleTable } from "../../Components/admin/PuzzleManagement/puzzleTable";
+import { PuzzleTable } from "../../Components/Admin/PuzzleManagement/PuzzleTable";
 import {
   PuzzleModal,
   PuzzleFormData,
-} from "../../Components/admin/PuzzleManagement/puzzleModal";
-import { DailyPuzzle } from "../../Components/admin/PuzzleManagement/dailyPuzzle";
+} from "../../Components/Admin/PuzzleManagement/PuzzleModal";
+import { DailyPuzzle } from "../../Components/Admin/PuzzleManagement/DailyPuzzle";
 import { PlusIcon } from "lucide-react";
 
 import {

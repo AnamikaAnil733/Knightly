@@ -1,5 +1,5 @@
 import { IPuzzleRepository } from "../../../../Domain/Interface/Repositories/IPuzzleRepository";
-import { IGetAllPuzzleUseCase } from "../../../../Domain/Interface/usecases/Admin/PuzzleManagement/IGetAllPuzzlesUseCase";
+import { IGetAllPuzzleUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IGetAllPuzzlesUseCase";
 import {
   GetAllPuzzleOutputDTO,
   GetallPuzzleInputDTO,

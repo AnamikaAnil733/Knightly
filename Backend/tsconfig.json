@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "commonjs",
     "moduleResolution": "node",
-    "target": "esnext",
+    "target": "es2022",
     "esModuleInterop": true,
     "rootDir": "./src",
     "outDir": "./dist",
@@ -23,9 +23,6 @@
         "presentation/*"
       ]
     }
-  },
-  "ts-node": {
-    "esm": true
   },
   "include": [
     "src/**/*.ts"

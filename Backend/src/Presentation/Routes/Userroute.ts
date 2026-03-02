@@ -7,9 +7,9 @@ import {
   userPuzzleController,
 } from "../../Infrastructure/Composition/UserCompostion";
 import { authMiddleware } from "../Middleware/AuthMiddleware";
-import { ITokenService } from "../../Domain/Interface/service/ITokenService";
+import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
-import { USER_ROUTES } from "../Constants/Routes/userRoutes";
+import { USER_ROUTES } from "../Constants/Routes/UserRoutes";
 
 export class UserRoutes {
   public readonly router: Router;
@@ -23,16 +23,16 @@ export class UserRoutes {
   private initializeRoutes() {
     this.router.patch(
       USER_ROUTES.EDIT_PROFILE,
-      editUserController.handleEditProfile
+      editUserController.handleEditProfile,
     );
     this.router.patch(
       USER_ROUTES.CHANGE_PASSWORD,
-      changePasswordController.handleChangePassword
+      changePasswordController.handleChangePassword,
     );
     this.router.post(USER_ROUTES.AVATAR.UPLOAD, avatarController.getAvatarUrl);
     this.router.post(
       USER_ROUTES.AVATAR.DICEBEAR,
-      avatarController.saveDiceBearAvatar
+      avatarController.saveDiceBearAvatar,
     );
     this.router.get(USER_ROUTES.PROFILE, avatarController.getProfile);
     this.router.post(USER_ROUTES.CREATE_GAME, gameController.createGame);
@@ -41,11 +41,11 @@ export class UserRoutes {
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);
     this.router.get(
       USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY,
-      userPuzzleController.getPuzzle
+      userPuzzleController.getPuzzle,
     );
     this.router.post(
       USER_ROUTES.VALIDATE_PUZZLE_MOVE,
-      userPuzzleController.validateMove
+      userPuzzleController.validateMove,
     );
   }
 }

@@ -2,13 +2,13 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
-import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/IChangePassword";
+import { IChangePasswordUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IChangePassword";
 import {
   ChangePasswordOutputDto,
   ChangePasswordInputDto,
 } from "../../../../Domain/DTOs/UserDTOs";
 import EAuth from "../../../../Domain/Entity/Auth";
-import { IHashService } from "../../../../Domain/Interface/service/IHashpassword";
+import { IHashService } from "../../../../Domain/Interface/Service/IHashpassword";
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
   private _changePasswordRepo: IBaseRepository<EAuth>;

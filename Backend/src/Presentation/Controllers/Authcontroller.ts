@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
-import { IVerifyOtpUseCase } from "Domain/Interface/usecases/Authentication/IVerifyOtpUseCase";
-import { IRegisterUserUseCase } from "Domain/Interface/usecases/Authentication/IRegisterUseCase";
-import { ILoginUseCase } from "Domain/Interface/usecases/Authentication/ILoginUseCases";
-import { IResendOtpUsecase } from "Domain/Interface/usecases/Authentication/IResendOtpUseCases";
-import { IforgetPasswordUseCase } from "Domain/Interface/usecases/Authentication/IForgetPasswordUseCase";
-import { IResetPasswordUseCase } from "Domain/Interface/usecases/Authentication/IResetPasswordUseCase";
-import { IGoogleAuthUseCase } from "Domain/Interface/usecases/Authentication/IGoogleAuthUseCase";
+import { IVerifyOtpUseCase } from "Domain/Interface/Usecases/Authentication/IVerifyOtpUseCase";
+import { IRegisterUserUseCase } from "Domain/Interface/Usecases/Authentication/IRegisterUseCase";
+import { ILoginUseCase } from "Domain/Interface/Usecases/Authentication/ILoginUseCases";
+import { IResendOtpUsecase } from "Domain/Interface/Usecases/Authentication/IResendOtpUseCases";
+import { IforgetPasswordUseCase } from "Domain/Interface/Usecases/Authentication/IforgetPasswordUseCase";
+import { IResetPasswordUseCase } from "Domain/Interface/Usecases/Authentication/IResetPasswordUseCase";
+import { IGoogleAuthUseCase } from "Domain/Interface/Usecases/Authentication/IGoogleAuthUseCase";
 
 import { logger } from "../../Infrastructure/Logger/Logger";
 
@@ -18,12 +18,12 @@ import {
   ResetPasswordRequestSchema,
   GoogleAuthRequestSchema,
   LoginRequestSchema,
-} from "../Validators/authValidator";
+} from "../Validators/AuthValidator";
 
 import { CustomError } from "../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../Domain/Constants/Messages/Messages";
-import { ITokenService } from "../../Domain/Interface/service/ITokenService";
+import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 
 export class AuthController {
   constructor(
@@ -34,7 +34,7 @@ export class AuthController {
     private _forgetPasswordUseCase: IforgetPasswordUseCase,
     private _resetPasswordUseCase: IResetPasswordUseCase,
     private _googleAuthUseCase: IGoogleAuthUseCase,
-    private _tokenService: ITokenService
+    private _tokenService: ITokenService,
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -44,7 +44,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -54,7 +54,7 @@ export class AuthController {
       if (!isValid) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INVALID_OTP
+          MESSAGES.INVALID_OTP,
         );
       }
 
@@ -75,7 +75,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
       const user = await this._registerUserUseCase.execute(result.data);
@@ -99,7 +99,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -137,7 +137,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -160,7 +160,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -183,7 +183,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 
@@ -208,7 +208,7 @@ export class AuthController {
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_REQUEST_BODY
+          MESSAGES.INVALID_REQUEST_BODY,
         );
       }
 

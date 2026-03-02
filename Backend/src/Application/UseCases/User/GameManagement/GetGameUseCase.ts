@@ -1,10 +1,10 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
 import { GameOutputDTO } from "../../../../Domain/DTOs/UserDTOs";
-import { IGetGameUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IGetGameUseCase";
+import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetGameUseCase";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../../Domain/Entity/Auth";
-import { IStorageService } from "../../../../Domain/Interface/service/IS3Service";
+import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 
 export class GetGameUseCase implements IGetGameUseCase {
   constructor(

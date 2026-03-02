@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUnBlockUserUseCase } from "../../../../Domain/Interface/usecases/Admin/UserManagement/IUnBlockUserUseCase";
+import { IUnBlockUserUseCase } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IUnBlockUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 

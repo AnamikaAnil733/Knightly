@@ -10,7 +10,7 @@ export class ChessGame extends BaseEntity {
     private clock: GameClock,
     private _whitePlayerId?: string,
     private _blackPlayerId?: string,
-    id?: string
+    id?: string,
   ) {
     super(id);
     if (this._status === "ACTIVE" || this._status === "CHECK") {

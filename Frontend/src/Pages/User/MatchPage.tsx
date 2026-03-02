@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Chessboard } from "../../Components/user/Match/ChessBoard";
-import { PlayerPanel } from "../../Components/user/Match/PlayerPanel";
-import { MoveList } from "../../Components/user/Match/History";
-import { ChatPanel } from "../../Components/user/Match/Chat";
-import { ControlBar } from "../../Components/user/Match/ControlBar";
-import { PromotionModal } from "../../Components/user/Match/PromotionModal";
-import { GameOver } from "../../Components/user/Match/GameOver";
+import { Chessboard } from "../../Components/User/Match/ChessBoard";
+import { PlayerPanel } from "../../Components/User/Match/PlayerPanel";
+import { MoveList } from "../../Components/User/Match/History";
+import { ChatPanel } from "../../Components/User/Match/Chat";
+import { ControlBar } from "../../Components/User/Match/ControlBar";
+import { PromotionModal } from "../../Components/User/Match/PromotionModal";
+import { GameOver } from "../../Components/User/Match/GameOver";
 
 import { socket } from "../../Service/Socket";
 

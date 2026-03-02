@@ -257,14 +257,14 @@ export class GameState{
       this._status = "CHECKMATE";
     } else if (GameEndService.isStaleMate(this._currentTurn, this._board)) {
       this._status = "STALEMATE";
-    } else if (CheckService.isKingInCheck(this._currentTurn, this._board)) {
-      this._status = "CHECK";
     } else if (this.checkThreefoldRepetition()) {
       this._status = "DRAW_BY_REPETITION";
     } else if (GameEndService.isInsufficientMaterial(this._board)) {
       this._status = "DRAW_BY_INSUFFICIENT_MATERIAL";
     } else if (this._halfMoveClock >= 100) {
       this._status = "DRAW_BY_FIFTY_MOVES";
+    } else if (CheckService.isKingInCheck(this._currentTurn, this._board)) {
+      this._status = "CHECK";
     } else {
       this._status = "ACTIVE";
     }

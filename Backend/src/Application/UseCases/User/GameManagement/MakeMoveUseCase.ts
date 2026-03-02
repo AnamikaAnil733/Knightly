@@ -1,5 +1,5 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
-import { IMakeMoveUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IMakeMoveUseCase";
+import { IMakeMoveUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 import { LegalService } from "../../../../Domain/Chess/Service/LegalMoveService";
 import { Position } from "../../../../Domain/Chess/Position";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";

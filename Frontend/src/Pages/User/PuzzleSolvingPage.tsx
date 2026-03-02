@@ -17,7 +17,7 @@ import {
   AlertCircle,
   Sparkles,
 } from "lucide-react";
-import { Chessboard } from "../../Components/user/Match/ChessBoard";
+import { Chessboard } from "../../Components/User/Match/ChessBoard";
 import {
   fetchPuzzleByDifficulty,
   validatePuzzleMove,

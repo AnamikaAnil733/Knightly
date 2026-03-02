@@ -1,4 +1,4 @@
-import { IValidateMoveusecase } from "../../../../Domain/Interface/usecases/User/puzzleManagement/IValidatePuzzlesMoves";
+import { IValidateMoveusecase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IValidatePuzzlesMoves";
 import { IPuzzleRepository } from "../../../../Domain/Interface/Repositories/IPuzzleRepository";
 import { IUserPuzzleProgressRepository } from "../../../../Domain/Interface/Repositories/IUserPuzzleProgressRepository";
 import { EUserPuzzleprogress } from "../../../../Domain/Entity/UserPuzzleProgress";

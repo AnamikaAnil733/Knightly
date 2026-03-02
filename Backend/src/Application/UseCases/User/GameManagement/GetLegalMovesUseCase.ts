@@ -1,6 +1,6 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
 import { Position } from "../../../../Domain/Chess/Position";
-import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/usecases/User/gameManagement/IGetLegalMovesUseCase";
+import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLegalMovesUseCase";
 import { LegalService } from "../../../../Domain/Chess/Service/LegalMoveService";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
