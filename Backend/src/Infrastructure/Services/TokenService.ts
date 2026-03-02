@@ -1,4 +1,4 @@
-import { ITokenService } from "../../Domain/Interface/service/ITokenService";
+import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import {
   AccessTokenData,
   GenerateRefreshTokenReturnType,

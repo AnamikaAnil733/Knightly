@@ -33,4 +33,29 @@ export class GameEndService {
       !this.hasAnyLegalMove(color, board)
     );
   }
+
+  static isInsufficientMaterial(board: Board): boolean {
+    const pieces: { type: string; color: string }[] = [];
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        const piece = board.getPiece(new Position(i, j));
+        if (piece) {
+          pieces.push({ type: piece.type, color: piece.color });
+        }
+      }
+    }
+
+    // King vs King
+    if (pieces.length === 2) {
+      return true;
+    }
+
+    // King vs King + Knight or King vs King + Bishop
+    if (pieces.length === 3) {
+      return pieces.some(p => p.type === "KNIGHT" || p.type === "BISHOP");
+    }
+
+    return false;
+  }
+
 }

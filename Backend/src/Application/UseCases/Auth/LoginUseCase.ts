@@ -1,12 +1,12 @@
-import { AuthRequestDTO, AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
+import { AuthRequestDTO,AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
-import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
-import { ILoginUseCase } from "../../../Domain/Interface/usecases/Authentication/ILoginUseCases";
+import { IHashService } from "../../../Domain/Interface/Service/IHashpassword";
+import { ILoginUseCase } from "../../../Domain/Interface/Usecases/Authentication/ILoginUseCases";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { AuthMapper } from "../../Mapper/AuthMapper";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
-import { ITokenService } from "../../../Domain/Interface/service/ITokenService";
+import { ITokenService } from "../../../Domain/Interface/Service/ITokenService";
 
 export class LoginUseCase implements ILoginUseCase {
   constructor(

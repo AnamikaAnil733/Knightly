@@ -17,6 +17,7 @@ import { ForgetPasswordUseCase } from "../../Application/UseCases/Auth/ForgetPas
 import { ResetPaswordUseCase } from "../../Application/UseCases/Auth/ResetPasswordUseCase";
 import { GoogleAuthUseCase } from "../../Application/UseCases/Auth/GoogleAuthUseCase";
 
+
 const UserRepo = new AuthRepository();
 const cache = new CachingService();
 const otpService = new OtpService(cache);

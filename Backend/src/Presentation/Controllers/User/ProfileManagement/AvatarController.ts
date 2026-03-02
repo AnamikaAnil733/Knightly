@@ -1,45 +1,51 @@
-import { Request, Response, NextFunction } from "express";
+import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { IGetAvatarUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/IGetAvatarUseCase";
-import { IGetUserProfileUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/IGetUserProfileUseCase";
-import { ISaveDiceBearAvatarUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/ISaveDiceBearAvatarUseCase";
+import { IGetAvatarUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IGetAvatarUseCase";
+import { IGetUserProfileUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IGetUserProfileUseCase";
+import { ISaveDiceBearAvatarUseCase }
+  from "../../../../Domain/Interface/Usecases/User/ProfileManagement/ISaveDiceBearAvatarUseCase";
 
-export class AvatarController {
+
+export class AvatarController{
   constructor(
-    private readonly _getAvatarUseCase: IGetAvatarUseCase,
-    private readonly _getUserProfileUseCase: IGetUserProfileUseCase,
-    private readonly _saveDiceBearAvatarUseCase: ISaveDiceBearAvatarUseCase
-  ) {}
+        private readonly _getAvatarUseCase:IGetAvatarUseCase,
+        private readonly _getUserProfileUseCase:IGetUserProfileUseCase,
+        private readonly _saveDiceBearAvatarUseCase: ISaveDiceBearAvatarUseCase,
+  ){}
 
-  getAvatarUrl = async (req: Request, res: Response, next: NextFunction) => {
-    try {
+  getAvatarUrl = async(req:Request,res:Response,next:NextFunction)=>{
+    try{
       const userId = (req as any).user.id;
-      const { contentType } = req.query;
+      const {contentType} = req.query;
 
       const result = await this._getAvatarUseCase.execute({
         userId,
-        contentType: String(contentType),
+        contentType:String(contentType),
       });
 
       return res.status(HttpStatusCodes.OK).json(result);
-    } catch (error) {
+
+    }catch(error){
       next(error);
     }
   };
 
+
+
   saveDiceBearAvatar = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const userId = (req as any).user.id;
       const { diceBearUrl } = req.body;
 
-      const avatarUrl = await this._saveDiceBearAvatarUseCase.execute({
-        userId,
-        diceBearUrl,
-      });
+      const avatarUrl =
+            await this._saveDiceBearAvatarUseCase.execute({
+              userId,
+              diceBearUrl,
+            });
 
       return res.status(HttpStatusCodes.OK).json({
         success: true,
@@ -50,7 +56,12 @@ export class AvatarController {
     }
   };
 
-  getProfile = async (req: Request, res: Response, next: NextFunction) => {
+
+  getProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const userId = (req as any).user.id;
 
@@ -61,4 +72,6 @@ export class AvatarController {
       next(error);
     }
   };
+
+
 }

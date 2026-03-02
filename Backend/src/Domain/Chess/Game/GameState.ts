@@ -10,12 +10,21 @@ import { Move } from "./Move";
 import { PromotionType } from "./PromotionType";
 import { GameEndService } from "../Service/GameEndService";
 
-export class GameState {
-  private _moveHistory: Move[] = [];
-  private _currentTurn: "WHITE" | "BLACK" = "WHITE";
-  private _status: "ACTIVE" | "CHECKMATE" | "STALEMATE" | "CHECK" = "ACTIVE";
 
-  constructor(private readonly _board: Board) {}
+export class GameState{
+  private _moveHistory:Move[] = [];
+  private _currentTurn:"WHITE"|"BLACK" = "WHITE";
+  private _status: "ACTIVE" | "CHECKMATE" | "STALEMATE" |"CHECK" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL" = "ACTIVE";
+  private _positionHistory: string[] = [];
+  private _halfMoveClock: number = 0;
+
+
+
+  constructor(
+        private readonly _board :Board,
+  ){
+    this.updatePositionHistory();
+  }
 
   getTurn(): "WHITE" | "BLACK" {
     return this._currentTurn;
@@ -116,7 +125,9 @@ export class GameState {
     if (!piece) {
       throw new Error("No piece at the square");
     }
-    if (piece.color !== this._currentTurn) {
+    const capturedPiece = this._board.getPiece(to);
+    let isCapture = capturedPiece !== null;
+    if(piece.color !== this._currentTurn){
       throw new Error("Not your Turn");
     }
 
@@ -132,6 +143,7 @@ export class GameState {
     if (piece.type === "PAWN" && ep && to.equals(ep)) {
       const capturedPawnP = new Position(from.row, to.column);
       this._board.setPiece(capturedPawnP, null);
+      isCapture = true;
     }
 
     this._board.clearEnPassantTarget();
@@ -168,25 +180,75 @@ export class GameState {
       finalPieceType = promotionType;
     }
 
-    this._moveHistory.push(new Move(from, to, finalPieceType, piece.color));
-    this._currentTurn = this._currentTurn === "WHITE" ? "BLACK" : "WHITE";
 
+    this._moveHistory.push(
+      new Move(from,to,finalPieceType,piece.color),
+    );
+
+    if (piece.type === "PAWN" || isCapture) {
+      this._halfMoveClock = 0;
+    } else {
+      this._halfMoveClock++;
+    }
+
+    this._currentTurn = this._currentTurn=== "WHITE"?"BLACK":"WHITE";
+
+
+    this.updatePositionHistory();
     this.calculateStatus();
-    console.log(this._status, "isendddd");
+    console.log(this._status,"isendddd");
   }
 
-  restore(data: { turn: "WHITE" | "BLACK"; history: Move[] }): void {
+  private updatePositionHistory(): void {
+    const key = this.generatePositionKey();
+    this._positionHistory.push(key);
+  }
+
+  private generatePositionKey(): string {
+    const boardStr = JSON.stringify(this._board.serialize());
+    const turn = this._currentTurn;
+    const ep = this._board.getEnPassantTarget();
+    const epStr = ep ? `${ep.row},${ep.column}` : "none";
+    
+    // Castling rights are already captured in the board serialization 
+    // because piece.hasMoved is included for King and Rooks.
+    return `${boardStr}|${turn}|${epStr}`;
+  }
+
+  private checkThreefoldRepetition(): boolean {
+    const counts: Record<string, number> = {};
+    for (const key of this._positionHistory) {
+      counts[key] = (counts[key] || 0) + 1;
+      if (counts[key] >= 3) return true;
+    }
+    return false;
+  }
+
+  restore(data:{
+        turn:"WHITE"|"BLACK";
+        history:Move[];
+        positionHistory?: string[];
+        halfMoveClock?: number;
+    }):void{
     this._currentTurn = data.turn;
     this._moveHistory = data.history;
+    this._halfMoveClock = data.halfMoveClock || 0;
     this.reconstructEnPassantFromLastMove();
+    if (data.positionHistory && data.positionHistory.length > 0) {
+      this._positionHistory = data.positionHistory;
+    } else {
+      this._positionHistory = [this.generatePositionKey()];
+    }
     this.calculateStatus();
   }
 
-  getSnapshot() {
-    return {
-      turn: this._currentTurn,
-      history: [...this._moveHistory],
-      status: this._status,
+  getSnapshot(){
+    return{
+      turn:this._currentTurn,
+      history:[...this._moveHistory],
+      positionHistory: [...this._positionHistory],
+      halfMoveClock: this._halfMoveClock,
+      status:this._status,
     };
   }
 
@@ -197,6 +259,12 @@ export class GameState {
       this._status = "STALEMATE";
     } else if (CheckService.isKingInCheck(this._currentTurn, this._board)) {
       this._status = "CHECK";
+    } else if (this.checkThreefoldRepetition()) {
+      this._status = "DRAW_BY_REPETITION";
+    } else if (GameEndService.isInsufficientMaterial(this._board)) {
+      this._status = "DRAW_BY_INSUFFICIENT_MATERIAL";
+    } else if (this._halfMoveClock >= 100) {
+      this._status = "DRAW_BY_FIFTY_MOVES";
     } else {
       this._status = "ACTIVE";
     }

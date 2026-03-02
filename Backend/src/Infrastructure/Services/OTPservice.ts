@@ -1,6 +1,6 @@
-import { IOtpService } from "../../Domain/Interface/service/IOtpService";
+import { IOtpService } from "../../Domain/Interface/Service/IOtpService";
 import { logger } from "../Logger/Logger";
-import { ICachingService } from "../../Domain/Interface/service/ICachingService";
+import { ICachingService } from "../../Domain/Interface/Service/ICachingService";
 import { OTP_CACHE_PREFIX } from "../../Domain/Constants/EmailHtml/Otpcache";
 
 export class OtpService implements IOtpService {

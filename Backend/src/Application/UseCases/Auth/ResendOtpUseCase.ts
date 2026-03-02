@@ -1,7 +1,7 @@
 import { AuthRequestDTO } from "../../../Domain/DTOs/AuthDTO";
-import { IEmailService } from "../../../Domain/Interface/service/IEmailService";
-import { IOtpService } from "../../../Domain/Interface/service/IOtpService";
-import { IResendOtpUsecase } from "../../../Domain/Interface/usecases/Authentication/IResendOtpUseCases";
+import { IEmailService } from "../../../Domain/Interface/Service/IEmailService";
+import { IOtpService } from "../../../Domain/Interface/Service/IOtpService";
+import { IResendOtpUsecase } from "../../../Domain/Interface/Usecases/Authentication/IResendOtpUseCases";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
 import { CustomError } from "../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";

@@ -3,9 +3,10 @@ import { CustomError } from "../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { UserRole } from "../../../Domain/Types/UserRole";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
-import { ICachingService } from "../../../Domain/Interface/service/ICachingService";
-import { IHashService } from "../../../Domain/Interface/service/IHashpassword";
-import { IResetPasswordUseCase } from "../../../Domain/Interface/usecases/Authentication/IResetPasswordUseCase";
+import { ICachingService } from "../../../Domain/Interface/Service/ICachingService";
+import { IHashService } from "../../../Domain/Interface/Service/IHashpassword";
+import { IResetPasswordUseCase } from "../../../Domain/Interface/Usecases/Authentication/IResetPasswordUseCase";
+
 
 export class ResetPaswordUseCase implements IResetPasswordUseCase {
   constructor(

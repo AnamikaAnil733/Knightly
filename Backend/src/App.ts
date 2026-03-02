@@ -1,12 +1,11 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
-import { corsOptions } from "./Presentation/Constants/corsOption";
+import { corsOptions } from "../src/Presentation/Constants/CorsOption";
 import express, { Application } from "express";
 import http from "http";
 import {Server} from "socket.io";
-import { MongoDB } from "./Infrastructure/Database/Mongodbconnection";
-import { AuthRoutes } from "./Presentation/Routes/Authroute";
+import { MongoDB } from "../src/Infrastructure/Database/Mongodbconnection";
+import { AuthRoutes } from "../src/Presentation/Routes/Authroute";
 import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
 import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
@@ -18,7 +17,7 @@ import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository"
 import { AuthRepository } from "./Infrastructure/Repository/AuthRepository";
 import { GameModel } from "./Infrastructure/Database/Model/GameModel";
 
-import { errorHandler }from "./Presentation/Middleware/ErrorHandlingMiddleware";
+import { errorHandler }from "../src/Presentation/Middleware/ErrorHandlingMiddleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 

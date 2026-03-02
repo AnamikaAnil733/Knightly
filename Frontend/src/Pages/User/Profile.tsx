@@ -1,13 +1,16 @@
-import { ProfileUser } from "../../Components/user/profile";
-import { Navbar } from "../../Components/user/common/navbar";
-import { Footer } from "../../Components/user/common/footer";
+import { ProfileUser } from "../../Components/User/Profile";
+import { Navbar } from "../../Components/User/Common/Navbar";
+import { Footer } from "../../Components/User/Common/Footer";
 
-export function Profile() {
-  return (
+
+
+export function Profile(){
+  return(
     <>
-      <Navbar />
-      <ProfileUser />
-      <Footer />
-    </>
-  );
+  <Navbar/>
+  <ProfileUser/>
+  <Footer/>
+  </>
+  )
+
 }

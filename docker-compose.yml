@@ -1,0 +1,44 @@
+services:
+  # MongoDB
+  mongo:
+    image: mongo:7.0
+    container_name: knightly_mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db     
+    networks:
+      - knightly_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Backend
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: knightly_backend
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    env_file:
+      - ./Backend/.env
+    environment:
+      # Override localhost with the Docker service name so the backend can reach MongoDB
+      MONGODB_URL: mongodb://mongo:27017/Knightly
+      NODE_ENV: production
+    ports:
+      - "5001:5000"
+    networks:
+      - knightly_net
+
+volumes:
+  mongo_data:
+
+networks:
+  knightly_net:
+    driver: bridge

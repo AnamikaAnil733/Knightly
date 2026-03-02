@@ -3,7 +3,7 @@ import { authModel } from "../Database/Model/Authmodel";
 import { AuthMapper } from "../../Application/Mapper/AuthMapper";
 import EAuth from "../../Domain/Entity/Auth";
 import { AuthSchemaType } from "../Database/Schema/AuthSchema";
-import { IUserManagmentRepository } from "../../Domain/Interface/Repositories/IUserManagmentRepository";
+import {IUserManagmentRepository} from "../../Domain/Interface/Repositories/IUserManagmentRepository";
 
 export class UserManagmentRepository
   extends BaseRepository<EAuth, AuthSchemaType>

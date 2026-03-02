@@ -6,7 +6,7 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { AvatarURLtypes } from "../../Domain/Types/AvatarURLtypes";
 
-import { IStorageService } from "../../Domain/Interface/service/IS3Service";
+import { IStorageService } from "../../Domain/Interface/Service/IS3Service";
 
 export class S3StorageService implements IStorageService {
   private _s3: S3Client;

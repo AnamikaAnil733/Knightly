@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { Store, persistor } from "./Store/Store.ts";
-import './index.css'
+import { Store, persistor } from "./Store/Store";
+import './Index.css'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from './App.tsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';

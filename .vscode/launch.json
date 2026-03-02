@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Backend (ts-node)",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "-r",
+          "ts-node/register",
+          "-r",
+          "dotenv/config"
+        ],
+        "args": [
+          "${workspaceFolder}/Backend/src/app.ts"
+        ],
+        "cwd": "${workspaceFolder}/Backend",
+        "envFile": "${workspaceFolder}/Backend/.env",
+        "console": "integratedTerminal",
+        "skipFiles": ["<node_internals>/**"]
+      }
+    ]
+  }

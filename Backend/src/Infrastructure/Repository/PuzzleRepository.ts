@@ -1,8 +1,5 @@
 import { BaseRepository } from "./BaseRepository";
-import {
-  ProgressPuzzleModel,
-  PuzzleModel,
-} from "../Database/Model/PuzzleModel";
+import { ProgressPuzzleModel, PuzzleModel } from "../Database/Model/PuzzleModel";
 import { EPuzzle } from "../../Domain/Entity/Puzzle";
 import { PuzzleSchemaType } from "../Database/Schema/PuzzleSchema";
 import { IPuzzleRepository } from "../../Domain/Interface/Repositories/IPuzzleRepository";

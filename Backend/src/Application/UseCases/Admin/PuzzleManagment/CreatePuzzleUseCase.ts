@@ -7,7 +7,7 @@ import { EPuzzle } from "../../../../Domain/Entity/Puzzle";
 import { PuzzleMapper } from "../../../Mapper/PuzzleMapper";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { ICreatePuzzleUseCase } from "../../../../Domain/Interface/usecases/Admin/PuzzleManagement/ICreatePuzzle";
-import { IPuzzleValidationService } from "../../../../Domain/Interface/service/IPuzzleValidationService";
+import { IPuzzleValidationService } from "../../../../Domain/Interface/Service/IPuzzleValidationService";
 
 export class CreatePuzzleUseCase implements ICreatePuzzleUseCase {
   constructor(

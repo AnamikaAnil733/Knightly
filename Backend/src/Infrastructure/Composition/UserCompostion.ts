@@ -9,7 +9,7 @@ import { AvatarController } from "../../Presentation/Controllers/User/ProfileMan
 import { GameController } from "../../Presentation/Controllers/User/GameManagement.ts/GameController";
 import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
 
-import { EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
+import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
 import { ChangePasswordUseCase } from "../../Application/UseCases/User/ProfileManagement/ChangePasswordUseCase";
 import { CreateGameUseCase } from "../../Application/UseCases/User/GameManagement/CreateGameUseCase";
 import { GetGameUseCase } from "../../Application/UseCases/User/GameManagement/GetGameUseCase";
@@ -24,12 +24,13 @@ import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/User/Profi
 import { GetUserProfileUseCase } from "../../Application/UseCases/User/ProfileManagement/GetUserProfileUseCase";
 
 import { TokenService } from "../Services/TokenService";
-import { HashService } from "../Services/PasswordHashing";
+import {  HashService } from "../Services/PasswordHashing";
 import { S3StorageService } from "../Services/S3Service";
 
-import { GameModel } from "../Database/Model/GameModel";
+import {GameModel} from "../Database/Model/GameModel";
 
 import { UserRoutes } from "../../Presentation/Routes/Userroute";
+
 
 const UserRepo = new UserManagmentRepository();
 const GameRepo = new ChessGameRepository(GameModel);

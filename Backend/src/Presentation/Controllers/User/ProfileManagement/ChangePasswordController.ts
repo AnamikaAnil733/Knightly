@@ -1,19 +1,18 @@
-import { Request, Response, NextFunction } from "express";
+import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { IChangePasswordUseCase } from "../../../../Domain/Interface/usecases/User/ProfileManagement/IChangePassword";
+import { IChangePasswordUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IChangePassword";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
-export class ChangePassswordController {
-  constructor(private _changePasswordUsecase: IChangePasswordUseCase) {}
 
-  handleChangePassword = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
+
+
+export class ChangePassswordController{
+  constructor( private _changePasswordUsecase:IChangePasswordUseCase){}
+
+  handleChangePassword = async (req:Request,res:Response,next:NextFunction)=>{
+    try{
       const userId = (req as any).user.id;
-      const { currentPassword, newPassword } = req.body;
+      const {currentPassword,newPassword} = req.body;
 
       await this._changePasswordUsecase.changePassword({
         userId,
@@ -22,11 +21,13 @@ export class ChangePassswordController {
       });
 
       return res.status(HttpStatusCodes.OK).json({
-        success: true,
-        message: MESSAGES.PASSWORD_UPDATE_SUCCESS,
+        success:true,
+        message:MESSAGES.PASSWORD_UPDATE_SUCCESS,
       });
-    } catch (error) {
+
+    }catch(error){
       next(error);
     }
   };
+
 }
