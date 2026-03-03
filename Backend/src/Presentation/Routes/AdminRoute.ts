@@ -3,7 +3,7 @@ import { getAllUserController,
   banUserController,
   unBanUserController,
   PuzzleManagementController,
-} from "../../Infrastructure/Composition/AdminCompostion";
+} from "../../Infrastructure/Composition/AdminComposition";
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";

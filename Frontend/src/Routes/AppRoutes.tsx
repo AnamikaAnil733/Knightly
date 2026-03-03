@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { SignupPage } from "../Pages/Authentication/Sighnup";
+import { SignupPage } from "../Pages/Authentication/Signup";
 import { OTPVerify } from "../Pages/Authentication/EmailVerification";
 import { LandingPage } from "../Pages/User/LandingPage";
 import { LoginPage } from "../Pages/Authentication/LoginPage";
-import { UserManagment } from "../Pages/Admin/UserManagment";
+import { UserManagement } from "../Pages/Admin/UserManagement";
 import AdminLayout from "../Pages/Admin/Adminlayout";
 import { Profile } from "../Pages/User/Profile";
 import { ForgotPassword } from "../Pages/Authentication/ForgetPassword";
 import { ResetPassword } from "../Pages/Authentication/ChangePassword";
-import { Settings } from "../Pages/User/Setting";
+import { Settings } from "../Pages/User/Settings";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import { PuzzleManagement } from "../Pages/Admin/PuzzleManagement";
 import { Match } from "../Pages/User/MatchPage";
@@ -43,7 +43,7 @@ export default function AppRoutes() {
           <AdminProtectedRoute>
          <AdminLayout />
          </AdminProtectedRoute>
-        }><Route path="users" element={<UserManagment />} />
+        }><Route path="users" element={<UserManagement />} />
         <Route path="puzzles" element={<PuzzleManagement />} />
          </Route>
       </Routes>

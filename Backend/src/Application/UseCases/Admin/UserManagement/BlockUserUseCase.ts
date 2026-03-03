@@ -1,4 +1,4 @@
-import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagmentRepository";
+import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { IBlockUserUseCase } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IBlockUserUseCase";
 import { BlockUserInputDTO,BlockUserOutputDTO } from "../../../../Domain/DTOs/AdminDTOs";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";

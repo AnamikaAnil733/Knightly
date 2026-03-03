@@ -1,4 +1,4 @@
-import { UserManagmentRepository } from "../Repository/UserRepository";
+import { UserManagementRepository } from "../Repository/UserRepository";
 import { ChessGameRepository } from "../Repository/GameRepository";
 import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
@@ -6,7 +6,7 @@ import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { EditProfileController } from "../../Presentation/Controllers/User/ProfileManagement/UpdateProfileController";
 import { ChangePassswordController } from "../../Presentation/Controllers/User/ProfileManagement/ChangePasswordController";
 import { AvatarController } from "../../Presentation/Controllers/User/ProfileManagement/AvatarController";
-import { GameController } from "../../Presentation/Controllers/User/GameManagement.ts/GameController";
+import { GameController } from "../../Presentation/Controllers/User/GameManagement/GameController";
 import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
 
 import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
@@ -16,7 +16,7 @@ import { GetGameUseCase } from "../../Application/UseCases/User/GameManagement/G
 import { MakeMoveUsecase } from "../../Application/UseCases/User/GameManagement/MakeMoveUseCase";
 import { GetLegalMovesUseCase } from "../../Application/UseCases/User/GameManagement/GetLegalMovesUseCase";
 
-import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDiffiicultyUseCase";
+import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDifficultyUseCase";
 import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleManagement/ValidatePuzzleUseCase";
 
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/User/ProfileManagement/AvatarUseCase";
@@ -29,10 +29,10 @@ import { S3StorageService } from "../Services/S3Service";
 
 import {GameModel} from "../Database/Model/GameModel";
 
-import { UserRoutes } from "../../Presentation/Routes/Userroute";
+import { UserRoutes } from "../../Presentation/Routes/UserRoute";
 
 
-const UserRepo = new UserManagmentRepository();
+const UserRepo = new UserManagementRepository();
 const GameRepo = new ChessGameRepository(GameModel);
 const PuzzleRepo = new PuzzleManagementRepository();
 const ProgressPuzzleRepo = new UserPuzzleProgressRepository();

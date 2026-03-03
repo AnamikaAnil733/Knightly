@@ -1,13 +1,13 @@
 import { AuthRepository } from "../Repository/AuthRepository";
 
 import { CachingService } from "../Services/CachingService";
-import { OtpService } from "../Services/OTPservice";
+import { OtpService } from "../Services/OtpService";
 import { EmailService } from "../Services/EmailService";
 import { HashService } from "../Services/PasswordHashing";
 import { GoogleAuthService } from "../Services/GoogleAuthService";
 import { TokenService } from "../Services/TokenService";
 
-import { AuthController } from "../../Presentation/Controllers/Authcontroller";
+import { AuthController } from "../../Presentation/Controllers/AuthController";
 
 import { VerifyOtpUseCase } from "../../Application/UseCases/Auth/VerifyOtpUsecases";
 import { RegisterUserUseCase } from "../../Application/UseCases/Auth/RegisterUserCase";

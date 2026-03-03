@@ -5,9 +5,9 @@ import express, { Application } from "express";
 import http from "http";
 import {Server} from "socket.io";
 import { MongoDB } from "./Infrastructure/Database/Mongodbconnection";
-import { AuthRoutes } from "./Presentation/Routes/Authroute";
-import { userRoutes } from "./Infrastructure/Composition/UserCompostion";
-import { adminRoutes } from "./Infrastructure/Composition/AdminCompostion";
+import { AuthRoutes } from "./Presentation/Routes/AuthRoute";
+import { userRoutes } from "./Infrastructure/Composition/UserComposition";
+import { adminRoutes } from "./Infrastructure/Composition/AdminComposition";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
 
 import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/MakeMoveUseCase";

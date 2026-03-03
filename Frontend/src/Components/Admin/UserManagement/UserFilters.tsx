@@ -1,4 +1,4 @@
-import { UserFilter } from "../../../Pages/Admin/UserManagment";
+import { UserFilter } from "../../../Pages/Admin/UserManagement";
 
 interface Props {
   filter: UserFilter;

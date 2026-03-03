@@ -5,7 +5,7 @@ import {
   avatarController,
   gameController,
   userPuzzleController,
-} from "../../Infrastructure/Composition/UserCompostion";
+} from "../../Infrastructure/Composition/UserComposition";
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";

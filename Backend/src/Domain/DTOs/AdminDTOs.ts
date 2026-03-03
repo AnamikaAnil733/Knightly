@@ -103,5 +103,3 @@ export interface GetallPuzzleInputDTO{
     difficulty?: PuzzleType;
 
 }
-
-

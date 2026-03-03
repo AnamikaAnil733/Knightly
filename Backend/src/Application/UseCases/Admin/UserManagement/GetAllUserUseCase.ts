@@ -1,5 +1,5 @@
 import EAuth from "../../../../Domain/Entity/Auth";
-import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagmentRepository";
+import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { IGetAllUserUseCase } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetAllUserUseCase";
 import {
   GetAllUsersInputDto,
