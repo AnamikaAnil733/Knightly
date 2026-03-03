@@ -27,6 +27,8 @@ export interface ChessGameSchemaType {
   };
   whitePlayerId?: string;
   blackPlayerId?: string;
+  positionHistory: string[];
+  halfMoveClock: number;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
@@ -73,6 +75,16 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         required: true,
       },
       lastMoveTimestamp: { type: Number, required: true },
+    },
+    positionHistory: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+    halfMoveClock: {
+      type: Number,
+      required: true,
+      default: 0,
     },
   },
   {
