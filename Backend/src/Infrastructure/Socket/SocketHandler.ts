@@ -151,6 +151,20 @@ export class SocketHandler {
         console.log(`Socket ${socket.id} joined ${gameId} as ${role}`);
       });
 
+      socket.on("sendMessage", ({ gameId, sender, text }) => {
+        if (!gameId || !text || !sender) return;
+        
+        console.log(`Chat in ${gameId}: ${sender}: ${text}`);
+        
+        // Broadcast message to everyone in the game room
+        this._io.to(gameId).emit("messageReceived", {
+          sender,
+          text,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          socketId: socket.id
+        });
+      });
+
       socket.on("move", async ({ gameId, from, to, promotionType }) => {
         try {
           const room = this.rooms.get(gameId);

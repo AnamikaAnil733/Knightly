@@ -1,93 +1,149 @@
-import{ useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SendIcon } from 'lucide-react'
-const messages = [
-  {
-    sender: 'GrandMaster_Alex',
-    text: 'Good game so far!',
-    time: '5:30',
-  },
-  {
-    sender: 'You',
-    text: 'Thanks! You too',
-    time: '5:28',
-  },
-  {
-    sender: 'GrandMaster_Alex',
-    text: 'Interesting opening choice',
-    time: '5:25',
-  },
-]
-export function ChatPanel() {
+import { socket } from "../../../Service/Socket"
+
+interface Message {
+  sender: string;
+  text: string;
+  time: string;
+  socketId?: string;
+}
+
+interface ChatPanelProps {
+  gameId: string;
+  senderName: string;
+}
+
+export function ChatPanel({ gameId, senderName }: ChatPanelProps) {
   const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<Message[]>([])
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  useEffect(() => {
+    // Listen for incoming messages
+    const handleNewMessage = (msg: Message) => {
+      setMessages(prev => [...prev, msg]);
+    }
+
+    socket.on("messageReceived", handleNewMessage);
+
+    return () => {
+      socket.off("messageReceived", handleNewMessage);
+    };
+  }, []);
+
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+
+    socket.emit("sendMessage", {
+      gameId,
+      sender: senderName,
+      text: message
+    });
+
+    setMessage('');
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
+
   return (
     <div
-      className="w-full h-full rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#6B2EFF]/30 p-6 flex flex-col"
+      className="w-full h-full rounded-xl backdrop-blur-md bg-[#11193F]/70 border border-[#6B2EFF]/30 p-6 flex flex-col overflow-hidden"
       style={{
         boxShadow: '0 4px 20px rgba(107, 46, 255, 0.2)',
       }}
     >
       <h3
-        className="text-white font-semibold text-lg mb-4 pb-3 border-b border-[#6B2EFF]/20"
+        className="text-white font-semibold text-lg mb-4 pb-3 border-b border-[#6B2EFF]/20 shrink-0"
         style={{
           fontFamily: 'Poppins, sans-serif',
         }}
       >
-        Chat
+        Live Chat
       </h3>
+      
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 custom-scrollbar">
-        {messages.map((msg, index) => (
-          <div key={index} className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span
-                className={`text-xs font-medium ${msg.sender === 'You' ? 'text-[#3A6FF7]' : 'text-[#FFD166]'}`}
-              >
-                {msg.sender}
-              </span>
-              <span className="text-xs text-[#C9CAD9]/50">{msg.time}</span>
-            </div>
-            <p
-              className="text-sm text-[#C9CAD9] bg-[#1C2445]/30 px-3 py-2 rounded-lg"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-              }}
-            >
-              {msg.text}
-            </p>
+      <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 custom-scrollbar">
+        {messages.length === 0 ? (
+          <div className="h-full flex items-center justify-center text-[#C9CAD9]/30 text-xs italic">
+            No messages yet. Say hello!
           </div>
-        ))}
+        ) : (
+          messages.map((msg, index) => {
+            const isMe = msg.socketId === socket.id || msg.sender === senderName;
+            return (
+              <div key={index} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`}>
+                <div className="flex items-baseline gap-2">
+                  {!isMe && (
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#FFD166]/70">
+                      {msg.sender}
+                    </span>
+                  )}
+                  <span className="text-[9px] text-[#C9CAD9]/40">{msg.time}</span>
+                </div>
+                <div
+                  className={`max-w-[85%] text-sm px-3 py-2 rounded-2xl ${
+                    isMe 
+                      ? 'bg-gradient-to-br from-[#6B2EFF] to-[#3A6FF7] text-white rounded-tr-none shadow-lg shadow-[#3A6FF7]/10' 
+                      : 'bg-[#1C2445]/50 text-[#C9CAD9] border border-white/5 rounded-tl-none'
+                  }`}
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                  }}
+                >
+                  {msg.text}
+                </div>
+              </div>
+            );
+          })
+        )}
+        <div ref={messagesEndRef} />
       </div>
+
       {/* Input */}
-      <div className="relative">
+      <div className="relative shrink-0">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-          className="w-full px-4 py-3 pr-12 rounded-lg bg-[#1C2445]/50 border border-[#6B2EFF]/30 text-white text-sm placeholder-[#C9CAD9]/50 focus:outline-none focus:border-[#6B2EFF] focus:ring-1 focus:ring-[#6B2EFF] transition-all"
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.2)',
-          }}
+          onKeyPress={handleKeyPress}
+          placeholder="Write a message..."
+          className="w-full px-4 py-3 pr-12 rounded-xl bg-[#0A0F2C]/60 border border-[#6B2EFF]/30 text-white text-sm placeholder-[#C9CAD9]/30 focus:outline-none focus:border-[#3A6FF7] focus:ring-1 focus:ring-[#3A6FF7] transition-all"
         />
-        <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-[#6B2EFF]/20 hover:bg-[#6B2EFF]/40 transition-colors">
-          <SendIcon className="w-4 h-4 text-[#6B2EFF]" />
+        <button 
+          onClick={handleSendMessage}
+          className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all ${
+            message.trim() ? 'bg-[#3A6FF7] hover:bg-[#6B2EFF] text-white' : 'bg-[#1C2445]/50 text-[#C9CAD9]/30'
+          }`}
+        >
+          <SendIcon className="w-4 h-4" />
         </button>
       </div>
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
+          width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(28, 36, 69, 0.3);
-          border-radius: 3px;
+          background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(107, 46, 255, 0.3);
-          border-radius: 3px;
+          background: rgba(107, 46, 255, 0.2);
+          border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(107, 46, 255, 0.5);
+          background: rgba(107, 46, 255, 0.4);
         }
       `}</style>
     </div>

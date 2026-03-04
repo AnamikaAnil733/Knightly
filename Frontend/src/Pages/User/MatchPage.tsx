@@ -8,6 +8,8 @@ import { ChatPanel } from "../../Components/User/Match/Chat";
 import { ControlBar } from "../../Components/User/Match/ControlBar";
 import { PromotionModal } from "../../Components/User/Match/PromotionModal";
 import { GameOver } from "../../Components/User/Match/GameOver";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/Store";
 
 import { socket } from "../../Service/Socket";
 
@@ -41,6 +43,7 @@ type MoveDTO = {
 export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.userAuth.user);
 
   const [board, setBoard] = useState<BoardGrid>([]);
   const [turn, setTurn] = useState<Turn>("WHITE");
@@ -365,7 +368,7 @@ export function Match() {
 
           {/* Chat: Middle Section */}
           <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
-            <ChatPanel />
+            <ChatPanel gameId={gameId || ""} senderName={user?.displayname || "Observer"} />
           </div>
 
           {/* Controls: Bottom Section */}
@@ -383,7 +386,7 @@ export function Match() {
             <MoveList history={history} status={status} />
           </div>
           <div className="h-64">
-            <ChatPanel />
+            <ChatPanel gameId={gameId || ""} senderName={user?.displayname || "Observer"} />
           </div>
         </div>
       </div>
