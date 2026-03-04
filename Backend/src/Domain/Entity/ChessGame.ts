@@ -10,6 +10,7 @@ export class ChessGame extends BaseEntity {
     private clock: GameClock,
     private _whitePlayerId?: string,
     private _blackPlayerId?: string,
+    private readonly _timeControl: string = "5+0",
     id?: string,
   ) {
     super(id);
@@ -87,5 +88,9 @@ export class ChessGame extends BaseEntity {
 
   getBlackPlayerId(): string | undefined {
     return this._blackPlayerId;
+  }
+
+  getTimeControl(): string {
+    return this._timeControl;
   }
 }

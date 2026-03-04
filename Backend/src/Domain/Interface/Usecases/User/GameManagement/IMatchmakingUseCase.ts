@@ -3,6 +3,7 @@ export type QueuePlayer = {
     socketId: string;
     rating: number;
     joinedAt: number;
+    timeControl: string; // "1+0", "3+2", etc.
   };
 
 export type MatchResult =
@@ -18,4 +19,5 @@ export interface IMatchmakingUseCase {
     findMatch(player: QueuePlayer): Promise<MatchResult>;
     removeFromQueue(socketId: string): void;
     getQueueSize(): number;
+    getQueueSizeFor(timeControl: string): number;
   }

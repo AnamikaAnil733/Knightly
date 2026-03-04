@@ -58,13 +58,15 @@ export class SocketHandler {
         }
       });
 
-      socket.on("findMatch", async (userId: string) => {
+      socket.on("findMatch", async (userId: string, gameFormat: string = "3+0") => {
         try {
           const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
 
+          // Try to get rating for specific format, fallback to BLITZ or 1200
+          // This requires user entity to have ratings for different formats
           const rating = user.getRating
-            ? user.getRating("BLITZ")
+            ? user.getRating("BLITZ") // For now keeping it BLITZ, but could be dynamic
             : user.rating?.BLITZ || 1200;
 
           const result = await this._matchmakingUseCase.findMatch({
@@ -72,11 +74,13 @@ export class SocketHandler {
             socketId: socket.id,
             rating,
             joinedAt: Date.now(),
+            timeControl: gameFormat,
           });
 
           if (result.type === "WAITING") {
             socket.emit("waiting", {
-              queueSize: this._matchmakingUseCase.getQueueSize(),
+              queueSize: this._matchmakingUseCase.getQueueSizeFor(gameFormat),
+              format: gameFormat
             });
             return;
           }

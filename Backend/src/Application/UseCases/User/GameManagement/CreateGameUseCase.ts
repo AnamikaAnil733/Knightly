@@ -4,20 +4,22 @@ import { InitialBoard } from "../../../../Domain/Chess/InitialBoard";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
 import { ICreateGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/ICreateGameUseCase";
 import { GameClock } from "../../../../Domain/Entity/GameClock";
-
+import { TIME_CONTROLS } from "../../../../Domain/Chess/Types/GameFormat";
 
 export class CreateGameUseCase implements ICreateGameUseCase{
   constructor(
         private readonly ChessGameRepository : IBaseRepository<ChessGame>,
   ){}
 
-  async execute(whitePlayerId?: string, blackPlayerId?: string): Promise<{ gameId: string }> {
+  async execute(whitePlayerId?: string, blackPlayerId?: string, timeControl: string = "5+0"): Promise<{ gameId: string }> {
+    const config = TIME_CONTROLS[timeControl] || TIME_CONTROLS["5+0"];
+    
     const board = InitialBoard.create();
     const gameState = new GameState(board);
     const clock = new GameClock(
-      5 * 60 * 1000,   // whiteTime (5 minutes)
-      5 * 60 * 1000,   // blackTime
-      2000,            // increment (2 seconds)
+      config.whiteTime,
+      config.blackTime,
+      config.increment,
       "WHITE",         // starting turn
       Date.now(),       // lastMoveTimestamp
     );
@@ -28,6 +30,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       clock,
       whitePlayerId,
       blackPlayerId,
+      config.name
     );
 
     const savedGame = await this.ChessGameRepository.create(game);

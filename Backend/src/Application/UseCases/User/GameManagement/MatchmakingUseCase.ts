@@ -9,7 +9,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
   constructor(
     private readonly createGameUseCase: {
-      execute(whiteId?: string, blackId?: string): Promise<{ gameId: string }>;
+      execute(whiteId?: string, blackId?: string, timeControl?: string): Promise<{ gameId: string }>;
     }
   ) {}
 
@@ -25,8 +25,11 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
     const now = Date.now();
 
-    // Look for an opponent in the queue
+    // Look for an opponent in the queue with the SAME time control
     const opponentIndex = this.queue.findIndex((qPlayer) => {
+      // Must have the same time control
+      if (qPlayer.timeControl !== player.timeControl) return false;
+
       const timeInQueue = (now - qPlayer.joinedAt) / 1000;
       const myTimeInQueue = (now - player.joinedAt) / 1000;
 
@@ -51,7 +54,8 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
     const { gameId } = await this.createGameUseCase.execute(
       white.userId,
-      black.userId
+      black.userId,
+      player.timeControl // Pass the time control to game creation
     );
 
     return {
@@ -68,5 +72,9 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
   getQueueSize() {
     return this.queue.length;
+  }
+
+  getQueueSizeFor(timeControl: string) {
+    return this.queue.filter((p) => p.timeControl === timeControl).length;
   }
 }

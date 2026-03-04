@@ -3,6 +3,11 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Zap, Timer, Clock, Trophy, ChevronLeft } from "lucide-react";
 
+export interface TimeControlOption {
+  id: string; // The backend code, e.g., "1+0"
+  label: string; // The display label, e.g., "1 | 0"
+}
+
 interface GameMode {
   id: string;
   name: string;
@@ -10,40 +15,63 @@ interface GameMode {
   description: string;
   icon: React.ReactNode;
   color: string;
+  options: TimeControlOption[];
 }
 
 const gameModes: GameMode[] = [
   {
     id: "bullet",
     name: "Bullet",
-    duration: "1 min",
+    duration: "1-2 min",
     description: "Ultra-fast matches for quick thinkers.",
     icon: <Zap className="w-8 h-8" />,
     color: "from-orange-500 to-red-600",
+    options: [
+      { id: "1+0", label: "1 | 0" },
+      { id: "2+1", label: "2 | 1" },
+    ],
   },
   {
     id: "blitz",
     name: "Blitz",
-    duration: "3 - 5 min",
+    duration: "3-5 min",
     description: "The classic fast-paced chess experience.",
     icon: <Timer className="w-8 h-8" />,
     color: "from-yellow-400 to-orange-500",
+    options: [
+      { id: "3+0", label: "3 | 0" },
+      { id: "3+2", label: "3 | 2" },
+      { id: "5+0", label: "5 | 0" },
+      { id: "5+3", label: "5 | 3" },
+    ],
   },
   {
     id: "rapid",
     name: "Rapid",
-    duration: "10 - 15 min",
+    duration: "10-30 min",
     description: "Balanced time for strategy and speed.",
     icon: <Clock className="w-8 h-8" />,
     color: "from-emerald-400 to-teal-600",
+    options: [
+      { id: "10+0", label: "10 | 0" },
+      { id: "15+10", label: "15 | 10" },
+      { id: "20+0", label: "20 | 0" },
+      { id: "30+0", label: "30 | 0" },
+    ],
   },
   {
     id: "classical",
     name: "Classical",
-    duration: "30+ min",
+    duration: "30-60 min",
     description: "Deep thinking and long-term strategy.",
     icon: <Trophy className="w-8 h-8" />,
     color: "from-blue-500 to-indigo-600",
+    options: [
+      { id: "30+10", label: "30 | 10" },
+      { id: "45+0", label: "45 | 0" },
+      { id: "60+0", label: "60 | 0" },
+      { id: "45+15", label: "45 | 15" },
+    ],
   },
 ];
 
@@ -120,14 +148,18 @@ export function GameSelectionPage() {
               key={mode.id}
               variants={itemVariants}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              onClick={() => navigate("/waiting")}
               className="group relative cursor-pointer"
+              onClick={() => {
+                const firstOption = mode.options[0];
+                console.log("Card clicked, using default option:", firstOption.id);
+                navigate("/waiting", { state: { format: firstOption.id, modeName: mode.name } });
+              }}
             >
               {/* Card Background with Glassmorphism */}
-              <div className="h-full p-8 rounded-3xl bg-[#11193F]/40 backdrop-blur-xl border border-white/5 group-hover:border-[#3A6FF7]/50 transition-all duration-300 relative overflow-hidden">
+              <div className="h-full p-8 rounded-3xl bg-[#11193F]/40 backdrop-blur-xl border border-white/5 group-hover:border-[#3A6FF7]/30 transition-all duration-300 relative overflow-hidden flex flex-col">
                 {/* Hover Gradient Overlay */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${mode.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                  className={`absolute inset-0 bg-gradient-to-br ${mode.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none`}
                 />
 
                 {/* Icon Container */}
@@ -146,14 +178,25 @@ export function GameSelectionPage() {
                   <span>{mode.duration}</span>
                 </div>
 
-                <p className="text-[#C9CAD9] text-sm leading-relaxed mb-6">
+                <p className="text-[#C9CAD9] text-sm leading-relaxed mb-6 flex-grow">
                   {mode.description}
                 </p>
 
-                {/* Bottom Action Hint */}
-                <div className="flex items-center gap-2 text-[#3A6FF7] font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                  <span>Start Match</span>
-                  <div className="w-5 h-[2px] bg-[#3A6FF7]" />
+                {/* Specific Time Control Options */}
+                <div className="grid grid-cols-2 gap-2 mt-auto relative z-20">
+                  {mode.options.map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        console.log("Navigating to waiting room with:", option.id);
+                        navigate("/waiting", { state: { format: option.id, modeName: mode.name } });
+                      }}
+                      className="px-3 py-2 text-xs font-bold rounded-xl bg-white/5 border border-white/10 hover:bg-[#3A6FF7] hover:border-[#3A6FF7] hover:text-white transition-all duration-200"
+                    >
+                      {option.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 

@@ -16,7 +16,8 @@ export class GameController {
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const GameResponse = await this._createGameUseCase.execute();
+      const { timeControl } = req.body;
+      const GameResponse = await this._createGameUseCase.execute(undefined, undefined, timeControl);
       return res.status(HttpStatusCodes.CREATED).json({
         success: true,
         data: GameResponse,

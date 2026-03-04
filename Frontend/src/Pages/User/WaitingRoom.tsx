@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { Users, Shield, Zap, X } from "lucide-react";
@@ -8,7 +8,12 @@ import { RootState } from "../../Store/Store";
 
 export function WaitingRoom() {
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((state: RootState) => state.userAuth.user);
+  
+  // Get format from navigation state
+  const { format = "3+0", modeName = "Blitz" } = location.state || {};
+  
   const [queueSize, setQueueSize] = useState(1);
   const [dots, setDots] = useState("");
 
@@ -18,8 +23,8 @@ export function WaitingRoom() {
       return;
     }
 
-    // Step 1: Tell backend we are looking for a match
-    socket.emit("findMatch", user.id);
+    // Step 1: Tell backend we are looking for a match with SPECIFIC format
+    socket.emit("findMatch", user.id, format);
 
     // Step 2: Listen for updates
     socket.on("waiting", (data) => {
@@ -47,7 +52,7 @@ export function WaitingRoom() {
       socket.off("searchCancelled");
       clearInterval(dotInterval);
     };
-  }, [user, navigate]);
+  }, [user, navigate, format]);
 
   const handleCancel = () => {
     socket.emit("cancelSearch");
@@ -93,12 +98,11 @@ export function WaitingRoom() {
             </div>
 
             {/* Title & Status */}
-            <h2 className="text-3xl font-bold text-white mb-2 font-poppins">
+            <h2 className="text-3xl font-bold text-white mb-2 font-['Poppins']">
               Finding Opponent{dots}
             </h2>
-            <p className="text-[#C9CAD9] text-sm mb-8 font-inter">
-              Estimated wait time:{" "}
-              <span className="text-[#FFD166]">&lt; 30s</span>
+            <p className="text-[#C9CAD9] text-sm mb-8 font-['Inter']">
+              Searching for a <span className="text-[#3A6FF7] font-bold">{format.replace('+', ' | ')}</span> match
             </p>
 
             {/* Stats Grid */}
@@ -108,12 +112,12 @@ export function WaitingRoom() {
                 <span className="text-white font-bold text-lg">
                   {queueSize}
                 </span>
-                <span className="text-[#C9CAD9] text-xs">Waiting</span>
+                <span className="text-[#C9CAD9] text-xs">Players waiting</span>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center">
                 <Zap className="w-5 h-5 text-[#FFD166] mb-2" />
-                <span className="text-white font-bold text-lg">Blitz</span>
-                <span className="text-[#C9CAD9] text-xs">Game Mode</span>
+                <span className="text-white font-bold text-lg">{modeName}</span>
+                <span className="text-[#C9CAD9] text-xs">Format</span>
               </div>
             </div>
 

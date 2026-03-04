@@ -29,12 +29,14 @@ export interface ChessGameSchemaType {
   blackPlayerId?: string;
   positionHistory: string[];
   halfMoveClock: number;
+  timeControl: string;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
   {
     whitePlayerId: { type: String },
     blackPlayerId: { type: String },
+    timeControl: { type: String, default: "5+0" },
     turn: {
       type: String,
       enum: ["WHITE", "BLACK"],
