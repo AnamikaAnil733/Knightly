@@ -14,7 +14,7 @@ export function MoveList({
   status,
 }: {
   history: MoveDTO[];
-  status: "ACTIVE" | "CHECK" | "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+  status: "ACTIVE" | "CHECK" | "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "WHITE_RESIGNED" | "BLACK_RESIGNED" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL";
 }) {
   const moves = [];
   const lastMoveIndex = history.length - 1;

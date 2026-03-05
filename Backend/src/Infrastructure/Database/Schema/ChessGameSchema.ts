@@ -1,21 +1,13 @@
 import { Schema } from "mongoose";
 import { SerializedBoardGrid } from "../../../Domain/Chess/Types/SerializedBoard";
+import { GameStatus } from "../../../Domain/Chess/Game/GameStatus";
 
 export interface ChessGameSchemaType {
   _id?: string;
   turn: "WHITE" | "BLACK";
   board: SerializedBoardGrid;
   history: any[];
-  status:
-    | "ACTIVE"
-    | "CHECKMATE"
-    | "STALEMATE"
-    | "CHECK"
-    | "WHITE_TIMEOUT"
-    | "BLACK_TIMEOUT"
-    | "DRAW_BY_REPETITION"
-    | "DRAW_BY_FIFTY_MOVES"
-    | "DRAW_BY_INSUFFICIENT_MATERIAL";
+  status: GameStatus;
   createdAt: Date;
   updatedAt: Date;
   clock: {
@@ -60,6 +52,8 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         "CHECK",
         "WHITE_TIMEOUT",
         "BLACK_TIMEOUT",
+        "WHITE_RESIGNED",
+        "BLACK_RESIGNED",
         "DRAW_BY_REPETITION",
         "DRAW_BY_FIFTY_MOVES",
         "DRAW_BY_INSUFFICIENT_MATERIAL",

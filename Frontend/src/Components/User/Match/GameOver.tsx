@@ -5,7 +5,7 @@ import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
 
 type Props = {
-  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT";
+  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "WHITE_RESIGNED" | "BLACK_RESIGNED" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL";
   turn: "WHITE" | "BLACK";
   myRole: "WHITE" | "BLACK" | "SPECTATOR" | null;
 };
@@ -22,7 +22,11 @@ export function GameOver({ status, turn, myRole }: Props) {
         ? "BLACK"
         : status === "BLACK_TIMEOUT"
           ? "WHITE"
-          : null;
+          : status === "WHITE_RESIGNED"
+            ? "BLACK"
+            : status === "BLACK_RESIGNED"
+              ? "WHITE"
+              : null;
 
   // Determine outcome from the current player's perspective
   const getOutcome = (): Outcome => {
@@ -137,7 +141,7 @@ export function GameOver({ status, turn, myRole }: Props) {
   const theme = {
     win: {
       title: "Victory!",
-      subtitle: "You won the Chess Championship",
+      subtitle: status === "WHITE_RESIGNED" || status === "BLACK_RESIGNED" ? "Opponent Resigned" : "You won the Chess Championship",
       titleColor: "#ffffff",
       titleGlow: "0 0 40px rgba(139, 92, 246, 0.5), 0 2px 4px rgba(0,0,0,0.3)",
       cardBg: "linear-gradient(180deg, #1a1a2e 0%, #16162a 50%, #121225 100%)",
@@ -154,7 +158,7 @@ export function GameOver({ status, turn, myRole }: Props) {
     },
     lose: {
       title: "Defeat",
-      subtitle: "Better luck next time, knight",
+      subtitle: status === "WHITE_RESIGNED" || status === "BLACK_RESIGNED" ? "You Resigned" : "Better luck next time, knight",
       titleColor: "#f87171",
       titleGlow: "0 0 40px rgba(239, 68, 68, 0.4), 0 2px 4px rgba(0,0,0,0.3)",
       cardBg: "linear-gradient(180deg, #1a1a2e 0%, #16162a 50%, #121225 100%)",
@@ -209,8 +213,8 @@ export function GameOver({ status, turn, myRole }: Props) {
 
   const winnerName = winner === "WHITE" ? "White" : "Black";
   const loserName = winner === "WHITE" ? "Black" : "White";
-  const winnerScore = status === "CHECKMATE" ? 1 : 0;
-  const loserScore = status === "CHECKMATE" ? 0 : 0;
+  const winnerScore = (status === "CHECKMATE" || status === "WHITE_TIMEOUT" || status === "BLACK_TIMEOUT" || status === "WHITE_RESIGNED" || status === "BLACK_RESIGNED") ? 1 : 0.5;
+  const loserScore = (status === "CHECKMATE" || status === "WHITE_TIMEOUT" || status === "BLACK_TIMEOUT" || status === "WHITE_RESIGNED" || status === "BLACK_RESIGNED") ? 0 : 0.5;
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center">

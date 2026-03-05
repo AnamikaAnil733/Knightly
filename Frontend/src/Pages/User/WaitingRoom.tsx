@@ -23,10 +23,7 @@ export function WaitingRoom() {
       return;
     }
 
-    // Step 1: Tell backend we are looking for a match with SPECIFIC format
-    socket.emit("findMatch", user.id, format);
-
-    // Step 2: Listen for updates
+    // Step 1: Listen for updates (Register BEFORE emitting)
     socket.on("waiting", (data) => {
       setQueueSize(data.queueSize);
     });
@@ -40,6 +37,9 @@ export function WaitingRoom() {
     socket.on("searchCancelled", () => {
       navigate("/landing-page");
     });
+
+    // Step 2: Tell backend we are looking for a match with SPECIFIC format
+    socket.emit("findMatch", user.id, format);
 
     // Animated dots for the "Looking for opponent" text
     const dotInterval = setInterval(() => {

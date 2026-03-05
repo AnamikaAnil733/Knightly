@@ -8,6 +8,7 @@ import { ChatPanel } from "../../Components/User/Match/Chat";
 import { ControlBar } from "../../Components/User/Match/ControlBar";
 import { PromotionModal } from "../../Components/User/Match/PromotionModal";
 import { GameOver } from "../../Components/User/Match/GameOver";
+import { ResignModal } from "../../Components/User/Match/ResignModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
 
@@ -28,7 +29,12 @@ type GameStatus =
   | "CHECKMATE"
   | "STALEMATE"
   | "WHITE_TIMEOUT"
-  | "BLACK_TIMEOUT";
+  | "BLACK_TIMEOUT"
+  | "WHITE_RESIGNED"
+  | "BLACK_RESIGNED"
+  | "DRAW_BY_REPETITION"
+  | "DRAW_BY_FIFTY_MOVES"
+  | "DRAW_BY_INSUFFICIENT_MATERIAL";
 
 type Position = { row: number; col: number };
 
@@ -60,6 +66,8 @@ export function Match() {
   const [legalMoves, setLegalMoves] = useState<
     { row: number; col: number; type: "NORMAL" | "EN_PASSANT" }[]
   >([]);
+
+  const [isResignModalOpen, setIsResignModalOpen] = useState(false);
 
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
     null
@@ -227,6 +235,16 @@ export function Match() {
     setLegalMoves([]);
   };
 
+  const handleResign = () => {
+    if (!gameId || myRole === "SPECTATOR" || (status !== "ACTIVE" && status !== "CHECK")) return;
+    setIsResignModalOpen(true);
+  };
+
+  const confirmResign = () => {
+    if (!gameId) return;
+    socket.emit("resign", gameId);
+  };
+
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
@@ -331,6 +349,12 @@ export function Match() {
                   }}
                 />
               )}
+
+              <ResignModal
+                isOpen={isResignModalOpen}
+                onClose={() => setIsResignModalOpen(false)}
+                onConfirm={confirmResign}
+              />
             </div>
 
             {/* Bottom Player (You) */}
@@ -373,14 +397,14 @@ export function Match() {
 
           {/* Controls: Bottom Section */}
           <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
-            <ControlBar />
+            <ControlBar onResign={handleResign} />
           </div>
         </div>
 
         {/* Mobile/Tablet View for Sidebar */}
         <div className="lg:hidden w-full flex flex-col gap-4 p-4 bg-[#0A0F2C]">
           <div className="flex justify-center">
-            <ControlBar />
+            <ControlBar onResign={handleResign} />
           </div>
           <div className="h-64">
             <MoveList history={history} status={status} />

@@ -165,6 +165,58 @@ export class SocketHandler {
         });
       });
 
+      socket.on("resign", async (gameId: string) => {
+        try {
+          const game = await this._gameRepo.findById(gameId);
+          if (
+            !game ||
+            (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")
+          )
+            return;
+
+          const room = this.rooms.get(gameId);
+          if (!room) return;
+
+          let status: any;
+          if (room.white === socket.id) {
+            status = "WHITE_RESIGNED";
+          } else if (room.black === socket.id) {
+            status = "BLACK_RESIGNED";
+          } else {
+            return;
+          }
+
+          game.setStatus(status);
+          game.getClock().stop();
+          await this._gameRepo.update(game);
+
+          const updatedState = game.getGameState();
+          const clock = game.getClock();
+          const liveTimes = clock.getLiveTimes();
+
+          this._io.to(gameId).emit("gameUpdated", {
+            board: updatedState.getBoard().serialize(),
+            turn: updatedState.getTurn(),
+            history: updatedState.getHistory().map((move: any) => ({
+              from: { row: move.from.row, col: move.from.column },
+              to: { row: move.to.row, col: move.to.column },
+              piece: move.pieceType,
+              color: move.color,
+              promotion: move.promotionType ?? undefined,
+            })),
+            status: game.getStatus(),
+            clock: {
+              whiteTime: liveTimes.whiteTime,
+              blackTime: liveTimes.blackTime,
+              increment: clock.increment,
+              turn: clock.turn,
+            },
+          });
+        } catch (error) {
+          console.error("Resign error:", error);
+        }
+      });
+
       socket.on("move", async ({ gameId, from, to, promotionType }) => {
         try {
           const room = this.rooms.get(gameId);
