@@ -26,16 +26,24 @@ export function ProfileUser() {
   const user = useSelector((state: RootState) => state.userAuth.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-
-  
-
-
+  const [avatarError, setAvatarError] = useState(false);
 
   if (!user) {
     return <p className="text-center text-white pt-32">Loading profile...</p>;
   }
 
- 
+  /* ---------------- Refresh avatar URL if S3 signed URL expires ---------------- */
+  const handleAvatarError = async () => {
+    if (avatarError) return; // prevent infinite retry loop
+    setAvatarError(true);
+    try {
+      const profileRes = await axios.get("/user/profile");
+      dispatch(updateUser({ avatarUrl: profileRes.data.avatarUrl }));
+      setAvatarError(false);
+    } catch {
+      // silently fail — fallback shown
+    }
+  };
 
   /* ---------------- Generate DiceBear Avatar ---------------- */
   const handleGenerateAvatar = async () => {
@@ -44,18 +52,15 @@ export function ProfileUser() {
 
       const diceBearUrl = generateDiceBearUrl();
 
-      
       await axios.post("/user/avatar/dicebear", {
         diceBearUrl,
       });
 
-    
+      // Re-fetch full profile to get fresh signed avatar URL
       const profileRes = await axios.get("/user/profile");
-      console.log(profileRes)
-
       dispatch(updateUser(profileRes.data));
 
-      toast.success("Avatar generated successfully");
+      toast.success("Avatar generated successfully!");
     } catch (error) {
       console.error(error);
       toast.error("Failed to generate avatar");
@@ -74,6 +79,7 @@ export function ProfileUser() {
             <div className="relative">
               <img
                 src={getAvatarUrl(user)}
+                onError={handleAvatarError}
                 className={`w-32 h-32 rounded-full border-4 border-gold shadow-lg ${
                   loading ? "opacity-50" : ""
                 }`}
@@ -94,11 +100,11 @@ export function ProfileUser() {
 
               <div className="mt-3">
                 <p className="text-3xl font-bold text-gold">
-                  {user.rating?.RAPID || 1200}
+                  {user.rating?.RAPID || 300}
                 </p>
                 <div className="flex gap-4 mt-2 text-xs text-gray-400">
-                  <span>Blitz: {user.rating?.BLITZ || 1200}</span>
-                  <span>Bullet: {user.rating?.BULLET || 1200}</span>
+                  <span>Blitz: {user.rating?.BLITZ || 300}</span>
+                  <span>Bullet: {user.rating?.BULLET || 300}</span>
                 </div>
               </div>
 

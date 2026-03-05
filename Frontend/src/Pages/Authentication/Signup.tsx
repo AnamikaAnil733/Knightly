@@ -89,19 +89,16 @@ export function SignupPage() {
 
   const handleGoogleLogin = async (response: CredentialResponse) => {
     try {  
-
       const token = response.credential
       if (!token) return toast.error("No Google token received")
 
       const res = await axios.post("/auth/googleAuth", { token, role: "user" })
-      const user = res.data.userInfo
       const accessToken = res.data.accessToken
 
-      localStorage.setItem("userAccessToken", accessToken)
-      localStorage.setItem("user", JSON.stringify(user))
-
       dispatch(setuserAccessToken(accessToken))
-      dispatch(setUser(user))
+      // Fetch full profile including signed avatarUrl
+      const profileRes = await axios.get("/user/profile")
+      dispatch(setUser(profileRes.data))
 
       navigate("/landing-page",{ replace: true })
     } catch{

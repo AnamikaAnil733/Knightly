@@ -52,14 +52,14 @@ const handleConfirmBan = () => {
               <div className="flex items-center">
                 <StarIcon className="h-4 w-4 text-[#FFD166]" />
                 <span className="text-white text-sm ml-1 font-semibold">
-                  {user.rating?.RAPID || 1200}
+                  {user.rating?.RAPID || 300}
                 </span>
                 <span className="text-gray-400 text-xs ml-1">Rapid</span>
               </div>
               <div className="flex items-center mt-1">
-                 <span className="text-gray-500 text-xs">Blitz: {user.rating?.BLITZ || 1200}</span>
+                 <span className="text-gray-500 text-xs">Blitz: {user.rating?.BLITZ || 300}</span>
                  <span className="mx-1 text-gray-700">|</span>
-                 <span className="text-gray-500 text-xs">Bullet: {user.rating?.BULLET || 1200}</span>
+                 <span className="text-gray-500 text-xs">Bullet: {user.rating?.BULLET || 300}</span>
               </div>
             </div>
           </div>

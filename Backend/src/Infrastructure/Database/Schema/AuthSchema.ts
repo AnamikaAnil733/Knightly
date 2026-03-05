@@ -63,12 +63,12 @@ export const authSchema = new Schema<AuthSchemaType>(
     gamesWin: { type: Number, default: 0 },
     rating: {
       type: {
-        BULLET: { type: Number, default: 1200 },
-        BLITZ: { type: Number, default: 1200 },
-        RAPID: { type: Number, default: 1200 },
-        CLASSICAL: { type: Number, default: 1200 },
+        BULLET: { type: Number, default: 300 },
+        BLITZ: { type: Number, default: 300 },
+        RAPID: { type: Number, default: 300 },
+        CLASSICAL: { type: Number, default: 300 },
       },
-      default: { BULLET: 1200, BLITZ: 1200, RAPID: 1200, CLASSICAL: 1200 },
+      default: { BULLET: 300, BLITZ: 300, RAPID: 300, CLASSICAL: 300 },
     },
     premium: { type: Boolean, default: false },
     longestStreak: { type: Number, default: 0 },

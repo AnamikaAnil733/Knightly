@@ -58,8 +58,6 @@ export function LoginPage({ role }: LoginPageProps) {
 
       const { userInfo } = res.data;
       const { accessToken } = userInfo;
-      console.log(accessToken);
-      console.log(userInfo);
 
       if (role === "ADMIN") {
         dispatch(setAdminAccessToken(accessToken));
@@ -67,7 +65,9 @@ export function LoginPage({ role }: LoginPageProps) {
         navigate("/admin/users", { replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
-        dispatch(setUser(userInfo));
+        // Fetch full profile to get signed avatarUrl and all stats
+        const profileRes = await axiosUser.get("/user/profile");
+        dispatch(setUser(profileRes.data));
         navigate("/landing-page", { replace: true });
       }
     } catch (error) {
@@ -89,7 +89,7 @@ export function LoginPage({ role }: LoginPageProps) {
 
       const res = await api.post("/auth/googleAuth", {
         token: response.credential,
-        role: role.toLowerCase(), // "admin" | "user"
+        role: role.toLowerCase(),
       });
 
       const { accessToken, userInfo } = res.data;
@@ -100,7 +100,9 @@ export function LoginPage({ role }: LoginPageProps) {
         navigate("/admin/users", { replace: true });
       } else {
         dispatch(setuserAccessToken(accessToken));
-        dispatch(setUser(userInfo));
+        // Fetch full profile to get signed avatarUrl and all stats
+        const profileRes = await axiosUser.get("/user/profile");
+        dispatch(setUser(profileRes.data));
         navigate("/landing-page", { replace: true });
       }
     } catch {

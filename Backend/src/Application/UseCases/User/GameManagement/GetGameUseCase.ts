@@ -44,7 +44,7 @@ export class GetGameUseCase implements IGetGameUseCase {
           avatar: user.avatarKey
             ? await this._storageService.generateSignedGetUrl(
                 user.avatarKey,
-                3600
+                43200 // 12 hours
               )
             : null,
         };
@@ -60,7 +60,7 @@ export class GetGameUseCase implements IGetGameUseCase {
           avatar: user.avatarKey
             ? await this._storageService.generateSignedGetUrl(
                 user.avatarKey,
-                3600
+                43200 // 12 hours
               )
             : null,
         };

@@ -1,5 +1,6 @@
 import { HydratedDocument } from "mongoose";
 import Auth from "../../Domain/Entity/Auth";
+import { UserRating } from "../../Domain/Entity/RatingEntity";
 import { AuthSchemaType } from "../../Infrastructure/Database/Schema/AuthSchema";
 import { AuthResponseDTO } from "../../Domain/DTOs/AuthDTO";
 
@@ -17,6 +18,17 @@ export class AuthMapper {
       isBlocked: doc.isBlocked,
       isNewUser: doc.isNewUser,
       avatarKey: doc.avatarKey ?? null,
+
+      // Profile fields
+      gamesPlayed: doc.gamesPlayed,
+      gamesWin: doc.gamesWin,
+      rating: new UserRating(doc.rating),
+      premium: doc.premium,
+      longestStreak: doc.longestStreak,
+      currentStreak: doc.currentStreak,
+      rewards: doc.rewards,
+      achievements: doc.achievements,
+      subscriptionStart: doc.subscriptionStart,
     });
   }
 

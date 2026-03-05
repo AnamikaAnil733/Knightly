@@ -11,7 +11,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
     from: { row: number; col: number },
     to: { row: number; col: number },
     promotionType?: "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT"
-  ): Promise<void> {
+  ): Promise<any> {
     const game = await this._gameRepo.findById(gameId);
 
     if (!game) {
@@ -37,7 +37,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
 
     if (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK") {
       await this._gameRepo.update(game);
-      return;
+      return game;
     }
 
     const LegalMoves = LegalService.getLegalMove(fromP, board);
@@ -62,5 +62,6 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
     game.statusFromGameState();
 
     await this._gameRepo.update(game);
+    return game;
   }
 }

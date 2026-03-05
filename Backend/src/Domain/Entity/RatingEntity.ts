@@ -14,10 +14,10 @@ export class UserRating {
     >
   ) {
     this._ratings = {
-      BULLET: ratings?.BULLET ?? 1200,
-      BLITZ: ratings?.BLITZ ?? 1200,
-      RAPID: ratings?.RAPID ?? 1200,
-      CLASSICAL: ratings?.CLASSICAL ?? 1200,
+      BULLET: ratings?.BULLET ?? 300,
+      BLITZ: ratings?.BLITZ ?? 300,
+      RAPID: ratings?.RAPID ?? 300,
+      CLASSICAL: ratings?.CLASSICAL ?? 300,
     };
   }
 

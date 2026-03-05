@@ -155,7 +155,7 @@ export function WaitingRoom() {
                 Rating:{" "}
                 {typeof user.rating === "number"
                   ? user.rating
-                  : user.rating?.BLITZ || 1200}
+                  : user.rating?.BLITZ || 300}
               </p>
             </div>
           </motion.div>

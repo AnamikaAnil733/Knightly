@@ -34,6 +34,7 @@ export class ChessGameMapper {
       doc.blackPlayerId,
       doc.timeControl || "5+0",
       doc._id.toString(),
+      doc.isRatingUpdated ?? false
     );
   }
 
@@ -61,6 +62,7 @@ export class ChessGameMapper {
       whitePlayerId: entity.getWhitePlayerId(),
       blackPlayerId: entity.getBlackPlayerId(),
       timeControl: entity.getTimeControl(),
+      isRatingUpdated: entity.isRatingUpdated(),
     };
   }
 }

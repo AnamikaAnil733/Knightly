@@ -70,10 +70,15 @@ export function Match() {
 
   const [isResignModalOpen, setIsResignModalOpen] = useState(false);
   const [isDrawOfferModalOpen, setIsDrawOfferModalOpen] = useState(false);
+  const [ratingDelta, setRatingDelta] = useState<number | null>(null);
 
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
     null
   );
+  const myRoleRef = useRef(myRole);
+  useEffect(() => {
+    myRoleRef.current = myRole;
+  }, [myRole]);
 
   const [whiteTime, setWhiteTime] = useState<number>(0);
   const [blackTime, setBlackTime] = useState<number>(0);
@@ -105,6 +110,18 @@ export function Match() {
       setTurn(game.turn);
       setHistory(game.history);
       setStatus(game.status);
+
+      if (game.newRatings) {
+        setWhitePlayer((prev) =>
+          prev ? { ...prev, rating: game.newRatings.white } : null
+        );
+        setBlackPlayer((prev) =>
+          prev ? { ...prev, rating: game.newRatings.black } : null
+        );
+
+        if (myRoleRef.current === "WHITE") setRatingDelta(game.newRatings.whiteDelta);
+        if (myRoleRef.current === "BLACK") setRatingDelta(game.newRatings.blackDelta);
+      }
 
       serverWhite.current = game.clock.whiteTime;
       serverBlack.current = game.clock.blackTime;
@@ -346,7 +363,7 @@ export function Match() {
 
               {/* Overlays */}
               {status !== "ACTIVE" && status !== "CHECK" && (
-                <GameOver status={status} turn={turn} myRole={myRole} />
+                <GameOver status={status} turn={turn} myRole={myRole} ratingDelta={ratingDelta} />
               )}
 
               {promotion && (

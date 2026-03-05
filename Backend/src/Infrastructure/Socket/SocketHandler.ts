@@ -3,6 +3,9 @@ import { IMakeMoveUseCase } from "../../Domain/Interface/Usecases/User/GameManag
 import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameRepository";
 import { IMatchmakingUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/IMatchmakingUseCase";
 
+import { RatingUpdateService } from "../../Domain/Chess/Service/RatingUpdateService";
+import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
+
 export class SocketHandler {
   private rooms = new Map<string, { white?: string; black?: string }>();
 
@@ -11,8 +14,53 @@ export class SocketHandler {
     private readonly _makeMoveUseCase: IMakeMoveUseCase,
     private readonly _gameRepo: IChessGameRepository,
     private readonly _matchmakingUseCase: IMatchmakingUseCase,
-    private readonly _userRepo: IChessGameRepository
+    private readonly _userRepo: IUserRepository,
+    private readonly _ratingUpdateService: RatingUpdateService
   ) {}
+
+  private async finalizeGame(game: any) {
+    const status = game.getStatus();
+    let ratings = null;
+
+    if (status !== "ACTIVE" && status !== "CHECK") {
+      try {
+        ratings = await this._ratingUpdateService.updateRatings(game);
+        await this._gameRepo.update(game);
+        console.log(`Ratings updated and persisted for game ${game.id}`);
+      } catch (error) {
+        console.error("Error updating ratings in finalizeGame:", error);
+      }
+    }
+
+    const updatedState = game.getGameState();
+    const clock = game.getClock();
+    const liveTimes = clock.getLiveTimes();
+
+    this._io.to(game.id).emit("gameUpdated", {
+      board: updatedState.getBoard().serialize(),
+      turn: updatedState.getTurn(),
+      history: updatedState.getHistory().map((move: any) => ({
+        from: { row: move.from.row, col: move.from.column },
+        to: { row: move.to.row, col: move.to.column },
+        piece: move.pieceType,
+        color: move.color,
+        promotion: move.promotionType ?? undefined,
+      })),
+      status: status,
+      clock: {
+        whiteTime: liveTimes.whiteTime,
+        blackTime: liveTimes.blackTime,
+        increment: clock.increment,
+        turn: clock.turn,
+      },
+      newRatings: ratings ? {
+        white: ratings.whiteNew,
+        black: ratings.blackNew,
+        whiteDelta: ratings.whiteDelta,
+        blackDelta: ratings.blackDelta
+      } : null
+    });
+  }
 
   public initialize() {
     this._io.on("connection", (socket: Socket) => {
@@ -29,29 +77,7 @@ export class SocketHandler {
 
           if (game.checkPassiveTimeout()) {
             await this._gameRepo.update(game);
-
-            const updatedState = game.getGameState();
-            const clock = game.getClock();
-            const liveTimes = clock.getLiveTimes();
-
-            this._io.to(gameId).emit("gameUpdated", {
-              board: updatedState.getBoard().serialize(),
-              turn: updatedState.getTurn(),
-              history: updatedState.getHistory().map((move: any) => ({
-                from: { row: move.from.row, col: move.from.column },
-                to: { row: move.to.row, col: move.to.column },
-                piece: move.pieceType,
-                color: move.color,
-                promotion: move.promotionType ?? undefined,
-              })),
-              status: game.getStatus(),
-              clock: {
-                whiteTime: liveTimes.whiteTime,
-                blackTime: liveTimes.blackTime,
-                increment: clock.increment,
-                turn: clock.turn,
-              },
-            });
+            await this.finalizeGame(game);
           }
         } catch (error) {
           console.error("Timeout check error:", error);
@@ -63,11 +89,11 @@ export class SocketHandler {
           const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
 
-          // Try to get rating for specific format, fallback to BLITZ or 1200
+          // Try to get rating for specific format, fallback to BLITZ or 300
           // This requires user entity to have ratings for different formats
           const rating = user.getRating
             ? user.getRating("BLITZ") // For now keeping it BLITZ, but could be dynamic
-            : user.rating?.BLITZ || 1200;
+            : user.rating?.BLITZ || 300;
 
           const result = await this._matchmakingUseCase.findMatch({
             userId,
@@ -189,29 +215,7 @@ export class SocketHandler {
           game.setStatus(status);
           game.getClock().stop();
           await this._gameRepo.update(game);
-
-          const updatedState = game.getGameState();
-          const clock = game.getClock();
-          const liveTimes = clock.getLiveTimes();
-
-          this._io.to(gameId).emit("gameUpdated", {
-            board: updatedState.getBoard().serialize(),
-            turn: updatedState.getTurn(),
-            history: updatedState.getHistory().map((move: any) => ({
-              from: { row: move.from.row, col: move.from.column },
-              to: { row: move.to.row, col: move.to.column },
-              piece: move.pieceType,
-              color: move.color,
-              promotion: move.promotionType ?? undefined,
-            })),
-            status: game.getStatus(),
-            clock: {
-              whiteTime: liveTimes.whiteTime,
-              blackTime: liveTimes.blackTime,
-              increment: clock.increment,
-              turn: clock.turn,
-            },
-          });
+          await this.finalizeGame(game);
         } catch (error) {
           console.error("Resign error:", error);
         }
@@ -243,29 +247,7 @@ export class SocketHandler {
           game.setStatus("DRAW_BY_AGREEMENT" as any);
           game.getClock().stop();
           await this._gameRepo.update(game);
-
-          const updatedState = game.getGameState();
-          const clock = game.getClock();
-          const liveTimes = clock.getLiveTimes();
-
-          this._io.to(gameId).emit("gameUpdated", {
-            board: updatedState.getBoard().serialize(),
-            turn: updatedState.getTurn(),
-            history: updatedState.getHistory().map((move: any) => ({
-              from: { row: move.from.row, col: move.from.column },
-              to: { row: move.to.row, col: move.to.column },
-              piece: move.pieceType,
-              color: move.color,
-              promotion: move.promotionType ?? undefined,
-            })),
-            status: game.getStatus(),
-            clock: {
-              whiteTime: liveTimes.whiteTime,
-              blackTime: liveTimes.blackTime,
-              increment: clock.increment,
-              turn: clock.turn,
-            },
-          });
+          await this.finalizeGame(game);
         } catch (error) {
           console.error("Accept draw error:", error);
         }
@@ -295,51 +277,18 @@ export class SocketHandler {
             return;
           }
 
-          await this._makeMoveUseCase.execute(gameId, from, to, promotionType);
-
-          const updatedGame = await this._gameRepo.findById(gameId);
-          if (!updatedGame) {
-            console.error("Game not found after move:", gameId);
-            return;
-          }
+          const updatedGame = await this._makeMoveUseCase.execute(gameId, from, to, promotionType);
 
           // Passive timeout check
           if (updatedGame.checkPassiveTimeout()) {
             await this._gameRepo.update(updatedGame);
           }
 
-          const updatedState = updatedGame.getGameState();
-          const clock = updatedGame.getClock();
-          const liveTimes = clock.getLiveTimes();
-
           console.log(
             `Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`
           );
 
-          this._io.to(gameId).emit("gameUpdated", {
-            board: updatedState.getBoard().serialize(),
-            turn: updatedState.getTurn(),
-            history: updatedState.getHistory().map((move: any) => ({
-              from: {
-                row: move.from.row,
-                col: move.from.column,
-              },
-              to: {
-                row: move.to.row,
-                col: move.to.column,
-              },
-              piece: move.pieceType,
-              color: move.color,
-              promotion: move.promotionType ?? undefined,
-            })),
-            status: updatedGame.getStatus(),
-            clock: {
-              whiteTime: liveTimes.whiteTime,
-              blackTime: liveTimes.blackTime,
-              increment: clock.increment,
-              turn: clock.turn,
-            },
-          });
+          await this.finalizeGame(updatedGame);
         } catch (err) {
           console.error("Move processing error:", err);
           socket.emit("moveError", (err as Error).message);

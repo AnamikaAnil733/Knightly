@@ -9,6 +9,7 @@ import { AuthRoutes } from "./Presentation/Routes/AuthRoute";
 import { userRoutes } from "./Infrastructure/Composition/UserComposition";
 import { adminRoutes } from "./Infrastructure/Composition/AdminComposition";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
+import { RatingUpdateService } from "./Domain/Chess/Service/RatingUpdateService";
 
 import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/MakeMoveUseCase";
 import { CreateGameUseCase } from "./Application/UseCases/User/GameManagement/CreateGameUseCase";
@@ -48,13 +49,15 @@ export class App {
     const createGameUseCase = new CreateGameUseCase(gameRepo);
     const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
     const authRepo = new AuthRepository();
+    const ratingUpdateService = new RatingUpdateService(authRepo);
 
     const socketHandler = new SocketHandler(
       this._io,
       makeMoveUseCase,
       gameRepo,
       matchmakingUseCase,
-      authRepo as any,
+      authRepo,
+      ratingUpdateService
     );
     socketHandler.initialize();
 

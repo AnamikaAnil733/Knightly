@@ -24,7 +24,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
       );
     }
     const avatarUrl = user.avatarKey
-      ? await this._storageService.generateSignedGetUrl(user.avatarKey, 300)
+      ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
       : null;
 
     return {

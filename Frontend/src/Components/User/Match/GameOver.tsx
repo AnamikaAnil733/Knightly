@@ -5,14 +5,15 @@ import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
 
 type Props = {
-  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "WHITE_RESIGNED" | "BLACK_RESIGNED" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL";
+  status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "WHITE_RESIGNED" | "BLACK_RESIGNED" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL" | "DRAW_BY_AGREEMENT";
   turn: "WHITE" | "BLACK";
   myRole: "WHITE" | "BLACK" | "SPECTATOR" | null;
+  ratingDelta?: number | null;
 };
 
 type Outcome = "win" | "lose" | "draw" | "spectator";
 
-export function GameOver({ status, turn, myRole }: Props) {
+export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
   const winner =
     status === "CHECKMATE"
       ? turn === "WHITE"
@@ -30,7 +31,7 @@ export function GameOver({ status, turn, myRole }: Props) {
 
   // Determine outcome from the current player's perspective
   const getOutcome = (): Outcome => {
-    if (status === "STALEMATE") return "draw";
+    if (status === "STALEMATE" || status === "DRAW_BY_REPETITION" || status === "DRAW_BY_FIFTY_MOVES" || status === "DRAW_BY_INSUFFICIENT_MATERIAL" || status === "DRAW_BY_AGREEMENT") return "draw";
     if (!myRole || myRole === "SPECTATOR") return "spectator";
     if (winner === myRole) return "win";
     return "lose";
@@ -40,6 +41,10 @@ export function GameOver({ status, turn, myRole }: Props) {
   const isWin = outcome === "win";
   const isLose = outcome === "lose";
   const isDraw = outcome === "draw";
+
+  const eloChangeText = ratingDelta !== null && ratingDelta !== undefined 
+    ? (ratingDelta >= 0 ? `+${ratingDelta}` : `${ratingDelta}`) + " ELO"
+    : (isWin ? "+20 ELO" : isLose ? "-20 ELO" : "+0 ELO");
 
   // Load lottie animation data
   const [trophyData, setTrophyData] = useState<object | null>(null);
@@ -151,7 +156,7 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloBadgeBg: "rgba(34, 197, 94, 0.1)",
       eloBadgeBorder: "rgba(34, 197, 94, 0.3)",
       eloColor: "text-green-400",
-      eloText: "+24 ELO",
+      eloText: eloChangeText,
       eloIcon: <TrendingUp className="w-4 h-4 text-green-400" />,
       buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
       buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
@@ -168,7 +173,7 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloBadgeBg: "rgba(239, 68, 68, 0.1)",
       eloBadgeBorder: "rgba(239, 68, 68, 0.3)",
       eloColor: "text-red-400",
-      eloText: "-24 ELO",
+      eloText: eloChangeText,
       eloIcon: <TrendingDown className="w-4 h-4 text-red-400" />,
       buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
       buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
@@ -185,7 +190,7 @@ export function GameOver({ status, turn, myRole }: Props) {
       eloBadgeBg: "rgba(234, 179, 8, 0.1)",
       eloBadgeBorder: "rgba(234, 179, 8, 0.3)",
       eloColor: "text-yellow-400",
-      eloText: "+0 ELO",
+      eloText: eloChangeText,
       eloIcon: null,
       buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
       buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",

@@ -22,6 +22,7 @@ export interface ChessGameSchemaType {
   positionHistory: string[];
   halfMoveClock: number;
   timeControl: string;
+  isRatingUpdated: boolean; 
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
@@ -57,6 +58,7 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
         "DRAW_BY_REPETITION",
         "DRAW_BY_FIFTY_MOVES",
         "DRAW_BY_INSUFFICIENT_MATERIAL",
+        "DRAW_BY_AGREEMENT",
       ],
       required: true,
       default: "ACTIVE",
@@ -81,6 +83,10 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
       type: Number,
       required: true,
       default: 0,
+    },
+    isRatingUpdated: {
+      type: Boolean,
+      default: false,
     },
   },
   {

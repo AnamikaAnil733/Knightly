@@ -141,6 +141,25 @@ export default class EAuth {
     this._rating.set(type, newRating);
   }
 
+  public addWin(): void {
+    this._gamesWin++;
+    this._gamesPlayed++;
+    this._currentStreak++;
+    if (this._currentStreak > this._longestStreak) {
+      this._longestStreak = this._currentStreak;
+    }
+  }
+
+  public addLoss(): void {
+    this._gamesPlayed++;
+    this._currentStreak = 0;
+  }
+
+  public addDraw(): void {
+    this._gamesPlayed++;
+    this._currentStreak = 0;
+  }
+
 
 
 }
