@@ -1,5 +1,4 @@
-
-import { FlagIcon, HandshakeIcon, RefreshCwIcon } from 'lucide-react'
+import { FlagIcon, HandshakeIcon } from 'lucide-react'
 
 type ControlBarProps = {
   onResign?: () => void;
@@ -7,7 +6,7 @@ type ControlBarProps = {
   onRematch?: () => void;
 }
 
-export function ControlBar({ onResign, onDraw, onRematch }: ControlBarProps) {
+export function ControlBar({ onResign, onDraw }: ControlBarProps) {
   return (
     <div className="grid grid-cols-3 lg:grid-cols-1 gap-3 w-full">
       {/* Offer Draw */}
@@ -33,16 +32,6 @@ export function ControlBar({ onResign, onDraw, onRematch }: ControlBarProps) {
         </div>
       </button>
 
-      {/* Rematch */}
-      <button
-        onClick={onRematch}
-        className="group w-full px-4 py-3 rounded-xl bg-[#3A6FF7]/5 hover:bg-[#3A6FF7]/10 border border-[#3A6FF7]/20 hover:border-[#3A6FF7]/40 transition-all duration-300"
-      >
-        <div className="flex items-center justify-center gap-3">
-          <RefreshCwIcon className="w-5 h-5 text-[#3A6FF7] group-hover:rotate-180 transition-transform duration-500" />
-          <span className="font-medium text-[#3A6FF7]/90 group-hover:text-[#3A6FF7] text-sm">Rematch</span>
-        </div>
-      </button>
     </div>
   )
 }

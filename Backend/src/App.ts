@@ -56,7 +56,6 @@ export class App {
       matchmakingUseCase,
       authRepo as any,
     );
-
     socketHandler.initialize();
 
     this.setErrorHandlerMiddleware();

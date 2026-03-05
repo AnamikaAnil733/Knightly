@@ -9,6 +9,7 @@ import { ControlBar } from "../../Components/User/Match/ControlBar";
 import { PromotionModal } from "../../Components/User/Match/PromotionModal";
 import { GameOver } from "../../Components/User/Match/GameOver";
 import { ResignModal } from "../../Components/User/Match/ResignModal";
+import { DrawOfferModal } from "../../Components/User/Match/DrawOfferModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
 
@@ -68,6 +69,7 @@ export function Match() {
   >([]);
 
   const [isResignModalOpen, setIsResignModalOpen] = useState(false);
+  const [isDrawOfferModalOpen, setIsDrawOfferModalOpen] = useState(false);
 
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
     null
@@ -114,6 +116,10 @@ export function Match() {
       setLegalMoves([]);
     });
 
+    socket.on("drawOffered", () => {
+      setIsDrawOfferModalOpen(true);
+    });
+
     socket.on("roleAssigned", (role: "WHITE" | "BLACK" | "SPECTATOR") => {
       console.log("Assigned role:", role);
       setMyRole(role);
@@ -123,6 +129,7 @@ export function Match() {
       socket.off("gameUpdated");
       socket.off("moveError");
       socket.off("roleAssigned");
+      socket.off("drawOffered");
     };
   }, []);
   useEffect(() => {
@@ -245,6 +252,16 @@ export function Match() {
     socket.emit("resign", gameId);
   };
 
+  const handleOfferDraw = () => {
+    if (!gameId || myRole === "SPECTATOR" || (status !== "ACTIVE" && status !== "CHECK")) return;
+    socket.emit("offerDraw", gameId);
+  };
+
+  const confirmAcceptDraw = () => {
+    if (!gameId) return;
+    socket.emit("acceptDraw", gameId);
+  };
+
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
@@ -355,6 +372,12 @@ export function Match() {
                 onClose={() => setIsResignModalOpen(false)}
                 onConfirm={confirmResign}
               />
+
+              <DrawOfferModal
+                isOpen={isDrawOfferModalOpen}
+                onClose={() => setIsDrawOfferModalOpen(false)}
+                onConfirm={confirmAcceptDraw}
+              />
             </div>
 
             {/* Bottom Player (You) */}
@@ -397,14 +420,14 @@ export function Match() {
 
           {/* Controls: Bottom Section */}
           <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
-            <ControlBar onResign={handleResign} />
+            <ControlBar onResign={handleResign} onDraw={handleOfferDraw} />
           </div>
         </div>
 
         {/* Mobile/Tablet View for Sidebar */}
         <div className="lg:hidden w-full flex flex-col gap-4 p-4 bg-[#0A0F2C]">
           <div className="flex justify-center">
-            <ControlBar onResign={handleResign} />
+            <ControlBar onResign={handleResign} onDraw={handleOfferDraw} />
           </div>
           <div className="h-64">
             <MoveList history={history} status={status} />
