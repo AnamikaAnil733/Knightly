@@ -1,6 +1,9 @@
 import { motion } from "framer-motion"
 import { useMemo, useState } from "react"
 import { Piece_Images } from "../../Reuseable/ChessPieces"
+import { useSelector } from "react-redux"
+import { RootState } from "../../../Store/Store"
+import { BOARD_THEMES } from "./BoardThemes"
 
 type ChessColor = "WHITE" | "BLACK"
 
@@ -147,9 +150,11 @@ export function Chessboard({
     setPrevBoard(board);
     setPrevPieces(result);
     return result;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board]);
 
+
+  const themeKey = useSelector((state: RootState) => state.ui.boardTheme) as keyof typeof BOARD_THEMES;
+  const theme = BOARD_THEMES[themeKey] || BOARD_THEMES.classic;
 
   return (
     <div className="relative w-full max-w-[800px] aspect-square mx-auto">
@@ -202,8 +207,7 @@ export function Chessboard({
                    flex items-center justify-center
                    cursor-pointer select-none
                    transition-all duration-200
-                   ${isLight ? "bg-[#F2F7F9]" : "bg-[#4FB3BF]"}
-                   ${isSelected ? "ring-4 ring-[#6d5bae] ring-inset" : ""}
+                   ${isSelected ? "ring-4 ring-inset" : ""}
                    ${isLegalMove
                      ? isEnPassant
                        ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:pointer-events-none"
@@ -213,6 +217,8 @@ export function Chessboard({
                  `}
 
                    style={{
+                     backgroundColor: isSelected ? theme.selected : (isLight ? theme.light : theme.dark),
+                     borderColor: isSelected ? theme.selected : "transparent",
                      borderRight:
                        displayColIndex < 7
                          ? "1px solid rgba(255, 209, 102, 0.1)"
@@ -223,16 +229,18 @@ export function Chessboard({
                          : "none",
                    }}
                  >
-                         {/* Rank Numbers (1-8) - Top Left of first col */}
+                          {/* Rank Numbers (1-8) - Top Left of first col */}
             {displayColIndex === 0 && (
-              <span className={`absolute top-0.5 left-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"}`}>
+              <span className={`absolute top-0.5 left-0.5 text-[10px] sm:text-xs font-bold leading-none select-none`}
+                    style={{ color: isLight ? theme.dark : theme.light }}>
                 {displayRanks[displayRowIndex]}
               </span>
             )}
 
             {/* File Letters (a-h) - Bottom Right of last row */}
             {displayRowIndex === 7 && (
-              <span className={`absolute bottom-0.5 right-0.5 text-[10px] sm:text-xs font-bold leading-none select-none ${isLight ? "text-[#4FB3BF]" : "text-[#F2F7F9]"}`}>
+              <span className={`absolute bottom-0.5 right-0.5 text-[10px] sm:text-xs font-bold leading-none select-none`}
+                    style={{ color: isLight ? theme.dark : theme.light }}>
                 {displayFiles[displayColIndex]}
               </span>
             )}
@@ -269,6 +277,13 @@ export function Chessboard({
                   src={Piece_Images[piece.color][piece.type]}
                   alt={`${piece.color} ${piece.type}`}
                   className="w-[90%] h-[90%] object-contain drop-shadow-xl select-none"
+                  style={{
+                    filter: (themeKey === "neotoon" && piece.color === "BLACK") 
+                      ? "sepia(1) saturate(5) hue-rotate(240deg) brightness(0.7)" 
+                      : (themeKey === "neotoon" && piece.color === "WHITE")
+                      ? "brightness(1.1) contrast(1.1)"
+                      : "none"
+                  }}
                 />
               </motion.div>
             );

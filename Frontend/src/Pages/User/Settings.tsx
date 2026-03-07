@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AccountSettings } from "../../Components/User/Settings/Account";
 import { Sidebar } from "../../Components/User/Settings/Sidebar";
 import { Navbar } from "../../Components/User/Common/Navbar";
+import { BoardThemesSettings } from "../../Components/User/Settings/BoardThemesSettings";
 
 export function Settings() {
     const [activeSection, setActiveSection] = useState("account");
@@ -21,6 +22,7 @@ export function Settings() {
           <main className="flex-1 p-6 md:p-10 overflow-y-auto">
             <div className="max-w-4xl mx-auto">
               {activeSection === "account" && <AccountSettings />}
+              {activeSection === "chessboard" && <BoardThemesSettings />}
             </div>
           </main>
         </div>
