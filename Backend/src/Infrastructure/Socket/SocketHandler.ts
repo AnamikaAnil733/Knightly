@@ -2,9 +2,11 @@ import { Server, Socket } from "socket.io";
 import { IMakeMoveUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 import { IChessGameRepository } from "../../Domain/Interface/Repositories/IGameRepository";
 import { IMatchmakingUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/IMatchmakingUseCase";
+import { ICreateGameUseCase } from "../../Domain/Interface/Usecases/User/GameManagement/ICreateGameUseCase";
 
 import { RatingUpdateService } from "../../Domain/Chess/Service/RatingUpdateService";
 import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
+import { TIME_CONTROLS } from "../../Domain/Chess/Types/GameFormat";
 
 export class SocketHandler {
   private rooms = new Map<string, { white?: string; black?: string }>();
@@ -14,6 +16,7 @@ export class SocketHandler {
     private readonly _makeMoveUseCase: IMakeMoveUseCase,
     private readonly _gameRepo: IChessGameRepository,
     private readonly _matchmakingUseCase: IMatchmakingUseCase,
+    private readonly _createGameUseCase: ICreateGameUseCase,
     private readonly _userRepo: IUserRepository,
     private readonly _ratingUpdateService: RatingUpdateService
   ) {}
@@ -36,6 +39,10 @@ export class SocketHandler {
     const clock = game.getClock();
     const liveTimes = clock.getLiveTimes();
 
+    const timeControl = game.getTimeControl();
+    const config = TIME_CONTROLS[timeControl] || TIME_CONTROLS["5+0"];
+    const ratingMode = config.mode;
+
     this._io.to(game.id).emit("gameUpdated", {
       board: updatedState.getBoard().serialize(),
       turn: updatedState.getTurn(),
@@ -47,6 +54,8 @@ export class SocketHandler {
         promotion: move.promotionType ?? undefined,
       })),
       status: status,
+      timeControl: timeControl,
+      modeName: ratingMode,
       clock: {
         whiteTime: liveTimes.whiteTime,
         blackTime: liveTimes.blackTime,
@@ -89,11 +98,13 @@ export class SocketHandler {
           const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
 
-          // Try to get rating for specific format, fallback to BLITZ or 300
-          // This requires user entity to have ratings for different formats
+          const config = TIME_CONTROLS[gameFormat] || TIME_CONTROLS["5+0"];
+          const ratingMode = config.mode;
+
+          // Try to get rating for specific format
           const rating = user.getRating
-            ? user.getRating("BLITZ") // For now keeping it BLITZ, but could be dynamic
-            : user.rating?.BLITZ || 300;
+            ? user.getRating(ratingMode)
+            : user.rating?.[ratingMode] || 300;
 
           const result = await this._matchmakingUseCase.findMatch({
             userId,
@@ -250,6 +261,87 @@ export class SocketHandler {
           await this.finalizeGame(game);
         } catch (error) {
           console.error("Accept draw error:", error);
+        }
+      });
+
+
+      socket.on("rematchrequest", async (gameId: string) => {
+        try {
+          const game = await this._gameRepo.findById(gameId);
+          if (!game) return;
+
+          // Only allow rematch if the game is finished
+          const status = game.getStatus();
+          if (status === "ACTIVE" || status === "CHECK") {
+            console.log(`Rematch rejected: Game ${gameId} is still ${status}`);
+            return;
+          }
+
+          const room = this.rooms.get(gameId);
+          if (!room) return;
+
+          const opponentSocketId =
+            room.white === socket.id ? room.black : room.white;
+          if (opponentSocketId) {
+            this._io.to(opponentSocketId).emit("rematchOffered");
+          }
+        } catch (error) {
+          console.error("Rematch request error", error);
+        }
+      });
+
+      socket.on("acceptRematch", async (gameId: string) => {
+        try {
+          const oldGame = await this._gameRepo.findById(gameId);
+          if (!oldGame) return;
+
+          const room = this.rooms.get(gameId);
+          if (!room || !room.white || !room.black) return;
+
+          // Swap colors for rematch
+          const newWhiteSocketId = room.black;
+          const newBlackSocketId = room.white;
+
+          const whitePlayerId = oldGame.getWhitePlayerId();
+          const blackPlayerId = oldGame.getBlackPlayerId();
+
+          // Players in the new game (swapped)
+          const newWhitePlayerId = blackPlayerId;
+          const newBlackPlayerId = whitePlayerId;
+
+          const { gameId: newGameId } = await this._createGameUseCase.execute(
+            newWhitePlayerId,
+            newBlackPlayerId,
+            oldGame.getTimeControl()
+          );
+
+          // Update rooms map for the new game
+          this.rooms.set(newGameId, {
+            white: newWhiteSocketId,
+            black: newBlackSocketId,
+          });
+
+          // Join both players to the new socket room
+          const whiteSocket = this._io.sockets.sockets.get(newWhiteSocketId);
+          const blackSocket = this._io.sockets.sockets.get(newBlackSocketId);
+
+          if (whiteSocket) whiteSocket.join(newGameId);
+          if (blackSocket) blackSocket.join(newGameId);
+
+          // Notify players about the new match
+          this._io.to(newWhiteSocketId).emit("matchFound", {
+            gameId: newGameId,
+            role: "WHITE",
+          });
+
+          this._io.to(newBlackSocketId).emit("matchFound", {
+            gameId: newGameId,
+            role: "BLACK",
+          });
+
+          console.log(`Rematch created: ${newGameId} for players ${newWhitePlayerId} and ${newBlackPlayerId}`);
+        } catch (error) {
+          console.error("Accept rematch error:", error);
         }
       });
 

@@ -101,5 +101,4 @@ export interface GetallPuzzleInputDTO{
     page?: number;
     limit?: number;
     difficulty?: PuzzleType;
-
 }

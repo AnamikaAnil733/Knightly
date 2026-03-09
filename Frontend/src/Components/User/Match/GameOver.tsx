@@ -3,17 +3,24 @@ import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
 import Lottie from "lottie-react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   status: "CHECKMATE" | "STALEMATE"|"WHITE_TIMEOUT"|"BLACK_TIMEOUT" | "WHITE_RESIGNED" | "BLACK_RESIGNED" | "DRAW_BY_REPETITION" | "DRAW_BY_FIFTY_MOVES" | "DRAW_BY_INSUFFICIENT_MATERIAL" | "DRAW_BY_AGREEMENT";
   turn: "WHITE" | "BLACK";
   myRole: "WHITE" | "BLACK" | "SPECTATOR" | null;
   ratingDelta?: number | null;
+  onRematch: () => void;
+  rematchOffered?: boolean;
+  rematchRequested?: boolean;
+  format?: string;
+  modeName?: string;
 };
 
 type Outcome = "win" | "lose" | "draw" | "spectator";
 
-export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
+export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematchOffered, rematchRequested, format, modeName }: Props) {
+  const navigate = useNavigate()
   const winner =
     status === "CHECKMATE"
       ? turn === "WHITE"
@@ -71,14 +78,14 @@ export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
     audio.volume = 0.7;
     audio.play().catch(() => {});
 
-    // 🎆 1️⃣ Big Central Explosion
+    //  Big Central Explosion
     confetti({
       particleCount: 150,
       spread: 90,
       origin: { y: 0.6 },
     });
 
-    // 🎇 2️⃣ Side Cannons
+    // Side Cannons
     setTimeout(() => {
       const duration = 2000;
       const end = Date.now() + duration;
@@ -451,7 +458,11 @@ export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
           >
             {/* Rematch Button */}
             <button
-              className="w-full py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-white font-semibold text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              onClick={onRematch}
+              disabled={rematchRequested && !rematchOffered}
+              className={`w-full py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-white font-semibold text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+                rematchRequested && !rematchOffered ? "opacity-70 cursor-not-allowed" : ""
+              }`}
               style={{
                 background: t.buttonGradient,
                 boxShadow: t.buttonGlow,
@@ -459,7 +470,7 @@ export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
               }}
             >
               <Users className="w-5 h-5" />
-              Rematch
+              {rematchOffered ? "Accept Rematch" : rematchRequested ? "Rematch Requested..." : "Rematch"}
             </button>
 
             {/* New Game Button */}
@@ -470,6 +481,7 @@ export function GameOver({ status, turn, myRole, ratingDelta }: Props) {
                 border: "1px solid rgba(255, 255, 255, 0.08)",
                 fontFamily: "Poppins, sans-serif",
               }}
+              onClick={()=>navigate("/waiting", { state: { format, modeName } })}
             >
               <RefreshCw className="w-5 h-5" />
               New Game

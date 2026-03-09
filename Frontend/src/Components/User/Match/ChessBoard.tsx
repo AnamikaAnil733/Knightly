@@ -210,8 +210,8 @@ export function Chessboard({
                    ${isSelected ? "ring-4 ring-inset" : ""}
                    ${isLegalMove
                      ? isEnPassant
-                       ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:pointer-events-none"
-                       : "after:absolute after:w-4 after:h-4 after:bg-[#394f64]/80 after:rounded-full after:pointer-events-none"
+                       ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:z-50"
+                       : "after:absolute after:w-4 after:h-4 after:bg-[#394f64]/80 after:rounded-full after:z-50"
                      : ""}
                    
                  `}
@@ -231,7 +231,7 @@ export function Chessboard({
                  >
                           {/* Rank Numbers (1-8) - Top Left of first col */}
             {displayColIndex === 0 && (
-              <span className={`absolute top-0.5 left-0.5 text-[10px] sm:text-xs font-bold leading-none select-none`}
+              <span className={`absolute top-0.5 left-0.5 text-[15px] sm:text-s font-bold leading-none select-none`}
                     style={{ color: isLight ? theme.dark : theme.light }}>
                 {displayRanks[displayRowIndex]}
               </span>
@@ -239,7 +239,7 @@ export function Chessboard({
 
             {/* File Letters (a-h) - Bottom Right of last row */}
             {displayRowIndex === 7 && (
-              <span className={`absolute bottom-0.5 right-0.5 text-[10px] sm:text-xs font-bold leading-none select-none`}
+              <span className={`absolute bottom-0.5 right-0.5 text-[15px] sm:text-s font-bold leading-none select-none`}
                     style={{ color: isLight ? theme.dark : theme.light }}>
                 {displayFiles[displayColIndex]}
               </span>

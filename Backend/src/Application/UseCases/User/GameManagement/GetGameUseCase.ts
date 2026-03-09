@@ -5,6 +5,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../../Domain/Entity/Auth";
 import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
+import { TIME_CONTROLS } from "../../../../Domain/Chess/Types/GameFormat";
 
 export class GetGameUseCase implements IGetGameUseCase {
   constructor(
@@ -35,12 +36,15 @@ export class GetGameUseCase implements IGetGameUseCase {
 
     let whitePlayer, blackPlayer;
 
+    const timeControlConfig = TIME_CONTROLS[game.getTimeControl()] || TIME_CONTROLS["5+0"];
+    const ratingMode = timeControlConfig.mode;
+
     if (whiteId) {
       const user = await this._userRepo.findById(whiteId);
       if (user) {
         whitePlayer = {
           name: user.displayname,
-          rating: user.getRating("BLITZ"),
+          rating: user.getRating(ratingMode),
           avatar: user.avatarKey
             ? await this._storageService.generateSignedGetUrl(
                 user.avatarKey,
@@ -56,7 +60,7 @@ export class GetGameUseCase implements IGetGameUseCase {
       if (user) {
         blackPlayer = {
           name: user.displayname,
-          rating: user.getRating("BLITZ"),
+          rating: user.getRating(ratingMode),
           avatar: user.avatarKey
             ? await this._storageService.generateSignedGetUrl(
                 user.avatarKey,
@@ -94,6 +98,8 @@ export class GetGameUseCase implements IGetGameUseCase {
       },
       whitePlayer,
       blackPlayer,
+      timeControl: game.getTimeControl(),
+      modeName: ratingMode
     };
   }
 }

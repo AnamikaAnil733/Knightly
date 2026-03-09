@@ -56,6 +56,7 @@ export class App {
       makeMoveUseCase,
       gameRepo,
       matchmakingUseCase,
+      createGameUseCase,
       authRepo,
       ratingUpdateService
     );

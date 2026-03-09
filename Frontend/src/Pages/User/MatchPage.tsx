@@ -10,6 +10,7 @@ import { PromotionModal } from "../../Components/User/Match/PromotionModal";
 import { GameOver } from "../../Components/User/Match/GameOver";
 import { ResignModal } from "../../Components/User/Match/ResignModal";
 import { DrawOfferModal } from "../../Components/User/Match/DrawOfferModal";
+import { RematchModal } from "../../Components/User/Match/RematchModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
 
@@ -72,6 +73,12 @@ export function Match() {
   const [isDrawOfferModalOpen, setIsDrawOfferModalOpen] = useState(false);
   const [ratingDelta, setRatingDelta] = useState<number | null>(null);
 
+  const [gameFormat, setGameFormat] = useState<string>("5+0");
+  const [modeName, setModeName] = useState<string>("Blitz");
+
+  const [isRematchRequested, setIsRematchRequested] = useState(false);
+  const [isRematchOffered, setIsRematchOffered] = useState(false);
+
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
     null
   );
@@ -110,6 +117,8 @@ export function Match() {
       setTurn(game.turn);
       setHistory(game.history);
       setStatus(game.status);
+      setGameFormat(game.timeControl);
+      setModeName(game.modeName);
 
       if (game.newRatings) {
         setWhitePlayer((prev) =>
@@ -142,11 +151,24 @@ export function Match() {
       setMyRole(role);
     });
 
+    socket.on("rematchOffered", () => {
+      setIsRematchOffered(true);
+    });
+
+    socket.on("matchFound", ({ gameId: newGameId }) => {
+      navigate(`/match/${newGameId}`);
+      // Reset rematch states for the new game
+      setIsRematchRequested(false);
+      setIsRematchOffered(false);
+    });
+
     return () => {
       socket.off("gameUpdated");
       socket.off("moveError");
       socket.off("roleAssigned");
       socket.off("drawOffered");
+      socket.off("rematchOffered");
+      socket.off("matchFound");
     };
   }, []);
   useEffect(() => {
@@ -164,6 +186,8 @@ export function Match() {
       setTurn(game.turn);
       setHistory(game.history);
       setStatus(game.status);
+      setGameFormat(game.timeControl);
+      setModeName(game.modeName);
 
       serverWhite.current = game.clock.whiteTime;
       serverBlack.current = game.clock.blackTime;
@@ -279,6 +303,16 @@ export function Match() {
     socket.emit("acceptDraw", gameId);
   };
 
+  const handleRematch = () => {
+    if (!gameId) return;
+    if (isRematchOffered) {
+      socket.emit("acceptRematch", gameId);
+    } else {
+      socket.emit("rematchrequest", gameId);
+      setIsRematchRequested(true);
+    }
+  };
+
   if (!gameId || board.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center text-white">
@@ -363,7 +397,17 @@ export function Match() {
 
               {/* Overlays */}
               {status !== "ACTIVE" && status !== "CHECK" && (
-                <GameOver status={status} turn={turn} myRole={myRole} ratingDelta={ratingDelta} />
+                <GameOver
+                  status={status}
+                  turn={turn}
+                  myRole={myRole}
+                  ratingDelta={ratingDelta}
+                  onRematch={handleRematch}
+                  rematchOffered={isRematchOffered}
+                  rematchRequested={isRematchRequested}
+                  format={gameFormat}
+                  modeName={modeName}
+                />
               )}
 
               {promotion && (
@@ -394,6 +438,12 @@ export function Match() {
                 isOpen={isDrawOfferModalOpen}
                 onClose={() => setIsDrawOfferModalOpen(false)}
                 onConfirm={confirmAcceptDraw}
+              />
+
+              <RematchModal
+                isOpen={isRematchOffered}
+                onClose={() => setIsRematchOffered(false)}
+                onAccept={handleRematch}
               />
             </div>
 

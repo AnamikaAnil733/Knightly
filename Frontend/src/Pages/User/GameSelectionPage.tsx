@@ -27,7 +27,7 @@ const gameModes: GameMode[] = [
     icon: <Zap className="w-8 h-8" />,
     color: "from-orange-500 to-red-600",
     options: [
-      { id: "1+0", label: "1 | 0" },
+      { id: "1+0", label: "1 min" },
       { id: "2+1", label: "2 | 1" },
     ],
   },
@@ -39,9 +39,9 @@ const gameModes: GameMode[] = [
     icon: <Timer className="w-8 h-8" />,
     color: "from-yellow-400 to-orange-500",
     options: [
-      { id: "3+0", label: "3 | 0" },
+      { id: "3+0", label: "3 min" },
       { id: "3+2", label: "3 | 2" },
-      { id: "5+0", label: "5 | 0" },
+      { id: "5+0", label: "5 min" },
       { id: "5+3", label: "5 | 3" },
     ],
   },
@@ -53,10 +53,10 @@ const gameModes: GameMode[] = [
     icon: <Clock className="w-8 h-8" />,
     color: "from-emerald-400 to-teal-600",
     options: [
-      { id: "10+0", label: "10 | 0" },
+      { id: "10+0", label: "10 min" },
       { id: "15+10", label: "15 | 10" },
-      { id: "20+0", label: "20 | 0" },
-      { id: "30+0", label: "30 | 0" },
+      { id: "20+0", label: "20 min" },
+      { id: "30+0", label: "30 min" },
     ],
   },
   {
@@ -68,8 +68,8 @@ const gameModes: GameMode[] = [
     color: "from-blue-500 to-indigo-600",
     options: [
       { id: "30+10", label: "30 | 10" },
-      { id: "45+0", label: "45 | 0" },
-      { id: "60+0", label: "60 | 0" },
+      { id: "45+0", label: "45 min" },
+      { id: "60+0", label: "60 min" },
       { id: "45+15", label: "45 | 15" },
     ],
   },

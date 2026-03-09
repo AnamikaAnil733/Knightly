@@ -132,6 +132,8 @@ export interface GameOutputDTO{
         rating: number;
         avatar: string | null;
     };
+    timeControl: string;
+    modeName: string;
   }
 
 
