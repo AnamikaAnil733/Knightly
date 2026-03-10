@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Zap, Timer, Clock, Trophy, ChevronLeft } from "lucide-react";
+import { Zap, Timer, Clock, Trophy, ChevronLeft, Bot } from "lucide-react";
+import { ColorSelectionModal } from "../../Components/User/Match/ColorSelectionModal";
 
 export interface TimeControlOption {
   id: string; // The backend code, e.g., "1+0"
@@ -73,10 +74,27 @@ const gameModes: GameMode[] = [
       { id: "45+15", label: "45 | 15" },
     ],
   },
+  {
+    id: "computer",
+    name: "Play Computer",
+    duration: "Untimed / Any",
+    description: "Challenge the Stockfish engine.",
+    icon: <Bot className="w-8 h-8" />,
+    color: "from-purple-500 to-fuchsia-600",
+    options: [
+      { id: "level-1", label: "Level 1" },
+      { id: "level-2", label: "Level 2" },
+      { id: "level-3", label: "Level 3" },
+      { id: "level-4", label: "Level 4" },
+      { id: "level-5", label: "Level 5" },
+      { id: "level-6", label: "Level 6" },
+    ],
+  },
 ];
 
 export function GameSelectionPage() {
   const navigate = useNavigate();
+  const [selectedBotLevel, setSelectedBotLevel] = React.useState<{ id: string; label: string } | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -151,8 +169,11 @@ export function GameSelectionPage() {
               className="group relative cursor-pointer"
               onClick={() => {
                 const firstOption = mode.options[0];
-                console.log("Card clicked, using default option:", firstOption.id);
-                navigate("/waiting", { state: { format: firstOption.id, modeName: mode.name } });
+                if (mode.id === "computer") {
+                  setSelectedBotLevel(firstOption);
+                } else {
+                  navigate("/waiting", { state: { format: firstOption.id, modeName: mode.name } });
+                }
               }}
             >
               {/* Card Background with Glassmorphism */}
@@ -189,8 +210,11 @@ export function GameSelectionPage() {
                       key={option.id}
                       onClick={(e) => {
                         e.stopPropagation();
-                        console.log("Navigating to waiting room with:", option.id);
-                        navigate("/waiting", { state: { format: option.id, modeName: mode.name } });
+                        if (mode.id === "computer") {
+                          setSelectedBotLevel(option);
+                        } else {
+                          navigate("/waiting", { state: { format: option.id, modeName: mode.name } });
+                        }
                       }}
                       className="px-3 py-2 text-xs font-bold rounded-xl bg-white/5 border border-white/10 hover:bg-[#3A6FF7] hover:border-[#3A6FF7] hover:text-white transition-all duration-200"
                     >
@@ -207,6 +231,24 @@ export function GameSelectionPage() {
             </motion.div>
           ))}
         </motion.div>
+
+        <ColorSelectionModal
+          isOpen={!!selectedBotLevel}
+          onClose={() => setSelectedBotLevel(null)}
+          levelLabel={selectedBotLevel?.label || ""}
+          onSelect={(color) => {
+            if (selectedBotLevel) {
+              navigate("/waiting", { 
+                state: { 
+                  format: selectedBotLevel.id, 
+                  modeName: "Play Computer",
+                  preferredColor: color 
+                } 
+              });
+              setSelectedBotLevel(null);
+            }
+          }}
+        />
 
         {/* Footer Note */}
         <motion.div

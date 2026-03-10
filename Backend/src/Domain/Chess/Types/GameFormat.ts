@@ -30,4 +30,5 @@ export const TIME_CONTROLS: Record<string, TimeControl> = {
   "45+0": { name: "45+0", whiteTime: 45 * 60 * 1000, blackTime: 45 * 60 * 1000, increment: 0, mode: "CLASSICAL" },
   "60+0": { name: "60+0", whiteTime: 60 * 60 * 1000, blackTime: 60 * 60 * 1000, increment: 0, mode: "CLASSICAL" },
   "45+15": { name: "45+15", whiteTime: 45 * 60 * 1000, blackTime: 45 * 60 * 1000, increment: 15000, mode: "CLASSICAL" },
+  "NO_TIMER": { name: "NO_TIMER", whiteTime: 24 * 60 * 60 * 1000, blackTime: 24 * 60 * 60 * 1000, increment: 0, mode: "CLASSICAL" },
 };

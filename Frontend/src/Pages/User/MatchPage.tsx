@@ -202,7 +202,7 @@ export function Match() {
   }, [gameId, navigate]);
 
   useEffect(() => {
-    if (status !== "ACTIVE" && status !== "CHECK") return;
+    if (status !== "ACTIVE" && status !== "CHECK" || gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish")) return;
 
     const interval = setInterval(() => {
       if (lastUpdate.current === 0) return;
@@ -371,7 +371,7 @@ export function Match() {
                     ? whitePlayer?.avatar || ""
                     : blackPlayer?.avatar || ""
                 }
-                time={formatTime(myRole === "BLACK" ? whiteTime : blackTime)}
+                time={gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish") ? "" : formatTime(myRole === "BLACK" ? whiteTime : blackTime)}
                 isOpponent
               />
             </div>
@@ -465,7 +465,7 @@ export function Match() {
                     ? blackPlayer?.avatar || ""
                     : whitePlayer?.avatar || ""
                 }
-                time={formatTime(myRole === "BLACK" ? blackTime : whiteTime)}
+                time={gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish") ? "" : formatTime(myRole === "BLACK" ? blackTime : whiteTime)}
                 isYourTurn={myRole === turn}
                 isOpponent={false}
               />

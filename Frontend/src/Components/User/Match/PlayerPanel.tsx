@@ -52,17 +52,19 @@ export function PlayerPanel({
         </div>
       </div>
       {/* Timer */}
-      <div
-        className={`
-          px-4 py-2 rounded-lg font-bold text-xl
-          ${isOpponent ? 'bg-[#FFD166]/10 text-[#FFD166]' : 'bg-[#3A6FF7]/10 text-[#3A6FF7]'}
-        `}
-        style={{
-          fontFamily: 'Poppins, sans-serif',
-        }}
-      >
-        {time}
-      </div>
+      {time && (
+        <div
+          className={`
+            px-4 py-2 rounded-lg font-bold text-xl
+            ${isOpponent ? 'bg-[#FFD166]/10 text-[#FFD166]' : 'bg-[#3A6FF7]/10 text-[#3A6FF7]'}
+          `}
+          style={{
+            fontFamily: 'Poppins, sans-serif',
+          }}
+        >
+          {time}
+        </div>
+      )}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { userRoutes } from "./Infrastructure/Composition/UserComposition";
 import { adminRoutes } from "./Infrastructure/Composition/AdminComposition";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
 import { RatingUpdateService } from "./Domain/Chess/Service/RatingUpdateService";
+import { StockfishService } from "./Domain/Chess/Service/StockfishService";
 
 import { MakeMoveUsecase } from "./Application/UseCases/User/GameManagement/MakeMoveUseCase";
 import { CreateGameUseCase } from "./Application/UseCases/User/GameManagement/CreateGameUseCase";
@@ -50,6 +51,7 @@ export class App {
     const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
     const authRepo = new AuthRepository();
     const ratingUpdateService = new RatingUpdateService(authRepo);
+    const stockfishService = new StockfishService();
 
     const socketHandler = new SocketHandler(
       this._io,
@@ -58,7 +60,8 @@ export class App {
       matchmakingUseCase,
       createGameUseCase,
       authRepo,
-      ratingUpdateService
+      ratingUpdateService,
+      stockfishService
     );
     socketHandler.initialize();
 

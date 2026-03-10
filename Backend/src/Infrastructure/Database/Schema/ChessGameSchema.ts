@@ -22,7 +22,8 @@ export interface ChessGameSchemaType {
   positionHistory: string[];
   halfMoveClock: number;
   timeControl: string;
-  isRatingUpdated: boolean; 
+  isRatingUpdated: boolean;
+  difficulty?: number; // Bot level 1-6
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
@@ -87,6 +88,11 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
     isRatingUpdated: {
       type: Boolean,
       default: false,
+    },
+    difficulty: {
+      type: Number,
+      min: 1,
+      max: 6,
     },
   },
   {

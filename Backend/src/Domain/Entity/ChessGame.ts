@@ -12,7 +12,8 @@ export class ChessGame extends BaseEntity {
     private _blackPlayerId?: string,
     private readonly _timeControl: string = "5+0",
     id?: string,
-    private _isRatingUpdated: boolean = false
+    private _isRatingUpdated: boolean = false,
+    private _difficulty?: number
   ) {
     super(id);
     if (this._status === "ACTIVE" || this._status === "CHECK") {
@@ -101,5 +102,9 @@ export class ChessGame extends BaseEntity {
 
   setRatingUpdated(): void {
     this._isRatingUpdated = true;
+  }
+
+  getDifficulty(): number | undefined {
+    return this._difficulty;
   }
 }

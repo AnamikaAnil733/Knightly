@@ -7,6 +7,7 @@ import { ICreateGameUseCase } from "../../Domain/Interface/Usecases/User/GameMan
 import { RatingUpdateService } from "../../Domain/Chess/Service/RatingUpdateService";
 import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
 import { TIME_CONTROLS } from "../../Domain/Chess/Types/GameFormat";
+import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 
 export class SocketHandler {
   private rooms = new Map<string, { white?: string; black?: string }>();
@@ -18,7 +19,8 @@ export class SocketHandler {
     private readonly _matchmakingUseCase: IMatchmakingUseCase,
     private readonly _createGameUseCase: ICreateGameUseCase,
     private readonly _userRepo: IUserRepository,
-    private readonly _ratingUpdateService: RatingUpdateService
+    private readonly _ratingUpdateService: RatingUpdateService,
+    private readonly _stockfishService:StockfishService,
   ) {}
 
   private async finalizeGame(game: any) {
@@ -41,7 +43,9 @@ export class SocketHandler {
 
     const timeControl = game.getTimeControl();
     const config = TIME_CONTROLS[timeControl] || TIME_CONTROLS["5+0"];
-    const ratingMode = config.mode;
+    
+    const isBotMatch = game.getWhitePlayerId() === "stockfish-bot" || game.getBlackPlayerId() === "stockfish-bot";
+    const modeName = isBotMatch ? "Play Computer" : config.mode;
 
     this._io.to(game.id).emit("gameUpdated", {
       board: updatedState.getBoard().serialize(),
@@ -55,7 +59,7 @@ export class SocketHandler {
       })),
       status: status,
       timeControl: timeControl,
-      modeName: ratingMode,
+      modeName: modeName,
       clock: {
         whiteTime: liveTimes.whiteTime,
         blackTime: liveTimes.blackTime,
@@ -147,6 +151,65 @@ export class SocketHandler {
           }
         } catch (error) {
           console.error("Matchmaking error:", error);
+        }
+      });
+
+      socket.on("playComputer", async (userId: string, gameFormat: string = "level-1", preferredColor: "WHITE" | "BLACK" | "RANDOM" = "RANDOM") => {
+        try {
+          let difficulty = 1;
+          let timeControl = "NO_TIMER";
+          
+          if (gameFormat.startsWith("level-")) {
+            difficulty = parseInt(gameFormat.split("-")[1]) || 1;
+            timeControl = "NO_TIMER"; 
+          }
+
+          let playerRole: "WHITE" | "BLACK";
+          if (preferredColor === "RANDOM") {
+            playerRole = Math.random() < 0.5 ? "WHITE" : "BLACK";
+          } else {
+            playerRole = preferredColor;
+          }
+
+          const whitePlayerId = playerRole === "WHITE" ? userId : "stockfish-bot";
+          const blackPlayerId = playerRole === "BLACK" ? userId : "stockfish-bot";
+
+          const { gameId } = await this._createGameUseCase.execute(whitePlayerId, blackPlayerId, gameFormat, difficulty);
+          
+          this.rooms.set(gameId, {
+            white: playerRole === "WHITE" ? socket.id : "bot-socket-placeholder",
+            black: playerRole === "BLACK" ? socket.id : "bot-socket-placeholder",
+          });
+
+          socket.join(gameId);
+
+          this._io.to(socket.id).emit("matchFound", {
+            gameId,
+            role: playerRole,
+          });
+
+          console.log(`Bot Match created: ${gameId} for user ${userId} as ${playerRole} at Level ${difficulty}`);
+
+          // If bot is white, it should move first
+          if (whitePlayerId === "stockfish-bot") {
+            const botGame = await this._gameRepo.findById(gameId);
+            if (botGame) {
+              const state = botGame.getGameState();
+              const skillLevel = Math.min(20, (difficulty - 1) * 4);
+              
+              this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+                const updatedBotGame = await this._makeMoveUseCase.execute(
+                  gameId,
+                  { row: bestMove.from.row, col: bestMove.from.column },
+                  { row: bestMove.to.row, col: bestMove.to.column },
+                  bestMove.promotionType as any
+                );
+                await this.finalizeGame(updatedBotGame);
+              });
+            }
+          }
+        } catch (error) {
+          console.error("Bot Matchmaking error:", error);
         }
       });
 
@@ -282,7 +345,11 @@ export class SocketHandler {
 
           const opponentSocketId =
             room.white === socket.id ? room.black : room.white;
-          if (opponentSocketId) {
+
+          if (opponentSocketId === "bot-socket-placeholder") {
+            // Auto-accept rematch for bot
+            socket.emit("rematchOffered");
+          } else if (opponentSocketId) {
             this._io.to(opponentSocketId).emit("rematchOffered");
           }
         } catch (error) {
@@ -312,7 +379,8 @@ export class SocketHandler {
           const { gameId: newGameId } = await this._createGameUseCase.execute(
             newWhitePlayerId,
             newBlackPlayerId,
-            oldGame.getTimeControl()
+            oldGame.getTimeControl(),
+            oldGame.getDifficulty()
           );
 
           // Update rooms map for the new game
@@ -338,6 +406,26 @@ export class SocketHandler {
             gameId: newGameId,
             role: "BLACK",
           });
+
+          // If bot is white, it should move first
+          if (newWhitePlayerId === "stockfish-bot") {
+            const botGame = await this._gameRepo.findById(newGameId);
+            if (botGame) {
+              const state = botGame.getGameState();
+              const difficulty = botGame.getDifficulty() || 1;
+              const skillLevel = Math.min(20, (difficulty - 1) * 4);
+              
+              this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+                const updatedBotGame = await this._makeMoveUseCase.execute(
+                  newGameId,
+                  { row: bestMove.from.row, col: bestMove.from.column },
+                  { row: bestMove.to.row, col: bestMove.to.column },
+                  bestMove.promotionType as any
+                );
+                await this.finalizeGame(updatedBotGame);
+              });
+            }
+          }
 
           console.log(`Rematch created: ${newGameId} for players ${newWhitePlayerId} and ${newBlackPlayerId}`);
         } catch (error) {
@@ -381,6 +469,42 @@ export class SocketHandler {
           );
 
           await this.finalizeGame(updatedGame);
+
+const state = updatedGame.getGameState();
+const nextTurnColor = state.getTurn();
+
+const whitePlayerId = updatedGame.getWhitePlayerId();
+const blackPlayerId = updatedGame.getBlackPlayerId();
+
+const isBotNext = 
+  (nextTurnColor === "WHITE" && whitePlayerId === "stockfish-bot") || 
+  (nextTurnColor === "BLACK" && blackPlayerId === "stockfish-bot");
+
+
+  if (isBotNext && (state.getStatus() === "ACTIVE" || state.getStatus() === "CHECK")) {
+    // Map level 1-6 to skill level 0-20
+    const difficulty = updatedGame.getDifficulty() || 1;
+    const skillLevel = Math.min(20, (difficulty - 1) * 4); // 0, 4, 8, 12, 16, 20
+
+    // Call stockfish asynchronously
+    this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+      try {
+          const botTurnGame = await this._makeMoveUseCase.execute(
+              gameId, 
+              { row: bestMove.from.row, col: bestMove.from.column }, 
+              { row: bestMove.to.row, col: bestMove.to.column }, 
+              bestMove.promotionType as any
+          );
+          
+          // Broadcast the bot's move to the user
+          await this.finalizeGame(botTurnGame);
+      } catch(err) {
+          console.error("Bot Move failed:", err);
+      }
+    });
+  }
+
+
         } catch (err) {
           console.error("Move processing error:", err);
           socket.emit("moveError", (err as Error).message);

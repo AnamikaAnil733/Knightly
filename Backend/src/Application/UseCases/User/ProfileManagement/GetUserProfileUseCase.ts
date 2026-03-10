@@ -15,6 +15,26 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
   ) {}
 
   async execute(userId: string) {
+    if (userId === "stockfish-bot") {
+      return {
+        id: "stockfish-bot",
+        displayname: "Stockfish Engine (Lvl 1-6)",
+        email: "stockfish@engine.local",
+        role: "BOT" as any,
+        isBlocked: false,
+        createdAt: new Date().toISOString(),
+        gamesPlayed: 0,
+        gamesWin: 0,
+        rating: { BULLET: 3000, BLITZ: 3000, RAPID: 3000, CLASSICAL: 3000 },
+        premium: true,
+        longestStreak: 0,
+        currentStreak: 0,
+        rewards: [],
+        achievements: [],
+        avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+      };
+    }
+
     const user = await this._userRepo.findById(userId);
 
     if (!user) {

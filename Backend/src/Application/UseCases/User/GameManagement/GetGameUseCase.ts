@@ -38,36 +38,45 @@ export class GetGameUseCase implements IGetGameUseCase {
 
     const timeControlConfig = TIME_CONTROLS[game.getTimeControl()] || TIME_CONTROLS["5+0"];
     const ratingMode = timeControlConfig.mode;
+    
+    const isBotMatch = whiteId === "stockfish-bot" || blackId === "stockfish-bot";
+    const modeName = isBotMatch ? "Play Computer" : ratingMode;
 
     if (whiteId) {
-      const user = await this._userRepo.findById(whiteId);
-      if (user) {
-        whitePlayer = {
-          name: user.displayname,
-          rating: user.getRating(ratingMode),
-          avatar: user.avatarKey
-            ? await this._storageService.generateSignedGetUrl(
-                user.avatarKey,
-                43200 // 12 hours
-              )
-            : null,
-        };
+      if (whiteId === "stockfish-bot") {
+        const difficulty = game.getDifficulty() || 1;
+        const botRating = 400 * difficulty;
+        whitePlayer = { name: "Stockfish Engine (Lvl " + difficulty + ")", rating: botRating, avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg" };
+      } else {
+        const user = await this._userRepo.findById(whiteId);
+        if (user) {
+          whitePlayer = {
+            name: user.displayname,
+            rating: user.getRating(ratingMode),
+            avatar: user.avatarKey
+              ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200)
+              : null,
+          };
+        }
       }
     }
 
     if (blackId) {
-      const user = await this._userRepo.findById(blackId);
-      if (user) {
-        blackPlayer = {
-          name: user.displayname,
-          rating: user.getRating(ratingMode),
-          avatar: user.avatarKey
-            ? await this._storageService.generateSignedGetUrl(
-                user.avatarKey,
-                43200 // 12 hours
-              )
-            : null,
-        };
+      if (blackId === "stockfish-bot") {
+        const difficulty = game.getDifficulty() || 1;
+        const botRating = 400 * difficulty;
+        blackPlayer = { name: "Stockfish Engine (Lvl " + difficulty + ")", rating: botRating, avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg" };
+      } else {
+        const user = await this._userRepo.findById(blackId);
+        if (user) {
+          blackPlayer = {
+            name: user.displayname,
+            rating: user.getRating(ratingMode),
+            avatar: user.avatarKey
+              ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200)
+              : null,
+          };
+        }
       }
     }
 
@@ -99,7 +108,7 @@ export class GetGameUseCase implements IGetGameUseCase {
       whitePlayer,
       blackPlayer,
       timeControl: game.getTimeControl(),
-      modeName: ratingMode
+      modeName: modeName
     };
   }
 }

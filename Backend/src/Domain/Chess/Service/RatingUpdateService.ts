@@ -32,6 +32,12 @@ export class RatingUpdateService {
       return null;
     }
 
+    // Skip rating updates for bot games
+    if (whiteId === "stockfish-bot" || blackId === "stockfish-bot") {
+      console.log("Bot game detected, skipping rating update.");
+      return null;
+    }
+
     const whitePlayer = await this._userRepo.findById(whiteId);
     const blackPlayer = await this._userRepo.findById(blackId);
 

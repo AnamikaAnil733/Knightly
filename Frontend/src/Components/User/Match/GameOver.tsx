@@ -49,9 +49,11 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
   const isLose = outcome === "lose";
   const isDraw = outcome === "draw";
 
-  const eloChangeText = ratingDelta !== null && ratingDelta !== undefined 
-    ? (ratingDelta >= 0 ? `+${ratingDelta}` : `${ratingDelta}`) + " ELO"
-    : (isWin ? "+20 ELO" : isLose ? "-20 ELO" : "+0 ELO");
+  const eloChangeText = modeName === "Play Computer"
+    ? "Casual Match"
+    : (ratingDelta !== null && ratingDelta !== undefined 
+        ? (ratingDelta >= 0 ? `+${ratingDelta}` : `${ratingDelta}`) + " ELO"
+        : (isWin ? "+20 ELO" : isLose ? "-20 ELO" : "+0 ELO"));
 
   // Load lottie animation data
   const [trophyData, setTrophyData] = useState<object | null>(null);
@@ -164,7 +166,7 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
       eloBadgeBorder: "rgba(34, 197, 94, 0.3)",
       eloColor: "text-green-400",
       eloText: eloChangeText,
-      eloIcon: <TrendingUp className="w-4 h-4 text-green-400" />,
+      eloIcon: modeName === "Play Computer" ? null : <TrendingUp className="w-4 h-4 text-green-400" />,
       buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
       buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },
@@ -181,7 +183,7 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
       eloBadgeBorder: "rgba(239, 68, 68, 0.3)",
       eloColor: "text-red-400",
       eloText: eloChangeText,
-      eloIcon: <TrendingDown className="w-4 h-4 text-red-400" />,
+      eloIcon: modeName === "Play Computer" ? null : <TrendingDown className="w-4 h-4 text-red-400" />,
       buttonGradient: "linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%)",
       buttonGlow: "0 4px 20px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2)",
     },

@@ -12,7 +12,8 @@ export function WaitingRoom() {
   const user = useSelector((state: RootState) => state.userAuth.user);
   
   // Get format from navigation state
-  const { format = "3+0", modeName = "Blitz" } = location.state || {};
+  const { format = "3+0", modeName: initialModeName = "Blitz", preferredColor = "RANDOM" } = location.state || {};
+  const modeName = format.startsWith("level-") ? "Play Computer" : initialModeName;
   
   const [queueSize, setQueueSize] = useState(1);
   const [dots, setDots] = useState("");
@@ -39,7 +40,11 @@ export function WaitingRoom() {
     });
 
     // Step 2: Tell backend we are looking for a match with SPECIFIC format
-    socket.emit("findMatch", user.id, format);
+    if (modeName === "Play Computer") {
+      socket.emit("playComputer", user.id, format, preferredColor);
+    } else {
+      socket.emit("findMatch", user.id, format);
+    }
 
     // Animated dots for the "Looking for opponent" text
     const dotInterval = setInterval(() => {
@@ -52,7 +57,7 @@ export function WaitingRoom() {
       socket.off("searchCancelled");
       clearInterval(dotInterval);
     };
-  }, [user, navigate, format]);
+  }, [user, navigate, format, modeName]);
 
   const handleCancel = () => {
     socket.emit("cancelSearch");
