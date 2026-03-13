@@ -34,8 +34,10 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
       setNewPassword("");
       setConfirmPassword("");
     },
-    onError: () => {
-      toast.error("Failed to update change Password");
+    onError: (error: any) => {
+      const errorMessage =
+        error.response?.data?.message || "Failed to update change Password";
+      toast.error(errorMessage);
     },
   });
 

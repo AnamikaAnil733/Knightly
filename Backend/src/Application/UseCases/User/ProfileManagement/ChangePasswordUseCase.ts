@@ -52,7 +52,7 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
         currentPassword,
         user.passwordHash!
       );
-
+    
       if (!verify) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
