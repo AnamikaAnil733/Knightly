@@ -9,8 +9,8 @@ export type TimeControl = "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 export class RatingUpdateService {
   constructor(private readonly _userRepo: IUserRepository) {}
 
-  public async updateRatings(game: ChessGame): Promise<{ 
-    whiteNew: number; 
+  public async updateRatings(game: ChessGame): Promise<{
+    whiteNew: number;
     blackNew: number;
     whiteDelta: number;
     blackDelta: number;
@@ -51,12 +51,12 @@ export class RatingUpdateService {
     const blackRating = blackPlayer.getRating(gameType);
 
     const score = this.getScore(game);
-    
+
     // Calculate new ratings
     const { newA: newWhite, newB: newBlack } = EloCalculator.calculateNewRating(
       whiteRating,
       blackRating,
-      score
+      score,
     );
 
     // Update ratings in entities
@@ -79,12 +79,12 @@ export class RatingUpdateService {
     }
 
     game.setRatingUpdated();
-    
+
     return {
-       whiteNew: newWhite,
-       blackNew: newBlack,
-       whiteDelta: newWhite - whiteRating,
-       blackDelta: newBlack - blackRating
+      whiteNew: newWhite,
+      blackNew: newBlack,
+      whiteDelta: newWhite - whiteRating,
+      blackDelta: newBlack - blackRating,
     };
   }
 

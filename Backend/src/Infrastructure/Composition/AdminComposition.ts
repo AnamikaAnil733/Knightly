@@ -32,30 +32,30 @@ const blockUserUseCase = new BlockUserUseCase(UserManagementRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagementRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(
   puzzleMangementRepo,
-  puzzleValidationService
+  puzzleValidationService,
 );
 const getAllPuzzleUseCase = new GetallPuzzleUseCase(puzzleMangementRepo);
 const editPuzzleUseCase = new EditPuzzleUseCase(
   puzzleMangementRepo,
-  puzzleValidationService
+  puzzleValidationService,
 );
 const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(
-  puzzleMangementRepo
+  puzzleMangementRepo,
 );
 
 export const getAllUserController = new GetAllUserController(
-  getAllUsersUseCase
+  getAllUsersUseCase,
 );
 export const banUserController = new BlockUserController(blockUserUseCase);
 export const unBanUserController = new UnBlockUserController(
-  unBlockUserUserCase
+  unBlockUserUserCase,
 );
 
 export const PuzzleManagementController = new AdminPuzzleController(
   createPuzzleUseCase,
   getAllPuzzleUseCase,
   editPuzzleUseCase,
-  softDeletePuzzleUseCase
+  softDeletePuzzleUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

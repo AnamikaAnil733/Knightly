@@ -43,7 +43,7 @@ export class SocketHandler {
 
     const timeControl = game.getTimeControl();
     const config = TIME_CONTROLS[timeControl] || TIME_CONTROLS["5+0"];
-    
+
     const isBotMatch = game.getWhitePlayerId() === "stockfish-bot" || game.getBlackPlayerId() === "stockfish-bot";
     const modeName = isBotMatch ? "Play Computer" : config.mode;
 
@@ -57,9 +57,9 @@ export class SocketHandler {
         color: move.color,
         promotion: move.promotionType ?? undefined,
       })),
-      status: status,
-      timeControl: timeControl,
-      modeName: modeName,
+      status,
+      timeControl,
+      modeName,
       clock: {
         whiteTime: liveTimes.whiteTime,
         blackTime: liveTimes.blackTime,
@@ -70,8 +70,8 @@ export class SocketHandler {
         white: ratings.whiteNew,
         black: ratings.blackNew,
         whiteDelta: ratings.whiteDelta,
-        blackDelta: ratings.blackDelta
-      } : null
+        blackDelta: ratings.blackDelta,
+      } : null,
     });
   }
 
@@ -121,7 +121,7 @@ export class SocketHandler {
           if (result.type === "WAITING") {
             socket.emit("waiting", {
               queueSize: this._matchmakingUseCase.getQueueSizeFor(gameFormat),
-              format: gameFormat
+              format: gameFormat,
             });
             return;
           }
@@ -158,10 +158,10 @@ export class SocketHandler {
         try {
           let difficulty = 1;
           let timeControl = "NO_TIMER";
-          
+
           if (gameFormat.startsWith("level-")) {
             difficulty = parseInt(gameFormat.split("-")[1]) || 1;
-            timeControl = "NO_TIMER"; 
+            timeControl = "NO_TIMER";
           }
 
           let playerRole: "WHITE" | "BLACK";
@@ -175,7 +175,7 @@ export class SocketHandler {
           const blackPlayerId = playerRole === "BLACK" ? userId : "stockfish-bot";
 
           const { gameId } = await this._createGameUseCase.execute(whitePlayerId, blackPlayerId, gameFormat, difficulty);
-          
+
           this.rooms.set(gameId, {
             white: playerRole === "WHITE" ? socket.id : "bot-socket-placeholder",
             black: playerRole === "BLACK" ? socket.id : "bot-socket-placeholder",
@@ -196,13 +196,13 @@ export class SocketHandler {
             if (botGame) {
               const state = botGame.getGameState();
               const skillLevel = Math.min(20, (difficulty - 1) * 4);
-              
+
               this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
                 const updatedBotGame = await this._makeMoveUseCase.execute(
                   gameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
                   { row: bestMove.to.row, col: bestMove.to.column },
-                  bestMove.promotionType as any
+                  bestMove.promotionType as any,
                 );
                 await this.finalizeGame(updatedBotGame);
               });
@@ -253,15 +253,15 @@ export class SocketHandler {
 
       socket.on("sendMessage", ({ gameId, sender, text }) => {
         if (!gameId || !text || !sender) return;
-        
+
         console.log(`Chat in ${gameId}: ${sender}: ${text}`);
-        
+
         // Broadcast message to everyone in the game room
         this._io.to(gameId).emit("messageReceived", {
           sender,
           text,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          socketId: socket.id
+          time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          socketId: socket.id,
         });
       });
 
@@ -380,7 +380,7 @@ export class SocketHandler {
             newWhitePlayerId,
             newBlackPlayerId,
             oldGame.getTimeControl(),
-            oldGame.getDifficulty()
+            oldGame.getDifficulty(),
           );
 
           // Update rooms map for the new game
@@ -414,13 +414,13 @@ export class SocketHandler {
               const state = botGame.getGameState();
               const difficulty = botGame.getDifficulty() || 1;
               const skillLevel = Math.min(20, (difficulty - 1) * 4);
-              
+
               this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
                 const updatedBotGame = await this._makeMoveUseCase.execute(
                   newGameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
                   { row: bestMove.to.row, col: bestMove.to.column },
-                  bestMove.promotionType as any
+                  bestMove.promotionType as any,
                 );
                 await this.finalizeGame(updatedBotGame);
               });
@@ -465,44 +465,44 @@ export class SocketHandler {
           }
 
           console.log(
-            `Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`
+            `Broadcasting update for ${gameId}. Status: ${updatedGame.getStatus()}`,
           );
 
           await this.finalizeGame(updatedGame);
 
-const state = updatedGame.getGameState();
-const nextTurnColor = state.getTurn();
+          const state = updatedGame.getGameState();
+          const nextTurnColor = state.getTurn();
 
-const whitePlayerId = updatedGame.getWhitePlayerId();
-const blackPlayerId = updatedGame.getBlackPlayerId();
+          const whitePlayerId = updatedGame.getWhitePlayerId();
+          const blackPlayerId = updatedGame.getBlackPlayerId();
 
-const isBotNext = 
-  (nextTurnColor === "WHITE" && whitePlayerId === "stockfish-bot") || 
+          const isBotNext =
+  (nextTurnColor === "WHITE" && whitePlayerId === "stockfish-bot") ||
   (nextTurnColor === "BLACK" && blackPlayerId === "stockfish-bot");
 
 
-  if (isBotNext && (state.getStatus() === "ACTIVE" || state.getStatus() === "CHECK")) {
-    // Map level 1-6 to skill level 0-20
-    const difficulty = updatedGame.getDifficulty() || 1;
-    const skillLevel = Math.min(20, (difficulty - 1) * 4); // 0, 4, 8, 12, 16, 20
+          if (isBotNext && (state.getStatus() === "ACTIVE" || state.getStatus() === "CHECK")) {
+            // Map level 1-6 to skill level 0-20
+            const difficulty = updatedGame.getDifficulty() || 1;
+            const skillLevel = Math.min(20, (difficulty - 1) * 4); // 0, 4, 8, 12, 16, 20
 
-    // Call stockfish asynchronously
-    this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
-      try {
-          const botTurnGame = await this._makeMoveUseCase.execute(
-              gameId, 
-              { row: bestMove.from.row, col: bestMove.from.column }, 
-              { row: bestMove.to.row, col: bestMove.to.column }, 
-              bestMove.promotionType as any
-          );
-          
-          // Broadcast the bot's move to the user
-          await this.finalizeGame(botTurnGame);
-      } catch(err) {
-          console.error("Bot Move failed:", err);
-      }
-    });
-  }
+            // Call stockfish asynchronously
+            this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+              try {
+                const botTurnGame = await this._makeMoveUseCase.execute(
+                  gameId,
+                  { row: bestMove.from.row, col: bestMove.from.column },
+                  { row: bestMove.to.row, col: bestMove.to.column },
+              bestMove.promotionType as any,
+                );
+
+                // Broadcast the bot's move to the user
+                await this.finalizeGame(botTurnGame);
+              } catch(err) {
+                console.error("Bot Move failed:", err);
+              }
+            });
+          }
 
 
         } catch (err) {

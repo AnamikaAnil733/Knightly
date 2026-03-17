@@ -10,7 +10,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
     gameId: string,
     from: { row: number; col: number },
     to: { row: number; col: number },
-    promotionType?: "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT"
+    promotionType?: "QUEEN" | "ROOK" | "BISHOP" | "KNIGHT",
   ): Promise<any> {
     const game = await this._gameRepo.findById(gameId);
 
@@ -42,7 +42,7 @@ export class MakeMoveUsecase implements IMakeMoveUseCase {
 
     const LegalMoves = LegalService.getLegalMove(fromP, board);
     const isLegal = LegalMoves.some(
-      (m) => m.row === toP.row && m.column === toP.column
+      (m) => m.row === toP.row && m.column === toP.column,
     );
 
     if (!isLegal) {

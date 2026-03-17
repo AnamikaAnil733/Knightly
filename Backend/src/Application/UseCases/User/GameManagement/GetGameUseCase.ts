@@ -11,7 +11,7 @@ export class GetGameUseCase implements IGetGameUseCase {
   constructor(
     private readonly _chessGameRepository: IChessGameRepository,
     private readonly _userRepo: IBaseRepository<EAuth>,
-    private readonly _storageService: IStorageService
+    private readonly _storageService: IStorageService,
   ) {}
 
   async execute(gameId: string): Promise<GameOutputDTO> {
@@ -38,7 +38,7 @@ export class GetGameUseCase implements IGetGameUseCase {
 
     const timeControlConfig = TIME_CONTROLS[game.getTimeControl()] || TIME_CONTROLS["5+0"];
     const ratingMode = timeControlConfig.mode;
-    
+
     const isBotMatch = whiteId === "stockfish-bot" || blackId === "stockfish-bot";
     const modeName = isBotMatch ? "Play Computer" : ratingMode;
 
@@ -108,7 +108,7 @@ export class GetGameUseCase implements IGetGameUseCase {
       whitePlayer,
       blackPlayer,
       timeControl: game.getTimeControl(),
-      modeName: modeName
+      modeName,
     };
   }
 }

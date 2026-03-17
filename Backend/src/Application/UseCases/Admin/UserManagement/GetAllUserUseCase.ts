@@ -8,14 +8,14 @@ import {
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
-    private readonly _userManagmentRepository: IUserManagmentRepository
+    private readonly _userManagmentRepository: IUserManagmentRepository,
   ) {}
 
   async getAllUsers(
     page: number,
     limit: number,
     search?: string,
-    filter?: string
+    filter?: string,
   ): Promise<GetAllUsersOutputDTO> {
     const skip = (page - 1) * limit;
 

@@ -12,7 +12,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
   constructor(
     private _userRepo: IUserRepository,
     private _cachingService: ICachingService,
-    private _hashService: IHashService
+    private _hashService: IHashService,
   ) {}
 
   async execute(data: {
@@ -22,7 +22,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     googleId?: string;
   }) {
     const verified = await this._cachingService.getData<boolean>(
-      `VERIFIED_USER:${data.email}`
+      `VERIFIED_USER:${data.email}`,
     );
     if (!verified) throw new Error(MESSAGES.EMAIL_VERIFY);
 

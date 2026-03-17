@@ -6,7 +6,7 @@ import { IGetPuzzleByDifficulty } from "../../../../Domain/Interface/Usecases/Us
 export class UserPuzzleController {
   constructor(
     private readonly _getPuzzleUsecase: IGetPuzzleByDifficulty,
-    private readonly _validateMoves: IValidateMoveusecase
+    private readonly _validateMoves: IValidateMoveusecase,
   ) {}
 
   getPuzzle = async (req: Request, res: Response, next: NextFunction) => {

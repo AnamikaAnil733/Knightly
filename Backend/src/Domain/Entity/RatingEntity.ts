@@ -11,7 +11,7 @@ export class UserRating {
   constructor(
     ratings?: Partial<
       Record<"BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", number>
-    >
+    >,
   ) {
     this._ratings = {
       BULLET: ratings?.BULLET ?? 300,

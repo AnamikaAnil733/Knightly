@@ -35,7 +35,7 @@ export class ChessGameMapper {
       doc.timeControl || "5+0",
       doc._id.toString(),
       doc.isRatingUpdated ?? false,
-      doc.difficulty
+      doc.difficulty,
     );
   }
 

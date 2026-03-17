@@ -33,7 +33,7 @@ export class UserManagementRepository
     skip: number,
     limit: number,
     search?: string,
-    filter?: "ALL" | "BLOCKED" | "UNBLOCKED"
+    filter?: "ALL" | "BLOCKED" | "UNBLOCKED",
   ): Promise<EAuth[]> {
     const query: any = {};
 
@@ -60,7 +60,7 @@ export class UserManagementRepository
 
   async count(
     search?: string,
-    filter?: "ALL" | "BLOCKED" | "UNBLOCKED"
+    filter?: "ALL" | "BLOCKED" | "UNBLOCKED",
   ): Promise<number> {
     const query: any = {};
 

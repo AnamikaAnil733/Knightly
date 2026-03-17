@@ -10,14 +10,14 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
   constructor(
     private readonly createGameUseCase: {
       execute(whiteId?: string, blackId?: string, timeControl?: string): Promise<{ gameId: string }>;
-    }
+    },
   ) {}
 
   async findMatch(player: QueuePlayer): Promise<MatchResult> {
     // prevent duplicate userId or socketId in queue
     if (
       this.queue.some(
-        (p) => p.socketId === player.socketId || p.userId === player.userId
+        (p) => p.socketId === player.socketId || p.userId === player.userId,
       )
     ) {
       return { type: "WAITING" };
@@ -55,7 +55,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
     const { gameId } = await this.createGameUseCase.execute(
       white.userId,
       black.userId,
-      player.timeControl // Pass the time control to game creation
+      player.timeControl, // Pass the time control to game creation
     );
 
     return {

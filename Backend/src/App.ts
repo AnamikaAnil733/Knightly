@@ -61,7 +61,7 @@ export class App {
       createGameUseCase,
       authRepo,
       ratingUpdateService,
-      stockfishService
+      stockfishService,
     );
     socketHandler.initialize();
 

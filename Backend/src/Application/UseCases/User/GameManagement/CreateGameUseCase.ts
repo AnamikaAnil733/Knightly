@@ -13,13 +13,13 @@ export class CreateGameUseCase implements ICreateGameUseCase{
 
   async execute(whitePlayerId?: string, blackPlayerId?: string, timeControl: string = "5+0", difficulty?: number): Promise<{ gameId: string }> {
     let config = TIME_CONTROLS[timeControl];
-    
+
     if (!config && timeControl.startsWith("level-")) {
       config = { ...TIME_CONTROLS["NO_TIMER"], name: timeControl };
     }
-    
+
     if (!config) config = TIME_CONTROLS["5+0"];
-    
+
     const board = InitialBoard.create();
     const gameState = new GameState(board);
     const clock = new GameClock(
@@ -39,7 +39,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       config.name,
       undefined,
       false,
-      difficulty
+      difficulty,
     );
 
     const savedGame = await this.ChessGameRepository.create(game);

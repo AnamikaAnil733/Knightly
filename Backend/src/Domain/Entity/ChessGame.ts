@@ -13,7 +13,7 @@ export class ChessGame extends BaseEntity {
     private readonly _timeControl: string = "5+0",
     id?: string,
     private _isRatingUpdated: boolean = false,
-    private _difficulty?: number
+    private _difficulty?: number,
   ) {
     super(id);
     if (this._status === "ACTIVE" || this._status === "CHECK") {

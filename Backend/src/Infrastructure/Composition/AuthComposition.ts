@@ -31,24 +31,24 @@ const verifyOtpUseCase = new VerifyOtpUseCase(otpService, cache);
 const registerUserUseCase = new RegisterUserUseCase(
   UserRepo,
   cache,
-  hashService
+  hashService,
 );
 const loginUserCase = new LoginUseCase(UserRepo, hashService, tokenservice);
 const resendOtpUseCase = new ResendOtpUseCase(
   otpService,
   emailService,
-  UserRepo
+  UserRepo,
 );
 const forgetPassword = new ForgetPasswordUseCase(
   emailService,
   otpService,
-  UserRepo
+  UserRepo,
 );
 const resetPassword = new ResetPaswordUseCase(cache, hashService, UserRepo);
 const googleAuthUseCase = new GoogleAuthUseCase(
   UserRepo,
   googleAuthService,
-  tokenservice
+  tokenservice,
 );
 
 //injection
@@ -60,5 +60,5 @@ export const authController = new AuthController(
   forgetPassword,
   resetPassword,
   googleAuthUseCase,
-  tokenservice
+  tokenservice,
 );

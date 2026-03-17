@@ -16,7 +16,7 @@ export class Board {
       this.grid = grid.map((row) => [...row]);
     } else {
       this.grid = Array.from({ length: 8 }, () =>
-        Array.from({ length: 8 }, () => null)
+        Array.from({ length: 8 }, () => null),
       );
     }
   }
@@ -68,13 +68,13 @@ export class Board {
           color: piece.color,
           hasMoved: piece.hasMoved ?? false,
         };
-      })
+      }),
     );
   }
 
   static deserialize(
     data: SerializedBoardGrid,
-    _enPassantTarget: Position | null = null
+    _enPassantTarget: Position | null = null,
   ): Board {
     const board = new Board();
     for (let i = 0; i < 8; i++) {

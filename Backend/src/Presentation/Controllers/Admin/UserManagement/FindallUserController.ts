@@ -8,7 +8,7 @@ export class GetAllUserController {
   getallusers = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     try {
       const page = Number(req.query.page) || 1;
@@ -20,7 +20,7 @@ export class GetAllUserController {
         page,
         limit,
         search,
-        filter
+        filter,
       );
       return res.status(HttpStatusCodes.OK).json(result);
     } catch (error) {

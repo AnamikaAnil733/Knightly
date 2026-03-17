@@ -97,5 +97,5 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
   },
   {
     timestamps: true,
-  }
+  },
 );

@@ -23,7 +23,7 @@ export class S3StorageService implements IStorageService {
 
   async generateAvatarUploadUrl(
     key: string,
-    contentType: string
+    contentType: string,
   ): Promise<AvatarURLtypes> {
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
@@ -53,7 +53,7 @@ export class S3StorageService implements IStorageService {
         Key: key,
         Body: body,
         ContentType: contentType,
-      })
+      }),
     );
 
     return key;

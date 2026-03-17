@@ -22,7 +22,7 @@ export class EditUserUseCase implements IEditProfileUseCase {
       if (!displayname || displayname.trim().length < 3) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.INVALID_USERNAME
+          MESSAGES.INVALID_USERNAME,
         );
       }
 
@@ -30,7 +30,7 @@ export class EditUserUseCase implements IEditProfileUseCase {
       if (!user) {
         throw new CustomError(
           HttpStatusCodes.NOT_FOUND,
-          MESSAGES.USER_DOESNT_EXIST
+          MESSAGES.USER_DOESNT_EXIST,
         );
       }
 
@@ -40,7 +40,7 @@ export class EditUserUseCase implements IEditProfileUseCase {
       if (!updatedUser) {
         throw new CustomError(
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          MESSAGES.FAILED_UPDATE_USERNAME
+          MESSAGES.FAILED_UPDATE_USERNAME,
         );
       }
 

@@ -9,7 +9,7 @@ export class UpadateRatingUseCase implements IUpdateRatingUseCase {
     whiteId: string,
     blackId: string,
     result: "WHITEWIN" | "BLACKWIN" | "DRAW",
-    type: "BULLET" | "RAPID" | "BLITZ" | "CLASSICAL"
+    type: "BULLET" | "RAPID" | "BLITZ" | "CLASSICAL",
   ): Promise<void> {
     const white = await this.userRepo.findById(whiteId);
     const black = await this.userRepo.findById(blackId);
@@ -30,7 +30,7 @@ export class UpadateRatingUseCase implements IUpdateRatingUseCase {
     const { newA, newB } = EloCalculator.calculateNewRating(
       whiteRating,
       blackRating,
-      scoreWhite
+      scoreWhite,
     );
 
     white.updateRating(type, newA);

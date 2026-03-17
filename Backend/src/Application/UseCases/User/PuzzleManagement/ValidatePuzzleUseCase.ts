@@ -6,7 +6,7 @@ import { EUserPuzzleprogress } from "../../../../Domain/Entity/UserPuzzleProgres
 export class ValidatePuzzlesMoves implements IValidateMoveusecase {
   constructor(
     private readonly _puzzleRepository: IPuzzleRepository,
-    private readonly _progressRepository: IUserPuzzleProgressRepository
+    private readonly _progressRepository: IUserPuzzleProgressRepository,
   ) {}
 
   async execute(input: {
@@ -24,7 +24,7 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
 
     let progress = await this._progressRepository.findByUserAndPuzzle(
       userId,
-      puzzleId
+      puzzleId,
     );
 
     const currentIndex = progress?.attempts ?? 0;

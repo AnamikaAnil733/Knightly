@@ -15,13 +15,13 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
   private _hashservice: IHashService;
   constructor(
     changePassword: IBaseRepository<EAuth>,
-    hashService: IHashService
+    hashService: IHashService,
   ) {
     this._changePasswordRepo = changePassword;
     this._hashservice = hashService;
   }
   async changePassword(
-    input: ChangePasswordInputDto
+    input: ChangePasswordInputDto,
   ): Promise<ChangePasswordOutputDto> {
     try {
       const { userId, currentPassword, newPassword } = input;
@@ -29,14 +29,14 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
       if (!currentPassword || !newPassword) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.ALL_FIELDS_REQUIRED
+          MESSAGES.ALL_FIELDS_REQUIRED,
         );
       }
 
       if (newPassword.length < 8) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,
-          MESSAGES.PASSWORD_LENGTH
+          MESSAGES.PASSWORD_LENGTH,
         );
       }
 
@@ -44,19 +44,19 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
       if (!user) {
         throw new CustomError(
           HttpStatusCodes.NOT_FOUND,
-          MESSAGES.USER_DOESNT_EXIST
+          MESSAGES.USER_DOESNT_EXIST,
         );
       }
 
       const verify = await this._hashservice.compare(
         currentPassword,
-        user.passwordHash!
+        user.passwordHash!,
       );
-    
+
       if (!verify) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INCORRECT_AUTH_CREDENTIALS
+          MESSAGES.INCORRECT_AUTH_CREDENTIALS,
         );
       }
       const hashPassword = await this._hashservice.hash(newPassword);
@@ -65,7 +65,7 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
       if (!changePassword) {
         throw new CustomError(
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          MESSAGES.FAILED_UPDATE_PASSWORD
+          MESSAGES.FAILED_UPDATE_PASSWORD,
         );
       }
     } catch (error) {

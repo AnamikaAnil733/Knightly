@@ -58,7 +58,7 @@ export class AuthMapper {
 
   static toAuthResponseDTOfromEntity(
     auth: Auth,
-    token: string
+    token: string,
   ): AuthResponseDTO {
     return {
       id: auth.id!,

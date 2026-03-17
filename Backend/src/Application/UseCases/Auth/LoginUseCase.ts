@@ -12,7 +12,7 @@ export class LoginUseCase implements ILoginUseCase {
   constructor(
     private _authRepository: IUserRepository,
     private _hashservice: IHashService,
-    private _tokenservice: ITokenService
+    private _tokenservice: ITokenService,
   ) {}
 
   async execute(data: AuthRequestDTO): Promise<AuthResponseDTO> {
@@ -24,13 +24,13 @@ export class LoginUseCase implements ILoginUseCase {
     if (!user?.passwordHash) {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INCORRECT_AUTH_CREDENTIALS
+        MESSAGES.INCORRECT_AUTH_CREDENTIALS,
       );
     }
     if (user && !user.isBlocked) {
       const verified = await this._hashservice.compare(
         password!,
-        user.passwordHash
+        user.passwordHash,
       );
       const accessToken = this._tokenservice.generateAccessToken({
         userId: user.id!,
@@ -41,13 +41,13 @@ export class LoginUseCase implements ILoginUseCase {
       } else {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.INCORRECT_AUTH_CREDENTIALS
+          MESSAGES.INCORRECT_AUTH_CREDENTIALS,
         );
       }
     } else {
       throw new CustomError(
         HttpStatusCodes.UNAUTHORIZED,
-        MESSAGES.INCORRECT_AUTH_CREDENTIALS
+        MESSAGES.INCORRECT_AUTH_CREDENTIALS,
       );
     }
   }

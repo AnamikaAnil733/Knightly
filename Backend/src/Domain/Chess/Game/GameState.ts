@@ -52,7 +52,7 @@ export class GameState{
   private promotePawn(
     color: "WHITE" | "BLACK",
     to: Position,
-    promotionType: PromotionType
+    promotionType: PromotionType,
   ): void {
     switch (promotionType) {
       case "QUEEN":
@@ -83,7 +83,7 @@ export class GameState{
 
     this._board.move(
       new Position(row, rookfromCol),
-      new Position(row, rooktoCol)
+      new Position(row, rooktoCol),
     );
     const rook = this._board.getPiece(new Position(row, rooktoCol));
     if (rook) rook.hasMoved = true;
@@ -209,8 +209,8 @@ export class GameState{
     const turn = this._currentTurn;
     const ep = this._board.getEnPassantTarget();
     const epStr = ep ? `${ep.row},${ep.column}` : "none";
-    
-    // Castling rights are already captured in the board serialization 
+
+    // Castling rights are already captured in the board serialization
     // because piece.hasMoved is included for King and Rooks.
     return `${boardStr}|${turn}|${epStr}`;
   }
@@ -283,7 +283,7 @@ export class GameState{
     ) {
       const passedSquare = new Position(
         (lastMove.from.row + lastMove.to.row) / 2,
-        lastMove.from.column
+        lastMove.from.column,
       );
       this._board.setEnPassantTarget(passedSquare);
     }

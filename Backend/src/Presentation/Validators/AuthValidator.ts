@@ -36,7 +36,7 @@ export const ResetPasswordRequestSchema = z.object({
     .string()
     .regex(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-      "Invalid password"
+      "Invalid password",
     ),
 });
 

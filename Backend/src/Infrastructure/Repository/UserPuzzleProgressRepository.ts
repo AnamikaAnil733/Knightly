@@ -3,11 +3,11 @@ import { EUserPuzzleprogress } from "../../Domain/Entity/UserPuzzleProgress";
 import { ProgressPuzzleModel } from "../Database/Model/PuzzleModel";
 
 export class UserPuzzleProgressRepository
-  implements IUserPuzzleProgressRepository
+implements IUserPuzzleProgressRepository
 {
   async findByUserAndPuzzle(
     userId: string,
-    puzzleId: string
+    puzzleId: string,
   ): Promise<EUserPuzzleprogress | null> {
     const doc = await ProgressPuzzleModel.findOne({ userId, puzzleId });
     if (!doc) return null;
@@ -29,7 +29,7 @@ export class UserPuzzleProgressRepository
         attempts: progress.attempts,
         solvedAt: progress.solvedAt,
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
     return new EUserPuzzleprogress({
       id: updated._id.toString(),
@@ -43,7 +43,7 @@ export class UserPuzzleProgressRepository
 
   async getSolvedPuzzles(userId: string): Promise<string[]> {
     return ProgressPuzzleModel.find({ userId, solved: true }).distinct(
-      "puzzleId"
+      "puzzleId",
     );
   }
 }

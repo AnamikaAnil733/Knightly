@@ -11,7 +11,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class GetUserProfileUseCase implements IGetUserProfileUseCase {
   constructor(
     private readonly _userRepo: IBaseRepository<EAuth>,
-    private readonly _storageService: IStorageService
+    private readonly _storageService: IStorageService,
   ) {}
 
   async execute(userId: string) {
@@ -40,7 +40,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
     if (!user) {
       throw new CustomError(
         HttpStatusCodes.NOT_FOUND,
-        MESSAGES.USER_DOESNT_EXIST
+        MESSAGES.USER_DOESNT_EXIST,
       );
     }
     const avatarUrl = user.avatarKey

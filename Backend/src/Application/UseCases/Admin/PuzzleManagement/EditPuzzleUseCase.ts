@@ -11,7 +11,7 @@ import { IPuzzleValidationService } from "../../../../Domain/Interface/Service/I
 export class EditPuzzleUseCase implements IEditPuzzleUsecase {
   constructor(
     private readonly _puzzleRepository: IPuzzleRepository,
-    private readonly puzzleValidationService: IPuzzleValidationService
+    private readonly puzzleValidationService: IPuzzleValidationService,
   ) {}
 
   async execute(input: UpdatePuzzleInputDTO): Promise<PuzzleResponseDTO> {
@@ -41,7 +41,7 @@ export class EditPuzzleUseCase implements IEditPuzzleUsecase {
 
     const validation = this.puzzleValidationService.validatePuzzle(
       input.fen,
-      input.moves
+      input.moves,
     );
     if (!validation.isValid) {
       throw new Error(validation.error);

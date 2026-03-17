@@ -61,14 +61,14 @@ export class PuzzleManagementRepository
 
   async getPuzzleByDifficulty(
     userId: string,
-    difficulty: PuzzleType
+    difficulty: PuzzleType,
   ): Promise<EPuzzle | null> {
     const solvedPuzzleId = await ProgressPuzzleModel.find({
       userId,
       solved: true,
     }).distinct("puzzleId");
     const objectIds = solvedPuzzleId.map(
-      (id) => new mongoose.Types.ObjectId(id)
+      (id) => new mongoose.Types.ObjectId(id),
     );
     const docs = await PuzzleModel.aggregate([
       {

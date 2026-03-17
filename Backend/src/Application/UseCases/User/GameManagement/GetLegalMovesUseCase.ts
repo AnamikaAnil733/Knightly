@@ -9,7 +9,7 @@ export class GetLegalMovesUseCase implements IGetLegalMovesUseCase {
 
   async execute(
     gameId: string,
-    p: { row: number; col: number }
+    p: { row: number; col: number },
   ): Promise<{ row: number; col: number; type: "NORMAL" | "EN_PASSANT" }[]> {
     const game = await this._gameRepo.findById(gameId);
     if (!game) {

@@ -9,7 +9,7 @@ export class EditProfileController {
   handleEditProfile = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const userId = (req as any).user.id;

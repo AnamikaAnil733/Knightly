@@ -5,6 +5,6 @@ export class Move {
     public readonly from: Position,
     public readonly to: Position,
     public readonly pieceType: string,
-    public readonly color: "WHITE" | "BLACK"
+    public readonly color: "WHITE" | "BLACK",
   ) {}
 }
