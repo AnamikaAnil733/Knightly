@@ -5,13 +5,15 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetGameUseCase";
 import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLegalMovesUseCase";
 import { IMakeMoveUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
+import { IReviewGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IReviewGameUseCase";
 
 export class GameController {
   constructor(
     private readonly _createGameUseCase: ICreateGameUseCase,
     private readonly _getGameUseCase: IGetGameUseCase,
     private readonly _getLegalMovesUseCase: IGetLegalMovesUseCase,
-    private readonly _makeMoveUseCase: IMakeMoveUseCase
+    private readonly _makeMoveUseCase: IMakeMoveUseCase,
+    private readonly _reviewGameUseCase: IReviewGameUseCase,
   ) {}
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
@@ -93,6 +95,24 @@ export class GameController {
 
       await this._makeMoveUseCase.execute(gameId, from, to, promotionType);
       res.status(200).json({ message: "success" });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  reviewGame = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { gameId } = req.params;
+
+      if (!gameId) {
+        res
+          .status(HttpStatusCodes.BAD_REQUEST)
+          .json({ message: "GameId is required" });
+        return;
+      }
+
+      const analysis = await this._reviewGameUseCase.execute(gameId);
+      res.status(HttpStatusCodes.OK).json({ success: true, analysis });
     } catch (error) {
       next(error);
     }

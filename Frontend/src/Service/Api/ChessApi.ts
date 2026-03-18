@@ -30,3 +30,8 @@ export const makeMove = async (
 await axios.post(`/user/games/${gameId}/move`,{from,to,promotionType})
 
 }
+
+export const getGameReview = async (gameId: string) => {
+    const res = await axios.get(`/user/games/${gameId}/review`);
+    return res.data.analysis;
+};

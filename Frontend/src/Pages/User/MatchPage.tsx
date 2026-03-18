@@ -407,6 +407,7 @@ export function Match() {
                   rematchRequested={isRematchRequested}
                   format={gameFormat}
                   modeName={modeName}
+                  gameId={gameId}
                 />
               )}
 

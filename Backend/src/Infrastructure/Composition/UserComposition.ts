@@ -15,6 +15,7 @@ import { CreateGameUseCase } from "../../Application/UseCases/User/GameManagemen
 import { GetGameUseCase } from "../../Application/UseCases/User/GameManagement/GetGameUseCase";
 import { MakeMoveUsecase } from "../../Application/UseCases/User/GameManagement/MakeMoveUseCase";
 import { GetLegalMovesUseCase } from "../../Application/UseCases/User/GameManagement/GetLegalMovesUseCase";
+import { ReviewGameUseCase } from "../../Application/UseCases/User/GameManagement/ReviewGameUseCase";
 
 import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDifficultyUseCase";
 import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleManagement/ValidatePuzzleUseCase";
@@ -28,6 +29,7 @@ import {  HashService } from "../Services/PasswordHashing";
 import { S3StorageService } from "../Services/S3Service";
 
 import {GameModel} from "../Database/Model/GameModel";
+import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 
 import { UserRoutes } from "../../Presentation/Routes/UserRoute";
 
@@ -41,6 +43,7 @@ const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 const tokenService = new TokenService();
 const hashService = new HashService();
 const S3Service = new S3StorageService();
+const stockfishService = new StockfishService();
 
 //usecase
 const editUserUseCase = new EditUserUseCase(UserRepo);
@@ -48,7 +51,7 @@ const changePasswordUseCase = new ChangePasswordUseCase(UserRepo, hashService);
 const getAvatarUrlUseCase = new GetAvatarUrlUseCase(S3Service);
 const saveDiceBearAvatarUseCase = new SaveDiceBearAvatarUseCase(
   S3Service,
-  UserRepo
+  UserRepo,
 );
 const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo, S3Service);
 const createGameUseCase = new CreateGameUseCase(GameRepo);
@@ -58,26 +61,28 @@ const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
 const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(PuzzleRepo);
 const validatePuzzleUsecase = new ValidatePuzzlesMoves(
   PuzzleRepo,
-  ProgressPuzzleRepo
+  ProgressPuzzleRepo,
 );
+const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService);
 
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(
-  changePasswordUseCase
+  changePasswordUseCase,
 );
 export const avatarController = new AvatarController(
   getAvatarUrlUseCase,
   getUserProfileUseCase,
-  saveDiceBearAvatarUseCase
+  saveDiceBearAvatarUseCase,
 );
 export const gameController = new GameController(
   createGameUseCase,
   getGameUseCase,
   getLegalMovesUseCase,
-  makeMoveUseCase
+  makeMoveUseCase,
+  reviewGameUseCase,
 );
 export const userPuzzleController = new UserPuzzleController(
   getpuzzleUseCase,
-  validatePuzzleUsecase
+  validatePuzzleUsecase,
 );
 export const userRoutes = new UserRoutes(tokenService);

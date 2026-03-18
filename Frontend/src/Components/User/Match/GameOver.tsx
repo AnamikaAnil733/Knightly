@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Users, RefreshCw } from "lucide-react";
+import { TrendingUp, TrendingDown, Users, RefreshCw, BarChart2 ,Home} from "lucide-react";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,11 +15,12 @@ type Props = {
   rematchRequested?: boolean;
   format?: string;
   modeName?: string;
+  gameId?: string;
 };
 
 type Outcome = "win" | "lose" | "draw" | "spectator";
 
-export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematchOffered, rematchRequested, format, modeName }: Props) {
+export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematchOffered, rematchRequested, format, modeName, gameId }: Props) {
   const navigate = useNavigate()
   const winner =
     status === "CHECKMATE"
@@ -231,6 +232,7 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
   const loserScore = (status === "CHECKMATE" || status === "WHITE_TIMEOUT" || status === "BLACK_TIMEOUT" || status === "WHITE_RESIGNED" || status === "BLACK_RESIGNED") ? 0 : 0.5;
 
   return (
+ 
     <div className="absolute inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <motion.div
@@ -257,6 +259,15 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
           border: `1px solid ${t.cardBorder}`,
         }}
       >
+        {/* Home Button */}
+        <button
+          onClick={() => navigate("/landing-page")}
+          className="absolute top-4 right-4 p-2 rounded-full bg-white/5 border border-white/10 text-white/70 hover:text-purple-400 hover:bg-white/10 hover:border-purple-500/50 transition-all duration-300 z-50 group"
+          title="Go to Home"
+        >
+          <Home className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        </button>
+
         {/* Inner Content */}
         <div className="flex flex-col items-center px-8 pt-10 pb-8">
 
@@ -488,6 +499,22 @@ export function GameOver({ status, turn, myRole, ratingDelta, onRematch, rematch
               <RefreshCw className="w-5 h-5" />
               New Game
             </button>
+
+            {/* Review Game Button */}
+            {gameId && (
+              <button
+                className="w-full py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-[#a0a0c0] font-semibold text-base transition-all duration-200 hover:text-white hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                style={{
+                  background: "rgba(255, 255, 255, 0.04)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  fontFamily: "Poppins, sans-serif",
+                }}
+                onClick={()=>navigate(`/review/${gameId}`)}
+              >
+                <BarChart2 className="w-5 h-5" />
+                Game Review
+              </button>
+            )}
           </motion.div>
         </div>
 

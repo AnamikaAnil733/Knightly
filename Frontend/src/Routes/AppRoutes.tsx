@@ -16,6 +16,7 @@ import { WaitingRoom } from "../Pages/User/WaitingRoom";
 import { GameSelectionPage } from "../Pages/User/GameSelectionPage";
 import { PuzzleTactics } from "../Pages/User/PuzzleTactics";
 import { PuzzleSolvingPage } from "../Pages/User/PuzzleSolvingPage";
+import { GameReviewPage } from "../Pages/User/GameReviewPage";
 
 
 export default function AppRoutes() {
@@ -36,6 +37,7 @@ export default function AppRoutes() {
         <Route path="/waiting" element={<WaitingRoom />} />
         <Route path="/match" element={<Match />} />
         <Route path="/match/:gameId" element={<Match/>}/>
+        <Route path="/review/:gameId" element={<GameReviewPage />} />
         <Route path="/puzzles" element={<PuzzleTactics />} />
         <Route path="/puzzle/solve/:difficulty" element={<PuzzleSolvingPage />} />
 

@@ -39,6 +39,7 @@ export class UserRoutes {
     this.router.get(USER_ROUTES.GET_GAME, gameController.getGame);
     this.router.get(USER_ROUTES.LEGAL_MOVES, gameController.legalMove);
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);
+    this.router.get(USER_ROUTES.REVIEW_GAME, gameController.reviewGame);
     this.router.get(
       USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY,
       userPuzzleController.getPuzzle,
