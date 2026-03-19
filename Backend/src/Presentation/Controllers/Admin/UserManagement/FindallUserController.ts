@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { IGetAllUserUseCase } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetAllUserUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
+import { GetAllUsersSchema } from "../../../Validators/AdminValidator";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class GetAllUserController {
   constructor(private readonly _getAllUserUseCase: IGetAllUserUseCase) {}
@@ -11,18 +14,22 @@ export class GetAllUserController {
     next: NextFunction,
   ): Promise<Response | void> => {
     try {
-      const page = Number(req.query.page) || 1;
-      const limit = Number(req.query.limit) || 10;
-      const search = req.query.search?.toString() || "";
-      const filter = req.query.filter?.toString() || "";
+      const result = GetAllUsersSchema.safeParse(req.query);
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          MESSAGES.INVALID_REQUEST_BODY,
+        );
+      }
+      const { page, limit, search, filter } = result.data;
 
-      const result = await this._getAllUserUseCase.getAllUsers(
+      const response = await this._getAllUserUseCase.getAllUsers(
         page,
         limit,
         search,
         filter,
       );
-      return res.status(HttpStatusCodes.OK).json(result);
+      return res.status(HttpStatusCodes.OK).json(response);
     } catch (error) {
       next(error);
     }

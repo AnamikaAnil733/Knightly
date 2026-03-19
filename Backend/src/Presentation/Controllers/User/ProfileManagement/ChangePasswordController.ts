@@ -2,6 +2,8 @@ import { Request,Response,NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { IChangePasswordUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IChangePassword";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
+import { ChangePasswordSchema } from "../../../Validators/UserValidator";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
 
 
 
@@ -9,10 +11,17 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class ChangePassswordController{
   constructor( private _changePasswordUsecase:IChangePasswordUseCase){}
 
-  handleChangePassword = async (req:Request,res:Response,next:NextFunction)=>{
-    try{
+  handleChangePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = ChangePasswordSchema.safeParse(req.body);
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          MESSAGES.INVALID_REQUEST_BODY,
+        );
+      }
       const userId = (req as any).user.id;
-      const {currentPassword,newPassword} = req.body;
+      const { currentPassword, newPassword } = result.data;
 
       await this._changePasswordUsecase.changePassword({
         userId,

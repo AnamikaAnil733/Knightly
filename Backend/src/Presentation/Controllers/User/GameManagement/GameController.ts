@@ -6,6 +6,14 @@ import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/Game
 import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLegalMovesUseCase";
 import { IMakeMoveUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 import { IReviewGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IReviewGameUseCase";
+import {
+  CreateGameSchema,
+  GetGameSchema,
+  LegalMoveSchema,
+  MakeMoveSchema,
+  ReviewGameSchema,
+} from "../../../Validators/UserValidator";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
 
 export class GameController {
   constructor(
@@ -18,8 +26,19 @@ export class GameController {
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const { timeControl } = req.body;
-      const GameResponse = await this._createGameUseCase.execute(undefined, undefined, timeControl);
+      const result = CreateGameSchema.safeParse(req.body);
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
+      }
+      const { timeControl } = result.data;
+      const GameResponse = await this._createGameUseCase.execute(
+        "",
+        "",
+        timeControl,
+      );
       return res.status(HttpStatusCodes.CREATED).json({
         success: true,
         data: GameResponse,
@@ -27,21 +46,22 @@ export class GameController {
     } catch (error: any) {
       return res.status(HttpStatusCodes.BAD_REQUEST).json({
         success: false,
-        message: MESSAGES.FAILED_CREATE_GAME,
+        message: error.message || MESSAGES.FAILED_CREATE_GAME,
       });
     }
   };
 
   getGame = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { gameId } = req.params;
+      const result = GetGameSchema.safeParse(req.params);
 
-      if (!gameId) {
-        res
-          .status(HttpStatusCodes.BAD_REQUEST)
-          .json({ message: "GameId is required" });
-        return;
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
       }
+      const { gameId } = result.data;
       const response = await this._getGameUseCase.execute(gameId);
       res.status(HttpStatusCodes.OK).json(response);
     } catch (error) {
@@ -51,16 +71,19 @@ export class GameController {
 
   legalMove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { gameId } = req.params;
-      const row = Number(req.query.row);
-      const col = Number(req.query.col);
+      const result = LegalMoveSchema.safeParse({
+        ...req.params,
+        ...req.query,
+      });
 
-      if (!gameId || Number.isNaN(row) || Number.isNaN(col)) {
-        res
-          .status(HttpStatusCodes.BAD_REQUEST)
-          .json({ message: "Invalid position" });
-        return;
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
       }
+
+      const { gameId, row, col } = result.data;
 
       const moves = await this._getLegalMovesUseCase.execute(gameId, {
         row,
@@ -75,23 +98,18 @@ export class GameController {
 
   makeMove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { gameId } = req.params;
-      const { from, to, promotionType } = req.body;
-      console.log(from, to, promotionType);
-      if (
-        !gameId ||
-        !from ||
-        !to ||
-        typeof from.row !== "number" ||
-        typeof from.col !== "number" ||
-        typeof to.row !== "number" ||
-        typeof to.col !== "number"
-      ) {
-        res
-          .status(HttpStatusCodes.BAD_REQUEST)
-          .json({ message: "Invalid move data" });
-        return;
+      const result = MakeMoveSchema.safeParse({
+        ...req.params,
+        ...req.body,
+      });
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
       }
+
+      const { gameId, from, to, promotionType } = result.data;
 
       await this._makeMoveUseCase.execute(gameId, from, to, promotionType);
       res.status(200).json({ message: "success" });
@@ -102,14 +120,16 @@ export class GameController {
 
   reviewGame = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { gameId } = req.params;
+      const result = ReviewGameSchema.safeParse(req.params);
 
-      if (!gameId) {
-        res
-          .status(HttpStatusCodes.BAD_REQUEST)
-          .json({ message: "GameId is required" });
-        return;
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
       }
+
+      const { gameId } = result.data;
 
       const analysis = await this._reviewGameUseCase.execute(gameId);
       res.status(HttpStatusCodes.OK).json({ success: true, analysis });

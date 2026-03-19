@@ -4,6 +4,8 @@ import { IGetAvatarUseCase } from "../../../../Domain/Interface/Usecases/User/Pr
 import { IGetUserProfileUseCase } from "../../../../Domain/Interface/Usecases/User/ProfileManagement/IGetUserProfileUseCase";
 import { ISaveDiceBearAvatarUseCase }
   from "../../../../Domain/Interface/Usecases/User/ProfileManagement/ISaveDiceBearAvatarUseCase";
+import { AvatarQuerySchema, DiceBearAvatarSchema } from "../../../Validators/UserValidator";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
 
 
 export class AvatarController{
@@ -13,14 +15,21 @@ export class AvatarController{
         private readonly _saveDiceBearAvatarUseCase: ISaveDiceBearAvatarUseCase,
   ){}
 
-  getAvatarUrl = async(req:Request,res:Response,next:NextFunction)=>{
-    try{
+  getAvatarUrl = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const queryResult = AvatarQuerySchema.safeParse(req.query);
+      if (!queryResult.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          queryResult.error.issues[0].message,
+        );
+      }
       const userId = (req as any).user.id;
-      const {contentType} = req.query;
+      const { contentType } = queryResult.data;
 
       const result = await this._getAvatarUseCase.execute({
         userId,
-        contentType:String(contentType),
+        contentType,
       });
 
       return res.status(HttpStatusCodes.OK).json(result);
@@ -38,14 +47,20 @@ export class AvatarController{
     next: NextFunction,
   ) => {
     try {
+      const result = DiceBearAvatarSchema.safeParse(req.body);
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
+      }
       const userId = (req as any).user.id;
-      const { diceBearUrl } = req.body;
+      const { diceBearUrl } = result.data;
 
-      const avatarUrl =
-            await this._saveDiceBearAvatarUseCase.execute({
-              userId,
-              diceBearUrl,
-            });
+      const avatarUrl = await this._saveDiceBearAvatarUseCase.execute({
+        userId,
+        diceBearUrl,
+      });
 
       return res.status(HttpStatusCodes.OK).json({
         success: true,

@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { IValidateMoveusecase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IValidatePuzzlesMoves";
 import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { IGetPuzzleByDifficulty } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetPuzzleByDifficultyUseCase";
+import { GetPuzzleSchema, ValidatePuzzleMoveSchema } from "../../../Validators/UserValidator";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
+import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 export class UserPuzzleController {
   constructor(
@@ -11,12 +15,17 @@ export class UserPuzzleController {
 
   getPuzzle = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const validationResult = GetPuzzleSchema.safeParse(req.params);
+      if (!validationResult.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          validationResult.error.issues[0].message,
+        );
+      }
       const userId = (req as any).user?.id;
-      if (!userId) throw new Error("Unauthorized");
+      if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
 
-      const difficultyParam = req.params.difficulty;
-      if (!difficultyParam) throw new Error("Difficulty is required");
-
+      const { difficulty: difficultyParam } = validationResult.data;
       const difficulty = (difficultyParam.charAt(0).toUpperCase() +
         difficultyParam.slice(1).toLowerCase()) as PuzzleType;
 
@@ -29,14 +38,20 @@ export class UserPuzzleController {
 
   validateMove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = (req as any).user?.id;
-      const { puzzleId } = req.params;
-      const { move } = req.body;
-
-      if (!userId) throw new Error("Unauthorized");
-      if (!puzzleId || !move) {
-        throw new Error("PuzzleId and move are required");
+      const validationResult = ValidatePuzzleMoveSchema.safeParse({
+        ...req.params,
+        ...req.body,
+      });
+      if (!validationResult.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          validationResult.error.issues[0].message,
+        );
       }
+      const userId = (req as any).user?.id;
+      if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+
+      const { puzzleId, move } = validationResult.data;
 
       const result = await this._validateMoves.execute({
         userId,
