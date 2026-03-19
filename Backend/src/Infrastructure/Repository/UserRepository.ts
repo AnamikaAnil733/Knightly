@@ -1,16 +1,16 @@
 import { BaseRepository } from "./BaseRepository";
 import { authModel } from "../Database/Model/Authmodel";
-import { AuthMapper } from "../../Application/Mapper/AuthMapper";
 import EAuth from "../../Domain/Entity/Auth";
 import { AuthSchemaType } from "../Database/Schema/AuthSchema";
 import {IUserManagmentRepository} from "../../Domain/Interface/Repositories/IUserManagementRepository";
+import { MongoAuthMapper } from "../Mapper/MongoAuthMapper";
 
 export class UserManagementRepository
   extends BaseRepository<EAuth, AuthSchemaType>
   implements IUserManagmentRepository
 {
   constructor() {
-    super(authModel, AuthMapper);
+    super(authModel, MongoAuthMapper);
   }
 
   async ban(id: string): Promise<boolean> {

@@ -1,11 +1,11 @@
 import { Board } from "../../Domain/Chess/Entities/Board";
-import { ChessGameSchemaType } from "../../Infrastructure/Database/Schema/ChessGameSchema";
+import { ChessGameSchemaType } from "../Database/Schema/ChessGameSchema";
 import { HydratedDocument } from "mongoose";
 import { ChessGame } from "../../Domain/Entity/ChessGame";
 import { GameState } from "../../Domain/Chess/Game/GameState";
 import { GameClock } from "../../Domain/Entity/GameClock";
 
-export class ChessGameMapper {
+export class MongoChessGameMapper {
   static toEntityFromDocument(
     doc: HydratedDocument<ChessGameSchemaType>,
   ): ChessGame {
@@ -39,7 +39,7 @@ export class ChessGameMapper {
     );
   }
 
-  static toDocumentFromEntity(entity: ChessGame): Partial<ChessGameSchemaType> {
+  static toDocumentFromEntity(entity: ChessGame) {
     const gameState = entity.getGameState();
     const board = gameState.getBoard();
     const snapShot = gameState.getSnapshot();

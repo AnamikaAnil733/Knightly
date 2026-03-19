@@ -3,17 +3,17 @@ import { ProgressPuzzleModel, PuzzleModel } from "../Database/Model/PuzzleModel"
 import { EPuzzle } from "../../Domain/Entity/Puzzle";
 import { PuzzleSchemaType } from "../Database/Schema/PuzzleSchema";
 import { IPuzzleRepository } from "../../Domain/Interface/Repositories/IPuzzleRepository";
-import { PuzzleMapper } from "../../Application/Mapper/PuzzleMapper";
+import { MongoPuzzleMapper } from "../Mapper/MongoPuzzleMapper";
 import { PuzzleType } from "Domain/Types/PuzzleTypes";
 import { getPagination } from "../Database/Utils/Pagination";
-import mongoose from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 
 export class PuzzleManagementRepository
   extends BaseRepository<EPuzzle, PuzzleSchemaType>
   implements IPuzzleRepository
 {
   constructor() {
-    super(PuzzleModel, PuzzleMapper);
+    super(PuzzleModel, MongoPuzzleMapper);
   }
 
   async findAll(input?: {
@@ -41,7 +41,7 @@ export class PuzzleManagementRepository
     ]);
 
     return {
-      puzzles: docs.map((doc) => PuzzleMapper.toEntityFromDocument(doc)),
+      puzzles: docs.map((doc) => MongoPuzzleMapper.toEntityFromDocument(doc)),
       total,
     };
   }
@@ -84,15 +84,7 @@ export class PuzzleManagementRepository
     if (!docs.length) {
       return null;
     }
-    const doc = docs[0];
-    return new EPuzzle({
-      id: doc._id.toString(),
-      fen: doc.fen,
-      difficulty: doc.difficulty,
-      moves: doc.moves,
-      solutionLength: doc.solutionLength,
-      isActive: doc.isActive,
-      createdAt: doc.createdAt,
-    });
+    const doc = docs[0] as HydratedDocument<PuzzleSchemaType>;
+    return MongoPuzzleMapper.toEntityFromDocument(doc);
   }
 }

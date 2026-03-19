@@ -1,18 +1,16 @@
 import { BaseRepository } from "./BaseRepository";
 import { authModel } from "../Database/Model/Authmodel";
-import { AuthMapper } from "../../Application/Mapper/AuthMapper";
+import { MongoAuthMapper } from "../Mapper/MongoAuthMapper";
 import EAuth from "../../Domain/Entity/Auth";
 import { AuthSchemaType } from "../Database/Schema/AuthSchema";
 import {IUserRepository} from "../../Domain/Interface/Repositories/IUserRepository";
-
-
 
 export class AuthRepository
   extends BaseRepository<EAuth, AuthSchemaType>
   implements IUserRepository
 {
   constructor() {
-    super(authModel, AuthMapper);
+    super(authModel, MongoAuthMapper);
   }
 
   async findByEmail(email: string): Promise<EAuth | null> {
