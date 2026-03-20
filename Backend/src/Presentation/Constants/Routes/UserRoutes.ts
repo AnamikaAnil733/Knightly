@@ -17,4 +17,6 @@ export const USER_ROUTES = {
 
   GET_PUZZLE_BY_DIFFICULTY: "/puzzles/difficulty/:difficulty",
   VALIDATE_PUZZLE_MOVE: "/puzzles/:puzzleId/validate",
+
+  LEADERBOARD: "/leaderboard/:type",
 } as const;

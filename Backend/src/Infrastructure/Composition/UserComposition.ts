@@ -34,10 +34,15 @@ import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 import { UserRoutes } from "../../Presentation/Routes/UserRoute";
 
 
+import { LeaderBoardRepository } from "../Repository/LeaderBoardRepository";
+import { GetLeaderBoardUseCase } from "../../Application/UseCases/User/LeaderBoard/GetLeaderBoardUseCase";
+import { LeaderBoardController } from "../../Presentation/Controllers/User/LeaderBoard/LeaderBoardController";
+
 const UserRepo = new UserManagementRepository();
 const GameRepo = new ChessGameRepository(GameModel);
 const PuzzleRepo = new PuzzleManagementRepository();
 const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
+const LeaderRepo = new LeaderBoardRepository();
 
 //service
 const tokenService = new TokenService();
@@ -64,6 +69,7 @@ const validatePuzzleUsecase = new ValidatePuzzlesMoves(
   ProgressPuzzleRepo,
 );
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService);
+const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, S3Service);
 
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(
@@ -84,5 +90,8 @@ export const gameController = new GameController(
 export const userPuzzleController = new UserPuzzleController(
   getpuzzleUseCase,
   validatePuzzleUsecase,
+);
+export const leaderBoardController = new LeaderBoardController(
+  getLeaderBoardUseCase,
 );
 export const userRoutes = new UserRoutes(tokenService);

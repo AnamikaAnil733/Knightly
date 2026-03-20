@@ -5,6 +5,7 @@ import {
   avatarController,
   gameController,
   userPuzzleController,
+  leaderBoardController,
 } from "../../Infrastructure/Composition/UserComposition";
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
@@ -47,6 +48,10 @@ export class UserRoutes {
     this.router.post(
       USER_ROUTES.VALIDATE_PUZZLE_MOVE,
       userPuzzleController.validateMove,
+    );
+    this.router.get(
+      USER_ROUTES.LEADERBOARD,
+      leaderBoardController.getLeaderBoard,
     );
   }
 }

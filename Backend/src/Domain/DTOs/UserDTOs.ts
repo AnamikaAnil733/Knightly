@@ -143,3 +143,12 @@ export interface UserPuzzleResponseDTO {
     fen: string;
     difficulty: PuzzleType;
   }
+
+
+//------LeaderBoardDTO-----
+export interface LeaderBoardResponse {
+  rank: number;
+  displayname: string;
+  avatarKey: string;
+  rating: number;
+}

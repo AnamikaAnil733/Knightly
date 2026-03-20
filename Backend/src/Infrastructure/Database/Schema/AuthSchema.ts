@@ -69,6 +69,7 @@ export const authSchema = new Schema<AuthSchemaType>(
         CLASSICAL: { type: Number, default: 300 },
       },
       default: { BULLET: 300, BLITZ: 300, RAPID: 300, CLASSICAL: 300 },
+      _id: false,
     },
     premium: { type: Boolean, default: false },
     longestStreak: { type: Number, default: 0 },

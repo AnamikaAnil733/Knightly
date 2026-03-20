@@ -41,14 +41,14 @@ export function Navbar() {
             Home
           </Link>
           <a
-            href="#"
+            href="/play"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
             Play
           </a>
           
           <a
-            href="#"
+            href="/leaderboard"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
             Leaderboard

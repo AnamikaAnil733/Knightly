@@ -17,6 +17,7 @@ import { GameSelectionPage } from "../Pages/User/GameSelectionPage";
 import { PuzzleTactics } from "../Pages/User/PuzzleTactics";
 import { PuzzleSolvingPage } from "../Pages/User/PuzzleSolvingPage";
 import { GameReviewPage } from "../Pages/User/GameReviewPage";
+import { LeaderBoardPage } from "../Pages/User/LeaderBoardPage";
 
 
 export default function AppRoutes() {
@@ -26,6 +27,8 @@ export default function AppRoutes() {
         <Route path="/" element={<SignupPage />} />
         <Route path="/verify-otp" element={<OTPVerify mode="signup" />} />
         <Route path="/landing-page" element={<LandingPage />} />
+        <Route path="/leaderboard" element={<LeaderBoardPage />} />
+        <Route path="/leaderboard/:type" element={<LeaderBoardPage />} />
         <Route path="/admin/login" element={<LoginPage role="ADMIN" />} />
         <Route path="/user/login" element={<LoginPage role="USER" />} />
         <Route path="/user/profile" element={<Profile />} />

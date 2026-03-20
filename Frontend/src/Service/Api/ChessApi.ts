@@ -35,3 +35,7 @@ export const getGameReview = async (gameId: string) => {
     const res = await axios.get(`/user/games/${gameId}/review`);
     return res.data.analysis;
 };
+export const getLeaderboard = async (type: string) => {
+  const res = await axios.get(`/user/leaderboard/${type}`);
+  return res.data.data;
+};
