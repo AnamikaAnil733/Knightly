@@ -1,10 +1,10 @@
-import { FlagIcon, HandshakeIcon } from 'lucide-react'
+import { FlagIcon, HandshakeIcon } from "lucide-react";
 
 type ControlBarProps = {
   onResign?: () => void;
   onDraw?: () => void;
   onRematch?: () => void;
-}
+};
 
 export function ControlBar({ onResign, onDraw }: ControlBarProps) {
   return (
@@ -16,8 +16,12 @@ export function ControlBar({ onResign, onDraw }: ControlBarProps) {
       >
         <div className="flex items-center justify-center gap-3">
           <HandshakeIcon className="w-5 h-5 text-[#FFD166] group-hover:scale-110 transition-transform" />
-          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm hidden lg:inline">Offer Draw</span>
-          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm lg:hidden">Draw</span>
+          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm hidden lg:inline">
+            Offer Draw
+          </span>
+          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm lg:hidden">
+            Draw
+          </span>
         </div>
       </button>
 
@@ -28,10 +32,11 @@ export function ControlBar({ onResign, onDraw }: ControlBarProps) {
       >
         <div className="flex items-center justify-center gap-3">
           <FlagIcon className="w-5 h-5 text-[#E74C3C] group-hover:scale-110 transition-transform" />
-          <span className="font-medium text-[#E74C3C]/90 group-hover:text-[#E74C3C] text-sm">Resign</span>
+          <span className="font-medium text-[#E74C3C]/90 group-hover:text-[#E74C3C] text-sm">
+            Resign
+          </span>
         </div>
       </button>
-
     </div>
-  )
+  );
 }

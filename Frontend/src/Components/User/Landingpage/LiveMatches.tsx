@@ -1,25 +1,24 @@
-
-import { PlayIcon } from 'lucide-react'
+import { PlayIcon } from "lucide-react";
 export function LiveMatches() {
   const matches = [
     {
-      player1: 'GrandMaster_Alex',
-      player2: 'QueenSlayer99',
-      time: '12:34',
+      player1: "GrandMaster_Alex",
+      player2: "QueenSlayer99",
+      time: "12:34",
     },
     {
-      player1: 'KnightRider_Pro',
-      player2: 'CheckMate_King',
-      time: '08:15',
+      player1: "KnightRider_Pro",
+      player2: "CheckMate_King",
+      time: "08:15",
     },
-  ]
+  ];
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <h2
           className="text-4xl font-bold text-center mb-12 text-white"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "Poppins, sans-serif",
           }}
         >
           Live Matches
@@ -56,5 +55,5 @@ export function LiveMatches() {
         </div>
       </div>
     </section>
-  )
+  );
 }

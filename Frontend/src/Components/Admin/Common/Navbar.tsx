@@ -1,7 +1,7 @@
-import React from 'react'
-import { BellIcon, SearchIcon, UserIcon } from 'lucide-react'
+import React from "react";
+import { BellIcon, SearchIcon, UserIcon } from "lucide-react";
 interface NavbarProps {
-  toggleSidebar: () => void
+  toggleSidebar: () => void;
 }
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   return (
@@ -48,11 +48,13 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <div className="w-8 h-8 bg-[#1e2547] rounded-full flex items-center justify-center">
               <UserIcon size={18} className="text-[#FFD166]" />
             </div>
-            <span className="ml-2 text-sm font-medium text-[#FFD166]">Admin</span>
+            <span className="ml-2 text-sm font-medium text-[#FFD166]">
+              Admin
+            </span>
           </div>
         </div>
       </div>
     </header>
-  )
-}
-export default Navbar
+  );
+};
+export default Navbar;

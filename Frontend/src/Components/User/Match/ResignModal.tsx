@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { FlagIcon, XIcon, HelpCircleIcon } from "lucide-react";
 
@@ -32,14 +31,14 @@ export function ResignModal({ isOpen, onClose, onConfirm }: Props) {
           >
             {/* Header Glow */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#E74C3C] to-transparent opacity-50" />
-            
+
             <div className="p-8">
               {/* Icon & Close */}
               <div className="mb-6 flex items-start justify-between">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#E74C3C]/10 border border-[#E74C3C]/20">
                   <FlagIcon className="h-6 w-6 text-[#E74C3C]" />
                 </div>
-                <button 
+                <button
                   onClick={onClose}
                   className="rounded-lg p-1 text-[#9ca3af] hover:bg-white/5 hover:text-white transition-colors"
                 >
@@ -49,10 +48,11 @@ export function ResignModal({ isOpen, onClose, onConfirm }: Props) {
 
               {/* Text Content */}
               <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                 Resign Game?
+                Resign Game?
               </h2>
               <p className="text-[#9ca3af] leading-relaxed mb-8">
-                Are you sure you want to resign? This will end the game and count as a loss. There is no way to undo this action.
+                Are you sure you want to resign? This will end the game and
+                count as a loss. There is no way to undo this action.
               </p>
 
               {/* Actions */}
@@ -78,7 +78,9 @@ export function ResignModal({ isOpen, onClose, onConfirm }: Props) {
             {/* Subtle bottom detail */}
             <div className="bg-[#0A0F2C]/50 px-8 py-4 border-t border-white/5 flex items-center gap-2">
               <HelpCircleIcon className="h-4 w-4 text-[#9ca3af]" />
-              <span className="text-xs text-[#9ca3af]">Think twice before you surrender, knight!</span>
+              <span className="text-xs text-[#9ca3af]">
+                Think twice before you surrender, knight!
+              </span>
             </div>
           </motion.div>
         </div>

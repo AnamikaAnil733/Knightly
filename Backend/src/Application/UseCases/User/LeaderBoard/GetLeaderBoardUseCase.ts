@@ -5,26 +5,26 @@ import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service
 
 
 export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
-    constructor(
+  constructor(
         private _leaderRepo:ILeaderBoardRepository,
         private readonly _storageService: IStorageService,
-    ){}
+  ){}
 
-    async execute(type: string): Promise<LeaderBoardResponse[]> {
-        const gameType = type.toUpperCase() as keyof any; 
-        const users = await this._leaderRepo.getTopPlayersByType(type, 10);
-        
-        return Promise.all(users.map(async (user, index) => {
-            const avatarUrl = user.avatarKey
-              ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
-              : null;
+  async execute(type: string): Promise<LeaderBoardResponse[]> {
+    const gameType = type.toUpperCase() as keyof any;
+    const users = await this._leaderRepo.getTopPlayersByType(type, 10);
 
-            return {
-                rank: index + 1,
-                displayname: user.displayname,
-                avatarKey: avatarUrl || "",
-                rating: user.rating[gameType]
-            };
-        }));
-    }
+    return Promise.all(users.map(async (user, index) => {
+      const avatarUrl = user.avatarKey
+        ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
+        : null;
+
+      return {
+        rank: index + 1,
+        displayname: user.displayname,
+        avatarKey: avatarUrl || "",
+        rating: user.rating[gameType],
+      };
+    }));
+  }
 }

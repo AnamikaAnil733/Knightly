@@ -46,7 +46,7 @@ let failedQueue: FailedRequest[] = [];
 
 const processQueue = (
   error: unknown | null,
-  token: string | null = null
+  token: string | null = null,
 ): void => {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) reject(error);
@@ -68,7 +68,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error: unknown) => Promise.reject(error)
+  (error: unknown) => Promise.reject(error),
 );
 
 /* ===================== RESPONSE INTERCEPTOR ===================== */
@@ -127,7 +127,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

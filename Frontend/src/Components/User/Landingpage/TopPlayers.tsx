@@ -1,39 +1,38 @@
-
-import { CrownIcon } from 'lucide-react'
+import { CrownIcon } from "lucide-react";
 export function TopPlayers() {
   const players = [
     {
-      name: 'Magnus_Supreme',
+      name: "Magnus_Supreme",
       rating: 2850,
       rank: 1,
-      color: '#FFD166',
+      color: "#FFD166",
     },
     {
-      name: 'Hikaru_Lightning',
+      name: "Hikaru_Lightning",
       rating: 2820,
       rank: 2,
-      color: '#C0C0C0',
+      color: "#C0C0C0",
     },
     {
-      name: 'Chess_Goddess',
+      name: "Chess_Goddess",
       rating: 2800,
       rank: 3,
-      color: '#CD7F32',
+      color: "#CD7F32",
     },
     {
-      name: 'Tactical_Genius',
+      name: "Tactical_Genius",
       rating: 2780,
       rank: 4,
-      color: '#3A6FF7',
+      color: "#3A6FF7",
     },
-  ]
+  ];
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <h2
           className="text-4xl font-bold text-center mb-12 text-white"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "Poppins, sans-serif",
           }}
         >
           Top Players This Week
@@ -74,5 +73,5 @@ export function TopPlayers() {
         </div>
       </div>
     </section>
-  )
+  );
 }

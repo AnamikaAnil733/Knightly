@@ -97,17 +97,16 @@ export function PuzzleSolvingPage() {
           color: (cell.color === "w" ? "WHITE" : "BLACK") as "WHITE" | "BLACK",
           hasMoved: false,
         };
-      })
+      }),
     );
   }, [game]);
 
   const loadNewPuzzle = useCallback(async () => {
     try {
-      // Only set loading to true if it's not already loading
-      setLoading((prev) => (prev ? prev : true));
+      const data = await fetchPuzzleByDifficulty(difficulty);
       setIsSolved(false);
       setIsWrong(false);
-      const data = await fetchPuzzleByDifficulty(difficulty);
+      setLoading(true); // reset to true just in case, but after await
       const newGame = new Chess(data.fen);
       setGame(newGame);
       setPuzzleId(data.id);
@@ -122,7 +121,10 @@ export function PuzzleSolvingPage() {
   }, [difficulty]);
 
   useEffect(() => {
-    loadNewPuzzle();
+    const init = async () => {
+      await loadNewPuzzle();
+    };
+    init();
   }, [loadNewPuzzle]);
 
   const handleSquareClick = async (row: number, col: number) => {
@@ -341,8 +343,8 @@ export function PuzzleSolvingPage() {
                 isWrong
                   ? "ring-4 ring-red-500/50"
                   : isSolved
-                  ? "ring-4 ring-emerald-500/50"
-                  : ""
+                    ? "ring-4 ring-emerald-500/50"
+                    : ""
               }`}
             >
               {loading ? (

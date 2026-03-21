@@ -1,33 +1,32 @@
-
-import { NewspaperIcon, MessageSquareIcon } from 'lucide-react'
+import { NewspaperIcon, MessageSquareIcon } from "lucide-react";
 export function CommunityNews() {
   const news = [
     {
-      title: 'New Tournament System Launched',
-      date: 'March 10, 2025',
+      title: "New Tournament System Launched",
+      date: "March 10, 2025",
       excerpt:
-        'Experience our revamped tournament platform with enhanced features and rewards.',
+        "Experience our revamped tournament platform with enhanced features and rewards.",
     },
     {
-      title: 'Top 10 Chess Strategies',
-      date: 'March 8, 2025',
+      title: "Top 10 Chess Strategies",
+      date: "March 8, 2025",
       excerpt:
-        'Learn from grandmasters about the most effective chess strategies for beginners.',
+        "Learn from grandmasters about the most effective chess strategies for beginners.",
     },
     {
-      title: 'Community Milestone: 1M Players',
-      date: 'March 5, 2025',
+      title: "Community Milestone: 1M Players",
+      date: "March 5, 2025",
       excerpt:
-        'Celebrating our incredible community reaching one million registered players!',
+        "Celebrating our incredible community reaching one million registered players!",
     },
-  ]
+  ];
   return (
     <section className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <h2
           className="text-4xl font-bold text-center mb-12 text-white"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "Poppins, sans-serif",
           }}
         >
           Community & News
@@ -56,5 +55,5 @@ export function CommunityNews() {
         </div>
       </div>
     </section>
-  )
+  );
 }

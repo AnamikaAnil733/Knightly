@@ -8,12 +8,7 @@ import toast from "react-hot-toast";
 import axios from "../../Service/Api/Axios/Useraxios";
 
 // Icons
-import {
-  TrophyIcon,
-  FlameIcon,
-  ClockIcon,
-  TargetIcon,
-} from "lucide-react";
+import { TrophyIcon, FlameIcon, ClockIcon, TargetIcon } from "lucide-react";
 
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = () => {
@@ -145,9 +140,7 @@ export function ProfileUser() {
             label: "Win Rate",
             value:
               user.gamesPlayed > 0
-                ? `${Math.round(
-                    (user.gamesWin / user.gamesPlayed) * 100
-                  )}%`
+                ? `${Math.round((user.gamesWin / user.gamesPlayed) * 100)}%`
                 : "0%",
           },
         ].map((item, i) => (

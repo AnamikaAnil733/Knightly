@@ -94,7 +94,10 @@ const gameModes: GameMode[] = [
 
 export function GameSelectionPage() {
   const navigate = useNavigate();
-  const [selectedBotLevel, setSelectedBotLevel] = React.useState<{ id: string; label: string } | null>(null);
+  const [selectedBotLevel, setSelectedBotLevel] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -172,7 +175,9 @@ export function GameSelectionPage() {
                 if (mode.id === "computer") {
                   setSelectedBotLevel(firstOption);
                 } else {
-                  navigate("/waiting", { state: { format: firstOption.id, modeName: mode.name } });
+                  navigate("/waiting", {
+                    state: { format: firstOption.id, modeName: mode.name },
+                  });
                 }
               }}
             >
@@ -213,7 +218,9 @@ export function GameSelectionPage() {
                         if (mode.id === "computer") {
                           setSelectedBotLevel(option);
                         } else {
-                          navigate("/waiting", { state: { format: option.id, modeName: mode.name } });
+                          navigate("/waiting", {
+                            state: { format: option.id, modeName: mode.name },
+                          });
                         }
                       }}
                       className="px-3 py-2 text-xs font-bold rounded-xl bg-white/5 border border-white/10 hover:bg-[#3A6FF7] hover:border-[#3A6FF7] hover:text-white transition-all duration-200"
@@ -238,12 +245,12 @@ export function GameSelectionPage() {
           levelLabel={selectedBotLevel?.label || ""}
           onSelect={(color) => {
             if (selectedBotLevel) {
-              navigate("/waiting", { 
-                state: { 
-                  format: selectedBotLevel.id, 
+              navigate("/waiting", {
+                state: {
+                  format: selectedBotLevel.id,
                   modeName: "Play Computer",
-                  preferredColor: color 
-                } 
+                  preferredColor: color,
+                },
               });
               setSelectedBotLevel(null);
             }

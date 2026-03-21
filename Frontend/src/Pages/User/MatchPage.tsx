@@ -22,7 +22,7 @@ import {
   getLegalMoves,
 } from "../../Service/Api/ChessApi";
 
-import { BoardGrid } from "../../Types/Chess";
+import { BoardGrid, MoveDTO } from "../../Types/Chess";
 
 type Turn = "WHITE" | "BLACK";
 type GameStatus =
@@ -37,16 +37,6 @@ type GameStatus =
   | "DRAW_BY_REPETITION"
   | "DRAW_BY_FIFTY_MOVES"
   | "DRAW_BY_INSUFFICIENT_MATERIAL";
-
-type Position = { row: number; col: number };
-
-type MoveDTO = {
-  from: Position;
-  to: Position;
-  piece: string;
-  color: "WHITE" | "BLACK";
-  promotion?: string;
-};
 
 export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -63,7 +53,7 @@ export function Match() {
     color: "WHITE" | "BLACK";
   } | null>(null);
   const [selected, setSelected] = useState<{ row: number; col: number } | null>(
-    null
+    null,
   );
   const [legalMoves, setLegalMoves] = useState<
     { row: number; col: number; type: "NORMAL" | "EN_PASSANT" }[]
@@ -80,7 +70,7 @@ export function Match() {
   const [isRematchOffered, setIsRematchOffered] = useState(false);
 
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
-    null
+    null,
   );
   const myRoleRef = useRef(myRole);
   useEffect(() => {
@@ -122,14 +112,16 @@ export function Match() {
 
       if (game.newRatings) {
         setWhitePlayer((prev) =>
-          prev ? { ...prev, rating: game.newRatings.white } : null
+          prev ? { ...prev, rating: game.newRatings.white } : null,
         );
         setBlackPlayer((prev) =>
-          prev ? { ...prev, rating: game.newRatings.black } : null
+          prev ? { ...prev, rating: game.newRatings.black } : null,
         );
 
-        if (myRoleRef.current === "WHITE") setRatingDelta(game.newRatings.whiteDelta);
-        if (myRoleRef.current === "BLACK") setRatingDelta(game.newRatings.blackDelta);
+        if (myRoleRef.current === "WHITE")
+          setRatingDelta(game.newRatings.whiteDelta);
+        if (myRoleRef.current === "BLACK")
+          setRatingDelta(game.newRatings.blackDelta);
       }
 
       serverWhite.current = game.clock.whiteTime;
@@ -170,7 +162,7 @@ export function Match() {
       socket.off("rematchOffered");
       socket.off("matchFound");
     };
-  }, []);
+  }, [navigate]);
   useEffect(() => {
     const init = async () => {
       // If no gameId → create game
@@ -202,7 +194,14 @@ export function Match() {
   }, [gameId, navigate]);
 
   useEffect(() => {
-    if (status !== "ACTIVE" && status !== "CHECK" || gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish")) return;
+    if (
+      (status !== "ACTIVE" && status !== "CHECK") ||
+      gameFormat === "NO_TIMER" ||
+      gameFormat.startsWith("level-") ||
+      whitePlayer?.name.includes("Stockfish") ||
+      blackPlayer?.name.includes("Stockfish")
+    )
+      return;
 
     const interval = setInterval(() => {
       if (lastUpdate.current === 0) return;
@@ -225,7 +224,7 @@ export function Match() {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [turn, status, gameId]);
+  }, [turn, status, gameId, blackPlayer?.name, gameFormat, whitePlayer?.name]);
 
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;
@@ -284,7 +283,12 @@ export function Match() {
   };
 
   const handleResign = () => {
-    if (!gameId || myRole === "SPECTATOR" || (status !== "ACTIVE" && status !== "CHECK")) return;
+    if (
+      !gameId ||
+      myRole === "SPECTATOR" ||
+      (status !== "ACTIVE" && status !== "CHECK")
+    )
+      return;
     setIsResignModalOpen(true);
   };
 
@@ -294,7 +298,12 @@ export function Match() {
   };
 
   const handleOfferDraw = () => {
-    if (!gameId || myRole === "SPECTATOR" || (status !== "ACTIVE" && status !== "CHECK")) return;
+    if (
+      !gameId ||
+      myRole === "SPECTATOR" ||
+      (status !== "ACTIVE" && status !== "CHECK")
+    )
+      return;
     socket.emit("offerDraw", gameId);
   };
 
@@ -371,7 +380,14 @@ export function Match() {
                     ? whitePlayer?.avatar || ""
                     : blackPlayer?.avatar || ""
                 }
-                time={gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish") ? "" : formatTime(myRole === "BLACK" ? whiteTime : blackTime)}
+                time={
+                  gameFormat === "NO_TIMER" ||
+                  gameFormat.startsWith("level-") ||
+                  whitePlayer?.name.includes("Stockfish") ||
+                  blackPlayer?.name.includes("Stockfish")
+                    ? ""
+                    : formatTime(myRole === "BLACK" ? whiteTime : blackTime)
+                }
                 isOpponent
               />
             </div>
@@ -466,7 +482,14 @@ export function Match() {
                     ? blackPlayer?.avatar || ""
                     : whitePlayer?.avatar || ""
                 }
-                time={gameFormat === "NO_TIMER" || gameFormat.startsWith("level-") || whitePlayer?.name.includes("Stockfish") || blackPlayer?.name.includes("Stockfish") ? "" : formatTime(myRole === "BLACK" ? blackTime : whiteTime)}
+                time={
+                  gameFormat === "NO_TIMER" ||
+                  gameFormat.startsWith("level-") ||
+                  whitePlayer?.name.includes("Stockfish") ||
+                  blackPlayer?.name.includes("Stockfish")
+                    ? ""
+                    : formatTime(myRole === "BLACK" ? blackTime : whiteTime)
+                }
                 isYourTurn={myRole === turn}
                 isOpponent={false}
               />
@@ -483,7 +506,10 @@ export function Match() {
 
           {/* Chat: Middle Section */}
           <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
-            <ChatPanel gameId={gameId || ""} senderName={user?.displayname || "Observer"} />
+            <ChatPanel
+              gameId={gameId || ""}
+              senderName={user?.displayname || "Observer"}
+            />
           </div>
 
           {/* Controls: Bottom Section */}
@@ -501,7 +527,10 @@ export function Match() {
             <MoveList history={history} status={status} />
           </div>
           <div className="h-64">
-            <ChatPanel gameId={gameId || ""} senderName={user?.displayname || "Observer"} />
+            <ChatPanel
+              gameId={gameId || ""}
+              senderName={user?.displayname || "Observer"}
+            />
           </div>
         </div>
       </div>

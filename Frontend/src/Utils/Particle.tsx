@@ -24,7 +24,7 @@ export const KnightlyParticles: React.FC<KnightlyParticlesProps> = ({
         top: Math.random() * 100,
         delay: 6,
         duration: 8,
-      }))
+      })),
     );
   }, [count]);
 

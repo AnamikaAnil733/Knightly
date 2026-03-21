@@ -1,11 +1,10 @@
-
 import {
   CrownIcon,
   FacebookIcon,
   TwitterIcon,
   InstagramIcon,
   YoutubeIcon,
-} from 'lucide-react'
+} from "lucide-react";
 export function Footer() {
   return (
     <footer className="bg-[#0A0F2C] border-t border-white/10 py-12 px-6">
@@ -17,7 +16,7 @@ export function Footer() {
               <span
                 className="text-xl font-bold text-[#FFD166]"
                 style={{
-                  fontFamily: 'Cinzel, serif',
+                  fontFamily: "Cinzel, serif",
                 }}
               >
                 Knightly
@@ -172,5 +171,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

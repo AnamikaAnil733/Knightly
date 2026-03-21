@@ -9,7 +9,7 @@ interface Props {
 
 const AdminProtectedRoute = ({ children }: Props) => {
   const { accessToken, authLoaded } = useSelector(
-    (state: RootState) => state.adminAuth
+    (state: RootState) => state.adminAuth,
   );
 
   if (!authLoaded) {

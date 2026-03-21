@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, XIcon, CheckIcon } from "lucide-react";
 
@@ -31,14 +30,14 @@ export function RematchModal({ isOpen, onClose, onAccept }: Props) {
           >
             {/* Header Glow */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FFD166] to-transparent opacity-50" />
-            
+
             <div className="p-8">
               {/* Icon & Close */}
               <div className="mb-6 flex items-start justify-between">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFD166]/10 border border-[#FFD166]/20">
                   <Users className="h-6 w-6 text-[#FFD166]" />
                 </div>
-                <button 
+                <button
                   onClick={onClose}
                   className="rounded-lg p-1 text-[#9ca3af] hover:bg-white/5 hover:text-white transition-colors"
                 >
@@ -48,7 +47,7 @@ export function RematchModal({ isOpen, onClose, onAccept }: Props) {
 
               {/* Text Content */}
               <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                 Rematch Offered
+                Rematch Offered
               </h2>
               <p className="text-[#9ca3af] leading-relaxed mb-8">
                 Your opponent has offered a rematch. Do you want to play again?
@@ -60,7 +59,7 @@ export function RematchModal({ isOpen, onClose, onAccept }: Props) {
                   onClick={onClose}
                   className="flex-1 px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-white font-semibold hover:bg-white/10 transition-all active:scale-[0.98]"
                 >
-                   Decline
+                  Decline
                 </button>
                 <button
                   onClick={() => {
@@ -76,7 +75,9 @@ export function RematchModal({ isOpen, onClose, onAccept }: Props) {
             </div>
 
             <div className="bg-[#0A0F2C]/50 px-8 py-4 border-t border-white/5 flex items-center gap-2">
-              <span className="text-xs text-[#9ca3af]">A rematch will start a new game with swapped colors.</span>
+              <span className="text-xs text-[#9ca3af]">
+                A rematch will start a new game with swapped colors.
+              </span>
             </div>
           </motion.div>
         </div>

@@ -1,54 +1,72 @@
-import { Chess } from 'chess.js';
-import { BoardGrid, ChessPiece } from '../Types/Chess';
+import { Chess } from "chess.js";
+import { BoardGrid, ChessPiece, MoveDTO } from "../Types/Chess";
 
 export const fenToBoardGrid = (fen: string): BoardGrid => {
-    const chess = new Chess(fen);
-    const board = chess.board();
+  const chess = new Chess(fen);
+  const board = chess.board();
 
-    return board.map(row => 
-        row.map(cell => {
-            if (!cell) return null;
-            
-            let type: ChessPiece["type"] = "PAWN";
-            switch(cell.type) {
-                case 'p': type = "PAWN"; break;
-                case 'r': type = "ROOK"; break;
-                case 'n': type = "KNIGHT"; break;
-                case 'b': type = "BISHOP"; break;
-                case 'q': type = "QUEEN"; break;
-                case 'k': type = "KING"; break;
-            }
-            
-            return {
-                type,
-                color: cell.color === 'w' ? "WHITE" : "BLACK",
-                hasMoved: false
-            };
-        })
-    );
+  return board.map((row) =>
+    row.map((cell) => {
+      if (!cell) return null;
+
+      let type: ChessPiece["type"] = "PAWN";
+      switch (cell.type) {
+        case "p":
+          type = "PAWN";
+          break;
+        case "r":
+          type = "ROOK";
+          break;
+        case "n":
+          type = "KNIGHT";
+          break;
+        case "b":
+          type = "BISHOP";
+          break;
+        case "q":
+          type = "QUEEN";
+          break;
+        case "k":
+          type = "KING";
+          break;
+      }
+
+      return {
+        type,
+        color: cell.color === "w" ? "WHITE" : "BLACK",
+        hasMoved: false,
+      };
+    }),
+  );
 };
 
-export const movesToFens = (moves: any[]): string[] => {
-    const chess = new Chess();
-    const fens = [chess.fen()];
-    
-    for (const move of moves) {
-        const fromAlg = String.fromCharCode(97 + move.from.col) + (8 - move.from.row);
-        const toAlg = String.fromCharCode(97 + move.to.col) + (8 - move.to.row);
-        const promoMap: any = { "QUEEN": "q", "ROOK": "r", "BISHOP": "b", "KNIGHT": "n" };
-        
-        try {
-            chess.move({
-                from: fromAlg as import('chess.js').Square, 
-                to: toAlg as import('chess.js').Square, 
-                promotion: move.promotion ? promoMap[move.promotion] : undefined
-            });
-            fens.push(chess.fen());
-        } catch(e) {
-            console.error("Invalid move for chess.js", move, e);
-            fens.push(chess.fen());
-        }
+export const movesToFens = (moves: MoveDTO[]): string[] => {
+  const chess = new Chess();
+  const fens = [chess.fen()];
+
+  for (const move of moves) {
+    const fromAlg =
+      String.fromCharCode(97 + move.from.col) + (8 - move.from.row);
+    const toAlg = String.fromCharCode(97 + move.to.col) + (8 - move.to.row);
+    const promoMap: Record<string, string> = {
+      QUEEN: "q",
+      ROOK: "r",
+      BISHOP: "b",
+      KNIGHT: "n",
+    };
+
+    try {
+      chess.move({
+        from: fromAlg as import("chess.js").Square,
+        to: toAlg as import("chess.js").Square,
+        promotion: move.promotion ? promoMap[move.promotion] : undefined,
+      });
+      fens.push(chess.fen());
+    } catch (e) {
+      console.error("Invalid move for chess.js", move, e);
+      fens.push(chess.fen());
     }
-    
-    return fens;
+  }
+
+  return fens;
 };

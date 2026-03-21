@@ -24,7 +24,7 @@ export class ReviewGameUseCase implements IReviewGameUseCase {
 
     const analysis: ReviewMoveAnalysis[] = [];
 
-   for (let i = 0; i < history.length; i++) {
+    for (let i = 0; i < history.length; i++) {
       const move = history[i];
 
       const prevEval = evaluations[i];
@@ -38,7 +38,7 @@ export class ReviewGameUseCase implements IReviewGameUseCase {
         const newScoreForOpponent = currentEval.mate !== null ? currentEval.mate * 10000 : currentEval.score;
         const newScore = -newScoreForOpponent;
 
-        const diff = newScore - oldScore; 
+        const diff = newScore - oldScore;
 
         if (i < 4) {
           classification = "BOOK"; // Very basic opening book approximation

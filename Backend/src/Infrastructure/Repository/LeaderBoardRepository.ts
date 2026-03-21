@@ -7,7 +7,7 @@ export class LeaderBoardRepository implements ILeaderBoardRepository {
     const gameType = type.toUpperCase();
     return authModel.find({
       isBlocked: false,
-      gamesPlayed: { $gte: 1 }
+      gamesPlayed: { $gte: 1 },
     })
       .sort({ [`rating.${gameType}`]: -1 })
       .limit(limit)

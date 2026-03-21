@@ -8,7 +8,12 @@ interface ColorSelectionModalProps {
   levelLabel: string;
 }
 
-export function ColorSelectionModal({ isOpen, onClose, onSelect, levelLabel }: ColorSelectionModalProps) {
+export function ColorSelectionModal({
+  isOpen,
+  onClose,
+  onSelect,
+  levelLabel,
+}: ColorSelectionModalProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -20,7 +25,7 @@ export function ColorSelectionModal({ isOpen, onClose, onSelect, levelLabel }: C
             onClick={onClose}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
-          
+
           <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -29,21 +34,24 @@ export function ColorSelectionModal({ isOpen, onClose, onSelect, levelLabel }: C
           >
             {/* Background Glow */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#3A6FF7] to-transparent opacity-50" />
-            
+
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-white font-['Poppins']">Choose Your Side</h2>
-              <button 
+              <h2 className="text-2xl font-bold text-white font-['Poppins']">
+                Choose Your Side
+              </h2>
+              <button
                 onClick={onClose}
                 className="text-[#C9CAD9] hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
-            
+
             <p className="text-[#C9CAD9] mb-8 text-center bg-white/5 py-2 rounded-xl border border-white/5 font-medium">
-              Playing Stockfish <span className="text-[#FFD166]">{levelLabel}</span>
+              Playing Stockfish{" "}
+              <span className="text-[#FFD166]">{levelLabel}</span>
             </p>
-            
+
             <div className="grid grid-cols-1 gap-4">
               <button
                 onClick={() => onSelect("WHITE")}
@@ -53,7 +61,7 @@ export function ColorSelectionModal({ isOpen, onClose, onSelect, levelLabel }: C
                 <span className="text-2xl">♔</span>
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
-              
+
               <button
                 onClick={() => onSelect("BLACK")}
                 className="group relative flex items-center justify-between px-6 py-4 rounded-2xl bg-[#0A0F2C] border border-[#3A6FF7]/20 text-white font-bold text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg overflow-hidden"
@@ -62,7 +70,7 @@ export function ColorSelectionModal({ isOpen, onClose, onSelect, levelLabel }: C
                 <span className="text-2xl">♚</span>
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
-              
+
               <button
                 onClick={() => onSelect("RANDOM")}
                 className="group relative flex items-center justify-between px-6 py-4 rounded-2xl bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF] text-white font-bold text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg overflow-hidden"

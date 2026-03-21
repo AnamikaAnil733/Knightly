@@ -6,22 +6,16 @@ import axios from "./Service/Api/Axios/Useraxios";
 import AppRoutes from "./Routes/AppRoutes";
 import FullScreenLoader from "./Components/FullScreenLoader";
 
-import { RootState } from "./Store/Store"
-import {
-  setUser,
-  setAuthLoaded,
-} from "./Store/Slices/Auth/UserAuthSlice";
-
+import { RootState } from "./Store/Store";
+import { setUser, setAuthLoaded } from "./Store/Slices/Auth/UserAuthSlice";
 
 import {
   setAccessToken as setAdminAccessToken,
   setAuthLoaded as setAdminAuthLoaded,
 } from "./Store/Slices/Auth/AdminAuthSlice";
 
-
 function App() {
   const dispatch = useDispatch();
- 
 
   useEffect(() => {
     const initAuth = async () => {
@@ -34,11 +28,11 @@ function App() {
       } finally {
         dispatch(setAuthLoaded(true));
       }
-  
+
       try {
         // ADMIN AUTH CHECK
         const adminToken = localStorage.getItem("adminAccessToken");
-  
+
         if (adminToken) {
           dispatch(setAdminAccessToken(adminToken));
         }
@@ -48,22 +42,21 @@ function App() {
         dispatch(setAdminAuthLoaded(true));
       }
     };
-  
+
     initAuth();
   }, [dispatch]);
-  
+
   const userLoaded = useSelector(
-    (state: RootState) => state.userAuth.authLoaded
+    (state: RootState) => state.userAuth.authLoaded,
   );
-  
+
   const adminLoaded = useSelector(
-    (state: RootState) => state.adminAuth.authLoaded
+    (state: RootState) => state.adminAuth.authLoaded,
   );
-  
+
   if (!userLoaded || !adminLoaded) {
     return <FullScreenLoader />;
   }
-  
 
   return (
     <>

@@ -40,11 +40,7 @@ export function UserManagement() {
 
   /* ===================== FETCH USERS ===================== */
 
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useQuery<UsersResponse>({
+  const { data, isLoading, isError } = useQuery<UsersResponse>({
     queryKey: ["admin-users", page, searchTerm, filter],
     queryFn: async () => {
       const res = await axios.get("/admin/users", {
@@ -71,9 +67,7 @@ export function UserManagement() {
   /* ===================== DERIVED DATA ===================== */
 
   const users = useMemo(() => {
-    return (data?.users ?? []).filter(
-      (u) => u.role !== UserRole.ADMIN
-    );
+    return (data?.users ?? []).filter((u) => u.role !== UserRole.ADMIN);
   }, [data]);
 
   const totalPages = data?.totalPages ?? 1;
@@ -83,7 +77,7 @@ export function UserManagement() {
   const banMutation = useMutation({
     mutationFn: async ({ id, block }: { id: string; block: boolean }) => {
       const res = await axios.patch(
-        `/admin/users/${block ? "ban" : "unban"}/${id}`
+        `/admin/users/${block ? "ban" : "unban"}/${id}`,
       );
       return res.data;
     },
@@ -109,12 +103,10 @@ export function UserManagement() {
           return {
             ...oldData,
             users: oldData.users.map((user) =>
-              user.id === id
-                ? { ...user, isBlocked: block }
-                : user
+              user.id === id ? { ...user, isBlocked: block } : user,
             ),
           };
-        }
+        },
       );
 
       // Update selected user panel immediately
@@ -133,7 +125,7 @@ export function UserManagement() {
       if (context?.previousData) {
         queryClient.setQueryData(
           ["admin-users", page, searchTerm, filter],
-          context.previousData
+          context.previousData,
         );
       }
 
@@ -153,12 +145,12 @@ export function UserManagement() {
 
   const blockedCount = useMemo(
     () => users.filter((u) => u.isBlocked).length,
-    [users]
+    [users],
   );
 
   const unblockedCount = useMemo(
     () => users.filter((u) => !u.isBlocked).length,
-    [users]
+    [users],
   );
 
   /* ===================== UI ===================== */
@@ -166,9 +158,7 @@ export function UserManagement() {
   return (
     <div className="w-full min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">
-          User Management
-        </h1>
+        <h1 className="text-3xl font-bold text-white mb-6">User Management</h1>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* LEFT PANEL */}
@@ -238,9 +228,7 @@ export function UserManagement() {
                 </span>
 
                 <button
-                  onClick={() =>
-                    setPage((p) => Math.min(p + 1, totalPages))
-                  }
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                   disabled={page === totalPages}
                   className="px-4 py-2 bg-[#11193F] text-white rounded disabled:opacity-40"
                 >
@@ -253,10 +241,7 @@ export function UserManagement() {
           {/* RIGHT PROFILE */}
           <div className="lg:w-80 mt-6 lg:mt-0">
             {selectedUser ? (
-              <UserProfile
-                user={selectedUser}
-                onBanUser={handleBanUser}
-              />
+              <UserProfile user={selectedUser} onBanUser={handleBanUser} />
             ) : (
               <div className="bg-[#0A0F2C] rounded-lg p-6 text-center text-gray-400 h-full flex items-center justify-center">
                 <p>Select a user to view details</p>

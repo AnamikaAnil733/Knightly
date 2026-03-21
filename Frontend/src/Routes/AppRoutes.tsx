@@ -19,7 +19,6 @@ import { PuzzleSolvingPage } from "../Pages/User/PuzzleSolvingPage";
 import { GameReviewPage } from "../Pages/User/GameReviewPage";
 import { LeaderBoardPage } from "../Pages/User/LeaderBoardPage";
 
-
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -39,18 +38,25 @@ export default function AppRoutes() {
         <Route path="/play" element={<GameSelectionPage />} />
         <Route path="/waiting" element={<WaitingRoom />} />
         <Route path="/match" element={<Match />} />
-        <Route path="/match/:gameId" element={<Match/>}/>
+        <Route path="/match/:gameId" element={<Match />} />
         <Route path="/review/:gameId" element={<GameReviewPage />} />
         <Route path="/puzzles" element={<PuzzleTactics />} />
-        <Route path="/puzzle/solve/:difficulty" element={<PuzzleSolvingPage />} />
+        <Route
+          path="/puzzle/solve/:difficulty"
+          element={<PuzzleSolvingPage />}
+        />
 
-        <Route path="/admin" element={
-          <AdminProtectedRoute>
-         <AdminLayout />
-         </AdminProtectedRoute>
-        }><Route path="users" element={<UserManagement />} />
-        <Route path="puzzles" element={<PuzzleManagement />} />
-         </Route>
+        <Route
+          path="/admin"
+          element={
+            <AdminProtectedRoute>
+              <AdminLayout />
+            </AdminProtectedRoute>
+          }
+        >
+          <Route path="users" element={<UserManagement />} />
+          <Route path="puzzles" element={<PuzzleManagement />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

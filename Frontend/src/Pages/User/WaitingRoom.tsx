@@ -10,11 +10,17 @@ export function WaitingRoom() {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((state: RootState) => state.userAuth.user);
-  
+
   // Get format from navigation state
-  const { format = "3+0", modeName: initialModeName = "Blitz", preferredColor = "RANDOM" } = location.state || {};
-  const modeName = format.startsWith("level-") ? "Play Computer" : initialModeName;
-  
+  const {
+    format = "3+0",
+    modeName: initialModeName = "Blitz",
+    preferredColor = "RANDOM",
+  } = location.state || {};
+  const modeName = format.startsWith("level-")
+    ? "Play Computer"
+    : initialModeName;
+
   const [queueSize, setQueueSize] = useState(1);
   const [dots, setDots] = useState("");
 
@@ -57,7 +63,7 @@ export function WaitingRoom() {
       socket.off("searchCancelled");
       clearInterval(dotInterval);
     };
-  }, [user, navigate, format, modeName]);
+  }, [user, navigate, format, modeName, preferredColor]);
 
   const handleCancel = () => {
     socket.emit("cancelSearch");
@@ -107,7 +113,11 @@ export function WaitingRoom() {
               Finding Opponent{dots}
             </h2>
             <p className="text-[#C9CAD9] text-sm mb-8 font-['Inter']">
-              Searching for a <span className="text-[#3A6FF7] font-bold">{format.replace('+', ' | ')}</span> match
+              Searching for a{" "}
+              <span className="text-[#3A6FF7] font-bold">
+                {format.replace("+", " | ")}
+              </span>{" "}
+              match
             </p>
 
             {/* Stats Grid */}

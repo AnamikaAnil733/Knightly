@@ -40,7 +40,7 @@ let failedQueue: FailedRequest[] = [];
 
 const processQueue = (
   error: unknown | null,
-  token: string | null = null
+  token: string | null = null,
 ): void => {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) reject(error);
@@ -54,7 +54,7 @@ const processQueue = (
 userApi.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const isPublicRoute = PUBLIC_ROUTES.some((route) =>
-      config.url?.includes(route)
+      config.url?.includes(route),
     );
 
     if (isPublicRoute) {
@@ -69,7 +69,7 @@ userApi.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 /* ===================== RESPONSE INTERCEPTOR ===================== */
@@ -83,7 +83,7 @@ userApi.interceptors.response.use(
     }
 
     const isPublicRoute = PUBLIC_ROUTES.some((route) =>
-      originalRequest.url?.includes(route)
+      originalRequest.url?.includes(route),
     );
 
     if (isPublicRoute) {
@@ -125,7 +125,7 @@ userApi.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default userApi;

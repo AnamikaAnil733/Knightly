@@ -5,7 +5,7 @@ import { UserRating } from "../../Domain/Entity/RatingEntity";
 
 
 export class MongoAuthMapper{
-      // DB → Domain
+  // DB → Domain
   static toEntityFromDocument(doc: HydratedDocument<AuthSchemaType>): Auth {
     return new Auth({
       id: doc._id.toString(),

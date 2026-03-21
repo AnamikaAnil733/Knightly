@@ -110,8 +110,8 @@ export class StockfishService{
         let currentMate: number | null = null;
 
         const timeoutId = setTimeout(() => {
-            analyzerProcess.stdout?.removeListener("data", listener);
-            rej(new Error("Stockfish analysis timeout"));
+          analyzerProcess.stdout?.removeListener("data", listener);
+          rej(new Error("Stockfish analysis timeout"));
         }, 15000); // 15 second timeout per move
 
         const listener = (data: Buffer) => {

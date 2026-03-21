@@ -165,7 +165,9 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
             {otp.map((digit, i) => (
               <input
                 key={i}
-                ref={(el) => { inputRefs.current[i] = el; }}
+                ref={(el) => {
+                  inputRefs.current[i] = el;
+                }}
                 type="text"
                 maxLength={1}
                 value={digit}
@@ -215,8 +217,8 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
             {verifyOtpMutation.isPending
               ? "Verifying..."
               : registerMutation.isPending
-              ? "Creating Account..."
-              : "Verify OTP"}
+                ? "Creating Account..."
+                : "Verify OTP"}
           </button>
         </div>
       </main>
