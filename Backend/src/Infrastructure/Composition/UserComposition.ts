@@ -2,12 +2,14 @@ import { UserManagementRepository } from "../Repository/UserRepository";
 import { ChessGameRepository } from "../Repository/GameRepository";
 import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
+import { FriendshipRepository } from "../Repository/FriendshipRepository";
 
 import { EditProfileController } from "../../Presentation/Controllers/User/ProfileManagement/UpdateProfileController";
 import { ChangePassswordController } from "../../Presentation/Controllers/User/ProfileManagement/ChangePasswordController";
 import { AvatarController } from "../../Presentation/Controllers/User/ProfileManagement/AvatarController";
 import { GameController } from "../../Presentation/Controllers/User/GameManagement/GameController";
 import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
+import { FriendController } from "../../Presentation/Controllers/User/FriendManagement/FriendController";
 
 import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
 import { ChangePasswordUseCase } from "../../Application/UseCases/User/ProfileManagement/ChangePasswordUseCase";
@@ -23,6 +25,11 @@ import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleMana
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/User/ProfileManagement/AvatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/User/ProfileManagement/SaveDiceBearAvatarUseCase";
 import { GetUserProfileUseCase } from "../../Application/UseCases/User/ProfileManagement/GetUserProfileUseCase";
+import SendFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/SendFriendRequestUseCase";
+import AcceptFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/AcceptFriendRequestUseCase";
+import GetFriendsListUseCase from "../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
+import SearchUsersUseCase from "../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
+import GetPendingRequestsUseCase from "../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
 
 import { TokenService } from "../Services/TokenService";
 import {  HashService } from "../Services/PasswordHashing";
@@ -43,6 +50,7 @@ const GameRepo = new ChessGameRepository(GameModel);
 const PuzzleRepo = new PuzzleManagementRepository();
 const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 const LeaderRepo = new LeaderBoardRepository();
+const FriendshipRepo = new FriendshipRepository();
 
 //service
 const tokenService = new TokenService();
@@ -71,6 +79,12 @@ const validatePuzzleUsecase = new ValidatePuzzlesMoves(
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService);
 const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, S3Service);
 
+const sendFriendRequestUseCase = new SendFriendRequestUseCase(FriendshipRepo, UserRepo);
+const acceptFriendRequestUseCase = new AcceptFriendRequestUseCase(FriendshipRepo);
+const getFriendsListUseCase = new GetFriendsListUseCase(FriendshipRepo, UserRepo, S3Service);
+const searchUsersUseCase = new SearchUsersUseCase(UserRepo, S3Service);
+const getPendingRequestsUseCase = new GetPendingRequestsUseCase(FriendshipRepo, UserRepo, S3Service);
+
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(
   changePasswordUseCase,
@@ -93,5 +107,12 @@ export const userPuzzleController = new UserPuzzleController(
 );
 export const leaderBoardController = new LeaderBoardController(
   getLeaderBoardUseCase,
+);
+export const friendController = new FriendController(
+  sendFriendRequestUseCase,
+  acceptFriendRequestUseCase,
+  getFriendsListUseCase,
+  searchUsersUseCase,
+  getPendingRequestsUseCase,
 );
 export const userRoutes = new UserRoutes(tokenService);

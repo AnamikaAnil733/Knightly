@@ -19,4 +19,12 @@ export const USER_ROUTES = {
   VALIDATE_PUZZLE_MOVE: "/puzzles/:puzzleId/validate",
 
   LEADERBOARD: "/leaderboard/:type",
+
+  FRIENDS: {
+    SEND_REQUEST: "/friends/request",
+    ACCEPT_REQUEST: "/friends/accept",
+    LIST: "/friends",
+    SEARCH: "/friends/search",
+    PENDING_REQUESTS: "/friends/pending",
+  },
 } as const;

@@ -152,3 +152,26 @@ export interface LeaderBoardResponse {
   avatarKey: string;
   rating: number;
 }
+
+
+//------FriendManagementDTOs-----
+
+export interface FriendDTO {
+  id: string;
+  displayname: string;
+  email: string;
+  avatarUrl: string | null;
+}
+
+export interface PendingRequestDTO {
+  id: string;
+  displayname: string;
+  avatarUrl: string | null;
+  requestedAt: Date;
+}
+
+export interface SearchUserDTO {
+  id: string;
+  displayname: string;
+  avatarUrl: string | null;
+}

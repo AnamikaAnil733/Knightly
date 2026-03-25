@@ -6,6 +6,7 @@ import {
   gameController,
   userPuzzleController,
   leaderBoardController,
+  friendController,
 } from "../../Infrastructure/Composition/UserComposition";
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
@@ -52,6 +53,22 @@ export class UserRoutes {
     this.router.get(
       USER_ROUTES.LEADERBOARD,
       leaderBoardController.getLeaderBoard,
+    );
+
+    // Friend Routes
+    this.router.post(
+      USER_ROUTES.FRIENDS.SEND_REQUEST,
+      friendController.sendRequest,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.ACCEPT_REQUEST,
+      friendController.acceptRequest,
+    );
+    this.router.get(USER_ROUTES.FRIENDS.LIST, friendController.getFriends);
+    this.router.get(USER_ROUTES.FRIENDS.SEARCH, friendController.searchUsers);
+    this.router.get(
+      USER_ROUTES.FRIENDS.PENDING_REQUESTS,
+      friendController.getPendingRequests,
     );
   }
 }
