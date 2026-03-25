@@ -8,6 +8,8 @@ import {
   leaderBoardController,
   friendController,
 } from "../../Infrastructure/Composition/UserComposition";
+import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
+
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -86,5 +88,9 @@ export class UserRoutes {
       USER_ROUTES.FRIENDS.PENDING_REQUESTS,
       friendController.getPendingRequests,
     );
+
+    // Learning routes
+    this.router.get("/learn", lessonController.getLessons);
+    this.router.get("/learn/:id", lessonController.getLessonById);
   }
 }

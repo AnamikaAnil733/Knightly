@@ -18,6 +18,10 @@ import { PuzzleTactics } from "../Pages/User/PuzzleTactics";
 import { PuzzleSolvingPage } from "../Pages/User/PuzzleSolvingPage";
 import { GameReviewPage } from "../Pages/User/GameReviewPage";
 import { LeaderBoardPage } from "../Pages/User/LeaderBoardPage";
+import LearnPage from "../Pages/User/LearnPage";
+import LessonListPage from "../Pages/User/LessonListPage";
+import LessonPage from "../Pages/User/LessonPage";
+import { LessonManagement } from "../Pages/Admin/LessonManagement";
 
 export default function AppRoutes() {
   return (
@@ -41,10 +45,10 @@ export default function AppRoutes() {
       <Route path="/match/:gameId" element={<Match />} />
       <Route path="/review/:gameId" element={<GameReviewPage />} />
       <Route path="/puzzles" element={<PuzzleTactics />} />
-      <Route
-        path="/puzzle/solve/:difficulty"
-        element={<PuzzleSolvingPage />}
-      />
+      <Route path="/puzzle/solve/:difficulty" element={<PuzzleSolvingPage />} />
+      <Route path="/learn" element={<LearnPage />} />
+      <Route path="/learn/:category" element={<LessonListPage />} />
+      <Route path="/learn/lesson/:id" element={<LessonPage />} />
 
       <Route
         path="/admin"
@@ -56,6 +60,7 @@ export default function AppRoutes() {
       >
         <Route path="users" element={<UserManagement />} />
         <Route path="puzzles" element={<PuzzleManagement />} />
+        <Route path="lessons" element={<LessonManagement />} />
       </Route>
     </Routes>
   );

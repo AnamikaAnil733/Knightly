@@ -1,0 +1,13 @@
+export enum LessonCategory {
+  GETTING_STARTED = "GETTING_STARTED",
+  TACTICS = "TACTICS",
+  OPENINGS = "OPENINGS",
+  STRATEGY = "STRATEGY",
+  ENDGAMES = "ENDGAMES",
+}
+
+export enum LessonDifficulty {
+  BEGINNER = "BEGINNER",
+  INTERMEDIATE = "INTERMEDIATE",
+  ADVANCED = "ADVANCED",
+}

@@ -4,6 +4,8 @@ import { getAllUserController,
   unBanUserController,
   PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminComposition";
+import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
+
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -31,5 +33,11 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
     this.router.patch(ADMIN_ROUTES.EDITPUZZLE,PuzzleManagementController.editPuzzles);
     this.router.delete(ADMIN_ROUTES.DELETEPUZZLE,PuzzleManagementController.softDeletePuzzle);
+
+    // Lesson management routes
+    this.router.post("/lessons", lessonController.createLesson);
+    this.router.put("/lessons/:id", lessonController.updateLesson);
+    this.router.delete("/lessons/:id", lessonController.deleteLesson);
+    this.router.get("/lessons", lessonController.getLessons);
   }
 }

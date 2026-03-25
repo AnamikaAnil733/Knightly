@@ -94,6 +94,12 @@ export function Navbar() {
           >
             Puzzles
           </Link>
+          <Link
+            to="/learn"
+            className="text-white hover:text-[#FFD166] transition-colors"
+          >
+            Learn
+          </Link>
           <a
             href="#"
             className="text-white hover:text-[#FFD166] transition-colors"
