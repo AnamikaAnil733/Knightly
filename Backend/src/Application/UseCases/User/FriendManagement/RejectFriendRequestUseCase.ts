@@ -1,10 +1,10 @@
 import { IFriendshipRepository } from "../../../../Domain/Interface/Repositories/IFriendshipRepository";
 import { FriendshipStatus } from "../../../../Domain/Types/FriendshipStatus";
-import { IAcceptFriendRequestUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IAcceptFriendRequestUseCase";
+import { IRejectFriendRequestUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IRejectFriendRequestUseCase";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class AcceptFriendRequestUseCase implements IAcceptFriendRequestUseCase {
+export default class RejectFriendRequestUseCase implements IRejectFriendRequestUseCase {
   constructor(private friendshipRepository: IFriendshipRepository) {}
 
   async execute(requesterId: string, recipientId: string): Promise<void> {
@@ -21,12 +21,12 @@ export default class AcceptFriendRequestUseCase implements IAcceptFriendRequestU
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, "Friend request is not in pending status.");
     }
 
-    // Ensure the one accepting is the recipient
+    // Ensure the one rejecting is the recipient
     if (friendship.recipientId !== recipientId) {
-      throw new CustomError(HttpStatusCodes.FORBIDDEN, "Only the recipient can accept a friend request.");
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, "Only the recipient can reject a friend request.");
     }
 
-    friendship.accept();
+    friendship.reject();
     await this.friendshipRepository.update(friendship);
   }
 }

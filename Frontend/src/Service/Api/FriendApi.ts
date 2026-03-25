@@ -10,6 +10,11 @@ export const acceptFriendRequest = async (requesterId: string) => {
   return response.data;
 };
 
+export const rejectFriendRequest = async (requesterId: string) => {
+  const response = await axios.post("/user/friends/reject", { requesterId });
+  return response.data;
+};
+
 export const getFriendsList = async () => {
   const response = await axios.get("/user/friends");
   return response.data;

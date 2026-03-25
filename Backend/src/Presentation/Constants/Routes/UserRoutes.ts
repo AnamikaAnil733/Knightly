@@ -23,6 +23,7 @@ export const USER_ROUTES = {
   FRIENDS: {
     SEND_REQUEST: "/friends/request",
     ACCEPT_REQUEST: "/friends/accept",
+    REJECT_REQUEST: "/friends/reject",
     LIST: "/friends",
     SEARCH: "/friends/search",
     PENDING_REQUESTS: "/friends/pending",

@@ -30,6 +30,7 @@ import AcceptFriendRequestUseCase from "../../Application/UseCases/User/FriendMa
 import GetFriendsListUseCase from "../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
 import SearchUsersUseCase from "../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
 import GetPendingRequestsUseCase from "../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
+import RejectFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
 
 import { TokenService } from "../Services/TokenService";
 import {  HashService } from "../Services/PasswordHashing";
@@ -84,6 +85,7 @@ const acceptFriendRequestUseCase = new AcceptFriendRequestUseCase(FriendshipRepo
 const getFriendsListUseCase = new GetFriendsListUseCase(FriendshipRepo, UserRepo, S3Service);
 const searchUsersUseCase = new SearchUsersUseCase(UserRepo, S3Service);
 const getPendingRequestsUseCase = new GetPendingRequestsUseCase(FriendshipRepo, UserRepo, S3Service);
+const rejectFriendRequestUseCase = new RejectFriendRequestUseCase(FriendshipRepo);
 
 export const editUserController = new EditProfileController(editUserUseCase);
 export const changePasswordController = new ChangePassswordController(
@@ -114,5 +116,6 @@ export const friendController = new FriendController(
   getFriendsListUseCase,
   searchUsersUseCase,
   getPendingRequestsUseCase,
+  rejectFriendRequestUseCase,
 );
 export const userRoutes = new UserRoutes(tokenService);

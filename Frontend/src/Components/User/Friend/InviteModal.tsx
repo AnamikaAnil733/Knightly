@@ -11,7 +11,14 @@ type Props = {
   onReject: () => void;
 };
 
-export function InviteModal({ isOpen, senderName, gameFormat, onClose, onAccept, onReject }: Props) {
+export function InviteModal({
+  isOpen,
+  senderName,
+  gameFormat,
+  onClose,
+  onAccept,
+  onReject,
+}: Props) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -54,19 +61,25 @@ export function InviteModal({ isOpen, senderName, gameFormat, onClose, onAccept,
                 Challenge Received!
               </h2>
               <p className="text-[#94A3B8] leading-relaxed mb-6">
-                Your friend <span className="text-[#FFD166] font-bold">{senderName || "Player"}</span> has challenged you to a match.
+                Your friend{" "}
+                <span className="text-[#FFD166] font-bold">
+                  {senderName || "Player"}
+                </span>{" "}
+                has challenged you to a match.
               </p>
 
               {/* Game Info */}
               <div className="bg-white/5 rounded-xl p-4 mb-8 flex items-center justify-between border border-white/5">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-[#FFD166]/10 rounded-lg">
-                        <Timer className="w-5 h-5 text-[#FFD166]" />
-                    </div>
-                    <div>
-                        <p className="text-xs text-[#64748B] uppercase font-bold tracking-wider">Time Control</p>
-                        <p className="text-white font-bold">{gameFormat}</p>
-                    </div>
+                  <div className="p-2 bg-[#FFD166]/10 rounded-lg">
+                    <Timer className="w-5 h-5 text-[#FFD166]" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#64748B] uppercase font-bold tracking-wider">
+                      Time Control
+                    </p>
+                    <p className="text-white font-bold">{gameFormat}</p>
+                  </div>
                 </div>
               </div>
 

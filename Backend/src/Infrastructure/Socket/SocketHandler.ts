@@ -402,6 +402,15 @@ export class SocketHandler {
         }
       });
 
+      socket.on("accept_friend_request", ({ requesterId }) => {
+        const requesterSocketId = this.userToSocket.get(requesterId);
+        if (requesterSocketId) {
+          this._io.to(requesterSocketId).emit("friendship_changed");
+        }
+        // Also fire it back to the acceptor so their FriendList re-fetches
+        socket.emit("friendship_changed");
+      });
+
       socket.on("rematchrequest", async (gameId: string) => {
         try {
           const game = await this._gameRepo.findById(gameId);

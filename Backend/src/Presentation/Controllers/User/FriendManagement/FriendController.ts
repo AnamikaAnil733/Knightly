@@ -5,6 +5,7 @@ import AcceptFriendRequestUseCase from "../../../../Application/UseCases/User/Fr
 import GetFriendsListUseCase from "../../../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
 import SearchUsersUseCase from "../../../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
 import GetPendingRequestsUseCase from "../../../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
+import RejectFriendRequestUseCase from "../../../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
 
 export class FriendController {
   constructor(
@@ -13,6 +14,7 @@ export class FriendController {
     private getFriendsListUseCase: GetFriendsListUseCase,
     private searchUsersUseCase: SearchUsersUseCase,
     private getPendingRequestsUseCase: GetPendingRequestsUseCase,
+    private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
   ) {}
 
   searchUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -61,6 +63,22 @@ export class FriendController {
       return res.status(HttpStatusCodes.OK).json({
         success: true,
         message: "Friend request accepted.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  rejectRequest = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const recipientId = (req as any).user.id;
+      const { requesterId } = req.body;
+
+      await this.rejectFriendRequestUseCase.execute(requesterId, recipientId);
+
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "Friend request rejected.",
       });
     } catch (error) {
       next(error);
