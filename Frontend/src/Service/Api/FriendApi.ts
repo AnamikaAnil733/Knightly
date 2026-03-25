@@ -15,6 +15,21 @@ export const rejectFriendRequest = async (requesterId: string) => {
   return response.data;
 };
 
+export const unfriendUser = async (friendId: string) => {
+  const response = await axios.post("/user/friends/unfriend", { friendId });
+  return response.data;
+};
+
+export const blockUser = async (friendId: string) => {
+  const response = await axios.post("/user/friends/block", { friendId });
+  return response.data;
+};
+
+export const unblockUser = async (friendId: string) => {
+  const response = await axios.post("/user/friends/unblock", { friendId });
+  return response.data;
+};
+
 export const getFriendsList = async () => {
   const response = await axios.get("/user/friends");
   return response.data;

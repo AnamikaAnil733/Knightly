@@ -14,13 +14,14 @@ export default class GetFriendsListUseCase implements IGetFriendsListUseCase {
   async execute(userId: string): Promise<FriendDTO[]> {
     const friendships = await this.friendshipRepository.findFriendsByUserId(userId);
 
-    const friendIds = friendships.map((f) =>
-      f.requesterId === userId ? f.recipientId : f.requesterId,
-    );
+    const friendData = friendships.map((f) => ({
+      id: f.requesterId === userId ? f.recipientId : f.requesterId,
+      status: f.status,
+    }));
 
     const friends = await Promise.all(
-      friendIds.map(async (id) => {
-        const user = await this.userRepository.findById(id);
+      friendData.map(async (data) => {
+        const user = await this.userRepository.findById(data.id);
         if (!user) return null;
         const avatarUrl = user.avatarKey
           ? await this.storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
@@ -31,6 +32,7 @@ export default class GetFriendsListUseCase implements IGetFriendsListUseCase {
           displayname: user.displayname,
           email: user.email,
           avatarUrl,
+          status: data.status,
         };
       }),
     );

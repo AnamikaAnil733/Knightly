@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getFriendsList } from "../../../Service/Api/FriendApi";
+import {
+  getFriendsList,
+  unfriendUser,
+  blockUser,
+  unblockUser,
+} from "../../../Service/Api/FriendApi";
 import { socket } from "../../../Service/Socket";
-import { User, Swords, UserPlus } from "lucide-react";
+import { User, Swords, UserPlus, UserMinus, Ban, Unlock } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface FriendListProps {
@@ -57,6 +62,39 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
       gameFormat: selectedFormat,
     });
     toast.success(`Invite sent (${selectedFormat})!`);
+  };
+
+  const handleUnfriend = async (friendId: string) => {
+    try {
+      await unfriendUser(friendId);
+      toast.success("User unfriended");
+      socket.emit("friendship_action", { targetUserId: friendId });
+      fetchFriends();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to unfriend user");
+    }
+  };
+
+  const handleBlock = async (friendId: string) => {
+    try {
+      await blockUser(friendId);
+      toast.success("User blocked");
+      socket.emit("friendship_action", { targetUserId: friendId });
+      fetchFriends();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to block user");
+    }
+  };
+
+  const handleUnblock = async (friendId: string) => {
+    try {
+      await unblockUser(friendId);
+      toast.success("User unblocked");
+      socket.emit("friendship_action", { targetUserId: friendId });
+      fetchFriends();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to unblock user");
+    }
   };
 
   const [selectedCategory, setSelectedCategory] = useState("Blitz");
@@ -135,7 +173,11 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
           {friends.map((friend) => (
             <div
               key={friend.id}
-              className="bg-[#11193F] border border-white/5 p-4 rounded-xl flex items-center justify-between group hover:border-[#FFD166]/30 transition-all shadow-lg"
+              className={`bg-[#11193F] border border-white/5 p-4 rounded-xl flex items-center justify-between group transition-all shadow-lg ${
+                friend.status === "BLOCKED"
+                  ? "opacity-60 grayscale hover:opacity-80"
+                  : "hover:border-[#FFD166]/30"
+              }`}
             >
               <div className="flex items-center gap-3">
                 <div className="relative">
@@ -147,25 +189,64 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
                     alt={friend.displayname}
                     className="w-12 h-12 rounded-full border-2 border-white/10"
                   />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#11193F] rounded-full"></div>
+                  {friend.status !== "BLOCKED" && (
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#11193F] rounded-full"></div>
+                  )}
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">
+                  <h3
+                    className={`font-semibold ${friend.status === "BLOCKED" ? "text-[#B3B3B3] line-through decoration-[#EF476F]/50" : "text-white"}`}
+                  >
                     {friend.displayname}
                   </h3>
-                  <p className="text-[#9ca3af] text-xs">Online</p>
+                  {friend.status === "BLOCKED" ? (
+                    <span className="text-[#EF476F] text-[10px] font-black tracking-widest uppercase bg-[#EF476F]/10 px-2 py-0.5 rounded-md mt-1 inline-block">
+                      BLOCKED
+                    </span>
+                  ) : (
+                    <p className="text-[#9ca3af] text-xs">Online</p>
+                  )}
                 </div>
               </div>
 
-              <button
-                onClick={() =>
-                  inviteFriend(friend.id, userId || (window as any).userId)
-                }
-                className="p-2 rounded-lg bg-[#FFD166]/10 text-[#FFD166] hover:bg-[#FFD166] hover:text-[#0A0F2C] transition-all flex items-center gap-2 text-sm font-bold"
-              >
-                <Swords className="w-4 h-4" />
-                Invite
-              </button>
+              {friend.status === "BLOCKED" ? (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleUnblock(friend.id)}
+                    title="Unblock User"
+                    className="p-2 rounded-lg bg-[#EF476F]/10 text-[#EF476F] hover:bg-[#EF476F] hover:text-[#0A0F2C] transition-all flex items-center gap-2 text-sm font-bold"
+                  >
+                    <Unlock className="w-4 h-4" />
+                    Unblock
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() =>
+                      inviteFriend(friend.id, userId || (window as any).userId)
+                    }
+                    className="p-2 rounded-lg bg-[#FFD166]/10 text-[#FFD166] hover:bg-[#FFD166] hover:text-[#0A0F2C] transition-all flex items-center gap-2 text-sm font-bold"
+                  >
+                    <Swords className="w-4 h-4" />
+                    Invite
+                  </button>
+                  <button
+                    onClick={() => handleUnfriend(friend.id)}
+                    title="Unfriend User"
+                    className="p-2 rounded-lg bg-white/5 text-white/40 hover:text-[#EF476F] hover:bg-[#EF476F]/20 transition-all"
+                  >
+                    <UserMinus className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleBlock(friend.id)}
+                    title="Block User"
+                    className="p-2 rounded-lg bg-white/5 text-white/40 hover:text-[#EF476F] hover:bg-[#EF476F]/20 transition-all"
+                  >
+                    <Ban className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

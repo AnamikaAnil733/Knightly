@@ -411,6 +411,14 @@ export class SocketHandler {
         socket.emit("friendship_changed");
       });
 
+      socket.on("friendship_action", ({ targetUserId }) => {
+        const targetSocketId = this.userToSocket.get(targetUserId);
+        if (targetSocketId) {
+          this._io.to(targetSocketId).emit("friendship_changed");
+        }
+        socket.emit("friendship_changed");
+      });
+
       socket.on("rematchrequest", async (gameId: string) => {
         try {
           const game = await this._gameRepo.findById(gameId);

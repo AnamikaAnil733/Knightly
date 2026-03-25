@@ -6,6 +6,10 @@ import GetFriendsListUseCase from "../../../../Application/UseCases/User/FriendM
 import SearchUsersUseCase from "../../../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
 import GetPendingRequestsUseCase from "../../../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
 import RejectFriendRequestUseCase from "../../../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
+import UnfriendUseCase from "../../../../Application/UseCases/User/FriendManagement/UnfriendUseCase";
+import BlockUserUseCase from "../../../../Application/UseCases/User/FriendManagement/BlockUserUseCase";
+import UnblockUserUseCase from "../../../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
+
 
 export class FriendController {
   constructor(
@@ -15,6 +19,9 @@ export class FriendController {
     private searchUsersUseCase: SearchUsersUseCase,
     private getPendingRequestsUseCase: GetPendingRequestsUseCase,
     private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
+    private unfriendUseCase: UnfriendUseCase,
+    private blockUserUseCase: BlockUserUseCase,
+    private unblockUserUseCase: UnblockUserUseCase,
   ) {}
 
   searchUsers = async (req: Request, res: Response, next: NextFunction) => {
@@ -79,6 +86,54 @@ export class FriendController {
       return res.status(HttpStatusCodes.OK).json({
         success: true,
         message: "Friend request rejected.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  unfriend = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const currentUserId = (req as any).user.id;
+      const { friendId } = req.body;
+
+      await this.unfriendUseCase.execute(currentUserId, friendId);
+
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "User unfriended successfully.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  blockUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const currentUserId = (req as any).user.id;
+      const { friendId } = req.body;
+
+      await this.blockUserUseCase.execute(currentUserId, friendId);
+
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "User blocked successfully.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  unblockUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const currentUserId = (req as any).user.id;
+      const { friendId } = req.body;
+
+      await this.unblockUserUseCase.execute(currentUserId, friendId);
+
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "User unblocked successfully.",
       });
     } catch (error) {
       next(error);

@@ -161,6 +161,7 @@ export interface FriendDTO {
   displayname: string;
   email: string;
   avatarUrl: string | null;
+  status?: string;
 }
 
 export interface PendingRequestDTO {

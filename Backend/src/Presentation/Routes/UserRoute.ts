@@ -68,6 +68,18 @@ export class UserRoutes {
       USER_ROUTES.FRIENDS.REJECT_REQUEST,
       friendController.rejectRequest,
     );
+    this.router.post(
+      USER_ROUTES.FRIENDS.UNFRIEND,
+      friendController.unfriend,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.BLOCK,
+      friendController.blockUser,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.UNBLOCK,
+      friendController.unblockUser,
+    );
     this.router.get(USER_ROUTES.FRIENDS.LIST, friendController.getFriends);
     this.router.get(USER_ROUTES.FRIENDS.SEARCH, friendController.searchUsers);
     this.router.get(

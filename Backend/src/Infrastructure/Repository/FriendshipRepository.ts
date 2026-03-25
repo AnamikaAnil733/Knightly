@@ -47,8 +47,11 @@ export  class FriendshipRepository implements IFriendshipRepository {
 
   async findFriendsByUserId(userId: string): Promise<FriendshipEntity[]> {
     const query: any = {
-      $or: [{ requesterId: userId }, { recipientId: userId }],
-      status: FriendshipStatus.ACCEPTED,
+      $or: [
+        { requesterId: userId, status: FriendshipStatus.ACCEPTED },
+        { recipientId: userId, status: FriendshipStatus.ACCEPTED },
+        { requesterId: userId, status: FriendshipStatus.BLOCKED },
+      ],
     };
     const docs = await FriendshipModel.find(query);
 
