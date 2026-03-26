@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import Pagination from "../../Components/Reuseable/Pagination";
 
 const CATEGORIES = [
   "GETTING_STARTED",
@@ -38,6 +39,8 @@ export const LessonManagement: React.FC = () => {
   const [editing, setEditing] = useState<Lesson | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
 
   const fetchLessons = async () => {
     try {
@@ -219,40 +222,56 @@ export const LessonManagement: React.FC = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {lessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="flex items-center justify-between bg-[#11193F] border border-white/5 p-4 rounded-xl"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-[#9ca3af] font-bold text-sm">
-                    {lesson.order}
-                  </span>
-                  <div>
-                    <p className="text-white font-bold">{lesson.title}</p>
-                    <p className="text-[#9ca3af] text-xs">
-                      {lesson.category.replace("_", " ")} · {lesson.difficulty}
-                    </p>
+          <>
+            <div className="space-y-3">
+              {lessons
+                .slice(
+                  (currentPage - 1) * ITEMS_PER_PAGE,
+                  currentPage * ITEMS_PER_PAGE,
+                )
+                .map((lesson) => (
+                  <div
+                    key={lesson.id}
+                    className="flex items-center justify-between bg-[#11193F] border border-white/5 p-4 rounded-xl"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-[#9ca3af] font-bold text-sm">
+                        {lesson.order}
+                      </span>
+                      <div>
+                        <p className="text-white font-bold">{lesson.title}</p>
+                        <p className="text-[#9ca3af] text-xs">
+                          {lesson.category.replace("_", " ")} ·{" "}
+                          {lesson.difficulty}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => openEdit(lesson)}
+                        className="p-2 rounded-lg bg-white/5 text-[#9ca3af] hover:text-[#FFD166] hover:bg-[#FFD166]/10 transition-all"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(lesson.id)}
+                        className="p-2 rounded-lg bg-white/5 text-[#9ca3af] hover:text-[#EF476F] hover:bg-[#EF476F]/10 transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => openEdit(lesson)}
-                    className="p-2 rounded-lg bg-white/5 text-[#9ca3af] hover:text-[#FFD166] hover:bg-[#FFD166]/10 transition-all"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(lesson.id)}
-                    className="p-2 rounded-lg bg-white/5 text-[#9ca3af] hover:text-[#EF476F] hover:bg-[#EF476F]/10 transition-all"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))}
+            </div>
+
+            <Pagination
+              currentPage={currentPage}
+              totalItems={lessons.length}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+              label="lessons"
+            />
+          </>
         )}
       </div>
     </div>

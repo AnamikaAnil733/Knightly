@@ -213,12 +213,17 @@ export function GameReviewPage() {
                   {currentReview.classification}{" "}
                   {getClassificationSymbol(currentReview.classification)}
                 </div>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-400 mb-2">
                   Engine Eval:{" "}
                   {currentReview.evaluation?.mate
                     ? `Mate in ${currentReview.evaluation.mate}`
                     : `${(currentReview.evaluation?.score / 100).toFixed(2)}`}
                 </p>
+                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                  <p className="text-sm text-gray-200 leading-relaxed italic">
+                    "{currentReview.description}"
+                  </p>
+                </div>
               </div>
             ) : (
               <h2 className="text-xl font-bold text-gray-300">

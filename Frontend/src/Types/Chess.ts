@@ -20,6 +20,7 @@ export type MoveDTO = {
 
 export interface AnalysisData {
   classification: string;
+  description: string;
   evaluation: {
     score: number;
     mate: number | null;
