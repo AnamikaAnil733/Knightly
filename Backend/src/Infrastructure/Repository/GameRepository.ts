@@ -12,4 +12,18 @@ export class ChessGameRepository
   constructor(model: Model<ChessGameSchemaType>) {
     super(model, MongoChessGameMapper);
   }
+
+  async findRecent(limit: number): Promise<ChessGame[]> {
+    const docs = await this.model.find().sort({ createdAt: -1 }).limit(limit);
+    return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
+  }
+
+  async findByUserId(userId: string): Promise<ChessGame[]> {
+    const docs = await this.model
+      .find({
+        $or: [{ whitePlayerId: userId }, { blackPlayerId: userId }],
+      })
+      .sort({ createdAt: -1 });
+    return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
+  }
 }

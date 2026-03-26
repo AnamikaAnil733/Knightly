@@ -63,4 +63,5 @@ export const GetPuzzleSchema = z.object({
 export const ValidatePuzzleMoveSchema = z.object({
   puzzleId: z.string().min(1, "Puzzle ID is required"),
   move: z.string().min(1, "Move is required"),
+  moveIndex: z.number().min(0, "Move index must be non-negative"),
 });

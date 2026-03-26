@@ -8,4 +8,7 @@ export const ADMIN_ROUTES = {
   PUZZLES:"/puzzles",
   EDITPUZZLE:"/edit-puzzle/:id",
   DELETEPUZZLE:"/delete-puzzle/:id",
+  SYNC_LICHESS_PUZZLE: "/sync-lichess-puzzle",
+  GENERATE_AI_PUZZLES: "/generate-ai-puzzles",
+  GENERATE_PUZZLE_FROM_GAME: "/generate-puzzle-from-game/:gameId",
 } as const;

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Piece_Images } from "../../Reuseable/ChessPieces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
@@ -48,24 +48,17 @@ export function Chessboard({
   const displayFiles = isFlipped ? [...files].reverse() : files;
   const displayRanks = isFlipped ? [...ranks].reverse() : ranks;
 
-  // --- Piece Tracking Logic (using useState instead of refs to avoid ref access during render) ---
-  const [prevPieces, setPrevPieces] = useState<PositionedPiece[]>([]);
-  const [prevBoard, setPrevBoard] = useState<(ChessPiece | null)[][] | null>(
-    null,
-  );
+  // --- Piece Tracking Logic ---
+  const [pieces, setPieces] = useState<PositionedPiece[]>([]);
+  const [prevBoardRef, setPrevBoardRef] = useState<(ChessPiece | null)[][] | null>(null);
 
-  const pieces = useMemo(() => {
-    if (!board || board.length === 0) return prevPieces;
+  useEffect(() => {
+    if (!board || board.length === 0) return;
+    if (prevBoardRef === board) return;
 
-    // If the board reference hasn't changed, return the previous pieces as-is.
-    // This is the key fix: clicking a square only changes selectedSquare,
-    // NOT board, so pieces stay perfectly stable.
-    if (prevBoard === board) return prevPieces;
-
-    const currentPieces = prevPieces;
+    const currentPieces = pieces;
 
     if (currentPieces.length === 0) {
-      // First render — initialize with stable IDs
       const initial: PositionedPiece[] = [];
       board.forEach((row, r) => {
         row.forEach((cell, c) => {
@@ -79,12 +72,11 @@ export function Chessboard({
           }
         });
       });
-      setPrevBoard(board);
-      setPrevPieces(initial);
-      return initial;
+      setPieces(initial);
+      setPrevBoardRef(board);
+      return;
     }
 
-    // --- Diff-based matching against previous pieces ---
     const pieceMap = new Map<string, PositionedPiece>();
     currentPieces.forEach((p) => pieceMap.set(`${p.row}-${p.col}`, p));
 
@@ -92,7 +84,6 @@ export function Chessboard({
     const matchedNew = new Set<string>();
     const matchedOld = new Set<string>();
 
-    // 1. Exact position matches (unmoved pieces)
     board.forEach((row, r) => {
       row.forEach((cell, c) => {
         if (!cell) return;
@@ -105,7 +96,6 @@ export function Chessboard({
       });
     });
 
-    // 2. Moved pieces — match disappeared to appeared by type/color + proximity
     const disappeared = currentPieces.filter((p) => !matchedOld.has(p.id));
     const appeared: { cell: ChessPiece; r: number; c: number }[] = [];
     board.forEach((row, r) => {
@@ -138,7 +128,6 @@ export function Chessboard({
         result.push({ ...dis, ...app.cell, row: app.r, col: app.c });
         matchedOld.add(dis.id);
       } else {
-        // Brand new piece (e.g. promotion)
         result.push({
           ...app.cell,
           id: `piece-${pieceIdCounter++}`,
@@ -148,10 +137,9 @@ export function Chessboard({
       }
     });
 
-    setPrevBoard(board);
-    setPrevPieces(result);
-    return result;
-  }, [board, prevBoard, prevPieces]);
+    setPieces(result);
+    setPrevBoardRef(board);
+  }, [board, prevBoardRef, pieces]);
 
   const themeKey = useSelector(
     (state: RootState) => state.ui.boardTheme,

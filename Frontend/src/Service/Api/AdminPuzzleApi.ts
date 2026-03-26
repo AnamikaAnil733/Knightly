@@ -25,6 +25,7 @@ export interface EditPuzzleApiInput {
   fen?: string;
   difficulty?: "Easy" | "Medium" | "Hard" | "Expert";
   moves?: string[];
+  description?: string;
   isActive?: boolean;
 }
 
@@ -32,5 +33,18 @@ export const editPuzzlesApi = async (params: EditPuzzleApiInput) => {
   const { id, ...body } = params;
 
   const response = await axios.patch(`/admin/edit-puzzle/${id}`, body);
+  return response.data;
+};
+
+export const syncLichessDailyPuzzleApi = async () => {
+  const response = await axios.post("/admin/sync-lichess-puzzle");
+  return response.data;
+};
+
+export const generatePuzzlesFromGameApi = async (gameId?: string) => {
+  const url = gameId 
+    ? `/admin/generate-puzzle-from-game/${gameId}`
+    : "/admin/generate-ai-puzzles";
+  const response = await axios.post(url);
   return response.data;
 };

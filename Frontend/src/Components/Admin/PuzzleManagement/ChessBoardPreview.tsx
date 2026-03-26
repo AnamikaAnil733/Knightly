@@ -3,6 +3,7 @@ import { useMemo } from "react";
 
 interface ChessboardPreviewProps {
   fen: string;
+  orientation?: "white" | "black";
 }
 
 const pieceMap = {
@@ -20,7 +21,10 @@ const pieceMap = {
   K: Piece_Images.WHITE.KING,
 } as const;
 
-export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
+export function ChessboardPreview({
+  fen,
+  orientation,
+}: ChessboardPreviewProps) {
   // Memoized FEN parsing
   const board = useMemo(() => {
     if (!fen) return [];
@@ -47,18 +51,33 @@ export function ChessboardPreview({ fen }: ChessboardPreviewProps) {
     });
   }, [fen]);
 
+  const displayOrientation = useMemo(() => {
+    if (orientation) return orientation;
+    const turn = fen.split(" ")[1];
+    return turn === "b" ? "black" : "white";
+  }, [fen, orientation]);
+
+  const displayedBoard = useMemo(() => {
+    if (displayOrientation === "white") return board;
+    return [...board].reverse().map((row) => [...row].reverse());
+  }, [board, displayOrientation]);
+
   return (
     <div className="w-full max-w-[320px] aspect-square mx-auto">
       <div className="grid grid-cols-8 grid-rows-8 h-full w-full border border-[#3A6FF7]/50 shadow-[0_0_15px_rgba(58,111,247,0.3)]">
-        {board.map((row, rowIndex) =>
+        {displayedBoard.map((row, rowIndex) =>
           row.map((piece, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
               className={`flex items-center justify-center
                 ${
-                  (rowIndex + colIndex) % 2 === 0
-                    ? "bg-[#6a92a5]"
-                    : "bg-[#305375]"
+                  displayOrientation === "white"
+                    ? (rowIndex + colIndex) % 2 === 0
+                      ? "bg-[#6a92a5]"
+                      : "bg-[#305375]"
+                    : (rowIndex + colIndex) % 2 === 0
+                      ? "bg-[#305375]"
+                      : "bg-[#6a92a5]"
                 }`}
             >
               {piece && (

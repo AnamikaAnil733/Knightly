@@ -13,11 +13,17 @@ import { CreatePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleMana
 import { GetallPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/GetAllPuzzleUseCase";
 import { EditPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/EditPuzzleUseCase";
 import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/DeletePuzzleUseCase";
+import { SyncLichessDailyPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/SyncLichessDailyPuzzleUseCase";
+import { GeneratePuzzleFromGameUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/GeneratePuzzleFromGameUseCase";
+import { ChessGameRepository } from "../Repository/GameRepository";
+import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
+import { PuzzleGeneratorService } from "../Services/PuzzleGeneratorService";
 
 import { TokenService } from "../Services/TokenService";
 import { PuzzleValidationService } from "../Services/PuzzleValidationService";
 
-import {AdminRoutes} from "../../Presentation/Routes/AdminRoute";
+import { GameModel } from "../Database/Model/GameModel";
+import { AdminRoutes } from "../../Presentation/Routes/AdminRoute";
 
 const UserManagementRepo = new UserManagementRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();
@@ -25,6 +31,9 @@ const puzzleMangementRepo = new PuzzleManagementRepository();
 //service
 const tokenService = new TokenService();
 const puzzleValidationService = new PuzzleValidationService();
+const stockfishService = new StockfishService();
+const puzzleGeneratorService = new PuzzleGeneratorService(stockfishService);
+const chessGameRepo = new ChessGameRepository(GameModel);
 
 //useCase
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagementRepo);
@@ -42,6 +51,15 @@ const editPuzzleUseCase = new EditPuzzleUseCase(
 const softDeletePuzzleUseCase = new SoftDeletePuzzleUseCase(
   puzzleMangementRepo,
 );
+const syncLichessPuzzleUseCase = new SyncLichessDailyPuzzleUseCase(
+  puzzleGeneratorService,
+  puzzleMangementRepo,
+);
+const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
+  puzzleGeneratorService,
+  puzzleMangementRepo,
+  chessGameRepo,
+);
 
 export const getAllUserController = new GetAllUserController(
   getAllUsersUseCase,
@@ -56,6 +74,8 @@ export const PuzzleManagementController = new AdminPuzzleController(
   getAllPuzzleUseCase,
   editPuzzleUseCase,
   softDeletePuzzleUseCase,
+  syncLichessPuzzleUseCase,
+  generatePuzzleFromGameUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

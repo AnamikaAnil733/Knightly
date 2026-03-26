@@ -6,15 +6,19 @@ import { PuzzleType } from "../../../../Domain/Types/PuzzleTypes";
 import { IEditPuzzleUsecase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IEditPuzzleUseCase";
 import { ISoftDeleteUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IDeletePuzzleUseCase";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
+import { ISyncLichessDailyPuzzleUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/ISyncLichessDailyPuzzleUseCase";
+import { IGeneratePuzzleFromGameUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IGeneratePuzzleFromGameUseCase";
 
 
 export class AdminPuzzleController{
   constructor(
-                private readonly _createPuzzleUseCase :ICreatePuzzleUseCase,
-                private readonly _getAllPuzzleUseCase :IGetAllPuzzleUseCase,
-                private readonly _editPuzzleUseCase   :IEditPuzzleUsecase,
-                private readonly _softDeletePuzzleUseCase:ISoftDeleteUseCase,
-  ){}
+    private readonly _createPuzzleUseCase: ICreatePuzzleUseCase,
+    private readonly _getAllPuzzleUseCase: IGetAllPuzzleUseCase,
+    private readonly _editPuzzleUseCase: IEditPuzzleUsecase,
+    private readonly _softDeletePuzzleUseCase: ISoftDeleteUseCase,
+    private readonly _syncLichessPuzzleUseCase: ISyncLichessDailyPuzzleUseCase,
+    private readonly _generatePuzzleFromGameUseCase: IGeneratePuzzleFromGameUseCase,
+  ) {}
 
   createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
     try{
@@ -86,5 +90,36 @@ export class AdminPuzzleController{
     }
   };
 
+  syncDailyPuzzle = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+      const puzzle = await this._syncLichessPuzzleUseCase.execute();
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: "Lichess daily puzzle synced successfully",
+        data: puzzle,
+      });
+    } catch (error: any) {
+      return res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: `Sync failed: ${error.message}`,
+      });
+    }
+  };
 
+  generatePuzzlesFromGame = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+      const gameId = req.params.gameId;
+      const puzzles = await this._generatePuzzleFromGameUseCase.execute(gameId);
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        message: `${puzzles.length} puzzles generated from game`,
+        data: puzzles,
+      });
+    } catch (error: any) {
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: `AI generation failed: ${error.message}`,
+      });
+    }
+  };
 }

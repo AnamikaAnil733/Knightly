@@ -69,8 +69,8 @@ export function PuzzleTable({
                   {puzzle.solutionLength} moves
                 </td>
                 <td className="px-4 py-3 text-sm text-[#C9CAD9] font-mono">
-                  {puzzle.moves.join(" ").length > 20 
-                    ? puzzle.moves.join(" ").substring(0, 20) + "..." 
+                  {puzzle.moves.join(" ").length > 20
+                    ? puzzle.moves.join(" ").substring(0, 20) + "..."
                     : puzzle.moves.join(" ")}
                 </td>
                 <td className="px-4 py-3 text-sm text-right">

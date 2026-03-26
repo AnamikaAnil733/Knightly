@@ -12,7 +12,10 @@ import {
   getAllPuzzlesApi,
   deletePuzzleApi,
   editPuzzlesApi,
+  syncLichessDailyPuzzleApi,
+  generatePuzzlesFromGameApi,
 } from "../../Service/Api/AdminPuzzleApi";
+import toast from "react-hot-toast";
 
 /* ===================== TYPES ===================== */
 
@@ -22,6 +25,7 @@ export interface Puzzle {
   difficulty: "Easy" | "Medium" | "Hard" | "Expert";
   moves: string[];
   solutionLength: number;
+  description?: string;
   isActive: boolean;
   createdAt: string;
 }
@@ -70,6 +74,7 @@ export function PuzzleManagement() {
           fen: data.fen,
           difficulty: data.difficulty,
           moves: data.moves,
+          description: data.description,
         });
       } else {
         // CREATE
@@ -101,6 +106,34 @@ export function PuzzleManagement() {
     }
   };
 
+  const handleSyncLichess = async () => {
+    let loadingToast: string | undefined;
+    try {
+      loadingToast = toast.loading("Syncing Lichess daily puzzle...");
+      await syncLichessDailyPuzzleApi();
+      toast.success("Daily puzzle synced!", { id: loadingToast });
+      fetchPuzzles();
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Failed to sync Lichess puzzle";
+      toast.error(message, { id: loadingToast });
+      console.error(error);
+    }
+  };
+
+  const handleBulkGenerate = async () => {
+    let loadingToast: string | undefined;
+    try {
+      loadingToast = toast.loading("AI Scanning recent games for puzzles...");
+      const res = await generatePuzzlesFromGameApi(""); // Empty gameId triggers bulk scan
+      toast.success(`${res.data.length} puzzles generated!`, { id: loadingToast });
+      fetchPuzzles();
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Failed to generate puzzles from games";
+      toast.error(message, { id: loadingToast });
+      console.error(error);
+    }
+  };
+
   /* ===================== RENDER ===================== */
 
   return (
@@ -111,17 +144,35 @@ export function PuzzleManagement() {
           Puzzle Management
         </h1>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-6 py-2 rounded-lg font-medium
-                     bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7]
-                     border border-[#FFD166]
-                     hover:shadow-[0_0_15px_rgba(58,111,247,0.6)]
-                     transition-all duration-300"
-        >
-          <PlusIcon size={18} />
-          Add Puzzle
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={handleSyncLichess}
+            className="flex items-center gap-2 px-6 py-2 rounded-lg font-medium
+                       bg-[#0A0F2C] border border-[#3A6FF7]/50 text-[#C9CAD9]
+                       hover:bg-[#11193F] transition-all duration-300"
+          >
+            Sync Daily
+          </button>
+          <button
+            onClick={handleBulkGenerate}
+            className="flex items-center gap-2 px-6 py-2 rounded-lg font-medium
+                       bg-[#0A0F2C] border border-[#3A6FF7]/50 text-[#C9CAD9]
+                       hover:bg-[#11193F] transition-all duration-300"
+          >
+            AI Scan Games
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-6 py-2 rounded-lg font-medium
+                       bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7]
+                       border border-[#FFD166]
+                       hover:shadow-[0_0_15px_rgba(58,111,247,0.6)]
+                       transition-all duration-300"
+          >
+            <PlusIcon size={18} />
+            Add Puzzle
+          </button>
+        </div>
       </div>
 
       {/* Content */}
@@ -156,6 +207,7 @@ export function PuzzleManagement() {
                   fen: editingPuzzle.fen,
                   difficulty: editingPuzzle.difficulty,
                   moves: editingPuzzle.moves,
+                  description: editingPuzzle.description,
                 }
               : undefined
           }

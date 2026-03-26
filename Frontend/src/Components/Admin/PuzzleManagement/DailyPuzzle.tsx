@@ -37,8 +37,10 @@ export function DailyPuzzle({ puzzle }: DailyPuzzleProps) {
           </div>
           <div>
             <span className="text-xs text-[#C9CAD9]">Solution</span>
-            <span className="ml-2 text-white">
-              {puzzle.solutionLength} moves
+            <span className="ml-2 text-white text-xs font-mono">
+              {puzzle.moves.slice(0, 2).join(", ")}
+              {puzzle.moves.length > 2 ? "..." : ""} ({puzzle.solutionLength}{" "}
+              moves)
             </span>
           </div>
         </div>

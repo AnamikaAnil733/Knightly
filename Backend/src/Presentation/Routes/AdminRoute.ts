@@ -33,6 +33,9 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
     this.router.patch(ADMIN_ROUTES.EDITPUZZLE,PuzzleManagementController.editPuzzles);
     this.router.delete(ADMIN_ROUTES.DELETEPUZZLE,PuzzleManagementController.softDeletePuzzle);
+    this.router.post(ADMIN_ROUTES.SYNC_LICHESS_PUZZLE, PuzzleManagementController.syncDailyPuzzle);
+    this.router.post(ADMIN_ROUTES.GENERATE_AI_PUZZLES, PuzzleManagementController.generatePuzzlesFromGame);
+    this.router.post(ADMIN_ROUTES.GENERATE_PUZZLE_FROM_GAME, PuzzleManagementController.generatePuzzlesFromGame);
 
     // Lesson management routes
     this.router.post("/lessons", lessonController.createLesson);
