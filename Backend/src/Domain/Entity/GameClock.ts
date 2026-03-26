@@ -60,6 +60,18 @@ export class GameClock {
     return { whiteTime: w, blackTime: b };
   }
 
+  sync(now: number = Date.now()): void {
+    if (!this.running) return;
+    const elapsed = now - this.lastMoveTimestamp;
+    if (this.turn === "WHITE") {
+      this.whiteTime = Math.max(0, this.whiteTime - elapsed);
+    } else {
+      this.blackTime = Math.max(0, this.blackTime - elapsed);
+    }
+    this.lastMoveTimestamp = now;
+    this.stop();
+  }
+
   stop(): void {
     this.running = false;
   }

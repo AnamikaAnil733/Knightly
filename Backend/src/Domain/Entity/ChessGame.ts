@@ -21,7 +21,10 @@ export class ChessGame extends BaseEntity {
     super(id, createdAt);
     if (this._status === "ACTIVE" || this._status === "CHECK") {
       const stateStatus = this._gameState.getStatus();
-      if (stateStatus !== "ACTIVE") {
+      if (stateStatus !== "ACTIVE" && stateStatus !== "CHECK") {
+        this._status = stateStatus;
+        this.clock.stop();
+      } else {
         this._status = stateStatus;
       }
     }
@@ -41,6 +44,9 @@ export class ChessGame extends BaseEntity {
 
   statusFromGameState(): void {
     this._status = this._gameState.getStatus();
+    if (this._status !== "ACTIVE" && this._status !== "CHECK") {
+      this.clock.stop();
+    }
   }
 
   updateClock(now: number) {
@@ -54,10 +60,10 @@ export class ChessGame extends BaseEntity {
 
     if (timeoutWinner === "WHITE") {
       this._status = "BLACK_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
     } else if (timeoutWinner === "BLACK") {
       this._status = "WHITE_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
     }
   }
 
@@ -70,13 +76,13 @@ export class ChessGame extends BaseEntity {
 
     if (liveTimes.whiteTime <= 0) {
       this._status = "WHITE_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
       return true;
     }
 
     if (liveTimes.blackTime <= 0) {
       this._status = "BLACK_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
       return true;
     }
 
