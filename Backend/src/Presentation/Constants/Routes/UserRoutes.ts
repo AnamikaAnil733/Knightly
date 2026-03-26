@@ -14,6 +14,7 @@ export const USER_ROUTES = {
   LEGAL_MOVES:"/games/:gameId/legal-moves",
   MAKE_MOVE:"/games/:gameId/move",
   REVIEW_GAME: "/games/:gameId/review",
+  GET_GAME_HISTORY: "/games/history",
 
   GET_PUZZLE_BY_DIFFICULTY: "/puzzles/difficulty/:difficulty",
   VALIDATE_PUZZLE_MOVE: "/puzzles/:puzzleId/validate",

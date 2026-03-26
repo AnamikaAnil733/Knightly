@@ -40,3 +40,8 @@ export const getLeaderboard = async (type: string) => {
   const res = await axios.get(`/user/leaderboard/${type}`);
   return res.data.data;
 };
+
+export const getGameHistory = async () => {
+  const res = await axios.get("/user/games/history");
+  return res.data.data;
+};

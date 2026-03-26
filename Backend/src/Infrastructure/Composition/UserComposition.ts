@@ -18,6 +18,7 @@ import { GetGameUseCase } from "../../Application/UseCases/User/GameManagement/G
 import { MakeMoveUsecase } from "../../Application/UseCases/User/GameManagement/MakeMoveUseCase";
 import { GetLegalMovesUseCase } from "../../Application/UseCases/User/GameManagement/GetLegalMovesUseCase";
 import { ReviewGameUseCase } from "../../Application/UseCases/User/GameManagement/ReviewGameUseCase";
+import { GetGameHistoryUseCase } from "../../Application/UseCases/User/GameManagement/GetGameHistoryUseCase";
 
 import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDifficultyUseCase";
 import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleManagement/ValidatePuzzleUseCase";
@@ -82,6 +83,7 @@ const validatePuzzleUsecase = new ValidatePuzzlesMoves(
   ProgressPuzzleRepo,
 );
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService);
+const getGameHistoryUseCase = new GetGameHistoryUseCase(GameRepo, UserRepo);
 const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, S3Service);
 
 const sendFriendRequestUseCase = new SendFriendRequestUseCase(FriendshipRepo, UserRepo);
@@ -110,6 +112,7 @@ export const gameController = new GameController(
   getLegalMovesUseCase,
   makeMoveUseCase,
   reviewGameUseCase,
+  getGameHistoryUseCase,
 );
 export const userPuzzleController = new UserPuzzleController(
   getpuzzleUseCase,

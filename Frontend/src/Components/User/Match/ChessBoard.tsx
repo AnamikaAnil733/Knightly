@@ -50,7 +50,9 @@ export function Chessboard({
 
   // --- Piece Tracking Logic ---
   const [pieces, setPieces] = useState<PositionedPiece[]>([]);
-  const [prevBoardRef, setPrevBoardRef] = useState<(ChessPiece | null)[][] | null>(null);
+  const [prevBoardRef, setPrevBoardRef] = useState<
+    (ChessPiece | null)[][] | null
+  >(null);
 
   useEffect(() => {
     if (!board || board.length === 0) return;

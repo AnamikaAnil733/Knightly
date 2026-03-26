@@ -29,6 +29,7 @@ export class MongoAuthMapper{
       rewards: doc.rewards,
       achievements: doc.achievements,
       subscriptionStart: doc.subscriptionStart,
+      ratingHistory: doc.ratingHistory,
     });
   }
 
@@ -53,6 +54,7 @@ export class MongoAuthMapper{
       achievements: auth.achievements,
       subscriptionStart: auth.subscriptionStart,
       avatarKey: auth.avatarKey ?? null,
+      ratingHistory: auth.ratingHistory,
     };
   }
 }

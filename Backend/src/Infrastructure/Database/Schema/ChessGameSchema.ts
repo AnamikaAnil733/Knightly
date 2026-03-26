@@ -23,6 +23,8 @@ export interface ChessGameSchemaType {
   halfMoveClock: number;
   timeControl: string;
   isRatingUpdated: boolean;
+  whiteRatingChange?: number;
+  blackRatingChange?: number;
   difficulty?: number; // Bot level 1-6
 }
 
@@ -89,6 +91,8 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
       type: Boolean,
       default: false,
     },
+    whiteRatingChange: { type: Number },
+    blackRatingChange: { type: Number },
     difficulty: {
       type: Number,
       min: 1,

@@ -40,10 +40,15 @@ export class UserRoutes {
     );
     this.router.get(USER_ROUTES.PROFILE, avatarController.getProfile);
     this.router.post(USER_ROUTES.CREATE_GAME, gameController.createGame);
+    this.router.get(
+      USER_ROUTES.GET_GAME_HISTORY,
+      gameController.getGameHistory,
+    );
     this.router.get(USER_ROUTES.GET_GAME, gameController.getGame);
     this.router.get(USER_ROUTES.LEGAL_MOVES, gameController.legalMove);
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);
     this.router.get(USER_ROUTES.REVIEW_GAME, gameController.reviewGame);
+
     this.router.get(
       USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY,
       userPuzzleController.getPuzzle,

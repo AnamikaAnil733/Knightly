@@ -13,9 +13,12 @@ export class ChessGame extends BaseEntity {
     private readonly _timeControl: string = "5+0",
     id?: string,
     private _isRatingUpdated: boolean = false,
+    private _whiteRatingChange?: number,
+    private _blackRatingChange?: number,
     private _difficulty?: number,
+    createdAt?: Date,
   ) {
-    super(id);
+    super(id, createdAt);
     if (this._status === "ACTIVE" || this._status === "CHECK") {
       const stateStatus = this._gameState.getStatus();
       if (stateStatus !== "ACTIVE") {
@@ -106,5 +109,25 @@ export class ChessGame extends BaseEntity {
 
   getDifficulty(): number | undefined {
     return this._difficulty;
+  }
+
+  getWhiteRatingChange(): number | undefined {
+    return this._whiteRatingChange;
+  }
+
+  setWhiteRatingChange(change: number): void {
+    this._whiteRatingChange = change;
+  }
+
+  getBlackRatingChange(): number | undefined {
+    return this._blackRatingChange;
+  }
+
+  setBlackRatingChange(change: number): void {
+    this._blackRatingChange = change;
+  }
+
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
   }
 }

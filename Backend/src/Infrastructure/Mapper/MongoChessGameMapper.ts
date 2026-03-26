@@ -35,7 +35,10 @@ export class MongoChessGameMapper {
       doc.timeControl || "5+0",
       doc._id.toString(),
       doc.isRatingUpdated ?? false,
+      doc.whiteRatingChange,
+      doc.blackRatingChange,
       doc.difficulty,
+      doc.createdAt,
     );
   }
 
@@ -64,6 +67,8 @@ export class MongoChessGameMapper {
       blackPlayerId: entity.getBlackPlayerId(),
       timeControl: entity.getTimeControl(),
       isRatingUpdated: entity.isRatingUpdated(),
+      whiteRatingChange: entity.getWhiteRatingChange(),
+      blackRatingChange: entity.getBlackRatingChange(),
       difficulty: entity.getDifficulty(),
     };
   }

@@ -9,6 +9,8 @@ import axios from "../../Service/Api/Axios/Useraxios";
 
 // Icons
 import { TrophyIcon, FlameIcon, ClockIcon, TargetIcon } from "lucide-react";
+import { GameHistoryList } from "./GameHistoryList";
+import { PerformanceChart } from "./PerformanceChart";
 
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = () => {
@@ -153,6 +155,11 @@ export function ProfileUser() {
             <p className="text-3xl font-bold">{item.value}</p>
           </div>
         ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto mt-12">
+        <PerformanceChart data={user.ratingHistory || []} />
+        <GameHistoryList />
       </div>
     </div>
   );
