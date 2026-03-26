@@ -9,6 +9,7 @@ export class PuzzleMapper{
       difficulty: puzzle.difficulty,
       moves: puzzle.moves,
       solutionLength: puzzle.solutionLength,
+      description: puzzle.description,
       isActive: puzzle.isActive,
       createdAt: puzzle.createdAt
         ? puzzle.createdAt.toISOString()

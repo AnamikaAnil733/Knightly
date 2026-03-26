@@ -79,6 +79,7 @@ export function PuzzleSolvingPage() {
 
   const [game, setGame] = useState(new Chess());
   const [puzzleId, setPuzzleId] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
   const [initialFen, setInitialFen] = useState("");
   const [selectedSquare, setSelectedSquare] = useState<{
     row: number;
@@ -110,6 +111,7 @@ export function PuzzleSolvingPage() {
       const newGame = new Chess(data.fen);
       setGame(newGame);
       setPuzzleId(data.id);
+      setDescription(data.description || null);
       setInitialFen(data.fen);
       setLoading(false);
     } catch (error) {
@@ -431,8 +433,8 @@ export function PuzzleSolvingPage() {
 
             <div className="mt-8">
               <p className="text-sm leading-relaxed text-[#C9CAD9]">
-                Find the tactical sequence that gains a material advantage or
-                leads to checkmate. Watch out for defensive resources!
+                {description ||
+                  "Find the tactical sequence that gains a material advantage or leads to checkmate. Watch out for defensive resources!"}
               </p>
             </div>
           </section>

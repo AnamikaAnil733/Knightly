@@ -6,6 +6,7 @@ export class EPuzzle extends BaseEntity {
   difficulty: PuzzleType;
   moves: string[];
   solutionLength: number;
+  description?: string;
   isActive: boolean;
   createdAt?: Date;
 
@@ -15,6 +16,7 @@ export class EPuzzle extends BaseEntity {
     difficulty: PuzzleType;
     moves: string[];
     solutionLength?: number;
+    description?: string;
     isActive?: boolean;
     createdAt?: Date;
   }) {
@@ -29,6 +31,7 @@ export class EPuzzle extends BaseEntity {
     this.fen = props.fen;
     this.difficulty = props.difficulty;
     this.moves = props.moves;
+    this.description = props.description;
     this.solutionLength = props.solutionLength ?? props.moves.length;
     this.isActive = props.isActive ?? true;
     this.createdAt = props.createdAt;

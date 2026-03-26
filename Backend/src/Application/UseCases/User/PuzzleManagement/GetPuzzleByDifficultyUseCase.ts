@@ -17,6 +17,7 @@ export class GetPuzzleDifficultyUsecase implements IGetPuzzleByDifficulty{
       id:puzzle.id!,
       fen:puzzle.fen,
       difficulty:puzzle.difficulty,
+      description:puzzle.description,
     };
 
   }

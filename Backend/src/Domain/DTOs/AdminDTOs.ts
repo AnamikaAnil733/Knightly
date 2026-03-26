@@ -71,6 +71,7 @@ export interface CreatePuzzleInputDTO{
     fen:string;
     difficulty:PuzzleType;
     moves:string[];
+    description?:string;
 }
 
 export interface UpdatePuzzleInputDTO{
@@ -78,6 +79,7 @@ export interface UpdatePuzzleInputDTO{
     fen?:string;
     difficulty?:PuzzleType;
     moves?:string[];
+    description?:string;
     isActive?:boolean;
 }
 
@@ -87,6 +89,7 @@ export interface PuzzleResponseDTO{
     difficulty: PuzzleType;
     moves: string[];
     solutionLength: number;
+    description?: string;
     isActive: boolean;
     createdAt: string;
 }

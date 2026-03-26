@@ -6,6 +6,7 @@ export interface PuzzleSchemaType{
     difficulty:PuzzleType;
     moves:string[];
     solutionLength:number;
+    description?:string;
     isActive:boolean;
 }
 
@@ -27,6 +28,10 @@ export const PuzzleSchema = new Schema<PuzzleSchemaType>(
     solutionLength:{
       type:Number,
       required:true,
+    },
+    description:{
+      type:String,
+      required:false,
     },
     isActive:{
       type:Boolean,
