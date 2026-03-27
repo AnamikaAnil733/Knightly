@@ -1,27 +1,27 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import SendFriendRequestUseCase from "../../../../Application/UseCases/User/FriendManagement/SendFriendRequestUseCase";
-import AcceptFriendRequestUseCase from "../../../../Application/UseCases/User/FriendManagement/AcceptFriendRequestUseCase";
-import GetFriendsListUseCase from "../../../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
-import SearchUsersUseCase from "../../../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
-import GetPendingRequestsUseCase from "../../../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
-import RejectFriendRequestUseCase from "../../../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
-import UnfriendUseCase from "../../../../Application/UseCases/User/FriendManagement/UnfriendUseCase";
-import BlockUserUseCase from "../../../../Application/UseCases/User/FriendManagement/BlockUserUseCase";
-import UnblockUserUseCase from "../../../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
+import { ISendFriendRequestUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/ISendFriendRequestUseCase";
+import { IAcceptFriendRequestUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IAcceptFriendRequestUseCase";
+import { IGetFriendsListUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IGetFriendsListUseCase";
+import { ISearchUsersUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/ISearchUsersUseCase";
+import { IGetPendingRequestsUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IGetPendingRequestsUseCase";
+import { IRejectFriendRequestUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IRejectFriendRequestUseCase";
+import { IUnfriendUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IUnfriendUseCase";
+import { IBlockUserUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IBlockUserUseCase";
+import { IUnblockUserUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IUnblockUserUseCase";
 
 
 export class FriendController {
   constructor(
-    private sendFriendRequestUseCase: SendFriendRequestUseCase,
-    private acceptFriendRequestUseCase: AcceptFriendRequestUseCase,
-    private getFriendsListUseCase: GetFriendsListUseCase,
-    private searchUsersUseCase: SearchUsersUseCase,
-    private getPendingRequestsUseCase: GetPendingRequestsUseCase,
-    private rejectFriendRequestUseCase: RejectFriendRequestUseCase,
-    private unfriendUseCase: UnfriendUseCase,
-    private blockUserUseCase: BlockUserUseCase,
-    private unblockUserUseCase: UnblockUserUseCase,
+    private sendFriendRequestUseCase: ISendFriendRequestUseCase,
+    private acceptFriendRequestUseCase: IAcceptFriendRequestUseCase,
+    private getFriendsListUseCase: IGetFriendsListUseCase,
+    private searchUsersUseCase: ISearchUsersUseCase,
+    private getPendingRequestsUseCase: IGetPendingRequestsUseCase,
+    private rejectFriendRequestUseCase: IRejectFriendRequestUseCase,
+    private unfriendUseCase: IUnfriendUseCase,
+    private blockUserUseCase: IBlockUserUseCase,
+    private unblockUserUseCase: IUnblockUserUseCase,
   ) {}
 
   searchUsers = async (req: Request, res: Response, next: NextFunction) => {
