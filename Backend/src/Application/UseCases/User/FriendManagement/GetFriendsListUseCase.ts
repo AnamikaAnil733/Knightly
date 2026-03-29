@@ -2,6 +2,7 @@ import { IFriendshipRepository } from "../../../../Domain/Interface/Repositories
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 import { IGetFriendsListUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/IGetFriendsListUseCase";
+import { FriendMapper } from "../../../Mapper/FriendMapper";
 import { FriendDTO } from "../../../../Domain/DTOs/UserDTOs";
 
 export default class GetFriendsListUseCase implements IGetFriendsListUseCase {
@@ -27,16 +28,10 @@ export default class GetFriendsListUseCase implements IGetFriendsListUseCase {
           ? await this.storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
           : null;
 
-        return {
-          id: user.id!,
-          displayname: user.displayname,
-          email: user.email,
-          avatarUrl,
-          status: data.status,
-        };
+        return FriendMapper.toFriendDTO(user, data.status, avatarUrl);
       }),
     );
 
-    return friends.filter((f) => f !== null);
+    return friends.filter((f) => f !== null) as FriendDTO[];
   }
 }

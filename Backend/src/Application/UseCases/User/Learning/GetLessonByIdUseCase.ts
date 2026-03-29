@@ -4,6 +4,8 @@ import { LessonDetailDTO } from "../../../../Domain/DTOs/LessonDTOs";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
+import { LessonMapper } from "../../../Mapper/LessonMapper";
+
 export default class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
@@ -14,16 +16,6 @@ export default class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, "Lesson not found.");
     }
 
-    return {
-      id: lesson.id!,
-      title: lesson.title,
-      category: lesson.category,
-      difficulty: lesson.difficulty,
-      content: lesson.content,
-      order: lesson.order,
-      fen: lesson.fen,
-      createdAt: lesson.createdAt,
-      updatedAt: lesson.updatedAt,
-    };
+    return LessonMapper.toDetailDTO(lesson);
   }
 }

@@ -6,6 +6,7 @@ import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBase
 import EAuth from "../../../../Domain/Entity/Auth";
 import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 import { TIME_CONTROLS } from "../../../../Domain/Chess/Types/GameFormat";
+import { GameMapper } from "../../../Mapper/GameMapper";
 
 export class GetGameUseCase implements IGetGameUseCase {
   constructor(
@@ -80,35 +81,6 @@ export class GetGameUseCase implements IGetGameUseCase {
       }
     }
 
-    return {
-      gameId: game.id!,
-      turn: gameState.getTurn(),
-      board: board.serialize(),
-      history: gameState.getHistory().map((move) => ({
-        from: {
-          row: move.from.row,
-          col: move.from.column,
-        },
-        to: {
-          row: move.to.row,
-          col: move.to.column,
-        },
-        piece: move.pieceType,
-        color: move.color,
-      })),
-
-      status: game.getStatus(),
-
-      clock: {
-        whiteTime: liveTimes.whiteTime,
-        blackTime: liveTimes.blackTime,
-        increment: clock.increment,
-        turn: clock.turn,
-      },
-      whitePlayer,
-      blackPlayer,
-      timeControl: game.getTimeControl(),
-      modeName,
-    };
+    return GameMapper.toGameOutputDTO(game, whitePlayer, blackPlayer, modeName);
   }
 }

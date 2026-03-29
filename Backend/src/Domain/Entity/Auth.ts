@@ -146,7 +146,7 @@ export default class EAuth {
     this._ratingHistory.push({
       rating: newRating,
       date: new Date(),
-      type: type,
+      type,
     });
   }
 

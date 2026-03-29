@@ -1,5 +1,6 @@
 import { EPuzzle } from "../../Domain/Entity/Puzzle";
 import { PuzzleResponseDTO } from "../../Domain/DTOs/AdminDTOs";
+import { UserPuzzleResponseDTO } from "../../Domain/DTOs/UserDTOs";
 
 export class PuzzleMapper{
   static toPuzzleResposeDTO(puzzle:EPuzzle):PuzzleResponseDTO{
@@ -17,4 +18,12 @@ export class PuzzleMapper{
     };
   }
 
+  static toUserPuzzleResponseDTO(puzzle: EPuzzle): UserPuzzleResponseDTO {
+    return {
+      id: puzzle.id!,
+      fen: puzzle.fen,
+      difficulty: puzzle.difficulty,
+      description: puzzle.description,
+    };
+  }
 }

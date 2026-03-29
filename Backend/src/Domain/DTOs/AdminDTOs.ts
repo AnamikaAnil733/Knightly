@@ -11,6 +11,7 @@ export interface BaseUserResponseDTO{
     createdAt?: Date;
     gamesPlayed: number;
     premium: boolean;
+    avatarUrl?: string | null;
     rating: {
         BULLET: number;
         BLITZ: number;

@@ -3,6 +3,8 @@ import { IGetLessonsUseCase } from "../../../../Domain/Interface/Usecases/User/L
 import { LessonSummaryDTO } from "../../../../Domain/DTOs/LessonDTOs";
 import { LessonCategory, LessonDifficulty } from "../../../../Domain/Types/LessonTypes";
 
+import { LessonMapper } from "../../../Mapper/LessonMapper";
+
 export default class GetLessonsUseCase implements IGetLessonsUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
@@ -11,12 +13,6 @@ export default class GetLessonsUseCase implements IGetLessonsUseCase {
 
     return lessons
       .sort((a, b) => a.order - b.order)
-      .map((lesson) => ({
-        id: lesson.id!,
-        title: lesson.title,
-        category: lesson.category,
-        difficulty: lesson.difficulty,
-        order: lesson.order,
-      }));
+      .map(LessonMapper.toSummaryDTO);
   }
 }

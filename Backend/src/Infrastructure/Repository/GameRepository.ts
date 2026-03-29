@@ -27,14 +27,14 @@ export class ChessGameRepository
       })
       .sort({ createdAt: -1 })
       .exec();
-    
+
     logger.info(`[Repository] Found ${docs.length} games`);
     return docs.map((doc) => {
       try {
         return this.mapper.toEntityFromDocument(doc);
       } catch (err: any) {
         logger.error(`[Repository] Error mapping game ${doc._id}:`, err);
-        // Rethrow or return a partially valid entity? 
+        // Rethrow or return a partially valid entity?
         // For debugging, let's throw with the game ID.
         throw new Error(`Corrupted game data for ${doc._id}: ${err.message}`);
       }

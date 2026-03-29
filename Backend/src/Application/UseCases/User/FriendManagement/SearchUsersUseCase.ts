@@ -1,6 +1,7 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
 import { ISearchUsersUseCase } from "../../../../Domain/Interface/Usecases/User/FriendManagement/ISearchUsersUseCase";
+import { FriendMapper } from "../../../Mapper/FriendMapper";
 import { SearchUserDTO } from "../../../../Domain/DTOs/UserDTOs";
 
 export default class SearchUsersUseCase implements ISearchUsersUseCase {
@@ -23,11 +24,7 @@ export default class SearchUsersUseCase implements ISearchUsersUseCase {
           ? await this.storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
           : null;
 
-        return {
-          id: user.id!,
-          displayname: user.displayname,
-          avatarUrl,
-        };
+        return FriendMapper.toSearchUserDTO(user, avatarUrl);
       }),
     );
   }

@@ -1,6 +1,7 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { GameHistoryDTO } from "../../../../Domain/DTOs/UserDTOs";
+import { GameMapper } from "../../../Mapper/GameMapper";
 
 export class GetGameHistoryUseCase {
   constructor(
@@ -48,24 +49,21 @@ export class GetGameHistoryUseCase {
           }
         }
 
-        history.push({
-          id: game.id!,
-          whitePlayer: {
-            id: whiteId || "bot",
-            displayname: whitePlayer?.displayname || "Bot",
-            avatarUrl: whitePlayer?.avatarKey || null,
-          },
-          blackPlayer: {
-            id: blackId || "bot",
-            displayname: blackPlayer?.displayname || "Bot",
-            avatarUrl: blackPlayer?.avatarKey || null,
-          },
-          status: game.getStatus(),
-          createdAt: game.getCreatedAt()?.toISOString() || new Date().toISOString(),
-          timeControl: game.getTimeControl(),
-          whiteRatingChange: game.getWhiteRatingChange(),
-          blackRatingChange: game.getBlackRatingChange(),
-        });
+        history.push(
+          GameMapper.toGameHistoryDTO(
+            game,
+            {
+              id: whiteId || "bot",
+              displayname: whitePlayer?.displayname || "Bot",
+              avatarUrl: whitePlayer?.avatarKey || null,
+            },
+            {
+              id: blackId || "bot",
+              displayname: blackPlayer?.displayname || "Bot",
+              avatarUrl: blackPlayer?.avatarKey || null,
+            },
+          ),
+        );
       } catch (gameError: any) {
         throw new Error(`Failed to process game ${game.id}: ${gameError.message}`);
       }
