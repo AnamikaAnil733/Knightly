@@ -13,28 +13,31 @@ export function Navbar() {
   const user = useSelector((state: RootState) => state.userAuth.user);
   const [pendingCount, setPendingCount] = useState(0);
 
-  useEffect(() => {
-    if (user) {
-        loadPendingCount();
-        
-        socket.on("receive_friend_request", () => {
-            setPendingCount(prev => prev + 1);
-        });
-    }
-
-    return () => {
-        socket.off("receive_friend_request");
-    };
-  }, [user]);
-
   const loadPendingCount = async () => {
     try {
-        const data = await getPendingRequests();
-        setPendingCount(data.requests?.length || 0);
+      const data = await getPendingRequests();
+      setPendingCount(data.requests?.length || 0);
     } catch (err) {
-        console.error("Failed to load pending count:", err);
+      console.error("Failed to load pending count:", err);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      const timer = setTimeout(() => {
+        loadPendingCount();
+      }, 0);
+
+      socket.on("receive_friend_request", () => {
+        setPendingCount((prev) => prev + 1);
+      });
+
+      return () => {
+        clearTimeout(timer);
+        socket.off("receive_friend_request");
+      };
+    }
+  }, [user]);
 
   function handleLogout() {
     localStorage.removeItem("userAccessToken");
@@ -83,9 +86,9 @@ export function Navbar() {
             <Users className="w-4 h-4 group-hover:scale-110 transition-transform" />
             Friends
             {pendingCount > 0 && (
-                <span className="absolute -top-2 -right-3 min-w-[18px] h-[18px] bg-[#EF476F] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 border-[#0A0F2C] animate-pulse">
-                    {pendingCount}
-                </span>
+              <span className="absolute -top-2 -right-3 min-w-[18px] h-[18px] bg-[#EF476F] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 border-[#0A0F2C] animate-pulse">
+                {pendingCount}
+              </span>
             )}
           </Link>
           <Link

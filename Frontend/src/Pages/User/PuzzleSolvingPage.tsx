@@ -106,10 +106,11 @@ export function PuzzleSolvingPage() {
 
   const loadNewPuzzle = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await fetchPuzzleByDifficulty(difficulty);
       setIsSolved(false);
       setIsWrong(false);
-      setLoading(true); // reset to true just in case, but after await
+      // Removed redundant setLoading(true)
       const newGame = new Chess(data.fen);
       setGame(newGame);
       setPuzzleId(data.id);
@@ -127,8 +128,11 @@ export function PuzzleSolvingPage() {
   }, [difficulty]);
 
   useEffect(() => {
-    loadNewPuzzle();
-  }, [difficulty]); // Only trigger when the difficulty string CHANGES from the URL
+    const timer = setTimeout(() => {
+      loadNewPuzzle();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [loadNewPuzzle]); // Only trigger when the difficulty string CHANGES from the URL
 
   const handleSquareClick = async (row: number, col: number) => {
     if (isSolved || loading) return;

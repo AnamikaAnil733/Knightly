@@ -13,7 +13,15 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         navigateFallback: "index.html",
-        navigateFallbackAllowlist: [/^\/user/, /^\/play/, /^\/leaderboard/, /^\/puzzles/, /^\/friends/, /^\/landing-page/, /^\/settings/],
+        navigateFallbackAllowlist: [
+          /^\/user/,
+          /^\/play/,
+          /^\/leaderboard/,
+          /^\/puzzles/,
+          /^\/friends/,
+          /^\/landing-page/,
+          /^\/settings/,
+        ],
       },
       manifest: {
         name: "Knightly",

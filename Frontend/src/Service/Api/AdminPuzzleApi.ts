@@ -42,7 +42,7 @@ export const syncLichessDailyPuzzleApi = async () => {
 };
 
 export const generatePuzzlesFromGameApi = async (gameId?: string) => {
-  const url = gameId 
+  const url = gameId
     ? `/admin/generate-puzzle-from-game/${gameId}`
     : "/admin/generate-ai-puzzles";
   const response = await axios.post(url);

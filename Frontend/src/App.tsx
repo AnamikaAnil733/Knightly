@@ -28,7 +28,8 @@ function App() {
         dispatch(setUser(userData));
         const userId = userData.id || userData._id;
         if (userId) {
-          (window as any).userId = userId;
+          (window as Window & typeof globalThis & { userId?: string }).userId =
+            userId;
           // Identify on initial load
           socket.emit("identify", userId);
           console.log(`[Auth] Identified as ${userId}`);
@@ -113,14 +114,15 @@ function App() {
       socket.off("receive_friend_request");
       socket.off("invite_rejected");
     };
-  }, []);
+  }, [navigate]);
 
   const handleAcceptInvite = () => {
     const currentUserId =
-      (user as any)?.id || (user as any)?._id || (window as any).userId;
+      user?.id ||
+      (window as Window & typeof globalThis & { userId?: string }).userId;
     if (inviteData && currentUserId) {
       console.log(
-        `[Invite] Accepting invite from ${inviteData.senderId} for user ${currentUserId}`
+        `[Invite] Accepting invite from ${inviteData.senderId} for user ${currentUserId}`,
       );
       socket.emit("accept_friend_invite", {
         senderId: inviteData.senderId,

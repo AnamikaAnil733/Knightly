@@ -113,9 +113,15 @@ export function PuzzleManagement() {
       await syncLichessDailyPuzzleApi();
       toast.success("Daily puzzle synced!", { id: loadingToast });
       fetchPuzzles();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorResponse = error as {
+        response?: { data?: { message?: string } };
+      };
       const message =
-        error.response?.data?.message || "Failed to sync Lichess puzzle";
+        error instanceof Error
+          ? errorResponse.response?.data?.message ||
+            "Failed to sync Lichess puzzle"
+          : "Failed to sync Lichess puzzle";
       toast.error(message, { id: loadingToast });
       console.error(error);
     }
@@ -130,10 +136,15 @@ export function PuzzleManagement() {
         id: loadingToast,
       });
       fetchPuzzles();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorResponse = error as {
+        response?: { data?: { message?: string } };
+      };
       const message =
-        error.response?.data?.message ||
-        "Failed to generate puzzles from games";
+        error instanceof Error
+          ? errorResponse.response?.data?.message ||
+            "Failed to generate puzzles from games"
+          : "Failed to generate puzzles from games";
       toast.error(message, { id: loadingToast });
       console.error(error);
     }

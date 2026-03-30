@@ -16,17 +16,27 @@ interface LessonDetail {
   fen?: string;
 }
 
-const DIFF_COLORS: Record<string, { label: string; color: string; bg: string }> = {
-  BEGINNER:     { label: "Beginner",     color: "#06D6A0", bg: "bg-[#06D6A0]/10" },
-  INTERMEDIATE: { label: "Intermediate", color: "#FFD166", bg: "bg-[#FFD166]/10" },
-  ADVANCED:     { label: "Advanced",     color: "#EF476F", bg: "bg-[#EF476F]/10" },
+const DIFF_COLORS: Record<
+  string,
+  { label: string; color: string; bg: string }
+> = {
+  BEGINNER: { label: "Beginner", color: "#06D6A0", bg: "bg-[#06D6A0]/10" },
+  INTERMEDIATE: {
+    label: "Intermediate",
+    color: "#FFD166",
+    bg: "bg-[#FFD166]/10",
+  },
+  ADVANCED: { label: "Advanced", color: "#EF476F", bg: "bg-[#EF476F]/10" },
 };
 
 const LessonPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [lesson, setLesson] = useState<LessonDetail | null>(null);
-  const [nextLesson, setNextLesson] = useState<{ id: string; title: string } | null>(null);
+  const [nextLesson, setNextLesson] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,10 +46,16 @@ const LessonPage: React.FC = () => {
         setLesson(data.lesson);
 
         // Find next lesson in same category
-        const siblingData = await getLessons({ category: data.lesson.category });
+        const siblingData = await getLessons({
+          category: data.lesson.category,
+        });
         const siblings: LessonDetail[] = siblingData.lessons || [];
-        const sorted = siblings.sort((a: LessonDetail, b: LessonDetail) => a.order - b.order);
-        const idx = sorted.findIndex((l: LessonDetail) => l.id === data.lesson.id);
+        const sorted = siblings.sort(
+          (a: LessonDetail, b: LessonDetail) => a.order - b.order,
+        );
+        const idx = sorted.findIndex(
+          (l: LessonDetail) => l.id === data.lesson.id,
+        );
         if (idx >= 0 && idx < sorted.length - 1) {
           const next = sorted[idx + 1];
           setNextLesson({ id: next.id, title: next.title });
@@ -111,7 +127,9 @@ const LessonPage: React.FC = () => {
           {/* FEN Board (read-only illustration) */}
           {lesson.fen && (
             <div className="bg-[#11193F] border border-white/5 rounded-2xl p-6 mb-8">
-              <p className="text-[#9ca3af] text-xs font-mono mb-4 text-center">Position: {lesson.fen}</p>
+              <p className="text-[#9ca3af] text-xs font-mono mb-4 text-center">
+                Position: {lesson.fen}
+              </p>
               <ChessboardPreview fen={lesson.fen} />
             </div>
           )}

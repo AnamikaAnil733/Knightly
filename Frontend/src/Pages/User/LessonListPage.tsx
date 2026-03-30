@@ -68,7 +68,9 @@ const LessonListPage: React.FC = () => {
             </div>
           ) : lessons.length === 0 ? (
             <div className="text-center py-20 bg-[#11193F]/30 rounded-2xl border border-dashed border-white/5">
-              <p className="text-[#9ca3af]">No lessons in this category yet. Check back soon!</p>
+              <p className="text-[#9ca3af]">
+                No lessons in this category yet. Check back soon!
+              </p>
             </div>
           ) : (
             <div className="space-y-3">

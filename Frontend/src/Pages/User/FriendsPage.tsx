@@ -12,6 +12,8 @@ import {
 } from "../../Service/Api/FriendApi";
 import toast from "react-hot-toast";
 import { socket } from "../../Service/Socket";
+import { IUser } from "../../Types/User";
+import { IPendingRequest } from "../../Types/Friend";
 
 import { RootState } from "../../Store/Store";
 import { useSelector } from "react-redux";
@@ -20,8 +22,8 @@ const FriendsPage: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.userAuth.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [pendingRequests, setPendingRequests] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<IUser[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<IPendingRequest[]>([]);
   const [activeTab, setActiveTab] = useState<"friends" | "pending">("friends");
 
   useEffect(() => {
@@ -80,8 +82,15 @@ const FriendsPage: React.FC = () => {
           senderName: localStorage.getItem("displayname") || "Someone",
         });
       }
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to send request");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to send request";
+      toast.error(errorMessage);
     }
   };
 
@@ -96,8 +105,15 @@ const FriendsPage: React.FC = () => {
       }
 
       loadPendingRequests();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to accept request");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to accept request";
+      toast.error(errorMessage);
     }
   };
 
@@ -107,8 +123,15 @@ const FriendsPage: React.FC = () => {
       toast.success("Friend request rejected");
 
       loadPendingRequests();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to reject request");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to reject request";
+      toast.error(errorMessage);
     }
   };
 
@@ -279,9 +302,7 @@ const FriendsPage: React.FC = () => {
                     </div>
                   </div>
                 )}
-                <FriendList
-                  userId={(currentUser as any)?.id || (currentUser as any)?._id}
-                />
+                <FriendList userId={currentUser?.id} />
               </div>
             </>
           ) : (

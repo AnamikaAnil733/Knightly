@@ -8,19 +8,20 @@ import {
 import { socket } from "../../../Service/Socket";
 import { User, Swords, UserPlus, UserMinus, Ban, Unlock } from "lucide-react";
 import toast from "react-hot-toast";
+import { IFriend } from "../../../Types/Friend";
 
 interface FriendListProps {
   userId?: string;
 }
 
 const FriendList: React.FC<FriendListProps> = ({ userId }) => {
-  const [friends, setFriends] = useState<any[]>([]);
+  const [friends, setFriends] = useState<IFriend[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchFriends();
 
-    socket.on("friend_offline", ({ recipientId: _ }) => {
+    socket.on("friend_offline", () => {
       toast.error("Friend is offline");
     });
 
@@ -49,8 +50,10 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
 
   const [selectedFormat, setSelectedFormat] = useState("5+0");
 
-  const inviteFriend = (friendId: string, senderId: string) => {
-    const finalSenderId = senderId || (window as any).userId;
+  const inviteFriend = (friendId: string, senderId: string | undefined) => {
+    const finalSenderId =
+      senderId ||
+      (window as Window & typeof globalThis & { userId?: string }).userId;
     if (!finalSenderId) {
       toast.error("Authentication error. Please refresh.");
       return;
@@ -70,8 +73,15 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
       toast.success("User unfriended");
       socket.emit("friendship_action", { targetUserId: friendId });
       fetchFriends();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to unfriend user");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to unfriend user";
+      toast.error(errorMessage);
     }
   };
 
@@ -81,8 +91,15 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
       toast.success("User blocked");
       socket.emit("friendship_action", { targetUserId: friendId });
       fetchFriends();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to block user");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to block user";
+      toast.error(errorMessage);
     }
   };
 
@@ -92,8 +109,15 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
       toast.success("User unblocked");
       socket.emit("friendship_action", { targetUserId: friendId });
       fetchFriends();
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to unblock user");
+    } catch (err: unknown) {
+      const errorResponse = err as {
+        response?: { data?: { message?: string } };
+      };
+      const errorMessage =
+        err instanceof Error
+          ? errorResponse.response?.data?.message || err.message
+          : "Failed to unblock user";
+      toast.error(errorMessage);
     }
   };
 
@@ -224,7 +248,16 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() =>
-                      inviteFriend(friend.id, userId || (window as any).userId)
+                      inviteFriend(
+                        friend.id,
+                        userId ||
+                          (
+                            window as Window &
+                              typeof globalThis & {
+                                userId?: string;
+                              }
+                          ).userId,
+                      )
                     }
                     className="p-2 rounded-lg bg-[#FFD166]/10 text-[#FFD166] hover:bg-[#FFD166] hover:text-[#0A0F2C] transition-all flex items-center gap-2 text-sm font-bold"
                   >

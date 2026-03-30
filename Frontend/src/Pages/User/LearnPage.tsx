@@ -2,20 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
-import {
-  BookOpen,
-  Sword,
-  Crown,
-  Layers,
-  Flag,
-} from "lucide-react";
-
+import { BookOpen, Sword, Crown, Layers, Flag } from "lucide-react";
 
 const CATEGORIES = [
   {
     id: "GETTING_STARTED",
     label: "Getting Started",
-    description: "Learn the rules: piece movements, board setup, check & checkmate.",
+    description:
+      "Learn the rules: piece movements, board setup, check & checkmate.",
     icon: Flag,
     color: "#06D6A0",
     bg: "from-[#06D6A0]/20 to-[#06D6A0]/5",
@@ -25,7 +19,8 @@ const CATEGORIES = [
   {
     id: "TACTICS",
     label: "Tactics",
-    description: "Forks, pins, skewers, discovered attacks, and back-rank mates.",
+    description:
+      "Forks, pins, skewers, discovered attacks, and back-rank mates.",
     icon: Sword,
     color: "#EF476F",
     bg: "from-[#EF476F]/20 to-[#EF476F]/5",
@@ -35,7 +30,8 @@ const CATEGORIES = [
   {
     id: "OPENINGS",
     label: "Openings",
-    description: "Master key openings: Ruy Lopez, Sicilian, Italian, King's Indian.",
+    description:
+      "Master key openings: Ruy Lopez, Sicilian, Italian, King's Indian.",
     icon: BookOpen,
     color: "#FFD166",
     bg: "from-[#FFD166]/20 to-[#FFD166]/5",
@@ -45,7 +41,8 @@ const CATEGORIES = [
   {
     id: "STRATEGY",
     label: "Strategy",
-    description: "Understand pawn structure, piece activity, center control & outposts.",
+    description:
+      "Understand pawn structure, piece activity, center control & outposts.",
     icon: Layers,
     color: "#118AB2",
     bg: "from-[#118AB2]/20 to-[#118AB2]/5",
@@ -85,7 +82,8 @@ const LearnPage: React.FC = () => {
               </span>
             </h1>
             <p className="text-[#9ca3af] text-lg max-w-2xl mx-auto">
-              From your first move to advanced endgames, Knightly Academy covers every aspect of chess — interactively.
+              From your first move to advanced endgames, Knightly Academy covers
+              every aspect of chess — interactively.
             </p>
           </div>
 
