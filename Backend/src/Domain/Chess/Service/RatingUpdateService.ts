@@ -63,6 +63,12 @@ export class RatingUpdateService {
     whitePlayer.updateRating(gameType, newWhite);
     blackPlayer.updateRating(gameType, newBlack);
 
+    const whiteDelta = newWhite - whiteRating;
+    const blackDelta = newBlack - blackRating;
+
+    game.setWhiteRatingChange(whiteDelta);
+    game.setBlackRatingChange(blackDelta);
+
     console.log(`Updating ${gameType} ratings: White ${whiteRating}->${newWhite}, Black ${blackRating}->${newBlack}`);
 
     // Update games played/win stats

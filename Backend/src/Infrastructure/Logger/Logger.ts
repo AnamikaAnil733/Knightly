@@ -18,7 +18,7 @@ export const logger = pino({
         options: {
           file: "./logs/app.log",
           size: "10m",
-          count: 5,
+          count: process.env.COUNT,
           mkdir: true,
         },
         level: "info",

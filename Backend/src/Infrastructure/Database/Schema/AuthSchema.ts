@@ -19,6 +19,11 @@ export interface AuthSchemaType{
       RAPID: number;
       CLASSICAL: number;
     };
+    ratingHistory: {
+      rating: number;
+      date: Date;
+      type: string;
+    }[];
     premium: boolean;
     longestStreak: number;
     currentStreak: number;
@@ -69,6 +74,17 @@ export const authSchema = new Schema<AuthSchemaType>(
         CLASSICAL: { type: Number, default: 300 },
       },
       default: { BULLET: 300, BLITZ: 300, RAPID: 300, CLASSICAL: 300 },
+      _id: false,
+    },
+    ratingHistory: {
+      type: [
+        {
+          rating: { type: Number, required: true },
+          date: { type: Date, required: true, default: Date.now },
+          type: { type: String, required: true },
+        },
+      ],
+      default: [],
       _id: false,
     },
     premium: { type: Boolean, default: false },

@@ -51,12 +51,13 @@ export class UserPuzzleController {
       const userId = (req as any).user?.id;
       if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
 
-      const { puzzleId, move } = validationResult.data;
+      const { puzzleId, move, moveIndex } = validationResult.data;
 
       const result = await this._validateMoves.execute({
         userId,
         puzzleId,
         move,
+        moveIndex,
       });
 
       return res.status(200).json(result);

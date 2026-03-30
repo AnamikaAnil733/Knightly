@@ -8,6 +8,7 @@ export interface PuzzleFormData {
   fen: string;
   difficulty: "Easy" | "Medium" | "Hard" | "Expert";
   moves: string[];
+  description?: string;
 }
 
 function validatePuzzle(fen: string, moves: string[]) {
@@ -61,6 +62,7 @@ export function PuzzleModal({
     fen: initialData?.fen ?? "",
     difficulty: initialData?.difficulty ?? "Medium",
     moves: initialData?.moves ?? [],
+    description: initialData?.description ?? "",
   }));
 
   // Real-time validation — let React Compiler handle memoization automatically
@@ -177,6 +179,25 @@ export function PuzzleModal({
                   <option value="Hard">Hard</option>
                   <option value="Expert">Expert</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#C9CAD9] mb-1">
+                  Goal / Description
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                  rows={3}
+                  className="w-full bg-[#0A0F2C] border border-[#3A6FF7]/50 rounded-lg p-2.5 
+                             text-white focus:ring-[#6B2EFF] focus:border-[#6B2EFF] outline-none transition-colors"
+                  placeholder="e.g. Checkmate in 2 moves"
+                />
               </div>
 
               <div>

@@ -5,6 +5,7 @@ import {
   GetAllUsersInputDto,
   GetAllUsersOutputDTO,
 } from "../../../../Domain/DTOs/AdminDTOs";
+import { UserMapper } from "../../../Mapper/UserManagementMapper";
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(
@@ -25,24 +26,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
     ]);
 
     return {
-      users: users.map((user) => ({
-        id: user.id!,
-        displayname: user.displayname,
-        email: user.email,
-        role: user.role,
-        isBlocked: user.isBlocked,
-        isNewUser: user.isNewUser,
-        createdAt: user.createdAt,
-        gamesPlayed: user.gamesPlayed,
-        premium: user.premium,
-        rating: user.rating.getAll(),
-        gamesWin: user.gamesWin,
-        longestStreak: user.longestStreak,
-        currentStreak: user.currentStreak,
-        achievements: user.achievements,
-        rewards: user.rewards,
-        avatarUrl: user.avatarKey,
-      })),
+      users: users.map(UserMapper.toBaseUserResponseDTO),
       total,
       page,
       totalPages: Math.ceil(total / limit),

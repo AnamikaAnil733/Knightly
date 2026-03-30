@@ -33,6 +33,9 @@ export function PuzzleTable({
               <th className="px-4 py-3 text-left text-sm font-medium text-[#C9CAD9]">
                 Solution Length
               </th>
+              <th className="px-4 py-3 text-left text-sm font-medium text-[#C9CAD9]">
+                Solution
+              </th>
               <th className="px-4 py-3 text-right text-sm font-medium text-[#C9CAD9]">
                 Actions
               </th>
@@ -64,6 +67,11 @@ export function PuzzleTable({
                 </td>
                 <td className="px-4 py-3 text-sm text-[#C9CAD9]">
                   {puzzle.solutionLength} moves
+                </td>
+                <td className="px-4 py-3 text-sm text-[#C9CAD9] font-mono">
+                  {puzzle.moves.join(" ").length > 20
+                    ? puzzle.moves.join(" ").substring(0, 20) + "..."
+                    : puzzle.moves.join(" ")}
                 </td>
                 <td className="px-4 py-3 text-sm text-right">
                   <div className="flex justify-end gap-2">

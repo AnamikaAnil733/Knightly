@@ -59,6 +59,10 @@ export class EditPuzzleUseCase implements IEditPuzzleUsecase {
       puzzle.updateMoves(input.moves);
     }
 
+    if (input.description !== undefined) {
+      puzzle.description = input.description;
+    }
+
     if (input.isActive !== undefined) {
       puzzle.isActive = input.isActive;
     }

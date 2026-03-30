@@ -5,9 +5,14 @@ export const fetchPuzzleByDifficulty = async (difficulty: string) => {
   return response.data;
 };
 
-export const validatePuzzleMove = async (puzzleId: string, move: string) => {
+export const validatePuzzleMove = async (
+  puzzleId: string,
+  move: string,
+  moveIndex: number,
+) => {
   const response = await axios.post(`/user/puzzles/${puzzleId}/validate`, {
     move,
+    moveIndex,
   });
   return response.data;
 };

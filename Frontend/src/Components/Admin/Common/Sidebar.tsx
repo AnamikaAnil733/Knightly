@@ -78,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <GraduationCapIcon size={20} />,
       name: "Learning Lessons",
-      path: "/learning",
+      path: "/admin/lessons",
     },
     {
       icon: <GamepadIcon size={20} />,

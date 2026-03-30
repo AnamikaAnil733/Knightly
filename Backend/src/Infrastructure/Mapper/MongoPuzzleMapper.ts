@@ -10,6 +10,7 @@ export class MongoPuzzleMapper {
       difficulty: doc.difficulty,
       moves: doc.moves,
       solutionLength: doc.solutionLength,
+      description: doc.description,
       isActive: doc.isActive,
     });
   }
@@ -20,6 +21,7 @@ export class MongoPuzzleMapper {
       difficulty: puzzle.difficulty,
       moves: puzzle.moves,
       solutionLength: puzzle.solutionLength,
+      description: puzzle.description,
       isActive: puzzle.isActive,
     };
   }

@@ -1,15 +1,40 @@
-import { CrownIcon } from "lucide-react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { CrownIcon, Users } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../../Store/Slices/Auth/UserAuthSlice";
 import { RootState } from "../../../Store/Store";
+import { getPendingRequests } from "../../../Service/Api/FriendApi";
+import { socket } from "../../../Service/Socket";
 
 export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    if (user) {
+        loadPendingCount();
+        
+        socket.on("receive_friend_request", () => {
+            setPendingCount(prev => prev + 1);
+        });
+    }
+
+    return () => {
+        socket.off("receive_friend_request");
+    };
+  }, [user]);
+
+  const loadPendingCount = async () => {
+    try {
+        const data = await getPendingRequests();
+        setPendingCount(data.requests?.length || 0);
+    } catch (err) {
+        console.error("Failed to load pending count:", err);
+    }
+  };
 
   function handleLogout() {
     localStorage.removeItem("userAccessToken");
@@ -52,10 +77,28 @@ export function Navbar() {
             Leaderboard
           </a>
           <Link
+            to="/friends"
+            className="text-white hover:text-[#FFD166] transition-colors flex items-center gap-2 relative group"
+          >
+            <Users className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            Friends
+            {pendingCount > 0 && (
+                <span className="absolute -top-2 -right-3 min-w-[18px] h-[18px] bg-[#EF476F] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 border-2 border-[#0A0F2C] animate-pulse">
+                    {pendingCount}
+                </span>
+            )}
+          </Link>
+          <Link
             to="/puzzles"
             className="text-white hover:text-[#FFD166] transition-colors"
           >
             Puzzles
+          </Link>
+          <Link
+            to="/learn"
+            className="text-white hover:text-[#FFD166] transition-colors"
+          >
+            Learn
           </Link>
           <a
             href="#"

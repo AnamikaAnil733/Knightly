@@ -19,6 +19,11 @@ export interface IUser {
   currentStreak: number;
   rewards: string[];
   achievements: string[];
+  ratingHistory: {
+    rating: number;
+    date: string;
+    type: string;
+  }[];
 
   // Avatar
   avatarUrl?: string | null;

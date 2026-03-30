@@ -39,6 +39,8 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       config.name,
       undefined,
       false,
+      undefined, // whiteRatingChange
+      undefined, // blackRatingChange
       difficulty,
     );
 

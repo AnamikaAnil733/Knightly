@@ -39,6 +39,7 @@ export class CreatePuzzleUseCase implements ICreatePuzzleUseCase {
       fen: input.fen,
       difficulty: input.difficulty,
       moves: input.moves,
+      description: input.description,
     });
 
     const createPuzzle = await this._puzzleRepository.create(Puzzle);

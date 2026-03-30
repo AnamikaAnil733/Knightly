@@ -11,6 +11,7 @@ import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 
 export class SocketHandler {
   private rooms = new Map<string, { white?: string; black?: string }>();
+  private userToSocket = new Map<string, string>();
 
   constructor(
     private readonly _io: Server,
@@ -78,6 +79,11 @@ export class SocketHandler {
   public initialize() {
     this._io.on("connection", (socket: Socket) => {
       console.log("socket connected", socket.id);
+
+      socket.on("identify", (userId: string) => {
+        this.userToSocket.set(userId, socket.id);
+        console.log(`User ${userId} identified with socket ${socket.id}`);
+      });
 
       socket.on("checkTimeout", async (gameId: string) => {
         try {
@@ -328,6 +334,91 @@ export class SocketHandler {
       });
 
 
+      socket.on("invite_friend", ({ recipientId, senderId, senderName, gameFormat = "5+0" }) => {
+        const recipientSocketId = this.userToSocket.get(recipientId);
+        if (recipientSocketId) {
+          this._io.to(recipientSocketId).emit("receive_friend_invite", {
+            senderId,
+            senderName: senderName || "A friend",
+            gameFormat,
+          });
+          console.log(`Invite sent from ${senderId} to ${recipientId}`);
+        } else {
+          socket.emit("friend_offline", { recipientId });
+        }
+      });
+
+      socket.on("accept_friend_invite", async ({ senderId, recipientId, gameFormat = "5+0" }) => {
+        try {
+          const senderSocketId = this.userToSocket.get(senderId);
+          if (!senderSocketId) {
+            socket.emit("invite_failed", "Sender is offline");
+            return;
+          }
+
+          const { gameId } = await this._createGameUseCase.execute(senderId, recipientId, gameFormat);
+
+          this.rooms.set(gameId, {
+            white: senderSocketId,
+            black: socket.id,
+          });
+
+          const senderSocket = this._io.sockets.sockets.get(senderSocketId);
+          if (senderSocket) {
+            senderSocket.join(gameId);
+            senderSocket.emit("matchFound", {
+              gameId,
+              role: "WHITE",
+            });
+            console.log(`[Friend Match] Emitted matchFound to sender ${senderId} (Socket: ${senderSocketId})`);
+          } else {
+            console.warn(`[Friend Match] Could not find socket for sender ${senderId} even though ID was resolved`);
+          }
+
+          socket.join(gameId);
+          socket.emit("matchFound", {
+            gameId,
+            role: "BLACK",
+          });
+
+          console.log(`[Friend Match] Emitted matchFound to recipient ${recipientId} (Socket: ${socket.id})`);
+          console.log(`[Friend Match] Created game: ${gameId}`);
+        } catch (error) {
+          console.error("Error accepting friend invite:", error);
+        }
+      });
+
+      socket.on("reject_friend_invite", ({ senderId }) => {
+        const senderSocketId = this.userToSocket.get(senderId);
+        if (senderSocketId) {
+          this._io.to(senderSocketId).emit("invite_rejected");
+        }
+      });
+
+      socket.on("send_friend_request", ({ recipientId, senderName }) => {
+        const recipientSocketId = this.userToSocket.get(recipientId);
+        if (recipientSocketId) {
+          this._io.to(recipientSocketId).emit("receive_friend_request", { senderName });
+        }
+      });
+
+      socket.on("accept_friend_request", ({ requesterId }) => {
+        const requesterSocketId = this.userToSocket.get(requesterId);
+        if (requesterSocketId) {
+          this._io.to(requesterSocketId).emit("friendship_changed");
+        }
+        // Also fire it back to the acceptor so their FriendList re-fetches
+        socket.emit("friendship_changed");
+      });
+
+      socket.on("friendship_action", ({ targetUserId }) => {
+        const targetSocketId = this.userToSocket.get(targetUserId);
+        if (targetSocketId) {
+          this._io.to(targetSocketId).emit("friendship_changed");
+        }
+        socket.emit("friendship_changed");
+      });
+
       socket.on("rematchrequest", async (gameId: string) => {
         try {
           const game = await this._gameRepo.findById(gameId);
@@ -521,6 +612,13 @@ export class SocketHandler {
             room.black = undefined;
           }
         }
+        for (const [userId, sId] of this.userToSocket.entries()) {
+          if (sId === socket.id) {
+            this.userToSocket.delete(userId);
+            break;
+          }
+        }
+
         console.log("Socket disconnected", socket.id);
       });
     });

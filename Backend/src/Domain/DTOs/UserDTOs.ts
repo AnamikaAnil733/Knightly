@@ -142,6 +142,7 @@ export interface UserPuzzleResponseDTO {
     id: string;
     fen: string;
     difficulty: PuzzleType;
+    description?: string;
   }
 
 
@@ -152,3 +153,48 @@ export interface LeaderBoardResponse {
   avatarKey: string;
   rating: number;
 }
+
+
+//------FriendManagementDTOs-----
+
+export interface FriendDTO {
+  id: string;
+  displayname: string;
+  email: string;
+  avatarUrl: string | null;
+  status?: string;
+}
+
+export interface PendingRequestDTO {
+  id: string;
+  displayname: string;
+  avatarUrl: string | null;
+  requestedAt: Date;
+}
+
+export interface SearchUserDTO {
+  id: string;
+  displayname: string;
+  avatarUrl: string | null;
+}
+
+//------GameHistoryDTO-----
+export interface GameHistoryDTO {
+  id: string;
+  whitePlayer: {
+    id: string;
+    displayname: string;
+    avatarUrl: string | null;
+  };
+  blackPlayer: {
+    id: string;
+    displayname: string;
+    avatarUrl: string | null;
+  };
+  status: string;
+  createdAt: string;
+  timeControl: string;
+  whiteRatingChange?: number;
+  blackRatingChange?: number;
+}
+

@@ -79,6 +79,7 @@ export function PuzzleSolvingPage() {
 
   const [game, setGame] = useState(new Chess());
   const [puzzleId, setPuzzleId] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
   const [initialFen, setInitialFen] = useState("");
   const [selectedSquare, setSelectedSquare] = useState<{
     row: number;
@@ -87,6 +88,8 @@ export function PuzzleSolvingPage() {
   const [isSolved, setIsSolved] = useState(false);
   const [isWrong, setIsWrong] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [moveIndex, setMoveIndex] = useState(0);
+  const [playerSide, setPlayerSide] = useState<"white" | "black">("white");
 
   const board = useMemo(() => {
     return game.board().map((row) =>
@@ -110,7 +113,10 @@ export function PuzzleSolvingPage() {
       const newGame = new Chess(data.fen);
       setGame(newGame);
       setPuzzleId(data.id);
+      setDescription(data.description || null);
       setInitialFen(data.fen);
+      setPlayerSide(newGame.turn() === "w" ? "white" : "black");
+      setMoveIndex(0);
       setLoading(false);
     } catch (error) {
       const errorMessage =
@@ -121,11 +127,8 @@ export function PuzzleSolvingPage() {
   }, [difficulty]);
 
   useEffect(() => {
-    const init = async () => {
-      await loadNewPuzzle();
-    };
-    init();
-  }, [loadNewPuzzle]);
+    loadNewPuzzle();
+  }, [difficulty]); // Only trigger when the difficulty string CHANGES from the URL
 
   const handleSquareClick = async (row: number, col: number) => {
     if (isSolved || loading) return;
@@ -157,7 +160,11 @@ export function PuzzleSolvingPage() {
           setSelectedSquare(null);
 
           if (puzzleId) {
-            const result = await validatePuzzleMove(puzzleId, moveAttempt.san);
+            const result = await validatePuzzleMove(
+              puzzleId,
+              moveAttempt.san,
+              moveIndex,
+            );
 
             if (result.correct) {
               setIsWrong(false);
@@ -167,11 +174,13 @@ export function PuzzleSolvingPage() {
                   const updatedGame = new Chess(fenAfterMove);
                   updatedGame.move(result.nextMove);
                   setGame(new Chess(updatedGame.fen()));
+                  setMoveIndex((prev) => prev + 2); // User + Engine
                   if (result.solved) {
                     setIsSolved(true);
                   }
                 }, 500);
               } else if (result.solved) {
+                setMoveIndex((prev) => prev + 1); // User only (last move)
                 setIsSolved(true);
               }
             } else {
@@ -207,6 +216,7 @@ export function PuzzleSolvingPage() {
     setGame(new Chess(initialFen));
     setIsSolved(false);
     setIsWrong(false);
+    setMoveIndex(0);
     setSelectedSquare(null);
   };
 
@@ -357,7 +367,7 @@ export function PuzzleSolvingPage() {
                   onSquareClick={handleSquareClick}
                   selectedSquare={selectedSquare}
                   legalMoves={legalMoves}
-                  orientation="white"
+                  orientation={playerSide}
                 />
               )}
             </div>
@@ -431,8 +441,8 @@ export function PuzzleSolvingPage() {
 
             <div className="mt-8">
               <p className="text-sm leading-relaxed text-[#C9CAD9]">
-                Find the tactical sequence that gains a material advantage or
-                leads to checkmate. Watch out for defensive resources!
+                {description ||
+                  "Find the tactical sequence that gains a material advantage or leads to checkmate. Watch out for defensive resources!"}
               </p>
             </div>
           </section>

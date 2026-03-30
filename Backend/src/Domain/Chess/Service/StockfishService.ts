@@ -111,8 +111,8 @@ export class StockfishService{
 
         const timeoutId = setTimeout(() => {
           analyzerProcess.stdout?.removeListener("data", listener);
-          rej(new Error("Stockfish analysis timeout"));
-        }, 15000); // 15 second timeout per move
+          rej(new Error(`Stockfish analysis timeout for moves: ${movesStr}`));
+        }, 15000);
 
         const listener = (data: Buffer) => {
           const output = data.toString();
@@ -151,7 +151,25 @@ export class StockfishService{
         analyzerProcess.stdin?.write(`go depth ${depth}\n`);
       });
 
+      // Initialization helper
+      const waitForReady = () => new Promise<void>((res, rej) => {
+        const timeout = setTimeout(() => rej(new Error("Stockfish ready timeout")), 10000);
+        const listener = (data: Buffer) => {
+          if (data.toString().includes("readyok")) {
+            clearTimeout(timeout);
+            analyzerProcess.stdout?.removeListener("data", listener);
+            res();
+          }
+        };
+        analyzerProcess.stdout?.on("data", listener);
+        analyzerProcess.stdin?.write("isready\n");
+      });
+
       try {
+        analyzerProcess.stdin?.write("uci\n");
+        // No need to wait for uciok, just isready -> readyok is enough for initialization
+        await waitForReady();
+
         const startEval = await evaluatePosition("");
         evaluations.push(startEval);
 

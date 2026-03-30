@@ -14,6 +14,7 @@ import {
   ReviewGameSchema,
 } from "../../../Validators/UserValidator";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
+import { GetGameHistoryUseCase } from "../../../../Application/UseCases/User/GameManagement/GetGameHistoryUseCase";
 
 export class GameController {
   constructor(
@@ -22,6 +23,7 @@ export class GameController {
     private readonly _getLegalMovesUseCase: IGetLegalMovesUseCase,
     private readonly _makeMoveUseCase: IMakeMoveUseCase,
     private readonly _reviewGameUseCase: IReviewGameUseCase,
+    private readonly _getGameHistoryUseCase: GetGameHistoryUseCase,
   ) {}
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
@@ -133,6 +135,23 @@ export class GameController {
 
       const analysis = await this._reviewGameUseCase.execute(gameId);
       res.status(HttpStatusCodes.OK).json({ success: true, analysis });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getGameHistory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        throw new CustomError(
+          HttpStatusCodes.UNAUTHORIZED,
+          MESSAGES.UNAUTHORIZED,
+        );
+      }
+
+      const history = await this._getGameHistoryUseCase.execute(userId);
+      res.status(HttpStatusCodes.OK).json({ success: true, data: history });
     } catch (error) {
       next(error);
     }

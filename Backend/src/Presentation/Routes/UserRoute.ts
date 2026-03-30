@@ -6,7 +6,10 @@ import {
   gameController,
   userPuzzleController,
   leaderBoardController,
+  friendController,
 } from "../../Infrastructure/Composition/UserComposition";
+import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
+
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
@@ -37,10 +40,15 @@ export class UserRoutes {
     );
     this.router.get(USER_ROUTES.PROFILE, avatarController.getProfile);
     this.router.post(USER_ROUTES.CREATE_GAME, gameController.createGame);
+    this.router.get(
+      USER_ROUTES.GET_GAME_HISTORY,
+      gameController.getGameHistory,
+    );
     this.router.get(USER_ROUTES.GET_GAME, gameController.getGame);
     this.router.get(USER_ROUTES.LEGAL_MOVES, gameController.legalMove);
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);
     this.router.get(USER_ROUTES.REVIEW_GAME, gameController.reviewGame);
+
     this.router.get(
       USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY,
       userPuzzleController.getPuzzle,
@@ -53,5 +61,41 @@ export class UserRoutes {
       USER_ROUTES.LEADERBOARD,
       leaderBoardController.getLeaderBoard,
     );
+
+    // Friend Routes
+    this.router.post(
+      USER_ROUTES.FRIENDS.SEND_REQUEST,
+      friendController.sendRequest,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.ACCEPT_REQUEST,
+      friendController.acceptRequest,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.REJECT_REQUEST,
+      friendController.rejectRequest,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.UNFRIEND,
+      friendController.unfriend,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.BLOCK,
+      friendController.blockUser,
+    );
+    this.router.post(
+      USER_ROUTES.FRIENDS.UNBLOCK,
+      friendController.unblockUser,
+    );
+    this.router.get(USER_ROUTES.FRIENDS.LIST, friendController.getFriends);
+    this.router.get(USER_ROUTES.FRIENDS.SEARCH, friendController.searchUsers);
+    this.router.get(
+      USER_ROUTES.FRIENDS.PENDING_REQUESTS,
+      friendController.getPendingRequests,
+    );
+
+    // Learning routes
+    this.router.get("/learn", lessonController.getLessons);
+    this.router.get("/learn/:id", lessonController.getLessonById);
   }
 }

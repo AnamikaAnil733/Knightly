@@ -13,12 +13,18 @@ export class ChessGame extends BaseEntity {
     private readonly _timeControl: string = "5+0",
     id?: string,
     private _isRatingUpdated: boolean = false,
+    private _whiteRatingChange?: number,
+    private _blackRatingChange?: number,
     private _difficulty?: number,
+    createdAt?: Date,
   ) {
-    super(id);
+    super(id, createdAt);
     if (this._status === "ACTIVE" || this._status === "CHECK") {
       const stateStatus = this._gameState.getStatus();
-      if (stateStatus !== "ACTIVE") {
+      if (stateStatus !== "ACTIVE" && stateStatus !== "CHECK") {
+        this._status = stateStatus;
+        this.clock.stop();
+      } else {
         this._status = stateStatus;
       }
     }
@@ -38,6 +44,9 @@ export class ChessGame extends BaseEntity {
 
   statusFromGameState(): void {
     this._status = this._gameState.getStatus();
+    if (this._status !== "ACTIVE" && this._status !== "CHECK") {
+      this.clock.stop();
+    }
   }
 
   updateClock(now: number) {
@@ -51,10 +60,10 @@ export class ChessGame extends BaseEntity {
 
     if (timeoutWinner === "WHITE") {
       this._status = "BLACK_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
     } else if (timeoutWinner === "BLACK") {
       this._status = "WHITE_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
     }
   }
 
@@ -67,13 +76,13 @@ export class ChessGame extends BaseEntity {
 
     if (liveTimes.whiteTime <= 0) {
       this._status = "WHITE_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
       return true;
     }
 
     if (liveTimes.blackTime <= 0) {
       this._status = "BLACK_TIMEOUT";
-      this.clock.stop();
+      this.clock.sync(now);
       return true;
     }
 
@@ -106,5 +115,25 @@ export class ChessGame extends BaseEntity {
 
   getDifficulty(): number | undefined {
     return this._difficulty;
+  }
+
+  getWhiteRatingChange(): number | undefined {
+    return this._whiteRatingChange;
+  }
+
+  setWhiteRatingChange(change: number): void {
+    this._whiteRatingChange = change;
+  }
+
+  getBlackRatingChange(): number | undefined {
+    return this._blackRatingChange;
+  }
+
+  setBlackRatingChange(change: number): void {
+    this._blackRatingChange = change;
+  }
+
+  getCreatedAt(): Date | undefined {
+    return this.createdAt;
   }
 }

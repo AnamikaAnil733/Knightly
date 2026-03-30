@@ -10,6 +10,11 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "pwa-icons/*"],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+        navigateFallback: "index.html",
+        navigateFallbackAllowlist: [/^\/user/, /^\/play/, /^\/leaderboard/, /^\/puzzles/, /^\/friends/, /^\/landing-page/, /^\/settings/],
+      },
       manifest: {
         name: "Knightly",
         short_name: "Knightly",

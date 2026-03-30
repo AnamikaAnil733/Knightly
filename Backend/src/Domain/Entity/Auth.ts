@@ -21,6 +21,7 @@ export default class EAuth {
   private _rewards: string[];
   private _achievements: string[];
   private _subscriptionStart?: Date;
+  private _ratingHistory: { rating: number; date: Date; type: string }[];
 
 
   private _createdAt: Date;
@@ -60,6 +61,7 @@ export default class EAuth {
 
         createdAt?: Date;
         updatedAt?: Date;
+        ratingHistory?: { rating: number; date: Date; type: string }[];
     }) {
     this._id = params.id ;
     this._displayname = params.displayname;
@@ -82,6 +84,7 @@ export default class EAuth {
     this._rewards = params.rewards ?? [];
     this._achievements = params.achievements ?? [];
     this._subscriptionStart = params.subscriptionStart;
+    this._ratingHistory = params.ratingHistory ?? [];
 
     this._avatarUrl = params.avatarUrl ?? null;
     this._avatarSeed = params.avatarSeed ?? (params.id ?? params.email);
@@ -113,6 +116,7 @@ export default class EAuth {
 
   get createdAt(): Date { return this._createdAt; }
   get updatedAt(): Date { return this._updatedAt; }
+  get ratingHistory(): { rating: number; date: Date; type: string }[] { return this._ratingHistory; }
   get subscriptionStart():Date|undefined{ return this._subscriptionStart;}
 
   get avatarUrl(): string | null { return this._avatarUrl; }
@@ -139,6 +143,11 @@ export default class EAuth {
 
   updateRating(type: "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL", newRating: number): void {
     this._rating.set(type, newRating);
+    this._ratingHistory.push({
+      rating: newRating,
+      date: new Date(),
+      type,
+    });
   }
 
   public addWin(): void {

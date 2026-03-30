@@ -14,9 +14,22 @@ export const USER_ROUTES = {
   LEGAL_MOVES:"/games/:gameId/legal-moves",
   MAKE_MOVE:"/games/:gameId/move",
   REVIEW_GAME: "/games/:gameId/review",
+  GET_GAME_HISTORY: "/games/history",
 
   GET_PUZZLE_BY_DIFFICULTY: "/puzzles/difficulty/:difficulty",
   VALIDATE_PUZZLE_MOVE: "/puzzles/:puzzleId/validate",
 
   LEADERBOARD: "/leaderboard/:type",
+
+  FRIENDS: {
+    SEND_REQUEST: "/friends/request",
+    ACCEPT_REQUEST: "/friends/accept",
+    REJECT_REQUEST: "/friends/reject",
+    UNFRIEND: "/friends/unfriend",
+    BLOCK: "/friends/block",
+    UNBLOCK: "/friends/unblock",
+    LIST: "/friends",
+    SEARCH: "/friends/search",
+    PENDING_REQUESTS: "/friends/pending",
+  },
 } as const;
