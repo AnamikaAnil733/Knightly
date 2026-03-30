@@ -1,5 +1,5 @@
-import { LessonCategory, LessonDifficulty } from "../../Types/LessonTypes";
-import { LessonDetailDTO } from "../../DTOs/LessonDTOs";
+import { LessonCategory, LessonDifficulty } from "../../../../Types/LessonTypes";
+import { LessonDetailDTO } from "../../../../DTOs/LessonDTOs";
 
 export interface ICreateLessonUseCase {
   execute(params: {
