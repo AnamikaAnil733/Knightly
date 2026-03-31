@@ -35,20 +35,20 @@ export function CommunityNews() {
           {news.map((item, index) => (
             <div
               key={index}
-              className="bg-[#11193F]/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-[#6B2EFF]/50 transition-all card-glow cursor-pointer group"
+              className="bg-[#1C254E]/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-[#6D5DF6]/50 transition-all card-glow cursor-pointer group"
             >
-              <div className="h-48 bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] flex items-center justify-center">
+              <div className="h-48 bg-gradient-to-br from-[#4F7CFF] to-[#6D5DF6] flex items-center justify-center">
                 <NewspaperIcon className="w-16 h-16 text-white opacity-50" />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <MessageSquareIcon className="w-4 h-4 text-[#FFD166]" />
-                  <span className="text-[#C9CAD9] text-sm">{item.date}</span>
+                  <MessageSquareIcon className="w-4 h-4 text-[#4F7CFF]" />
+                  <span className="text-[#AAB3D1] text-sm">{item.date}</span>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#FFD166] transition-colors">
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#4F7CFF] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-[#C9CAD9]">{item.excerpt}</p>
+                <p className="text-[#AAB3D1]">{item.excerpt}</p>
               </div>
             </div>
           ))}

@@ -1,4 +1,3 @@
-import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
 import { Hero } from "../../Components/User/Landingpage/Hero";
 import { LearningZone } from "../../Components/User/Landingpage/LearningZone";
@@ -8,9 +7,8 @@ import { CommunityNews } from "../../Components/User/Landingpage/Commununtitynew
 
 export function LandingPage() {
   return (
-    <div className="w-full min-h-screen bg-[#0A0F2C] text-white overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[#0B1437] text-white overflow-x-hidden">
       <div className="sparkle-background">
-        <Navbar />
         <Hero />
         <TopPlayers />
         <LearningZone />

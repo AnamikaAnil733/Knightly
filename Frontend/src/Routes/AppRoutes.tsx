@@ -22,6 +22,7 @@ import LearnPage from "../Pages/User/LearnPage";
 import LessonListPage from "../Pages/User/LessonListPage";
 import LessonPage from "../Pages/User/LessonPage";
 import { LessonManagement } from "../Pages/Admin/LessonManagement";
+import AboutPage from "../Pages/User/AboutPage";
 
 export default function AppRoutes() {
   return (
@@ -49,6 +50,7 @@ export default function AppRoutes() {
       <Route path="/learn" element={<LearnPage />} />
       <Route path="/learn/:category" element={<LessonListPage />} />
       <Route path="/learn/lesson/:id" element={<LessonPage />} />
+      <Route path="/about" element={<AboutPage />} />
 
       <Route
         path="/admin"

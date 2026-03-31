@@ -5,16 +5,17 @@ import {
   InstagramIcon,
   YoutubeIcon,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 export function Footer() {
   return (
-    <footer className="bg-[#0A0F2C] border-t border-white/10 py-12 px-6">
+    <footer className="bg-[#0B1437] border-t border-white/10 py-12 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <CrownIcon className="w-6 h-6 text-[#FFD166]" />
+              <CrownIcon className="w-6 h-6 text-[#4F7CFF]" />
               <span
-                className="text-xl font-bold text-[#FFD166]"
+                className="text-xl font-bold text-[#4F7CFF]"
                 style={{
                   fontFamily: "Cinzel, serif",
                 }}
@@ -22,7 +23,7 @@ export function Footer() {
                 Knightly
               </span>
             </div>
-            <p className="text-[#C9CAD9] text-sm">
+            <p className="text-[#AAB3D1] text-sm">
               Where strategy meets royalty. Join the ultimate chess platform.
             </p>
           </div>
@@ -30,17 +31,17 @@ export function Footer() {
             <h4 className="text-white font-semibold mb-4">About</h4>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                <Link
+                  to="/about"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Our Story
-                </a>
+                </Link>
               </li>
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Team
                 </a>
@@ -48,7 +49,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Careers
                 </a>
@@ -56,7 +57,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Press
                 </a>
@@ -69,7 +70,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Play Now
                 </a>
@@ -77,7 +78,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Tournaments
                 </a>
@@ -85,7 +86,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Leaderboard
                 </a>
@@ -93,7 +94,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Learn
                 </a>
@@ -106,7 +107,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Help Center
                 </a>
@@ -114,7 +115,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Contact Us
                 </a>
@@ -122,7 +123,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Privacy Policy
                 </a>
@@ -130,7 +131,7 @@ export function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#C9CAD9] hover:text-[#FFD166] transition-colors text-sm"
+                  className="text-[#AAB3D1] hover:text-[#4F7CFF] transition-colors text-sm"
                 >
                   Terms of Service
                 </a>
@@ -139,33 +140,33 @@ export function Footer() {
             <div className="flex gap-3">
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FFD166]/20 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4F7CFF]/20 transition-colors"
               >
-                <FacebookIcon className="w-4 h-4 text-[#C9CAD9]" />
+                <FacebookIcon className="w-4 h-4 text-[#AAB3D1]" />
               </a>
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FFD166]/20 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4F7CFF]/20 transition-colors"
               >
-                <TwitterIcon className="w-4 h-4 text-[#C9CAD9]" />
+                <TwitterIcon className="w-4 h-4 text-[#AAB3D1]" />
               </a>
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FFD166]/20 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4F7CFF]/20 transition-colors"
               >
-                <InstagramIcon className="w-4 h-4 text-[#C9CAD9]" />
+                <InstagramIcon className="w-4 h-4 text-[#AAB3D1]" />
               </a>
               <a
                 href="#"
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#FFD166]/20 transition-colors"
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#4F7CFF]/20 transition-colors"
               >
-                <YoutubeIcon className="w-4 h-4 text-[#C9CAD9]" />
+                <YoutubeIcon className="w-4 h-4 text-[#AAB3D1]" />
               </a>
             </div>
           </div>
         </div>
         <div className="pt-8 border-t border-white/10 text-center">
-          <p className="text-[#C9CAD9] text-sm">
+          <p className="text-[#AAB3D1] text-sm">
             © 2025 Knightly. All Rights Reserved.
           </p>
         </div>
