@@ -1,5 +1,4 @@
 import { useRef, useEffect } from "react";
-import "../../../styles/Hero.css";
 import { Navbar } from "../Common/Navbar";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,6 +15,7 @@ export function Hero() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
 
+  /* ── Hero text entrance ── */
   useEffect(() => {
     const h1 = document.querySelector(".hero-heading");
     const p = document.querySelector(".hero-subtext");
@@ -27,11 +27,10 @@ export function Hero() {
     gsap.to(h1, {
       y: 0,
       opacity: 1,
-      delay: 0.5, // Reduced from 3 to 0.5 for better DX
+      delay: 0.5,
       duration: 1,
       ease: "power3.out",
     });
-
     gsap.to(p, {
       y: 0,
       opacity: 1,
@@ -39,7 +38,6 @@ export function Hero() {
       duration: 1,
       ease: "power3.out",
     });
-
     gsap.to(btn, {
       y: 0,
       opacity: 1,
@@ -49,32 +47,28 @@ export function Hero() {
     });
   }, []);
 
+  /* ── Section 1 scroll animation ── */
   useEffect(() => {
     const heading = document.querySelector(".section1-heading");
     const para = document.querySelector(".section1-para");
-
     if (!heading || !para || !section1Ref.current) return;
 
     gsap.set([heading, para], { opacity: 0, x: 100 });
 
+    const triggerOpts = {
+      trigger: section1Ref.current,
+      start: "top 70%",
+      toggleActions: "play none none none",
+    };
     gsap.to(heading, {
-      scrollTrigger: {
-        trigger: section1Ref.current,
-        start: "top 70%",
-        toggleActions: "play none none none",
-      },
+      scrollTrigger: triggerOpts,
       opacity: 1,
       x: 0,
       duration: 1,
       ease: "power3.out",
     });
-
     gsap.to(para, {
-      scrollTrigger: {
-        trigger: section1Ref.current,
-        start: "top 70%",
-        toggleActions: "play none none none",
-      },
+      scrollTrigger: triggerOpts,
       opacity: 1,
       x: 0,
       duration: 1,
@@ -83,32 +77,28 @@ export function Hero() {
     });
   }, []);
 
+  /* ── Section 2 scroll animation ── */
   useEffect(() => {
     const heading = document.querySelector(".section2-heading");
     const para = document.querySelector(".section2-para");
-
     if (!heading || !para || !section2Ref.current) return;
 
     gsap.set([heading, para], { opacity: 0, y: 60 });
 
+    const triggerOpts = {
+      trigger: section2Ref.current,
+      start: "top 70%",
+      toggleActions: "play none none none",
+    };
     gsap.to(heading, {
-      scrollTrigger: {
-        trigger: section2Ref.current,
-        start: "top 70%",
-        toggleActions: "play none none none",
-      },
+      scrollTrigger: triggerOpts,
       opacity: 1,
       y: 0,
       duration: 1,
       ease: "power3.out",
     });
-
     gsap.to(para, {
-      scrollTrigger: {
-        trigger: section2Ref.current,
-        start: "top 70%",
-        toggleActions: "play none none none",
-      },
+      scrollTrigger: triggerOpts,
       opacity: 1,
       y: 0,
       duration: 1,
@@ -117,22 +107,16 @@ export function Hero() {
     });
   }, []);
 
+  /* ── Section 3 scroll animation ── */
   useEffect(() => {
     const overlay = document.querySelector(".section3-overlay");
     const h1 = overlay?.querySelector("h1");
     const p = overlay?.querySelector("p");
     const btn = overlay?.querySelector("button");
-
     if (!overlay || !h1 || !p || !btn || !section3Ref.current) return;
 
     const showOverlay = gsap.timeline({ paused: true });
-
-    showOverlay.to(overlay, {
-      opacity: 1,
-      duration: 1,
-      pointerEvents: "auto",
-    });
-
+    showOverlay.to(overlay, { opacity: 1, duration: 1, pointerEvents: "auto" });
     showOverlay.to([h1, p, btn], {
       y: 0,
       opacity: 1,
@@ -147,28 +131,20 @@ export function Hero() {
       end: "bottom top",
       onEnter: () => showOverlay.play(),
       onLeaveBack: () => {
-        gsap.to(overlay, {
-          opacity: 0,
-          duration: 0.5,
-          pointerEvents: "none",
-        });
-        gsap.set([h1, p, btn], {
-          opacity: 0,
-          y: 80,
-        });
+        gsap.to(overlay, { opacity: 0, duration: 0.5, pointerEvents: "none" });
+        gsap.set([h1, p, btn], { opacity: 0, y: 80 });
         showOverlay.pause(0);
       },
     });
   }, []);
 
+  /* ── King scroll path ── */
   useEffect(() => {
     const heroImg = kingRef.current;
     const section1 = section1Ref.current;
     const section3 = section3Ref.current;
-
     if (!heroImg || !section1 || !section3) return;
 
-    // Set initial state: king is off-screen left, mid-height
     gsap.set(heroImg, {
       opacity: 0,
       x: "-20vw",
@@ -189,7 +165,6 @@ export function Hero() {
       },
     });
 
-    // Step 1: Fade in on left as section1 enters
     tl.to(heroImg, {
       opacity: 1,
       x: "10vw",
@@ -199,8 +174,6 @@ export function Hero() {
       ease: "power1.out",
       duration: 1,
     });
-
-    // Step 2: Drift to center-right through section2
     tl.to(heroImg, {
       x: "55vw",
       y: "50vh",
@@ -209,8 +182,6 @@ export function Hero() {
       ease: "none",
       duration: 1.5,
     });
-
-    // Step 3: Land on the far RIGHT side of section3
     tl.to(heroImg, {
       x: "72vw",
       y: "60vh",
@@ -223,13 +194,40 @@ export function Hero() {
 
   return (
     <div className="relative">
-      <div className="hero-container" ref={heroRef}>
+      {/* ══ Hero Section ══ */}
+      <div
+        ref={heroRef}
+        className="relative w-full h-screen overflow-hidden"
+        style={{ backgroundColor: "#0B1437" }}
+      >
         <Navbar />
-        <video className="hero-video" autoPlay muted loop playsInline>
+
+        {/* Background video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          style={{ backgroundColor: "#0B1437" }}
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
+
+        {/* Dark radial overlay */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(11,20,55,0.4), #0B1437)",
+          }}
+        />
+
+        {/* Hero content */}
+        <div
+          className="relative z-10 text-white text-center px-8"
+          style={{ top: "45%", transform: "translateY(-50%)" }}
+        >
           <Tilt
             className="tilt-wrapper"
             tiltMaxAngleX={20}
@@ -240,66 +238,160 @@ export function Hero() {
             perspective={2000}
             style={{ width: "fit-content", margin: "0 auto" }}
           >
-            <h1 className="hero-heading">Where Strategy Meets Royalty</h1>
-            <p className="hero-subtext">
+            <h1
+              className="hero-heading text-6xl mb-6 font-cinzel"
+              style={{
+                fontFamily: "'Cinzel', serif",
+                textShadow: "0 0 40px rgba(255,209,102,0.4)",
+                background: "linear-gradient(to bottom, #fff, #FFD166)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Where Strategy Meets Royalty
+            </h1>
+            <p
+              className="hero-subtext text-2xl mb-10 font-light tracking-wider"
+              style={{ fontFamily: "'Poppins', sans-serif", color: "#AAB3D1" }}
+            >
               Command the board. Master the game. Experience the royal pursuit
               of excellence.
             </p>
-            <button className="hero-button" onClick={() => navigate("/play")}>
+            <button
+              className="hero-button inline-block cursor-pointer rounded-full px-10 py-4 text-lg font-semibold tracking-wider transition-all duration-[400ms]"
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                backgroundColor: "#0B1437",
+                backgroundImage:
+                  "linear-gradient(to bottom right, rgba(79,124,255,0.1), transparent)",
+                border: "1px solid rgba(79,124,255,0.6)",
+                color: "#4F7CFF",
+                boxShadow:
+                  "0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(109,93,246,0.2)",
+              }}
+              onMouseEnter={(e) => {
+                const b = e.currentTarget;
+                b.style.transform = "scale(1.05) translateY(-2px)";
+                b.style.backgroundColor = "#1A1F4F";
+                b.style.borderColor = "#4F7CFF";
+                b.style.boxShadow =
+                  "0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(109,93,246,0.4)";
+                b.style.color = "#ffffff";
+              }}
+              onMouseLeave={(e) => {
+                const b = e.currentTarget;
+                b.style.transform = "scale(1) translateY(0)";
+                b.style.backgroundColor = "#0B1437";
+                b.style.borderColor = "rgba(79,124,255,0.6)";
+                b.style.boxShadow =
+                  "0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(109,93,246,0.2)";
+                b.style.color = "#4F7CFF";
+              }}
+              onClick={() => navigate("/play")}
+            >
               Begin Your Reign
             </button>
           </Tilt>
         </div>
       </div>
 
-      <div className="hero-model1">
+      {/* ── Animated King (scroll-driven) ── */}
+      <div className="static pointer-events-none">
         <img
           src="/images/king.png"
           alt="Animated King"
-          className="hero-img"
           ref={kingRef}
+          className="fixed top-0 left-0 w-[380px] h-[380px] object-contain pointer-events-none z-[99] will-change-transform"
+          style={{ filter: "drop-shadow(0 0 30px rgba(109,93,246,0.4))" }}
         />
       </div>
 
-      <div className="section1" ref={section1Ref}>
-        <div className="section1-left">
-          {/* Placeholder for left content if needed */}
-        </div>
-        <div className="section1-right">
-          <h1 className="section1-heading">Master Every Move</h1>
-          <p className="section1-para">
+      {/* ══ Section 1 ══ */}
+      <div
+        ref={section1Ref}
+        className="relative z-0 flex items-center justify-center overflow-hidden text-white border-t border-white/5"
+        style={{
+          height: "700px",
+          padding: "6rem 3rem",
+          gap: "10rem",
+          background: "radial-gradient(circle at center, #1A1F4F, #0B1437)",
+        }}
+      >
+        <div>{/* left placeholder */}</div>
+        <div className="max-w-[520px]">
+          <h1
+            className="section1-heading text-[3.5rem] mb-6"
+            style={{ color: "#4F7CFF", fontFamily: "'Cinzel', serif" }}
+          >
+            Master Every Move
+          </h1>
+          <p
+            className="section1-para text-xl leading-relaxed font-light"
+            style={{ color: "#AAB3D1" }}
+          >
             In the world of chess, every move matters. Whether you're opening
             strong or defending with grace, each piece tells a story. <br />
             <br />
             At Knightly, we help you decode those stories — from timeless
-            tactics to modern strategies — so you’re never just playing; you're
+            tactics to modern strategies — so you're never just playing; you're
             commanding.
           </p>
         </div>
       </div>
 
-      <div className="section2" ref={section2Ref}>
-        <div className="section2-top">
+      {/* ══ Section 2 ══ */}
+      <div
+        ref={section2Ref}
+        className="relative flex flex-col justify-center text-center min-h-screen"
+        style={{ backgroundColor: "#0B1437", padding: "120px 20px" }}
+      >
+        <div className="flex justify-center items-center gap-16 mb-16">
           <img
             src="/images/section2.png"
             alt="Silver Piece"
-            className="king-img"
+            className="w-[350px] h-[350px] object-contain"
+            style={{
+              transform: "rotate(-20deg)",
+              filter: "drop-shadow(0 0 30px rgba(109,93,246,0.2))",
+            }}
           />
         </div>
-        <h1 className="section2-heading">The Battle Begins</h1>
-        <p className="section2-para">
+        <h1
+          className="section2-heading text-5xl text-white mb-6"
+          style={{ fontFamily: "'Cinzel', serif" }}
+        >
+          The Battle Begins
+        </h1>
+        <p
+          className="section2-para text-xl mx-auto leading-relaxed max-w-[700px]"
+          style={{ color: "#AAB3D1" }}
+        >
           A timeless clash of strategy and elegance—where power meets precision,
           and every move counts.
         </p>
       </div>
 
-      <div className="section3" ref={section3Ref}>
+      {/* ══ Section 3 ══ */}
+      <div
+        ref={section3Ref}
+        className="relative w-full flex justify-center items-center overflow-visible"
+        style={{ height: "110vh", backgroundColor: "#0B1437" }}
+      >
         <img
           src="/images/section3-1.png"
           alt="Chess Background"
-          className="section3-img"
+          className="h-full w-full object-cover opacity-30"
         />
-        <div className="section3-overlay">
+
+        {/* Overlay (revealed by GSAP) */}
+        <div
+          className="section3-overlay absolute inset-0 flex flex-col justify-center items-center text-center text-white opacity-0 pointer-events-none z-10"
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(11,20,55,0.8), #0B1437)",
+          }}
+        >
           <Tilt
             className="tilt-wrapper"
             tiltMaxAngleX={20}
@@ -310,9 +402,40 @@ export function Hero() {
             perspective={2000}
             style={{ width: "fit-content", margin: "0 auto" }}
           >
-            <h1>Checkmate is Inevitable</h1>
-            <p>Even the mightiest fall when strategy is supreme.</p>
-            <button onClick={() => (window.location.href = "/play")}>
+            <h1
+              className="text-[4.5rem] tracking-widest"
+              style={{
+                fontFamily: "'Cinzel', serif",
+                color: "#4F7CFF",
+                textShadow: "0 0 40px rgba(109,93,246,0.4)",
+              }}
+            >
+              Checkmate is Inevitable
+            </h1>
+            <p
+              className="text-2xl mt-6 font-light"
+              style={{ color: "#AAB3D1" }}
+            >
+              Even the mightiest fall when strategy is supreme.
+            </p>
+            <button
+              className="mt-12 w-60 h-[60px] rounded-full text-base font-bold text-white cursor-pointer border-none transition-all duration-300"
+              style={{
+                background: "linear-gradient(to right, #4F7CFF, #6D5DF6)",
+                boxShadow: "0 10px 20px rgba(109,93,246,0.3)",
+              }}
+              onMouseEnter={(e) => {
+                const b = e.currentTarget;
+                b.style.transform = "scale(1.05)";
+                b.style.boxShadow = "0 15px 30px rgba(109,93,246,0.5)";
+              }}
+              onMouseLeave={(e) => {
+                const b = e.currentTarget;
+                b.style.transform = "scale(1)";
+                b.style.boxShadow = "0 10px 20px rgba(109,93,246,0.3)";
+              }}
+              onClick={() => (window.location.href = "/play")}
+            >
               Play Your First Game
             </button>
           </Tilt>

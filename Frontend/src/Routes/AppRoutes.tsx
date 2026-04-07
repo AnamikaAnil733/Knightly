@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { SignupPage } from "../Pages/Authentication/Signup";
+import { AuthPage } from "../Pages/Authentication/AuthPage";
 import { OTPVerify } from "../Pages/Authentication/EmailVerification";
 import { LandingPage } from "../Pages/User/LandingPage";
 import { LoginPage } from "../Pages/Authentication/LoginPage";
@@ -27,13 +27,16 @@ import AboutPage from "../Pages/User/AboutPage";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<SignupPage />} />
+      <Route path="/" element={<AuthPage initialMode="SIGNUP" role="USER" />} />
       <Route path="/verify-otp" element={<OTPVerify mode="signup" />} />
       <Route path="/landing-page" element={<LandingPage />} />
       <Route path="/leaderboard" element={<LeaderBoardPage />} />
       <Route path="/leaderboard/:type" element={<LeaderBoardPage />} />
       <Route path="/admin/login" element={<LoginPage role="ADMIN" />} />
-      <Route path="/user/login" element={<LoginPage role="USER" />} />
+      <Route
+        path="/user/login"
+        element={<AuthPage initialMode="LOGIN" role="USER" />}
+      />
       <Route path="/user/profile" element={<Profile />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/forgot-otp" element={<OTPVerify mode="forgot" />} />
