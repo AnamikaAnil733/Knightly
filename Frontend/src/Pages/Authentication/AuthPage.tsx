@@ -87,7 +87,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
 
   const onLoginSubmit = async (data: LoginFormData) => {
     const api = role === "ADMIN" ? axiosAdmin : axiosUser;
-    const loadingToast = toast.loading("Logging in...");
     try {
       const res = await api.post("/auth/login", data);
       const { userInfo } = res.data;
@@ -103,12 +102,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({
         dispatch(setUser(profileRes.data));
         navigate("/landing-page", { replace: true });
       }
-      toast.success("Welcome back!", { id: loadingToast });
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;
-      toast.error(err.response?.data?.message ?? "Login failed", {
-        id: loadingToast,
-      });
+      toast.error(err.response?.data?.message ?? "Login failed");
     }
   };
 
