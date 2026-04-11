@@ -49,9 +49,6 @@ export const BlogSchema = new Schema<BlogDocument>(
 );
 
 // Indexes for common queries
-BlogSchema.index({ slug: 1 });
 BlogSchema.index({ status: 1 });
 BlogSchema.index({ category: 1 });
 BlogSchema.index({ authorId: 1 });
-
-

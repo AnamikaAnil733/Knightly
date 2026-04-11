@@ -23,6 +23,10 @@ import LessonListPage from "../Pages/User/LessonListPage";
 import LessonPage from "../Pages/User/LessonPage";
 import { LessonManagement } from "../Pages/Admin/LessonManagement";
 import AboutPage from "../Pages/User/AboutPage";
+import BlogListPage from "../Pages/User/BlogListPage";
+import BlogDetailPage from "../Pages/User/BlogDetailPage";
+import BlogWorkspacePage from "../Pages/User/BlogWorkspacePage";
+import BlogManagement from "../Pages/Admin/BlogManagement";
 
 export default function AppRoutes() {
   return (
@@ -55,6 +59,11 @@ export default function AppRoutes() {
       <Route path="/learn/lesson/:id" element={<LessonPage />} />
       <Route path="/about" element={<AboutPage />} />
 
+      {/* Blog Routes */}
+      <Route path="/blogs" element={<BlogListPage />} />
+      <Route path="/blogs/:slug" element={<BlogDetailPage />} />
+      <Route path="/blog/create" element={<BlogWorkspacePage />} />
+
       <Route
         path="/admin"
         element={
@@ -66,6 +75,7 @@ export default function AppRoutes() {
         <Route path="users" element={<UserManagement />} />
         <Route path="puzzles" element={<PuzzleManagement />} />
         <Route path="lessons" element={<LessonManagement />} />
+        <Route path="blogs" element={<BlogManagement />} />
       </Route>
     </Routes>
   );

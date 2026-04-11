@@ -1,0 +1,23 @@
+import BlogEntity from "../../Domain/Entity/BlogEntity";
+import { BlogResponseDTO ,BlogListResponseDTO} from "Domain/DTOs/BlogDTOs";
+
+export class BlogMapper {
+  static toBlogResposeDTO(blog:BlogEntity):BlogResponseDTO{
+    return{
+      id:blog.id!,
+      title:blog.title,
+      slug:blog.slug,
+      excerpt:blog.excerpt,
+      content:blog.content,
+      tags:blog.tags,
+      category:blog.category,
+      status:blog.status,
+      authorId:blog.authorId,
+      authorRole:blog.authorRole,
+      viewCount:blog.viewCount,
+      rejectionReason:blog.rejectionReason,
+      createdAt:blog.createdAt,
+      updatedAt:blog.updatedAt,
+    };
+  }
+}

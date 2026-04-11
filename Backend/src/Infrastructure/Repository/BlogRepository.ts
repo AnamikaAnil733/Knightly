@@ -1,9 +1,10 @@
 import { BaseRepository } from "./BaseRepository";
 import BlogEntity from "../../Domain/Entity/BlogEntity";
-import { BlogModel, BlogDocument } from "../Database/Schema/BlogSchema";
+import { BlogDocument } from "../Database/Schema/BlogSchema";
 import { IBlogRepository } from "../../Domain/Interface/Repositories/IBlogRepository";
 import { BlogCategory, BlogStatus } from "../../Domain/Types/Blogtypes";
 import { MongoBlogMapper } from "../Mapper/MongoBlogMapper";
+import { BlogModel } from "../Database/Model/BlogModel";
 
 export class BlogRepository
   extends BaseRepository<BlogEntity, BlogDocument>

@@ -9,6 +9,7 @@ import {
   friendController,
 } from "../../Infrastructure/Composition/UserComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
+import { blogController } from "../../Infrastructure/Composition/BlogComposition";
 
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
@@ -97,5 +98,8 @@ export class UserRoutes {
     // Learning routes
     this.router.get("/learn", lessonController.getLessons);
     this.router.get("/learn/:id", lessonController.getLessonById);
+
+    //Blog routes
+    this.router.post("/blog",blogController.createBlog);
   }
 }
