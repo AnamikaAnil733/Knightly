@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <FileTextIcon size={20} />,
       name: "Blog Management",
-      path: "/blog",
+      path: "/admin/blogs",
     },
     {
       icon: <FlagIcon size={20} />,

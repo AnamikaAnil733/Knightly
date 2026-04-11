@@ -47,7 +47,7 @@ export const UpdateBlogSchema = z.object({
 
 export const BlogModerationSchema = z.object({
   id: z.string().min(1, { message: "Blog ID is required" }),
-  status: z.enum([BlogStatus.PUBLISHED, BlogStatus.REJECTED] as [string, ...string[]], {
+  status: z.nativeEnum(BlogStatus, {
     message: "Status must be either PUBLISHED or REJECTED",
   }),
   rejectionReason: z.string().optional(),

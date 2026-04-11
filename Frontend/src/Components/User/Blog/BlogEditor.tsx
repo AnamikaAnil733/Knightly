@@ -9,6 +9,7 @@ import { toast } from "react-hot-toast";
 
 interface BlogEditorProps {
   onSubmit: (data: CreateBlogInputDTO) => Promise<void>;
+  onCancel?: () => void;
   isLoading?: boolean;
   initialData?: Partial<CreateBlogInputDTO>;
   authorId: string;
@@ -17,6 +18,7 @@ interface BlogEditorProps {
 
 export const BlogEditor: React.FC<BlogEditorProps> = ({
   onSubmit,
+  onCancel,
   isLoading = false,
   initialData = {},
   authorId,
@@ -194,7 +196,16 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         </div>
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-end gap-4 pt-4">
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-all border border-white/10"
+          >
+            Cancel
+          </button>
+        )}
         <button
           type="submit"
           disabled={isLoading}

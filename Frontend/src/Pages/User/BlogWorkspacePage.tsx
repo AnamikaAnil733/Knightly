@@ -56,6 +56,7 @@ const BlogWorkspacePage: React.FC = () => {
 
         <BlogEditor
           onSubmit={handleSubmit}
+          onCancel={() => navigate("/blogs")}
           isLoading={loading}
           authorId={user.id || (user as any)._id}
           authorRole={

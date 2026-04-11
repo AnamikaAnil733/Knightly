@@ -11,4 +11,7 @@ export const ADMIN_ROUTES = {
   SYNC_LICHESS_PUZZLE: "/sync-lichess-puzzle",
   GENERATE_AI_PUZZLES: "/generate-ai-puzzles",
   GENERATE_PUZZLE_FROM_GAME: "/generate-puzzle-from-game/:gameId",
+
+  BLOGS: "/blogs",
+  MODERATE_BLOG: "/blogs/moderate",
 } as const;

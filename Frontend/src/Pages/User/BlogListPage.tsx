@@ -6,6 +6,8 @@ import { getAllBlogs } from "../../Service/Api/BlogApi";
 import { BlogResponseDTO, BlogCategory } from "../../Types/BlogTypes";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { PenSquareIcon, PlusIcon } from "lucide-react";
 
 const BlogListPage: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
@@ -38,7 +40,7 @@ const BlogListPage: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 relative">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -50,11 +52,25 @@ const BlogListPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-light max-w-2xl mx-auto text-lg"
+            className="text-gray-light max-w-2xl mx-auto text-lg mb-8"
           >
             Explore advanced chess strategies, community updates, and tactical
             tutorials from our master players.
           </motion.p>
+          
+          <motion.div
+             initial={{ opacity: 0, scale: 0.9 }}
+             animate={{ opacity: 1, scale: 1 }}
+             transition={{ delay: 0.4 }}
+          >
+            <Link
+              to="/blog/create"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gold hover:bg-gold-light text-navy-dark font-bold rounded-full transition-all shadow-lg hover:shadow-gold/20"
+            >
+              <PenSquareIcon size={18} />
+              Write Your Own
+            </Link>
+          </motion.div>
         </div>
 
         {/* Filters */}
@@ -97,6 +113,15 @@ const BlogListPage: React.FC = () => {
             </p>
           </div>
         )}
+        {/* Floating Action Button for Mobile/Convenience */}
+        <div className="fixed bottom-8 right-8 z-40 md:hidden">
+          <Link
+            to="/blog/create"
+            className="w-14 h-14 bg-gold rounded-full flex items-center justify-center text-navy-dark shadow-2xl shadow-gold/40 hover:scale-110 active:scale-95 transition-all"
+          >
+            <PlusIcon size={28} />
+          </Link>
+        </div>
       </main>
 
       <Footer />

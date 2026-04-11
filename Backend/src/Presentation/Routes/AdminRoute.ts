@@ -5,6 +5,7 @@ import { getAllUserController,
   PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
+import { blogController } from "../../Infrastructure/Composition/BlogComposition";
 
 import { authMiddleware } from "../Middleware/AuthMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
@@ -42,5 +43,9 @@ export class AdminRoutes{
     this.router.put("/lessons/:id", lessonController.updateLesson);
     this.router.delete("/lessons/:id", lessonController.deleteLesson);
     this.router.get("/lessons", lessonController.getLessons);
+
+    // Blog management routes
+    this.router.get(ADMIN_ROUTES.BLOGS, blogController.adminGetAllBlogs);
+    this.router.patch(ADMIN_ROUTES.MODERATE_BLOG, blogController.moderateBlog);
   }
 }
