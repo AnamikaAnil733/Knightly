@@ -11,6 +11,27 @@ import {
   BlogStatus,
 } from "../../Types/BlogTypes";
 
+/** Fetch signed S3 URL for blog cover upload. */
+export const getBlogCoverUploadUrl = async (
+  contentType: string,
+): Promise<{ uploadUrl: string; key: string }> => {
+  try {
+    const response = await userApi.post<{
+      success: boolean;
+      uploadUrl: string;
+      key: string;
+    }>("/user/blog/upload-url", { contentType });
+    return { uploadUrl: response.data.uploadUrl, key: response.data.key };
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data.message || "Failed to get upload URL",
+      );
+    }
+    throw error;
+  }
+};
+
 /** Fetch all published blogs with optional filters and pagination. */
 export const getAllBlogs = async (filters?: {
   category?: BlogCategory;
@@ -20,7 +41,7 @@ export const getAllBlogs = async (filters?: {
   limit?: number;
 }): Promise<BlogListResponseDTO> => {
   try {
-    const response = await userApi.get<BlogListResponseDTO>("/blogs", {
+    const response = await userApi.get<BlogListResponseDTO>("/user/blogs", {
       params: filters,
     });
     return response.data;
@@ -35,11 +56,15 @@ export const getAllBlogs = async (filters?: {
 /** Fetch a single blog by its slug. */
 export const getBlogBySlug = async (slug: string): Promise<BlogResponseDTO> => {
   try {
-    const response = await userApi.get<BlogResponseDTO>(`/blog/${slug}`);
-    return response.data;
+    const response = await userApi.get<{ blog: BlogResponseDTO }>(
+      `/user/blog/${slug}`,
+    );
+    return response.data.blog;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message || "Failed to fetch blog post");
+      throw new Error(
+        error.response?.data.message || "Failed to fetch blog post",
+      );
     }
     throw error;
   }
@@ -50,8 +75,11 @@ export const createBlog = async (
   data: CreateBlogInputDTO,
 ): Promise<BlogResponseDTO> => {
   try {
-    const response = await userApi.post<BlogResponseDTO>("/user/blog", data);
-    return response.data;
+    const response = await userApi.post<{ blog: BlogResponseDTO }>(
+      "/user/blog",
+      data,
+    );
+    return response.data.blog;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message || "Failed to create blog");
@@ -65,11 +93,11 @@ export const updateBlog = async (
   data: UpdateBlogInputDTO,
 ): Promise<BlogResponseDTO> => {
   try {
-    const response = await userApi.patch<BlogResponseDTO>(
-      `/blog/${data.id}`,
+    const response = await userApi.patch<{ blog: BlogResponseDTO }>(
+      `/user/blog/${data.id}`,
       data,
     );
-    return response.data;
+    return response.data.blog;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message || "Failed to update blog");
@@ -81,7 +109,7 @@ export const updateBlog = async (
 /** Increment view count for a blog. */
 export const incrementView = async (id: string): Promise<void> => {
   try {
-    await userApi.post(`/blog/${id}/view`);
+    await userApi.post(`/user/blog/${id}/view`);
   } catch (error) {
     // Silently fail for view increment as it's not critical
     console.error("Failed to increment view count", error);
@@ -93,11 +121,11 @@ export const moderateBlog = async (
   data: ModerationInputDTO,
 ): Promise<BlogResponseDTO> => {
   try {
-    const response = await adminApi.patch<BlogResponseDTO>(
+    const response = await adminApi.patch<{ blog: BlogResponseDTO }>(
       `/admin/blogs/moderate`,
       data,
     );
-    return response.data;
+    return response.data.blog;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message || "Moderation failed");
@@ -119,7 +147,9 @@ export const adminGetAllBlogs = async (filters?: {
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message || "Failed to fetch blogs for admin");
+      throw new Error(
+        error.response?.data.message || "Failed to fetch blogs for admin",
+      );
     }
     throw error;
   }

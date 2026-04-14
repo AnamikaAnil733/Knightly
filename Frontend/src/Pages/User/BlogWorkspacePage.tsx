@@ -21,8 +21,12 @@ const BlogWorkspacePage: React.FC = () => {
       await createBlog(data);
       toast.success("Blog submitted successfully! Awaiting moderation.");
       navigate("/blogs");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to submit blog. Please try again.");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to submit blog. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -58,7 +62,7 @@ const BlogWorkspacePage: React.FC = () => {
           onSubmit={handleSubmit}
           onCancel={() => navigate("/blogs")}
           isLoading={loading}
-          authorId={user.id || (user as any)._id}
+          authorId={user.id!}
           authorRole={
             user.role === "admin" ? BlogAuthorRole.ADMIN : BlogAuthorRole.USER
           }

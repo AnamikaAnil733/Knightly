@@ -13,21 +13,25 @@ export const AdminBlogManagement: React.FC = () => {
   );
   const [rejectionReason, setRejectionReason] = useState("");
 
-  useEffect(() => {
-    fetchBlogs();
-  }, [filter]);
-
-  const fetchBlogs = async () => {
+  const fetchBlogs = React.useCallback(async () => {
     try {
       setLoading(true);
       const data = await adminGetAllBlogs({ status: filter });
       setBlogs(data.blogs);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to fetch blogs for moderation.");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch blogs for moderation.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, [fetchBlogs]);
 
   const handleModerate = async (
     id: string,
@@ -41,8 +45,10 @@ export const AdminBlogManagement: React.FC = () => {
       setSelectedBlog(null);
       setRejectionReason("");
       fetchBlogs();
-    } catch (error: any) {
-      toast.error(error.message || "Moderation failed.");
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Moderation failed.";
+      toast.error(errorMessage);
     }
   };
 

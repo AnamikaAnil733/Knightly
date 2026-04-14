@@ -1,5 +1,5 @@
 import BlogEntity from "../../Domain/Entity/BlogEntity";
-import { BlogResponseDTO ,BlogListResponseDTO} from "Domain/DTOs/BlogDTOs";
+import { BlogResponseDTO } from "Domain/DTOs/BlogDTOs";
 
 export class BlogMapper {
   static toBlogResposeDTO(blog:BlogEntity):BlogResponseDTO{
@@ -7,6 +7,7 @@ export class BlogMapper {
       id:blog.id!,
       title:blog.title,
       slug:blog.slug,
+      coverImage:blog.coverImage,
       excerpt:blog.excerpt,
       content:blog.content,
       tags:blog.tags,

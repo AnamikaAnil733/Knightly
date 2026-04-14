@@ -25,7 +25,7 @@ const BlogDetailPage: React.FC = () => {
       setBlog(data);
       // Increment view count
       await incrementView(data.id);
-    } catch (error) {
+    } catch {
       toast.error("Could not load blog post.");
     } finally {
       setLoading(false);

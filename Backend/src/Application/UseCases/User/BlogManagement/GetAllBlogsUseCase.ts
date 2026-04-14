@@ -1,22 +1,26 @@
 import { IBlogRepository } from "../../../../Domain/Interface/Repositories/IBlogRepository";
 import { BlogListResponseDTO } from "../../../../Domain/DTOs/BlogDTOs";
 import { BlogMapper } from "../../../Mapper/BlogMapper";
-import { IAdminGetAllBlogsUseCase } from "../../../../Domain/Interface/Usecases/Admin/BlogManagement/IAdminGetAllBlogsUseCase";
-import { BlogStatus } from "../../../../Domain/Types/Blogtypes";
+import { IGetAllBlogsUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetAllBlogsUseCase";
+import { BlogStatus, BlogCategory } from "../../../../Domain/Types/Blogtypes";
 import { IStorageService } from "Domain/Interface/Service/IS3Service";
 
-export class AdminGetAllBlogsUseCase implements IAdminGetAllBlogsUseCase {
+export class GetAllBlogsUseCase implements IGetAllBlogsUseCase {
   constructor(
     private readonly _blogRepository: IBlogRepository,
     private readonly _storageService: IStorageService,
   ) {}
 
   async execute(filters?: {
-    status?: BlogStatus;
+    category?: BlogCategory;
     page?: number;
     limit?: number;
   }): Promise<BlogListResponseDTO> {
-    const { blogs, total } = await this._blogRepository.findAll(filters);
+    // Strictly filter by PUBLISHED status for public view
+    const { blogs, total } = await this._blogRepository.findAll({
+      ...filters,
+      status: BlogStatus.PUBLISHED,
+    });
 
     const blogsWithSignedUrls = await Promise.all(
       blogs.map(async (blog) => {
@@ -26,6 +30,7 @@ export class AdminGetAllBlogsUseCase implements IAdminGetAllBlogsUseCase {
           let shouldSign = false;
 
           if (key.startsWith("http")) {
+            // Handle legacy full URLs by extracting the key
             if (key.includes("knightly-avatars.s3")) {
               try {
                 const urlObj = new URL(key);
@@ -38,6 +43,7 @@ export class AdminGetAllBlogsUseCase implements IAdminGetAllBlogsUseCase {
               }
             }
           } else {
+            // It's already a key
             shouldSign = true;
           }
 

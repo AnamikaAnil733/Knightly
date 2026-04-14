@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   BlogCategory,
   CreateBlogInputDTO,
@@ -6,6 +6,9 @@ import {
 } from "../../../Types/BlogTypes";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import { getBlogCoverUploadUrl } from "../../../Service/Api/BlogApi";
+import axios from "axios";
+import { UploadCloud, Image as ImageIcon, X } from "lucide-react";
 
 interface BlogEditorProps {
   onSubmit: (data: CreateBlogInputDTO) => Promise<void>;
@@ -35,6 +38,12 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
     coverImage: initialData.coverImage || "",
   });
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    initialData.coverImage || null,
+  );
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [tagInput, setTagInput] = useState("");
 
   const handleChange = (
@@ -44,6 +53,43 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file.");
+        return;
+      }
+      setSelectedFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      // Clean up the URL if we change it
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  };
+
+  const uploadToS3 = async (file: File): Promise<string> => {
+    try {
+      setIsUploading(true);
+      // 1. Get signed URL
+      const { uploadUrl, key } = await getBlogCoverUploadUrl(file.type);
+
+      // 2. Upload to S3
+      await axios.put(uploadUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      return key;
+    } catch (error) {
+      console.error("S3 Upload Error:", error);
+      throw new Error("Failed to upload image to storage.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleTagsChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,7 +116,28 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
       toast.error("Please fill in all required fields.");
       return;
     }
-    await onSubmit({ ...formData, authorId, authorRole });
+
+    let coverImageUrl = formData.coverImage;
+
+    try {
+      if (selectedFile) {
+        coverImageUrl = await uploadToS3(selectedFile);
+      } else if (!coverImageUrl) {
+        toast.error("Please provide a cover image.");
+        return;
+      }
+
+      await onSubmit({
+        ...formData,
+        coverImage: coverImageUrl,
+        authorId,
+        authorRole,
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to submit blog.";
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -132,19 +199,64 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
           </select>
         </div>
 
-        {/* Cover Image URL */}
-        <div>
+        {/* Cover Image Upload */}
+        <div className="md:col-span-2">
           <label className="block text-xs font-semibold text-gold uppercase tracking-widest mb-2">
-            Cover Image URL
+            Cover Image
           </label>
-          <input
-            type="url"
-            name="coverImage"
-            value={formData.coverImage}
-            onChange={handleChange}
-            placeholder="https://example.com/image.jpg"
-            className="w-full bg-navy-dark border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-accent transition-colors"
-          />
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className={`relative h-48 rounded-xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center overflow-hidden ${
+              previewUrl
+                ? "border-purple-accent/50"
+                : "border-white/10 hover:border-purple-accent/50 bg-white/5"
+            }`}
+          >
+            {previewUrl ? (
+              <>
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <UploadCloud className="text-white text-2xl" />
+                  <span className="text-white font-bold text-sm">
+                    Change Image
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedFile(null);
+                    setPreviewUrl(null);
+                    setFormData((prev) => ({ ...prev, coverImage: "" }));
+                  }}
+                  className="absolute top-2 right-2 p-2 bg-red-600 rounded-full text-white hover:bg-red-700 transition-all z-10"
+                >
+                  <X />
+                </button>
+              </>
+            ) : (
+              <div className="text-center p-6">
+                <ImageIcon className="text-4xl text-gray-500 mb-3 mx-auto" />
+                <p className="text-gray-400 text-sm">
+                  Click or drag and drop to upload cover image
+                </p>
+                <p className="text-[10px] text-gray-600 mt-1 uppercase tracking-tighter">
+                  SVG, PNG, JPG (MAX. 5MB)
+                </p>
+              </div>
+            )}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
         </div>
 
         {/* Content */}
@@ -208,10 +320,19 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         )}
         <button
           type="submit"
-          disabled={isLoading}
-          className="bg-button-gradient hover:opacity-90 text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-purple-accent/30 transition-all disabled:opacity-50"
+          disabled={isLoading || isUploading}
+          className="bg-button-gradient hover:opacity-90 text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-purple-accent/30 transition-all disabled:opacity-50 flex items-center gap-2"
         >
-          {isLoading ? "Submitting..." : "Submit for Moderation"}
+          {isUploading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span>Uploading...</span>
+            </>
+          ) : isLoading ? (
+            <span>Submitting...</span>
+          ) : (
+            <span>Submit for Moderation</span>
+          )}
         </button>
       </div>
     </motion.form>

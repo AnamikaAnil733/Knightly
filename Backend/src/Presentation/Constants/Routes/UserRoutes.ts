@@ -32,4 +32,13 @@ export const USER_ROUTES = {
     SEARCH: "/friends/search",
     PENDING_REQUESTS: "/friends/pending",
   },
+
+  BLOGS: "/blogs",
+  BLOG_DETAIL: "/blog/:slug",
+  BLOG:"/blog",
+  BLOG_UPLOADURL:"/blog/upload-url",
+  BLOG_VIEW:"/blog/:id/view",
+
+  LEARN:"/learn",
+  LEARN_ID:"/learn/:id",
 } as const;

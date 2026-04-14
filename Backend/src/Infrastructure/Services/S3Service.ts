@@ -25,6 +25,14 @@ export class S3StorageService implements IStorageService {
     key: string,
     contentType: string,
   ): Promise<AvatarURLtypes> {
+    const { uploadUrl } = await this.generateUploadUrl(key, contentType);
+    return { uploadUrl, key };
+  }
+
+  async generateUploadUrl(
+    key: string,
+    contentType: string,
+  ): Promise<{ uploadUrl: string; key: string }> {
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET!,
       Key: key,
@@ -33,6 +41,7 @@ export class S3StorageService implements IStorageService {
 
     const uploadUrl = await getSignedUrl(this._s3, command, {
       expiresIn: 60,
+      signableHeaders: new Set(["content-type"]),
     });
 
     return { uploadUrl, key };

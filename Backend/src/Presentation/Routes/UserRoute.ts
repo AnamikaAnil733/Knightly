@@ -96,10 +96,14 @@ export class UserRoutes {
     );
 
     // Learning routes
-    this.router.get("/learn", lessonController.getLessons);
-    this.router.get("/learn/:id", lessonController.getLessonById);
+    this.router.get(USER_ROUTES.LEARN, lessonController.getLessons);
+    this.router.get(USER_ROUTES.LEARN_ID, lessonController.getLessonById);
 
     //Blog routes
-    this.router.post("/blog",blogController.createBlog);
+    this.router.post(USER_ROUTES.BLOG_UPLOADURL, blogController.getCoverUploadUrl);
+    this.router.post(USER_ROUTES.BLOG, blogController.createBlog);
+    this.router.get(USER_ROUTES.BLOGS, blogController.getAllBlogs);
+    this.router.get(USER_ROUTES.BLOG_DETAIL, blogController.getBlogBySlug);
+    this.router.post(USER_ROUTES.BLOG_VIEW, blogController.incrementView);
   }
 }
