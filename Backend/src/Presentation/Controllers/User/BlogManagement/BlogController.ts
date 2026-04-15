@@ -5,10 +5,15 @@ import { IAdminGetAllBlogsUseCase } from "../../../../Domain/Interface/Usecases/
 import { IGetAllBlogsUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetAllBlogsUseCase";
 import { IGetBlogBySlugUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetBlogBySlugUseCase";
 import { IGetCoverUploadUrlUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetCoverUploadUrlUseCase";
+import { IGetUserBlogsUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetUserBlogsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { BlogStatus } from "../../../../Domain/Types/Blogtypes";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
-import { CreateBlogSchema, BlogModerationSchema } from "../../../Validators/BlogValidator";
+import { CreateBlogSchema, UpdateBlogSchema, BlogModerationSchema } from "../../../Validators/BlogValidator";
+import { IUpdateBlogUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IUpdateBlogUseCase";
+import { IDeleteBlogUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IDeleteBlogUseCase";
+import { IGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetBlogByIdUseCase";
+import { IAdminGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/Admin/BlogManagement/IAdminGetBlogByIdUseCase";
 import { logger } from "../../../../Infrastructure/Logger/Logger";
 
 
@@ -20,6 +25,11 @@ export class BlogController{
     private readonly _getAllBlogsUseCase: IGetAllBlogsUseCase,
     private readonly _getBlogBySlugUseCase: IGetBlogBySlugUseCase,
     private readonly _getCoverUploadUrlUseCase: IGetCoverUploadUrlUseCase,
+    private readonly _getUserBlogsUseCase: IGetUserBlogsUseCase,
+    private readonly _updateBlogUseCase: IUpdateBlogUseCase,
+    private readonly _deleteBlogUseCase: IDeleteBlogUseCase,
+    private readonly _getBlogByIdUseCase: IGetBlogByIdUseCase,
+    private readonly _adminGetBlogByIdUseCase: IAdminGetBlogByIdUseCase,
   ) {}
 
   getCoverUploadUrl = async (req: Request, res: Response, next: NextFunction) => {
@@ -145,6 +155,90 @@ export class BlogController{
       return res.status(HttpStatusCodes.OK).json({ success: true, blog });
     } catch (error) {
       logger.error({ error }, "ERROR: BlogController - getBlogBySlug");
+      next(error);
+    }
+  };
+
+  /** User fetch their own blogs */
+  getUserBlogs = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authorId = (req as any).user.id;
+      const { category, status, page, limit } = req.query;
+
+      const filters = {
+        authorId,
+        category: category as any,
+        status: status as any,
+        page: page ? parseInt(page as string) : undefined,
+        limit: limit ? parseInt(limit as string) : undefined,
+      };
+
+      const result = await this._getUserBlogsUseCase.execute(filters);
+      return res.status(HttpStatusCodes.OK).json({
+        success: true,
+        blogs: result.blogs,
+        total: result.total,
+      });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - getUserBlogs");
+      next(error);
+    }
+  };
+
+  updateBlog = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { id } = req.params;
+      const result = UpdateBlogSchema.safeParse({ ...req.body, id });
+
+      if (!result.success) {
+        throw new CustomError(
+          HttpStatusCodes.BAD_REQUEST,
+          result.error.issues[0].message,
+        );
+      }
+
+      const blog = await this._updateBlogUseCase.execute(result.data, userId);
+      return res.status(HttpStatusCodes.OK).json({ success: true, blog });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - updateBlog");
+      next(error);
+    }
+  };
+
+  deleteBlog = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { id } = req.params;
+
+      const success = await this._deleteBlogUseCase.execute(id, userId);
+      return res.status(HttpStatusCodes.OK).json({ success });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - deleteBlog");
+      next(error);
+    }
+  };
+
+  getBlogById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { id } = req.params;
+
+      const blog = await this._getBlogByIdUseCase.execute(id, userId);
+      return res.status(HttpStatusCodes.OK).json({ success: true, blog });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - getBlogById");
+      next(error);
+    }
+  };
+
+  adminGetBlogById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const blog = await this._adminGetBlogByIdUseCase.execute(id);
+      return res.status(HttpStatusCodes.OK).json({ success: true, blog });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - adminGetBlogById");
       next(error);
     }
   };

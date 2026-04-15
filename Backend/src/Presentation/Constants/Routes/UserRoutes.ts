@@ -38,6 +38,10 @@ export const USER_ROUTES = {
   BLOG:"/blog",
   BLOG_UPLOADURL:"/blog/upload-url",
   BLOG_VIEW:"/blog/:id/view",
+  MY_BLOGS:"/my-blogs",
+  UPDATE_BLOG:"/blog/:id",
+  DELETE_BLOG:"/blog/:id",
+  BLOG_BY_ID: "/blog/id/:id",
 
   LEARN:"/learn",
   LEARN_ID:"/learn/:id",

@@ -46,6 +46,7 @@ export class AdminRoutes{
 
     // Blog management routes
     this.router.get(ADMIN_ROUTES.BLOGS, blogController.adminGetAllBlogs);
+    this.router.get(ADMIN_ROUTES.GET_BLOG_BY_ID, blogController.adminGetBlogById);
     this.router.patch(ADMIN_ROUTES.MODERATE_BLOG, blogController.moderateBlog);
   }
 }

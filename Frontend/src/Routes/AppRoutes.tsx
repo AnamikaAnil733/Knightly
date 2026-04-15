@@ -27,6 +27,7 @@ import BlogListPage from "../Pages/User/BlogListPage";
 import BlogDetailPage from "../Pages/User/BlogDetailPage";
 import BlogWorkspacePage from "../Pages/User/BlogWorkspacePage";
 import BlogManagement from "../Pages/Admin/BlogManagement";
+import BlogDashboardPage from "../Pages/User/BlogDashboardPage";
 
 export default function AppRoutes() {
   return (
@@ -63,6 +64,8 @@ export default function AppRoutes() {
       <Route path="/blogs" element={<BlogListPage />} />
       <Route path="/blogs/:slug" element={<BlogDetailPage />} />
       <Route path="/blog/create" element={<BlogWorkspacePage />} />
+      <Route path="/blog/edit/:id" element={<BlogWorkspacePage />} />
+      <Route path="/dashboard/blogs" element={<BlogDashboardPage />} />
 
       <Route
         path="/admin"

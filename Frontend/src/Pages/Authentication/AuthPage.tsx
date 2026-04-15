@@ -73,6 +73,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     register: regSignup,
     handleSubmit: handleSignupSubmit,
     watch,
+    getValues,
     formState: { errors: signupErrors },
   } = useForm<SignupFormData>({
     defaultValues: {
@@ -111,7 +112,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   const signupMutation = useMutation({
     mutationFn: sendSignupOtp,
     onSuccess: (_, variables) => {
-      const signupData = watch();
+      const signupData = getValues();
       navigate("/verify-otp", {
         state: {
           displayname: signupData.displayname,

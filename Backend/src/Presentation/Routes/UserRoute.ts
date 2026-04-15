@@ -105,5 +105,9 @@ export class UserRoutes {
     this.router.get(USER_ROUTES.BLOGS, blogController.getAllBlogs);
     this.router.get(USER_ROUTES.BLOG_DETAIL, blogController.getBlogBySlug);
     this.router.post(USER_ROUTES.BLOG_VIEW, blogController.incrementView);
+    this.router.get(USER_ROUTES.MY_BLOGS, blogController.getUserBlogs);
+    this.router.patch(USER_ROUTES.UPDATE_BLOG, blogController.updateBlog);
+    this.router.delete(USER_ROUTES.DELETE_BLOG, blogController.deleteBlog);
+    this.router.get(USER_ROUTES.BLOG_BY_ID, blogController.getBlogById);
   }
 }

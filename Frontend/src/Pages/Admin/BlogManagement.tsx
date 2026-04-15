@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { adminGetAllBlogs, moderateBlog } from "../../Service/Api/BlogApi";
+import {
+  adminGetAllBlogs,
+  moderateBlog,
+  adminGetBlogById,
+} from "../../Service/Api/BlogApi";
 import { BlogResponseDTO, BlogStatus } from "../../Types/BlogTypes";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
+import {
+  Eye,
+  FileText,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  ChevronLeft,
+} from "lucide-react";
 
 export const AdminBlogManagement: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
@@ -11,6 +23,8 @@ export const AdminBlogManagement: React.FC = () => {
   const [selectedBlog, setSelectedBlog] = useState<BlogResponseDTO | null>(
     null,
   );
+  const [reviewBlog, setReviewBlog] = useState<BlogResponseDTO | null>(null);
+  const [fetchingReview, setFetchingReview] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
 
   const fetchBlogs = React.useCallback(async () => {
@@ -43,12 +57,25 @@ export const AdminBlogManagement: React.FC = () => {
         `Blog ${status === BlogStatus.PUBLISHED ? "Approved" : "Rejected"} successfully!`,
       );
       setSelectedBlog(null);
+      setReviewBlog(null);
       setRejectionReason("");
       fetchBlogs();
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Moderation failed.";
       toast.error(errorMessage);
+    }
+  };
+
+  const handleReview = async (id: string) => {
+    try {
+      setFetchingReview(true);
+      const blog = await adminGetBlogById(id);
+      setReviewBlog(blog);
+    } catch {
+      toast.error("Failed to fetch full blog content.");
+    } finally {
+      setFetchingReview(false);
     }
   };
 
@@ -120,24 +147,34 @@ export const AdminBlogManagement: React.FC = () => {
                 </div>
               </div>
 
-              {filter === BlogStatus.DRAFT && (
-                <div className="flex gap-3">
-                  <button
-                    onClick={() =>
-                      handleModerate(blog.id, BlogStatus.PUBLISHED)
-                    }
-                    className="px-4 py-2 bg-green-600/20 text-green-400 border border-green-600/30 rounded-lg text-xs font-bold hover:bg-green-600/30 transition-all"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => setSelectedBlog(blog)}
-                    className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-600/30 rounded-lg text-xs font-bold hover:bg-red-600/30 transition-all"
-                  >
-                    Reject
-                  </button>
-                </div>
-              )}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleReview(blog.id)}
+                  className="p-2 bg-white/5 hover:bg-gold hover:text-navy-dark rounded-lg transition-all text-gray-light"
+                  title="Review Full Content"
+                >
+                  <Eye className="w-5 h-5" />
+                </button>
+
+                {filter === BlogStatus.DRAFT && (
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() =>
+                        handleModerate(blog.id, BlogStatus.PUBLISHED)
+                      }
+                      className="px-4 py-2 bg-green-600/20 text-green-400 border border-green-600/30 rounded-lg text-xs font-bold hover:bg-green-600/30 transition-all"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => setSelectedBlog(blog)}
+                      className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-600/30 rounded-lg text-xs font-bold hover:bg-red-600/30 transition-all"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {filter === BlogStatus.REJECTED && blog.rejectionReason && (
                 <div className="text-xs text-red-400 bg-red-400/5 p-3 rounded-lg border border-red-400/10 max-w-xs italic">
@@ -201,6 +238,138 @@ export const AdminBlogManagement: React.FC = () => {
                 </button>
               </div>
             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Full Content Review Modal */}
+      <AnimatePresence>
+        {reviewBlog && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-0 md:p-6 lg:p-12">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-navy-midnight/90 backdrop-blur-md"
+              onClick={() => setReviewBlog(null)}
+            />
+            <motion.div
+              initial={{ x: "100%", opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: "100%", opacity: 0 }}
+              className="bg-navy-card border-l border-white/10 w-full max-w-4xl h-full relative z-10 overflow-y-auto flex flex-col items-stretch"
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-navy-card/80 backdrop-blur-xl border-b border-white/5 p-6 flex items-center justify-between z-20">
+                <button
+                  onClick={() => setReviewBlog(null)}
+                  className="flex items-center gap-2 text-gray-light hover:text-gold transition-colors font-cinzel text-sm"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                  Back to Queue
+                </button>
+                {reviewBlog.status === BlogStatus.DRAFT && (
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() =>
+                        handleModerate(reviewBlog.id, BlogStatus.PUBLISHED)
+                      }
+                      className="px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-bold transition-all flex items-center gap-2"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      Approve Request
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedBlog(reviewBlog);
+                      }}
+                      className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold transition-all flex items-center gap-2"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      Reject Piece
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="p-8 md:p-12 flex flex-col">
+                {reviewBlog.coverImage && (
+                  <div className="w-full h-[400px] rounded-3xl overflow-hidden border border-white/10 mb-12">
+                    <img
+                      src={reviewBlog.coverImage}
+                      alt={reviewBlog.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+
+                <div className="max-w-2xl mx-auto w-full">
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="px-3 py-1 rounded-full bg-purple-accent/10 border border-purple-accent/30 text-purple-accent text-[10px] font-bold uppercase tracking-wider">
+                      {reviewBlog.category}
+                    </span>
+                    <span className="flex items-center gap-2 text-xs text-gray-500">
+                      <Clock className="w-3 h-3" />
+                      {new Date(reviewBlog.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <h1 className="text-4xl md:text-5xl font-cinzel font-bold text-white mb-8 leading-tight">
+                    {reviewBlog.title}
+                  </h1>
+
+                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/2 border border-white/5 mb-12">
+                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-gold" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-light uppercase tracking-tighter">
+                        Submitted By
+                      </p>
+                      <p className="text-sm font-bold text-white">
+                        Author_{reviewBlog.authorId.slice(-8)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-xl text-gray-light font-inter italic leading-relaxed mb-12 border-l-4 border-gold/30 pl-6">
+                    {reviewBlog.excerpt}
+                  </p>
+
+                  <div className="prose prose-invert prose-gold max-w-none text-gray-300 font-inter leading-loose space-y-6 whitespace-pre-wrap">
+                    {reviewBlog.content}
+                  </div>
+
+                  {reviewBlog.tags && (
+                    <div className="mt-16 pt-8 border-t border-white/5 flex flex-wrap gap-2">
+                      {reviewBlog.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Loading Overlay for Detail Fetch */}
+      <AnimatePresence>
+        {fetchingReview && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-midnight/50 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 border-4 border-gold/20 border-t-gold rounded-full animate-spin" />
+              <p className="text-gold font-cinzel tracking-widest text-sm animate-pulse">
+                RETRIEVING FULL MANUSCRIPT...
+              </p>
+            </div>
           </div>
         )}
       </AnimatePresence>

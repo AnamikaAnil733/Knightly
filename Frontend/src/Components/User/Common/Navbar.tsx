@@ -62,6 +62,7 @@ export function Navbar() {
     { to: "/puzzles", label: "Puzzles" },
     { to: "/learn", label: "Learn" },
     { to: "/about", label: "About" },
+    ...(user ? [{ to: "/dashboard/blogs", label: "My Blogs" }] : []),
     { to: "/settings", label: "Settings" },
   ];
 
@@ -80,12 +81,12 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-5">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="text-white hover:text-[#4F7CFF] transition-colors flex items-center gap-2 relative group"
+              className="text-white hover:text-[#4F7CFF] transition-colors flex items-center gap-2 relative group text-sm font-medium"
             >
               {link.icon}
               {link.label}

@@ -13,5 +13,6 @@ export const ADMIN_ROUTES = {
   GENERATE_PUZZLE_FROM_GAME: "/generate-puzzle-from-game/:gameId",
 
   BLOGS: "/blogs",
+  GET_BLOG_BY_ID: "/blogs/:id",
   MODERATE_BLOG: "/blogs/moderate",
 } as const;

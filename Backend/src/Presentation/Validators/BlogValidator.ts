@@ -17,7 +17,7 @@ export const CreateBlogSchema = z.object({
   category: z.nativeEnum(BlogCategory, {
     message: "Invalid blog category",
   }),
-  coverImage: z.string().url({ message: "Invalid cover image URL" }).optional().or(z.literal("")),
+  coverImage: z.string().optional().or(z.literal("")),
   authorId: z.string().min(1, { message: "Author ID is required" }),
   authorRole: z.nativeEnum(BlogAuthorRole, {
     message: "Invalid author role",
@@ -42,7 +42,7 @@ export const UpdateBlogSchema = z.object({
     .optional(),
   tags: z.array(z.string()).optional(),
   category: z.nativeEnum(BlogCategory).optional(),
-  coverImage: z.string().url({ message: "Invalid cover image URL" }).optional().or(z.literal("")),
+  coverImage: z.string().optional().or(z.literal("")),
 });
 
 export const BlogModerationSchema = z.object({

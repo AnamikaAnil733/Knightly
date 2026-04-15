@@ -70,6 +70,23 @@ export const getBlogBySlug = async (slug: string): Promise<BlogResponseDTO> => {
   }
 };
 
+/** Fetch a single blog by its ID. */
+export const getBlogById = async (id: string): Promise<BlogResponseDTO> => {
+  try {
+    const response = await userApi.get<{ blog: BlogResponseDTO }>(
+      `/user/blog/id/${id}`,
+    );
+    return response.data.blog;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch blog post",
+      );
+    }
+    throw error;
+  }
+};
+
 /** Create a new blog post. */
 export const createBlog = async (
   data: CreateBlogInputDTO,
@@ -101,6 +118,21 @@ export const updateBlog = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message || "Failed to update blog");
+    }
+    throw error;
+  }
+};
+
+/** Delete a blog post. */
+export const deleteBlog = async (id: string): Promise<boolean> => {
+  try {
+    const response = await userApi.delete<{ success: boolean }>(
+      `/user/blog/${id}`,
+    );
+    return response.data.success;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message || "Failed to delete blog");
     }
     throw error;
   }
@@ -149,6 +181,47 @@ export const adminGetAllBlogs = async (filters?: {
     if (error instanceof AxiosError) {
       throw new Error(
         error.response?.data.message || "Failed to fetch blogs for admin",
+      );
+    }
+    throw error;
+  }
+};
+
+/** Admin fetch single blog by ID (regardless of status). */
+export const adminGetBlogById = async (
+  id: string,
+): Promise<BlogResponseDTO> => {
+  try {
+    const response = await adminApi.get<{ blog: BlogResponseDTO }>(
+      `/admin/blogs/${id}`,
+    );
+    return response.data.blog;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch blog for admin",
+      );
+    }
+    throw error;
+  }
+};
+
+/** Fetch blogs authored by the current user. */
+export const getUserBlogs = async (filters?: {
+  category?: BlogCategory;
+  status?: BlogStatus;
+  page?: number;
+  limit?: number;
+}): Promise<BlogListResponseDTO> => {
+  try {
+    const response = await userApi.get<BlogListResponseDTO>("/user/my-blogs", {
+      params: filters,
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(
+        error.response?.data.message || "Failed to fetch your blogs",
       );
     }
     throw error;
