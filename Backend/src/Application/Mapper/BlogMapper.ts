@@ -14,6 +14,7 @@ export class BlogMapper {
       category:blog.category,
       status:blog.status,
       authorId:blog.authorId,
+      authorName:blog.authorName,
       authorRole:blog.authorRole,
       viewCount:blog.viewCount,
       likes: blog.likes,

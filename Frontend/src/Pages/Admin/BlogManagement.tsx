@@ -142,7 +142,7 @@ export const AdminBlogManagement: React.FC = () => {
                     {blog.category}
                   </span>
                   <span className="text-xs text-gray-500">
-                    By Author_{blog.authorId.slice(-4)}
+                    By {blog.authorName}
                   </span>
                 </div>
               </div>
@@ -328,7 +328,7 @@ export const AdminBlogManagement: React.FC = () => {
                         Submitted By
                       </p>
                       <p className="text-sm font-bold text-white">
-                        Author_{reviewBlog.authorId.slice(-8)}
+                        {reviewBlog.authorName}
                       </p>
                     </div>
                   </div>

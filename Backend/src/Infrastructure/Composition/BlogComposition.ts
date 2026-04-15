@@ -14,10 +14,12 @@ import { GetBlogByIdUseCase } from "../../Application/UseCases/User/BlogManageme
 import { ToggleLikeUseCase } from "../../Application/UseCases/User/BlogManagement/ToggleLikeUseCase";
 import { AddCommentUseCase, GetBlogCommentsUseCase, DeleteCommentUseCase } from "../../Application/UseCases/User/BlogManagement/CommentUseCases";
 import { CommentRepository } from "../Repository/CommentRepository";
+import { AuthRepository } from "../Repository/AuthRepository";
 import { S3StorageService } from "../Services/S3Service";
 
 const blogRepository = new BlogRepository();
 const commentRepository = new CommentRepository();
+const userRepository = new AuthRepository();
 const s3Service = new S3StorageService();
 
 const createBlogUseCase = new CreateBlogUseCase(blogRepository);
@@ -52,4 +54,5 @@ export const blogController = new BlogController(
   addCommentUseCase,
   getBlogCommentsUseCase,
   deleteCommentUseCase,
+  userRepository,
 );

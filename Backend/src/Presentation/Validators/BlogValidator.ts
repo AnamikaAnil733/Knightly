@@ -19,6 +19,7 @@ export const CreateBlogSchema = z.object({
   }),
   coverImage: z.string().optional().or(z.literal("")),
   authorId: z.string().min(1, { message: "Author ID is required" }),
+  authorName: z.string().min(1, { message: "Author Name is required" }),
   authorRole: z.nativeEnum(BlogAuthorRole, {
     message: "Invalid author role",
   }),

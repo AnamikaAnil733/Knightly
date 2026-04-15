@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
-import { getBlogBySlug, incrementView, toggleLike } from "../../Service/Api/BlogApi";
+import {
+  getBlogBySlug,
+  incrementView,
+  toggleLike,
+} from "../../Service/Api/BlogApi";
 import { BlogResponseDTO } from "../../Types/BlogTypes";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -44,6 +48,7 @@ const BlogDetailPage: React.FC = () => {
       toast.error("Please log in to endorse this chronicle.");
       return;
     }
+
     if (!blog) return;
 
     try {
@@ -103,7 +108,7 @@ const BlogDetailPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-gold">By</span>
                   <span className="text-white font-medium">
-                    Author_{blog.authorId.slice(-4)}
+                    {blog.authorName}
                   </span>
                 </div>
                 <div>•</div>

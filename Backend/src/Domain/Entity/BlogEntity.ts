@@ -11,6 +11,7 @@ export default class BlogEntity {
   private _category: BlogCategory;
   private _status: BlogStatus;
   private _authorId: string;
+  private _authorName: string;
   private _authorRole: BlogAuthorRole;
   private _viewCount: number;
   private _likes: string[];
@@ -29,6 +30,7 @@ export default class BlogEntity {
     category: BlogCategory;
     status?: BlogStatus;
     authorId: string;
+    authorName: string;
     authorRole: BlogAuthorRole;
     viewCount?: number;
     likes?: string[];
@@ -46,6 +48,7 @@ export default class BlogEntity {
     this._category = params.category;
     this._status = params.status ?? BlogStatus.DRAFT;
     this._authorId = params.authorId;
+    this._authorName = params.authorName;
     this._authorRole = params.authorRole;
     this._viewCount = params.viewCount ?? 0;
     this._likes = params.likes ?? [];
@@ -65,6 +68,7 @@ export default class BlogEntity {
   get category()         { return this._category; }
   get status()           { return this._status; }
   get authorId()         { return this._authorId; }
+  get authorName()       { return this._authorName; }
   get authorRole()       { return this._authorRole; }
   get viewCount()        { return this._viewCount; }
   get likes()            { return this._likes; }

@@ -16,6 +16,7 @@ import { IGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/User/
 import { IAdminGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/Admin/BlogManagement/IAdminGetBlogByIdUseCase";
 import { IToggleLikeUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IToggleLikeUseCase";
 import { IAddCommentUseCase, IGetBlogCommentsUseCase, IDeleteCommentUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/ICommentUseCases";
+import { IUserRepository } from "../../../../Domain/Interface/Repositories/IUserRepository";
 import { logger } from "../../../../Infrastructure/Logger/Logger";
 
 
@@ -36,6 +37,7 @@ export class BlogController{
     private readonly _addCommentUseCase: IAddCommentUseCase,
     private readonly _getBlogCommentsUseCase: IGetBlogCommentsUseCase,
     private readonly _deleteCommentUseCase: IDeleteCommentUseCase,
+    private readonly _userRepository: IUserRepository,
   ) {}
 
   getCoverUploadUrl = async (req: Request, res: Response, next: NextFunction) => {
@@ -61,7 +63,21 @@ export class BlogController{
 
   createBlog = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = CreateBlogSchema.safeParse(req.body);
+      const userId = (req as any).user.id;
+      const userRole = (req as any).user.role;
+
+      const user = await this._userRepository.findById(userId);
+      if (!user) {
+        throw new CustomError(HttpStatusCodes.NOT_FOUND, "User not found");
+      }
+
+      const inputData = {
+        ...req.body,
+        authorId: userId,
+        authorRole: userRole,
+        authorName: user.displayname,      };
+
+      const result = CreateBlogSchema.safeParse(inputData);
       if (!result.success) {
         throw new CustomError(
           HttpStatusCodes.BAD_REQUEST,

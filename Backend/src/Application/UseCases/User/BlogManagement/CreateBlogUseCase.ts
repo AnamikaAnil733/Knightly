@@ -28,6 +28,7 @@ export class CreateBlogUseCase implements ICreateBlogUseCase{
     const blog = new BlogEntity({
       ...input,
       slug: uniqueSlug,
+      authorName: input.authorName,
       status: BlogStatus.DRAFT,
       viewCount: 0,
       createdAt: new Date(),

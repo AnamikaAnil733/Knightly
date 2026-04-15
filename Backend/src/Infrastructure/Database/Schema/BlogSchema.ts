@@ -11,6 +11,7 @@ export interface BlogDocument {
   category: BlogCategory;
   status: BlogStatus;
   authorId: string;
+  authorName: string;
   authorRole: BlogAuthorRole;
   viewCount: number;
   likes: string[];
@@ -38,6 +39,7 @@ export const BlogSchema = new Schema<BlogDocument>(
       default: BlogStatus.DRAFT,
     },
     authorId: { type: String, required: true },
+    authorName: { type: String, required: true },
     authorRole: {
       type: String,
       enum: Object.values(BlogAuthorRole),

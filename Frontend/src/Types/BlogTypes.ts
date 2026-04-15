@@ -27,6 +27,7 @@ export interface BlogResponseDTO {
   category: BlogCategory;
   status: BlogStatus;
   authorId: string;
+  authorName: string;
   authorRole: BlogAuthorRole;
   viewCount: number;
   likes: string[];
@@ -43,6 +44,7 @@ export interface CreateBlogInputDTO {
   category: BlogCategory;
   coverImage?: string;
   authorId: string;
+  authorName: string;
   authorRole: BlogAuthorRole;
 }
 
