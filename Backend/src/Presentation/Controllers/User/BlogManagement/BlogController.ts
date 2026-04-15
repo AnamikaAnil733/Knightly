@@ -14,6 +14,8 @@ import { IUpdateBlogUseCase } from "../../../../Domain/Interface/Usecases/User/B
 import { IDeleteBlogUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IDeleteBlogUseCase";
 import { IGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetBlogByIdUseCase";
 import { IAdminGetBlogByIdUseCase } from "../../../../Domain/Interface/Usecases/Admin/BlogManagement/IAdminGetBlogByIdUseCase";
+import { IToggleLikeUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IToggleLikeUseCase";
+import { IAddCommentUseCase, IGetBlogCommentsUseCase, IDeleteCommentUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/ICommentUseCases";
 import { logger } from "../../../../Infrastructure/Logger/Logger";
 
 
@@ -30,6 +32,10 @@ export class BlogController{
     private readonly _deleteBlogUseCase: IDeleteBlogUseCase,
     private readonly _getBlogByIdUseCase: IGetBlogByIdUseCase,
     private readonly _adminGetBlogByIdUseCase: IAdminGetBlogByIdUseCase,
+    private readonly _toggleLikeUseCase: IToggleLikeUseCase,
+    private readonly _addCommentUseCase: IAddCommentUseCase,
+    private readonly _getBlogCommentsUseCase: IGetBlogCommentsUseCase,
+    private readonly _deleteCommentUseCase: IDeleteCommentUseCase,
   ) {}
 
   getCoverUploadUrl = async (req: Request, res: Response, next: NextFunction) => {
@@ -239,6 +245,59 @@ export class BlogController{
       return res.status(HttpStatusCodes.OK).json({ success: true, blog });
     } catch (error) {
       logger.error({ error }, "ERROR: BlogController - adminGetBlogById");
+      next(error);
+    }
+  };
+
+  toggleLike = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { id } = req.params;
+      const blog = await this._toggleLikeUseCase.execute(id, userId);
+      return res.status(HttpStatusCodes.OK).json({ success: true, blog });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - toggleLike");
+      next(error);
+    }
+  };
+
+  addComment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { blogId, content, authorName, authorAvatar } = req.body;
+      const comment = await this._addCommentUseCase.execute({
+        blogId,
+        content,
+        authorId: userId,
+        authorName,
+        authorAvatar,
+      });
+      return res.status(HttpStatusCodes.OK).json({ success: true, comment });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - addComment");
+      next(error);
+    }
+  };
+
+  getComments = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { blogId } = req.params;
+      const comments = await this._getBlogCommentsUseCase.execute(blogId);
+      return res.status(HttpStatusCodes.OK).json({ success: true, comments });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - getComments");
+      next(error);
+    }
+  };
+
+  deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const { commentId } = req.params;
+      const success = await this._deleteCommentUseCase.execute(commentId, userId);
+      return res.status(HttpStatusCodes.OK).json({ success });
+    } catch (error) {
+      logger.error({ error }, "ERROR: BlogController - deleteComment");
       next(error);
     }
   };

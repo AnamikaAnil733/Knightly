@@ -11,9 +11,13 @@ import { GetUserBlogsUseCase } from "../../Application/UseCases/User/BlogManagem
 import { UpdateBlogUseCase } from "../../Application/UseCases/User/BlogManagement/UpdateBlogUseCase";
 import { DeleteBlogUseCase } from "../../Application/UseCases/User/BlogManagement/DeleteBlogUseCase";
 import { GetBlogByIdUseCase } from "../../Application/UseCases/User/BlogManagement/GetBlogByIdUseCase";
+import { ToggleLikeUseCase } from "../../Application/UseCases/User/BlogManagement/ToggleLikeUseCase";
+import { AddCommentUseCase, GetBlogCommentsUseCase, DeleteCommentUseCase } from "../../Application/UseCases/User/BlogManagement/CommentUseCases";
+import { CommentRepository } from "../Repository/CommentRepository";
 import { S3StorageService } from "../Services/S3Service";
 
 const blogRepository = new BlogRepository();
+const commentRepository = new CommentRepository();
 const s3Service = new S3StorageService();
 
 const createBlogUseCase = new CreateBlogUseCase(blogRepository);
@@ -27,6 +31,10 @@ const getUserBlogsUseCase = new GetUserBlogsUseCase(blogRepository, s3Service);
 const updateBlogUseCase = new UpdateBlogUseCase(blogRepository);
 const deleteBlogUseCase = new DeleteBlogUseCase(blogRepository);
 const getBlogByIdUseCase = new GetBlogByIdUseCase(blogRepository, s3Service);
+const toggleLikeUseCase = new ToggleLikeUseCase(blogRepository);
+const addCommentUseCase = new AddCommentUseCase(commentRepository);
+const getBlogCommentsUseCase = new GetBlogCommentsUseCase(commentRepository);
+const deleteCommentUseCase = new DeleteCommentUseCase(commentRepository);
 
 export const blogController = new BlogController(
   createBlogUseCase,
@@ -40,4 +48,8 @@ export const blogController = new BlogController(
   deleteBlogUseCase,
   getBlogByIdUseCase,
   adminGetBlogByIdUseCase,
+  toggleLikeUseCase,
+  addCommentUseCase,
+  getBlogCommentsUseCase,
+  deleteCommentUseCase,
 );

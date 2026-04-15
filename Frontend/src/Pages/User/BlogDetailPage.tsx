@@ -2,15 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
-import { getBlogBySlug, incrementView } from "../../Service/Api/BlogApi";
+import { getBlogBySlug, incrementView, toggleLike } from "../../Service/Api/BlogApi";
 import { BlogResponseDTO } from "../../Types/BlogTypes";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/Store";
+import { LikeButton } from "../../Components/User/Blog/LikeButton";
+import { CommentSection } from "../../Components/User/Blog/CommentSection";
 
 const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [blog, setBlog] = useState<BlogResponseDTO | null>(null);
   const [loading, setLoading] = useState(true);
+  const [likeLoading, setLikeLoading] = useState(false);
+
+  const user = useSelector((state: RootState) => state.userAuth.user);
 
   useEffect(() => {
     if (slug) {
@@ -29,6 +36,24 @@ const BlogDetailPage: React.FC = () => {
       toast.error("Could not load blog post.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleLike = async () => {
+    if (!user) {
+      toast.error("Please log in to endorse this chronicle.");
+      return;
+    }
+    if (!blog) return;
+
+    try {
+      setLikeLoading(true);
+      const updatedBlog = await toggleLike(blog.id);
+      setBlog(updatedBlog);
+    } catch (error: any) {
+      toast.error(error.message || "Action failed.");
+    } finally {
+      setLikeLoading(false);
     }
   };
 
@@ -85,6 +110,14 @@ const BlogDetailPage: React.FC = () => {
                 <div>{new Date(blog.createdAt).toLocaleDateString()}</div>
                 <div>•</div>
                 <div>{blog.viewCount} Views</div>
+                <div className="hidden md:block scale-75 origin-left">
+                  <LikeButton
+                    likes={blog.likes || []}
+                    userId={user?.id}
+                    onToggle={handleToggleLike}
+                    loading={likeLoading}
+                  />
+                </div>
               </div>
             </motion.div>
           </div>
@@ -101,7 +134,6 @@ const BlogDetailPage: React.FC = () => {
           <article className="prose prose-invert prose-gold max-w-none text-gray-light leading-loose text-lg space-y-8 whitespace-pre-wrap">
             {blog.content}
           </article>
-
           {/* Tags */}
           <div className="mt-16 flex flex-wrap gap-3">
             {blog.tags.map((tag) => (
@@ -113,6 +145,19 @@ const BlogDetailPage: React.FC = () => {
               </span>
             ))}
           </div>
+
+          {/* Social Engagement Footer */}
+          <div className="mt-12 py-8 border-y border-white/5 flex items-center justify-between">
+            <LikeButton
+              likes={blog.likes || []}
+              userId={user?.id}
+              onToggle={handleToggleLike}
+              loading={likeLoading}
+            />
+          </div>
+
+          {/* Comments Section */}
+          <CommentSection blogId={blog.id} />
 
           {/* Navigation Back */}
           <div className="mt-20 pt-10 border-t border-white/5">

@@ -29,6 +29,7 @@ export interface BlogResponseDTO {
   authorId: string;
   authorRole: BlogAuthorRole;
   viewCount: number;
+  likes: string[];
   rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
@@ -64,4 +65,15 @@ export interface ModerationInputDTO {
 export interface BlogListResponseDTO {
   blogs: BlogResponseDTO[];
   total: number;
+}
+
+export interface CommentDTO {
+  id: string;
+  blogId: string;
+  authorId: string;
+  authorName: string;
+  authorAvatar?: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
 }

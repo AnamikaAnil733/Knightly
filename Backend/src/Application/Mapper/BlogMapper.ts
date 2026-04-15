@@ -16,6 +16,7 @@ export class BlogMapper {
       authorId:blog.authorId,
       authorRole:blog.authorRole,
       viewCount:blog.viewCount,
+      likes: blog.likes,
       rejectionReason:blog.rejectionReason,
       createdAt:blog.createdAt,
       updatedAt:blog.updatedAt,

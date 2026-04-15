@@ -13,6 +13,7 @@ export default class BlogEntity {
   private _authorId: string;
   private _authorRole: BlogAuthorRole;
   private _viewCount: number;
+  private _likes: string[];
   private _rejectionReason?: string;
   private _createdAt: Date;
   private _updatedAt: Date;
@@ -30,6 +31,7 @@ export default class BlogEntity {
     authorId: string;
     authorRole: BlogAuthorRole;
     viewCount?: number;
+    likes?: string[];
     rejectionReason?: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -46,6 +48,7 @@ export default class BlogEntity {
     this._authorId = params.authorId;
     this._authorRole = params.authorRole;
     this._viewCount = params.viewCount ?? 0;
+    this._likes = params.likes ?? [];
     this._rejectionReason = params.rejectionReason;
     this._createdAt = params.createdAt ?? new Date();
     this._updatedAt = params.updatedAt ?? new Date();
@@ -64,6 +67,7 @@ export default class BlogEntity {
   get authorId()         { return this._authorId; }
   get authorRole()       { return this._authorRole; }
   get viewCount()        { return this._viewCount; }
+  get likes()            { return this._likes; }
   get rejectionReason()  { return this._rejectionReason; }
   get createdAt()        { return this._createdAt; }
   get updatedAt()        { return this._updatedAt; }
@@ -107,6 +111,17 @@ export default class BlogEntity {
   /** Increment view counter (called on every public read). */
   incrementView() {
     this._viewCount++;
+  }
+
+  /** Toggles a user ID in the likes array. */
+  toggleLike(userId: string) {
+    const index = this._likes.indexOf(userId);
+    if (index === -1) {
+      this._likes.push(userId);
+    } else {
+      this._likes.splice(index, 1);
+    }
+    this._updatedAt = new Date();
   }
 
   /** Returns true when the post is still editable by its author. */

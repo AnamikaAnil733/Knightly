@@ -13,6 +13,7 @@ export interface BlogResponseDTO {
   authorId: string;
   authorRole: BlogAuthorRole;
   viewCount: number;
+  likes: string[];
   rejectionReason?: string;
   createdAt: Date;
   updatedAt: Date;

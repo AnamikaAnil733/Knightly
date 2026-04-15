@@ -109,5 +109,9 @@ export class UserRoutes {
     this.router.patch(USER_ROUTES.UPDATE_BLOG, blogController.updateBlog);
     this.router.delete(USER_ROUTES.DELETE_BLOG, blogController.deleteBlog);
     this.router.get(USER_ROUTES.BLOG_BY_ID, blogController.getBlogById);
+    this.router.post(USER_ROUTES.BLOG_TOGGLE_LIKE, blogController.toggleLike);
+    this.router.post(USER_ROUTES.BLOG_COMMENTS, blogController.addComment);
+    this.router.get(USER_ROUTES.BLOG_COMMENTS, blogController.getComments);
+    this.router.delete(USER_ROUTES.BLOG_DELETE_COMMENT, blogController.deleteComment);
   }
 }

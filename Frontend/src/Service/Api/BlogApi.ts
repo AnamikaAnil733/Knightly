@@ -9,6 +9,7 @@ import {
   BlogListResponseDTO,
   BlogCategory,
   BlogStatus,
+  CommentDTO,
 } from "../../Types/BlogTypes";
 
 /** Fetch signed S3 URL for blog cover upload. */
@@ -223,6 +224,72 @@ export const getUserBlogs = async (filters?: {
       throw new Error(
         error.response?.data.message || "Failed to fetch your blogs",
       );
+    }
+    throw error;
+  }
+};
+
+/** Toggle like on a blog. */
+export const toggleLike = async (id: string): Promise<BlogResponseDTO> => {
+  try {
+    const response = await userApi.post<{ success: boolean; blog: BlogResponseDTO }>(
+      `/user/blog/${id}/like`,
+    );
+    return response.data.blog;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message || "Failed to toggle like");
+    }
+    throw error;
+  }
+};
+
+/** Fetch all comments for a blog. */
+export const getBlogComments = async (blogId: string): Promise<CommentDTO[]> => {
+  try {
+    const response = await userApi.get<{ success: boolean; comments: CommentDTO[] }>(
+      `/user/blog/${blogId}/comments`,
+    );
+    return response.data.comments;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message || "Failed to fetch comments");
+    }
+    throw error;
+  }
+};
+
+/** Add a comment to a blog. */
+export const addComment = async (data: {
+  blogId: string;
+  content: string;
+  authorName: string;
+  authorAvatar?: string;
+}): Promise<CommentDTO> => {
+  try {
+    const response = await userApi.post<{ success: boolean; comment: CommentDTO }>(
+      `/user/blog/${data.blogId}/comments`,
+      data,
+    );
+    return response.data.comment;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message || "Failed to add comment");
+    }
+    throw error;
+  }
+};
+
+/** Delete a comment. */
+export const deleteComment = async (commentId: string): Promise<boolean> => {
+  try {
+    const response = await userApi.delete<{ success: boolean }>(
+      `/user/blog/comment/${commentId}`,
+    );
+    return response.data.success;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message || "Failed to delete comment");
     }
     throw error;
   }

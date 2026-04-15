@@ -13,6 +13,7 @@ export interface BlogDocument {
   authorId: string;
   authorRole: BlogAuthorRole;
   viewCount: number;
+  likes: string[];
   rejectionReason?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -43,6 +44,7 @@ export const BlogSchema = new Schema<BlogDocument>(
       required: true,
     },
     viewCount: { type: Number, default: 0 },
+    likes: { type: [String], default: [] },
     rejectionReason: { type: String },
   },
   { timestamps: true },

@@ -42,6 +42,9 @@ export const USER_ROUTES = {
   UPDATE_BLOG:"/blog/:id",
   DELETE_BLOG:"/blog/:id",
   BLOG_BY_ID: "/blog/id/:id",
+  BLOG_TOGGLE_LIKE: "/blog/:id/like",
+  BLOG_COMMENTS: "/blog/:blogId/comments",
+  BLOG_DELETE_COMMENT: "/blog/comment/:commentId",
 
   LEARN:"/learn",
   LEARN_ID:"/learn/:id",

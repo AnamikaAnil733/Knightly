@@ -17,6 +17,7 @@ export class MongoBlogMapper {
       authorId: doc.authorId,
       authorRole: doc.authorRole,
       viewCount: doc.viewCount,
+      likes: doc.likes,
       rejectionReason: doc.rejectionReason,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
@@ -36,6 +37,7 @@ export class MongoBlogMapper {
       authorId: blog.authorId,
       authorRole: blog.authorRole,
       viewCount: blog.viewCount,
+      likes: blog.likes,
       rejectionReason: blog.rejectionReason,
     };
   }
