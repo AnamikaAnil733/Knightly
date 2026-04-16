@@ -169,7 +169,9 @@ function App() {
           setInviteData(null);
           setShowInviteModal(false);
         }}
-        onAccept={(receiverIsPublic: boolean) => handleAcceptInvite(receiverIsPublic)}
+        onAccept={(receiverIsPublic: boolean) =>
+          handleAcceptInvite(receiverIsPublic)
+        }
         onReject={handleRejectInvite}
       />
       <AppRoutes />

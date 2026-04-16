@@ -19,12 +19,19 @@ export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
         ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
         : null;
 
+      const ratings = Object.values(user.rating).filter((r): r is number => typeof r === "number");
+      const averageRating = ratings.length > 0 
+        ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length)
+        : 0;
+
       return {
         rank: index + 1,
         displayname: user.displayname,
         avatarKey: avatarUrl || "",
         rating: user.rating[gameType],
+        averageRating: averageRating,
       };
     }));
+
   }
 }

@@ -64,7 +64,7 @@ export function WaitingRoom() {
       socket.off("searchCancelled");
       clearInterval(dotInterval);
     };
-  }, [user, navigate, format, modeName, preferredColor]);
+  }, [user, navigate, format, modeName, preferredColor, isPublic]);
 
   const handleCancel = () => {
     socket.emit("cancelSearch");

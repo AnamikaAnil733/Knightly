@@ -1,6 +1,7 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { DifficultyLevel } from "../../Types/PuzzleTypes";
+
 import {
   ChevronLeft,
   Brain,
@@ -19,17 +20,6 @@ import {
   getTodayLabel,
   isTodaysDifficulty,
 } from "../../Utils/GetDailyDifficulty";
-
-interface DifficultyLevel {
-  id: string;
-  name: string;
-  description: string;
-  icon: React.ElementType;
-  color: string;
-  ratingRange: string;
-  accent: string;
-  tasks: string;
-}
 
 const levels: DifficultyLevel[] = [
   {

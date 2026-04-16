@@ -3,16 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Play, Clock, Search, Ghost } from "lucide-react";
 import { getLiveGames } from "../../Service/Api/ChessApi";
-
-interface LiveGame {
-  id: string;
-  whitePlayerId?: string;
-  blackPlayerId?: string;
-  timeControl: string;
-  status: string;
-  whiteRatingChange?: number;
-  blackRatingChange?: number;
-}
+import { LiveGame } from "../../Types/LiveTypes";
 
 export function LiveGamesPage() {
   const navigate = useNavigate();

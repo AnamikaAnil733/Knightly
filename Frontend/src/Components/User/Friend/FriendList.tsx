@@ -149,7 +149,9 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
           </h2>
 
           <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-2xl border border-white/5">
-            <span className="text-xs font-bold text-[#94A3B8]">Public Match</span>
+            <span className="text-xs font-bold text-[#94A3B8]">
+              Public Match
+            </span>
             <button
               onClick={() => setIsPublic(!isPublic)}
               className={`w-10 h-5 rounded-full transition-all relative ${

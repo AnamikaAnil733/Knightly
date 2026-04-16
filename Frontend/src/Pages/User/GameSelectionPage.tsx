@@ -3,21 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Zap, Timer, Clock, Trophy, ChevronLeft, Bot } from "lucide-react";
 import { ColorSelectionModal } from "../../Components/User/Match/ColorSelectionModal";
-
-export interface TimeControlOption {
-  id: string; // The backend code, e.g., "1+0"
-  label: string; // The display label, e.g., "1 | 0"
-}
-
-interface GameMode {
-  id: string;
-  name: string;
-  duration: string;
-  description: string;
-  icon: React.ReactNode;
-  color: string;
-  options: TimeControlOption[];
-}
+import { GameMode } from "../../Types/Chess";
 
 const gameModes: GameMode[] = [
   {
@@ -166,12 +152,16 @@ export function GameSelectionPage() {
         >
           <div className="px-6 py-3">
             <h4 className="text-white font-bold text-sm">Public Match</h4>
-            <p className="text-[#C9CAD9]/60 text-xs">Allow others to spectate</p>
+            <p className="text-[#C9CAD9]/60 text-xs">
+              Allow others to spectate
+            </p>
           </div>
           <button
             onClick={() => setIsPublic(!isPublic)}
             className={`mr-3 w-14 h-8 rounded-full transition-all duration-300 relative ${
-              isPublic ? "bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF]" : "bg-white/10"
+              isPublic
+                ? "bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF]"
+                : "bg-white/10"
             }`}
           >
             <motion.div
@@ -200,10 +190,10 @@ export function GameSelectionPage() {
                   setSelectedBotLevel(firstOption);
                 } else {
                   navigate("/waiting", {
-                    state: { 
-                      format: firstOption.id, 
+                    state: {
+                      format: firstOption.id,
                       modeName: mode.name,
-                      isPublic 
+                      isPublic,
                     },
                   });
                 }
@@ -247,10 +237,10 @@ export function GameSelectionPage() {
                           setSelectedBotLevel(option);
                         } else {
                           navigate("/waiting", {
-                            state: { 
-                              format: option.id, 
+                            state: {
+                              format: option.id,
                               modeName: mode.name,
-                              isPublic 
+                              isPublic,
                             },
                           });
                         }
@@ -279,7 +269,7 @@ export function GameSelectionPage() {
             if (selectedBotLevel) {
               navigate("/waiting", {
                 state: {
-                  format: selectedBotLevel.id,
+                  format: selectedBotLevel.label,
                   modeName: "Play Computer",
                   preferredColor: color,
                   isPublic,

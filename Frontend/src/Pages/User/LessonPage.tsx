@@ -5,16 +5,7 @@ import { Footer } from "../../Components/User/Common/Footer";
 import { ChessboardPreview } from "../../Components/Admin/PuzzleManagement/ChessBoardPreview";
 import { getLessonById, getLessons } from "../../Service/Api/LearnApi";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
-
-interface LessonDetail {
-  id: string;
-  title: string;
-  category: string;
-  difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-  content: string;
-  order: number;
-  fen?: string;
-}
+import { LessonDetail } from "../../Types/LessonTypes";
 
 const DIFF_COLORS: Record<
   string,

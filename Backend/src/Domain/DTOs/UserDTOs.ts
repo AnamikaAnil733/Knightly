@@ -152,7 +152,9 @@ export interface LeaderBoardResponse {
   displayname: string;
   avatarKey: string;
   rating: number;
+  averageRating: number;
 }
+
 
 
 //------FriendManagementDTOs-----

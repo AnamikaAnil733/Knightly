@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getLeaderboard } from "../../Service/Api/ChessApi";
-import { Trophy, User, TrendingUp } from "lucide-react";
+import {
+  Trophy,
+  User,
+  TrendingUp,
+  Zap,
+  Flame,
+  Clock,
+  Award,
+} from "lucide-react";
 import { Navbar } from "../../Components/User/Common/Navbar";
 
 interface LeaderboardEntry {
@@ -10,8 +18,15 @@ interface LeaderboardEntry {
   rating: number;
 }
 
+const CATEGORIES = [
+  { id: "bullet", label: "Bullet", icon: Zap },
+  { id: "blitz", label: "Blitz", icon: Flame },
+  { id: "rapid", label: "Rapid", icon: Clock },
+  { id: "classical", label: "Classical", icon: Award },
+];
+
 export const LeaderBoardPage: React.FC = () => {
-  const [activeType] = useState("bullet");
+  const [activeType, setActiveType] = useState("bullet");
   const [players, setPlayers] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,10 +80,32 @@ export const LeaderBoardPage: React.FC = () => {
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-24">
-        <div className="text-center pt-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#FFD166] via-purple-400 to-[#FFD166] bg-clip-text text-transparent inline-block">
-            Leaderboard
+        <div className="text-center pt-8 mb-12">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#FFD166] via-purple-400 to-[#FFD166] bg-clip-text text-transparent inline-block mb-8">
+            Global Leaderboard
           </h1>
+
+          {/* Filter Bar */}
+          <div className="flex flex-wrap justify-end gap-4 bg-[#11193F]/40 backdrop-blur-md p-2 rounded-2xl border border-white/5 w-fit ml-auto">
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              const isActive = activeType === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveType(cat.id)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-bold tracking-wide uppercase text-xs ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#FFD166] to-[#FCA311] text-[#070B1E] shadow-[0_0_20px_rgba(252,163,17,0.3)] scale-105"
+                      : "text-white/40 hover:text-white/70 hover:bg-white/5"
+                  }`}
+                >
+                  <Icon size={16} />
+                  {cat.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Podium Section */}
@@ -194,8 +231,8 @@ export const LeaderBoardPage: React.FC = () => {
 
         {/* Section Title */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-[#FFD166] tracking-wide">
-            Top Players of the Week
+          <h2 className="text-2xl font-bold text-[#FFD166] tracking-wide uppercase">
+            Top {activeType} Players
           </h2>
         </div>
 

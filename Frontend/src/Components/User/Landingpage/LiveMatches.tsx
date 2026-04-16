@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { PlayIcon, ArrowRight, Trophy, Clock } from "lucide-react";
+import { ArrowRight, Trophy, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getLiveGames } from "../../../Service/Api/ChessApi";
 
+interface Match {
+  id?: string;
+  timeControl: string;
+  whitePlayerId?: string;
+  blackPlayerId?: string;
+}
+
 export function LiveMatches() {
   const navigate = useNavigate();
-  const [matches, setMatches] = useState<any[]>([]);
+  const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,10 +56,11 @@ export function LiveMatches() {
               Live Matches
             </h2>
             <p className="text-[#AAB3D1] max-w-lg text-lg">
-              Watch top players clash in real-time. Join as a spectator and learn from the masters.
+              Watch top players clash in real-time. Join as a spectator and
+              learn from the masters.
             </p>
           </div>
-          <button 
+          <button
             onClick={() => navigate("/live")}
             className="group flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-bold hover:bg-[#4F7CFF] hover:border-[#4F7CFF] transition-all"
           >
@@ -73,7 +81,9 @@ export function LiveMatches() {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#EF476F]/10 border border-[#EF476F]/20">
                     <div className="w-2 h-2 rounded-full bg-[#EF476F] animate-pulse" />
-                    <span className="text-[#EF476F] text-[10px] font-black tracking-widest uppercase">Live</span>
+                    <span className="text-[#EF476F] text-[10px] font-black tracking-widest uppercase">
+                      Live
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-[#AAB3D1] text-xs font-bold uppercase tracking-wider bg-white/5 px-4 py-1.5 rounded-full">
                     <Clock className="w-3.5 h-3.5" />
@@ -84,26 +94,36 @@ export function LiveMatches() {
                 {/* Rivalry Section */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
-                     <p className="text-white font-black text-xl mb-1 truncate">
-                       {match.whitePlayerId === "stockfish-bot" ? "Stockfish AI" : (match.whitePlayerId || "Anonymous")}
-                     </p>
+                    <p className="text-white font-black text-xl mb-1 truncate">
+                      {match.whitePlayerId === "stockfish-bot"
+                        ? "Stockfish AI"
+                        : match.whitePlayerId || "Anonymous"}
+                    </p>
                     <div className="flex items-center gap-2">
-                       <div className="w-2 h-2 rounded-full bg-white/20" />
-                       <span className="text-[#AAB3D1] text-[10px] font-bold uppercase tracking-widest">White</span>
+                      <div className="w-2 h-2 rounded-full bg-white/20" />
+                      <span className="text-[#AAB3D1] text-[10px] font-bold uppercase tracking-widest">
+                        White
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <span className="text-3xl font-black italic text-[#4F7CFF]/50 select-none">VS</span>
+                    <span className="text-3xl font-black italic text-[#4F7CFF]/50 select-none">
+                      VS
+                    </span>
                   </div>
 
                   <div className="flex-1 text-right">
                     <p className="text-white font-black text-xl mb-1 truncate">
-                      {match.blackPlayerId === "stockfish-bot" ? "Stockfish AI" : (match.blackPlayerId || "Anonymous")}
+                      {match.blackPlayerId === "stockfish-bot"
+                        ? "Stockfish AI"
+                        : match.blackPlayerId || "Anonymous"}
                     </p>
                     <div className="flex items-center gap-2 justify-end">
-                       <span className="text-[#AAB3D1] text-[10px] font-bold uppercase tracking-widest">Black</span>
-                       <div className="w-2 h-2 rounded-full bg-[#0B1437]" />
+                      <span className="text-[#AAB3D1] text-[10px] font-bold uppercase tracking-widest">
+                        Black
+                      </span>
+                      <div className="w-2 h-2 rounded-full bg-[#0B1437]" />
                     </div>
                   </div>
                 </div>
@@ -111,18 +131,23 @@ export function LiveMatches() {
                 {/* Match Preview Card */}
                 <div className="mt-8 bg-[#0B1437]/60 rounded-2xl p-6 h-40 flex flex-col items-center justify-center border border-white/5 group-hover:bg-[#4F7CFF]/5 transition-colors">
                   <Trophy className="w-10 h-10 text-[#4F7CFF]/30 mb-4 group-hover:scale-110 transition-transform" />
-                  <span className="text-[#AAB3D1] text-sm font-medium">Click to Spectate Battle</span>
+                  <span className="text-[#AAB3D1] text-sm font-medium">
+                    Click to Spectate Battle
+                  </span>
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="bg-white/5 border border-dashed border-white/10 rounded-[32px] py-32 flex flex-col items-center justify-center text-center px-6">
-            <h3 className="text-2xl font-bold text-white mb-4">Arena is Quiet</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Arena is Quiet
+            </h3>
             <p className="text-[#AAB3D1] max-w-sm mb-8">
-              There are currently no public matches in progress. Start one and broadcast it here!
+              There are currently no public matches in progress. Start one and
+              broadcast it here!
             </p>
-            <button 
+            <button
               onClick={() => navigate("/play")}
               className="px-8 py-4 bg-[#4F7CFF] text-white rounded-2xl font-black tracking-wide hover:shadow-[0_0_30px_rgba(79,124,255,0.4)] transition-all"
             >

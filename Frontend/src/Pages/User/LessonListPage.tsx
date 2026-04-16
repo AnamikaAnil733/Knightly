@@ -5,6 +5,7 @@ import { Footer } from "../../Components/User/Common/Footer";
 import LessonCard from "../../Components/User/Learning/LessonCard";
 import { getLessons } from "../../Service/Api/LearnApi";
 import { ArrowLeft, BookOpen } from "lucide-react";
+import { Lesson } from "../../Types/LessonTypes";
 
 const CATEGORY_LABELS: Record<string, string> = {
   GETTING_STARTED: "Getting Started",
@@ -13,14 +14,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   STRATEGY: "Strategy",
   ENDGAMES: "Endgames",
 };
-
-interface Lesson {
-  id: string;
-  title: string;
-  difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-  order: number;
-  category: string;
-}
 
 const LessonListPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();

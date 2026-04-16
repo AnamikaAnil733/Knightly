@@ -94,14 +94,18 @@ export function InviteModal({
                       Match Visibility
                     </p>
                     <div className="flex items-center gap-2">
-                       <span className={`text-[10px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded ${senderIsPublic ? "bg-[#06D6A0]/10 text-[#06D6A0]" : "bg-white/5 text-[#94A3B8]"}`}>
-                         Sender: {senderIsPublic ? "Public" : "Private"}
-                       </span>
+                      <span
+                        className={`text-[10px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded ${senderIsPublic ? "bg-[#06D6A0]/10 text-[#06D6A0]" : "bg-white/5 text-[#94A3B8]"}`}
+                      >
+                        Sender: {senderIsPublic ? "Public" : "Private"}
+                      </span>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-white">Make Public?</span>
+                    <span className="text-xs font-bold text-white">
+                      Make Public?
+                    </span>
                     <button
                       onClick={() => setReceiverIsPublic(!receiverIsPublic)}
                       className={`w-12 h-6 rounded-full transition-all relative ${
@@ -116,15 +120,17 @@ export function InviteModal({
                     </button>
                   </div>
                 </div>
-                
+
                 {senderIsPublic && !receiverIsPublic && (
                   <p className="text-[10px] text-[#FFD166]/60 italic">
-                    Note: Match will be private unless you also agree to make it public.
+                    Note: Match will be private unless you also agree to make it
+                    public.
                   </p>
                 )}
                 {!senderIsPublic && receiverIsPublic && (
                   <p className="text-[10px] text-[#FFD166]/60 italic">
-                    Note: Match will be private because the sender requested a private game.
+                    Note: Match will be private because the sender requested a
+                    private game.
                   </p>
                 )}
               </div>
