@@ -3,28 +3,38 @@ import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
 import { BlogMasonryGrid } from "../../Components/User/Blog/BlogMasonryGrid";
 import { getAllBlogs } from "../../Service/Api/BlogApi";
-import { BlogResponseDTO } from "../../Types/BlogTypes";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { BlogResponseDTO, BlogCategory } from "../../Types/BlogTypes";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { PenSquareIcon, PlusIcon, Sparkles } from "lucide-react";
+import { PenSquareIcon, PlusIcon, Sparkles, Search, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 
 const BlogListPage: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeCategory, setActiveCategory] = useState<BlogCategory | "ALL">("ALL");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { scrollY } = useScroll();
 
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    const timer = setTimeout(() => {
+      fetchBlogs();
+    }, 400); // 400ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, activeCategory]);
 
   const fetchBlogs = async () => {
     try {
       setLoading(true);
-      const data = await getAllBlogs({});
+      const data = await getAllBlogs({
+        search: searchTerm,
+        category: activeCategory === "ALL" ? undefined : activeCategory,
+      });
       setBlogs(data.blogs);
     } catch {
       toast.error("Failed to fetch blogs. Please try again later.");
@@ -129,9 +139,86 @@ const BlogListPage: React.FC = () => {
           </motion.div>
         </section>
 
+        {/* Blog Controls Area */}
+        <div className="max-w-7xl mx-auto px-6 mb-16 relative z-30">
+          <div className="flex flex-col md:flex-row gap-8 items-center justify-between bg-white/[0.02] border border-white/10 p-4 md:p-2 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl">
+            {/* Search Bar */}
+            <div className={`relative flex-1 group transition-all duration-500 ${isSearchFocused ? 'md:flex-[1.5]' : 'flex-1'}`}>
+              <div className={`absolute inset-y-0 left-6 flex items-center pointer-events-none transition-colors duration-300 ${isSearchFocused ? 'text-gold' : 'text-gray-500'}`}>
+                <Search size={20} strokeWidth={2.5} />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
+                placeholder="Search chronicles or authors..."
+                className="w-full bg-transparent border-none py-5 pl-16 pr-8 text-white focus:ring-0 placeholder:text-gray-600 font-medium text-lg leading-tight transition-all"
+              />
+              {isSearchFocused && (
+                <motion.div
+                  layoutId="searchHighlight"
+                  className="absolute bottom-4 left-16 right-8 h-[2px] bg-gradient-to-r from-gold/50 to-transparent"
+                />
+              )}
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex items-center gap-2 p-1.5 bg-black/40 rounded-[2rem] border border-white/5 overflow-x-auto no-scrollbar max-w-full">
+              {["ALL", ...Object.values(BlogCategory)].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat as any)}
+                  className={`px-6 py-3 rounded-full text-xs font-black uppercase tracking-[2px] transition-all duration-300 whitespace-nowrap ${
+                    activeCategory === cat
+                      ? "bg-gold text-navy-dark shadow-[0_4px_20px_rgba(212,175,55,0.4)] scale-105"
+                      : "text-gray-light hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {cat.replace("_", " ")}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {searchTerm && blogs.length > 0 && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="mt-6 text-center text-gold/60 font-cinzel text-xs tracking-[4px] uppercase"
+              >
+                Showing {blogs.length} results for "{searchTerm}"
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+
         {/* Blog Content Area */}
         <div className="max-w-[1600px] mx-auto pb-32">
-          {loading ? (
+          {!loading && blogs.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-40 text-center"
+            >
+              <div className="inline-block p-10 rounded-full bg-white/5 border border-white/10 mb-8">
+                <Search size={64} className="text-gray-600 mx-auto" strokeWidth={1} />
+              </div>
+              <h3 className="text-4xl font-cinzel font-bold text-white mb-4">No Chronicles Found</h3>
+              <p className="text-gray-light max-w-md mx-auto italic opacity-60">
+                The library archives do not contain manuscripts matching your search criteria.
+              </p>
+              <button
+                onClick={() => { setSearchTerm(""); setActiveCategory("ALL"); }}
+                className="mt-10 text-gold font-bold uppercase tracking-[3px] text-xs hover:text-white transition-colors border-b border-gold/30 pb-1"
+              >
+                Clear all filters
+              </button>
+            </motion.div>
+          ) : loading ? (
             <div className="px-12">
               <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
                 {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (

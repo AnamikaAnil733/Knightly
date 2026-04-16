@@ -17,10 +17,12 @@ import {
   ExternalLink,
   Trash2,
   TrendingUp,
+  Search,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { ConfirmationModal } from "../../Components/User/Common/ConfirmationModal";
+import Pagination from "../../Components/Reuseable/Pagination";
 
 const BlogDashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,6 +35,14 @@ const BlogDashboardPage: React.FC = () => {
     drafts: 0,
     views: 0,
   });
+
+  // Filter & Pagination State
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [activeStatus, setActiveStatus] = useState<BlogStatus | "ALL">("ALL");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 8;
 
   // Modal State
   const [deleteModal, setDeleteModal] = useState<{
@@ -47,36 +57,36 @@ const BlogDashboardPage: React.FC = () => {
     loading: false,
   });
 
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+      setCurrentPage(1); // Reset to first page on search
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
   useEffect(() => {
     if (user) {
       loadUserBlogs();
     }
-  }, [user]);
+  }, [user, debouncedSearch, activeStatus, currentPage]);
 
   const loadUserBlogs = async () => {
     try {
       setLoading(true);
-      const data = await getUserBlogs();
-      setBlogs(data.blogs);
-
-      // Calculate stats
-      const published = data.blogs.filter(
-        (b) => b.status === BlogStatus.PUBLISHED,
-      ).length;
-      const drafts = data.blogs.filter(
-        (b) => b.status === BlogStatus.DRAFT,
-      ).length;
-      const totalViews = data.blogs.reduce(
-        (acc, curr) => acc + curr.viewCount,
-        0,
-      );
-
-      setStats({
-        total: data.blogs.length,
-        published,
-        drafts,
-        views: totalViews,
+      const data = await getUserBlogs({
+        search: debouncedSearch || undefined,
+        status: activeStatus === "ALL" ? undefined : activeStatus,
+        page: currentPage,
+        limit: itemsPerPage,
       });
+      setBlogs(data.blogs);
+      setTotalItems(data.total);
+
+      if (data.stats) {
+        setStats(data.stats);
+      }
     } catch (error) {
       console.error("Failed to load blogs:", error);
       toast.error("Could not load your blogs.");
@@ -234,10 +244,44 @@ const BlogDashboardPage: React.FC = () => {
 
         {/* Blog List Section */}
         <div className="bg-navy-card rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
-          <div className="p-8 border-b border-white/5 flex items-center justify-between">
-            <h2 className="text-xl font-bold font-cinzel flex items-center gap-2">
+          <div className="p-8 border-b border-white/5 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <h2 className="text-xl font-bold font-cinzel flex items-center gap-2 whitespace-nowrap">
               Recent <span className="text-gold">Contributions</span>
             </h2>
+
+            <div className="flex flex-col md:flex-row items-center gap-4 w-full lg:max-w-2xl">
+              {/* Search Bar */}
+              <div className="relative w-full">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-light" />
+                <input
+                  type="text"
+                  placeholder="Search by title..."
+                  className="w-full bg-navy-dark border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm focus:border-gold/50 outline-none transition-all"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              {/* Status Filter */}
+              <div className="flex items-center gap-1 bg-navy-dark p-1 rounded-xl border border-white/10 w-full md:w-auto">
+                {["ALL", ...Object.values(BlogStatus)].map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => {
+                      setActiveStatus(status as BlogStatus);
+                      setCurrentPage(1);
+                    }}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                      activeStatus === status
+                        ? "bg-gold text-navy-dark shadow-lg shadow-gold/20"
+                        : "text-gray-light hover:text-white"
+                    }`}
+                  >
+                    {status.charAt(0) + status.slice(1).toLowerCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -378,6 +422,16 @@ const BlogDashboardPage: React.FC = () => {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="px-8 pb-8">
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
 

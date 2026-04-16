@@ -45,7 +45,9 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
           >
             <Heart
               className={`w-6 h-6 transition-colors duration-300 ${
-                isLiked ? "fill-red-500 text-red-500" : "text-gray-400 group-hover:text-red-500"
+                isLiked
+                  ? "fill-red-500 text-red-500"
+                  : "text-gray-400 group-hover:text-red-500"
               }`}
             />
           </motion.div>
@@ -67,9 +69,11 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
           />
         )}
       </motion.button>
-      
+
       <div className="flex flex-col">
-        <span className={`text-sm font-bold font-cinzel tracking-wider ${isLiked ? "text-red-500" : "text-white"}`}>
+        <span
+          className={`text-sm font-bold font-cinzel tracking-wider ${isLiked ? "text-red-500" : "text-white"}`}
+        >
           {count}
         </span>
         <span className="text-[10px] uppercase text-gray-500 tracking-widest font-bold">

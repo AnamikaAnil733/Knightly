@@ -14,6 +14,7 @@ import {
   XCircle,
   Clock,
   ChevronLeft,
+  Search,
 } from "lucide-react";
 
 export const AdminBlogManagement: React.FC = () => {
@@ -26,11 +27,16 @@ export const AdminBlogManagement: React.FC = () => {
   const [reviewBlog, setReviewBlog] = useState<BlogResponseDTO | null>(null);
   const [fetchingReview, setFetchingReview] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const fetchBlogs = React.useCallback(async () => {
     try {
       setLoading(true);
-      const data = await adminGetAllBlogs({ status: filter });
+      const data = await adminGetAllBlogs({
+        status: filter,
+        search: debouncedSearch,
+      });
       setBlogs(data.blogs);
     } catch (error) {
       const errorMessage =
@@ -41,7 +47,17 @@ export const AdminBlogManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [filter]);
+  }, [filter, debouncedSearch]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   useEffect(() => {
     fetchBlogs();
@@ -89,6 +105,19 @@ export const AdminBlogManagement: React.FC = () => {
           <p className="text-gray-400 text-sm">
             Review and manage community blog submissions.
           </p>
+        </div>
+
+        <div className="flex-1 max-w-md mx-8">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gold transition-colors" />
+            <input
+              type="text"
+              placeholder="Search by title or author..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-navy-card border border-white/10 rounded-xl py-2.5 pl-12 pr-4 text-white focus:outline-none focus:border-gold/50 transition-all placeholder:text-gray-600 shadow-xl"
+            />
+          </div>
         </div>
 
         <div className="flex gap-2 bg-navy-card p-1 rounded-lg border border-white/5">

@@ -40,6 +40,7 @@ export const getAllBlogs = async (filters?: {
   authorId?: string;
   page?: number;
   limit?: number;
+  search?: string;
 }): Promise<BlogListResponseDTO> => {
   try {
     const response = await userApi.get<BlogListResponseDTO>("/user/blogs", {
@@ -172,6 +173,7 @@ export const adminGetAllBlogs = async (filters?: {
   status?: BlogStatus;
   page?: number;
   limit?: number;
+  search?: string;
 }): Promise<BlogListResponseDTO> => {
   try {
     const response = await adminApi.get<BlogListResponseDTO>("/admin/blogs", {
@@ -213,6 +215,7 @@ export const getUserBlogs = async (filters?: {
   status?: BlogStatus;
   page?: number;
   limit?: number;
+  search?: string;
 }): Promise<BlogListResponseDTO> => {
   try {
     const response = await userApi.get<BlogListResponseDTO>("/user/my-blogs", {
@@ -232,9 +235,10 @@ export const getUserBlogs = async (filters?: {
 /** Toggle like on a blog. */
 export const toggleLike = async (id: string): Promise<BlogResponseDTO> => {
   try {
-    const response = await userApi.post<{ success: boolean; blog: BlogResponseDTO }>(
-      `/user/blog/${id}/like`,
-    );
+    const response = await userApi.post<{
+      success: boolean;
+      blog: BlogResponseDTO;
+    }>(`/user/blog/${id}/like`);
     return response.data.blog;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -245,15 +249,20 @@ export const toggleLike = async (id: string): Promise<BlogResponseDTO> => {
 };
 
 /** Fetch all comments for a blog. */
-export const getBlogComments = async (blogId: string): Promise<CommentDTO[]> => {
+export const getBlogComments = async (
+  blogId: string,
+): Promise<CommentDTO[]> => {
   try {
-    const response = await userApi.get<{ success: boolean; comments: CommentDTO[] }>(
-      `/user/blog/${blogId}/comments`,
-    );
+    const response = await userApi.get<{
+      success: boolean;
+      comments: CommentDTO[];
+    }>(`/user/blog/${blogId}/comments`);
     return response.data.comments;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message || "Failed to fetch comments");
+      throw new Error(
+        error.response?.data.message || "Failed to fetch comments",
+      );
     }
     throw error;
   }
@@ -267,10 +276,10 @@ export const addComment = async (data: {
   authorAvatar?: string;
 }): Promise<CommentDTO> => {
   try {
-    const response = await userApi.post<{ success: boolean; comment: CommentDTO }>(
-      `/user/blog/${data.blogId}/comments`,
-      data,
-    );
+    const response = await userApi.post<{
+      success: boolean;
+      comment: CommentDTO;
+    }>(`/user/blog/${data.blogId}/comments`, data);
     return response.data.comment;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -289,7 +298,9 @@ export const deleteComment = async (commentId: string): Promise<boolean> => {
     return response.data.success;
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message || "Failed to delete comment");
+      throw new Error(
+        error.response?.data.message || "Failed to delete comment",
+      );
     }
     throw error;
   }

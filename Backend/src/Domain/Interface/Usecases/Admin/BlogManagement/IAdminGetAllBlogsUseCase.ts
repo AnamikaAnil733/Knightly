@@ -6,5 +6,6 @@ export interface IAdminGetAllBlogsUseCase {
     status?: BlogStatus;
     page?: number;
     limit?: number;
+    search?: string;
   }): Promise<BlogListResponseDTO>;
 }

@@ -7,7 +7,7 @@ import { IGetBlogBySlugUseCase } from "../../../../Domain/Interface/Usecases/Use
 import { IGetCoverUploadUrlUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetCoverUploadUrlUseCase";
 import { IGetUserBlogsUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IGetUserBlogsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { BlogStatus } from "../../../../Domain/Types/Blogtypes";
+import { BlogStatus, BlogAuthorRole } from "../../../../Domain/Types/Blogtypes";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { CreateBlogSchema, UpdateBlogSchema, BlogModerationSchema } from "../../../Validators/BlogValidator";
 import { IUpdateBlogUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/IUpdateBlogUseCase";
@@ -65,6 +65,7 @@ export class BlogController{
     try {
       const userId = (req as any).user.id;
       const userRole = (req as any).user.role;
+      console.log(userRole,userId);
 
       const user = await this._userRepository.findById(userId);
       if (!user) {
@@ -74,8 +75,9 @@ export class BlogController{
       const inputData = {
         ...req.body,
         authorId: userId,
-        authorRole: userRole,
-        authorName: user.displayname,      };
+        authorRole: userRole === "admin" ? BlogAuthorRole.ADMIN : BlogAuthorRole.USER,
+        authorName: user.displayname,
+      };
 
       const result = CreateBlogSchema.safeParse(inputData);
       if (!result.success) {
@@ -115,12 +117,13 @@ export class BlogController{
   /** Admin fetch all blogs with status filter */
   adminGetAllBlogs = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { status, page, limit } = req.query;
+      const { status, page, limit, search } = req.query;
 
       const filters = {
         status: status as BlogStatus,
         page: page ? parseInt(page as string) : undefined,
         limit: limit ? parseInt(limit as string) : undefined,
+        search: search as string,
       };
 
       const result = await this._adminGetAllBlogsUseCase.execute(filters);
@@ -149,12 +152,13 @@ export class BlogController{
   /** User fetch all published blogs */
   getAllBlogs = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { category, page, limit } = req.query;
+      const { category, page, limit, search } = req.query;
 
       const filters = {
         category: category as any,
         page: page ? parseInt(page as string) : undefined,
         limit: limit ? parseInt(limit as string) : undefined,
+        search: search as string,
       };
 
       const result = await this._getAllBlogsUseCase.execute(filters);
@@ -185,7 +189,7 @@ export class BlogController{
   getUserBlogs = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const authorId = (req as any).user.id;
-      const { category, status, page, limit } = req.query;
+      const { category, status, page, limit, search } = req.query;
 
       const filters = {
         authorId,
@@ -193,6 +197,7 @@ export class BlogController{
         status: status as any,
         page: page ? parseInt(page as string) : undefined,
         limit: limit ? parseInt(limit as string) : undefined,
+        search: search as string,
       };
 
       const result = await this._getUserBlogsUseCase.execute(filters);
@@ -200,6 +205,7 @@ export class BlogController{
         success: true,
         blogs: result.blogs,
         total: result.total,
+        stats: result.stats,
       });
     } catch (error) {
       logger.error({ error }, "ERROR: BlogController - getUserBlogs");

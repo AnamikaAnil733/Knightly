@@ -15,6 +15,7 @@ export class AdminGetAllBlogsUseCase implements IAdminGetAllBlogsUseCase {
     status?: BlogStatus;
     page?: number;
     limit?: number;
+    search?: string;
   }): Promise<BlogListResponseDTO> {
     const { blogs, total } = await this._blogRepository.findAll(filters);
 

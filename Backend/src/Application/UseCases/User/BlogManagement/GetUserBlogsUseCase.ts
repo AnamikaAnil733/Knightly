@@ -17,8 +17,10 @@ export class GetUserBlogsUseCase implements IGetUserBlogsUseCase {
     status?: BlogStatus;
     page?: number;
     limit?: number;
+    search?: string;
   }): Promise<BlogListResponseDTO> {
     const { blogs, total } = await this._blogRepository.findAll(filters);
+    const stats = await this._blogRepository.getUserStats(filters.authorId);
 
     const blogsWithSignedUrls = await Promise.all(
       blogs.map(async (blog) => {
@@ -57,6 +59,7 @@ export class GetUserBlogsUseCase implements IGetUserBlogsUseCase {
     return {
       blogs: blogsWithSignedUrls,
       total,
+      stats,
     };
   }
 }

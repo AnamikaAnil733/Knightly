@@ -1,9 +1,4 @@
-import {
-  NewspaperIcon,
-  MessageSquareIcon,
-  Clock,
-  ChevronRight,
-} from "lucide-react";
+import { NewspaperIcon, Clock, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getAllBlogs } from "../../../Service/Api/BlogApi";
 import { BlogResponseDTO } from "../../../Types/BlogTypes";

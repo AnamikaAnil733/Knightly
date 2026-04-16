@@ -16,6 +16,7 @@ interface BlogEditorProps {
   isLoading?: boolean;
   initialData?: Partial<CreateBlogInputDTO>;
   authorId: string;
+  authorName: string;
   authorRole: BlogAuthorRole;
 }
 
@@ -25,6 +26,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
   isLoading = false,
   initialData = {},
   authorId,
+  authorName,
   authorRole,
 }) => {
   const [formData, setFormData] = useState<
@@ -131,6 +133,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         ...formData,
         coverImage: coverImageUrl,
         authorId,
+        authorName,
         authorRole,
       });
     } catch (error) {

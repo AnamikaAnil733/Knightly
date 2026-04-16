@@ -15,6 +15,7 @@ export class CreateBlogUseCase implements ICreateBlogUseCase{
   ){}
 
   async execute(input: CreateBlogInputDTO): Promise<BlogResponseDTO> {
+    console.log(input);
     const slug = this.generateSlug(input.title);
     let uniqueSlug = slug;
     let count = 1;

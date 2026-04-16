@@ -15,6 +15,7 @@ export class GetAllBlogsUseCase implements IGetAllBlogsUseCase {
     category?: BlogCategory;
     page?: number;
     limit?: number;
+    search?: string;
   }): Promise<BlogListResponseDTO> {
     // Strictly filter by PUBLISHED status for public view
     const { blogs, total } = await this._blogRepository.findAll({

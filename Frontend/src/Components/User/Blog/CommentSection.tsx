@@ -3,7 +3,11 @@ import { MessageSquare, Send, Trash2, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 import { CommentDTO } from "../../../Types/BlogTypes";
-import { addComment, getBlogComments, deleteComment } from "../../../Service/Api/BlogApi";
+import {
+  addComment,
+  getBlogComments,
+  deleteComment,
+} from "../../../Service/Api/BlogApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
 
@@ -16,7 +20,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  
+
   const user = useSelector((state: RootState) => state.userAuth.user);
 
   useEffect(() => {
@@ -49,7 +53,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         blogId,
         content: newComment,
         authorName: user.displayname || "Scholar",
-        authorAvatar: user.profileimage,
+        authorAvatar: user.avatarUrl!,
       });
       setComments((prev) => [comment, ...prev]);
       setNewComment("");
@@ -68,8 +72,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
         setComments((prev) => prev.filter((c) => c.id !== commentId));
         toast.success("Comment removed.");
       }
-    } catch (error: any) {
-      toast.error(error.message || "Failed to remove comment.");
+    } catch {
+      toast.error("Failed to remove comment.");
     }
   };
 
@@ -111,7 +115,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
       ) : (
         <div className="p-8 bg-navy-card/20 rounded-2xl border border-dashed border-white/10 text-center">
           <p className="text-gray- light font-cinzel tracking-wider">
-            You must be <span className="text-gold">Authorized</span> to participate in the scrolls.
+            You must be <span className="text-gold">Authorized</span> to
+            participate in the scrolls.
           </p>
         </div>
       )}
@@ -136,7 +141,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-gold/20">
                     {comment.authorAvatar ? (
-                      <img src={comment.authorAvatar} alt="" className="w-full h-full object-cover rounded-xl" />
+                      <img
+                        src={comment.authorAvatar}
+                        alt=""
+                        className="w-full h-full object-cover rounded-xl"
+                      />
                     ) : (
                       <User className="w-6 h-6 text-gold opacity-50" />
                     )}

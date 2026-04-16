@@ -9,8 +9,15 @@ export interface IBlogRepository extends IBaseRepository<BlogEntity, string> {
     authorId?: string;
     page?: number;
     limit?: number;
+    search?: string;
   }): Promise<{ blogs: BlogEntity[]; total: number }>;
 
   findBySlug(slug: string): Promise<BlogEntity | null>;
   incrementView(id: string): Promise<void>;
+  getUserStats(authorId: string): Promise<{
+    total: number;
+    published: number;
+    drafts: number;
+    views: number;
+  }>;
 }

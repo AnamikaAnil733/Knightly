@@ -67,6 +67,12 @@ export interface ModerationInputDTO {
 export interface BlogListResponseDTO {
   blogs: BlogResponseDTO[];
   total: number;
+  stats?: {
+    total: number;
+    published: number;
+    drafts: number;
+    views: number;
+  };
 }
 
 export interface CommentDTO {

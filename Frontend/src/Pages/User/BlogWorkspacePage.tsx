@@ -111,6 +111,7 @@ const BlogWorkspacePage: React.FC = () => {
             isLoading={loading}
             initialData={initialData || {}}
             authorId={user.id!}
+            authorName={user.displayname}
             authorRole={
               user.role === "admin" ? BlogAuthorRole.ADMIN : BlogAuthorRole.USER
             }

@@ -55,8 +55,8 @@ const BlogDetailPage: React.FC = () => {
       setLikeLoading(true);
       const updatedBlog = await toggleLike(blog.id);
       setBlog(updatedBlog);
-    } catch (error: any) {
-      toast.error(error.message || "Action failed.");
+    } catch {
+      toast.error("Action failed.");
     } finally {
       setLikeLoading(false);
     }
@@ -136,7 +136,7 @@ const BlogDetailPage: React.FC = () => {
           </div>
 
           {/* Main Content */}
-          <article className="prose prose-invert prose-gold max-w-none text-gray-light leading-loose text-lg space-y-8 whitespace-pre-wrap">
+          <article className="prose prose-invert prose-gold max-w-none text-white leading-loose text-lg space-y-8 whitespace-pre-wrap">
             {blog.content}
           </article>
           {/* Tags */}
