@@ -30,7 +30,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
   authorRole,
 }) => {
   const [formData, setFormData] = useState<
-    Omit<CreateBlogInputDTO, "authorId" | "authorRole">
+    Omit<CreateBlogInputDTO, "authorId" | "authorRole" | "authorName">
   >({
     title: initialData.title || "",
     excerpt: initialData.excerpt || "",
