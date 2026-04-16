@@ -103,7 +103,7 @@ export class SocketHandler {
         }
       });
 
-      socket.on("findMatch", async (userId: string, gameFormat: string = "3+0") => {
+      socket.on("findMatch", async (userId: string, gameFormat: string = "3+0", isPublic: boolean = false) => {
         try {
           const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
@@ -122,6 +122,7 @@ export class SocketHandler {
             rating,
             joinedAt: Date.now(),
             timeControl: gameFormat,
+            isPublic,
           });
 
           if (result.type === "WAITING") {
@@ -160,7 +161,7 @@ export class SocketHandler {
         }
       });
 
-      socket.on("playComputer", async (userId: string, gameFormat: string = "level-1", preferredColor: "WHITE" | "BLACK" | "RANDOM" = "RANDOM") => {
+      socket.on("playComputer", async (userId: string, gameFormat: string = "level-1", preferredColor: "WHITE" | "BLACK" | "RANDOM" = "RANDOM", isPublic: boolean = false) => {
         try {
           let difficulty = 1;
           let timeControl = "NO_TIMER";
@@ -180,7 +181,7 @@ export class SocketHandler {
           const whitePlayerId = playerRole === "WHITE" ? userId : "stockfish-bot";
           const blackPlayerId = playerRole === "BLACK" ? userId : "stockfish-bot";
 
-          const { gameId } = await this._createGameUseCase.execute(whitePlayerId, blackPlayerId, gameFormat, difficulty);
+          const { gameId } = await this._createGameUseCase.execute(whitePlayerId, blackPlayerId, gameFormat, difficulty, isPublic);
 
           this.rooms.set(gameId, {
             white: playerRole === "WHITE" ? socket.id : "bot-socket-placeholder",
@@ -334,21 +335,22 @@ export class SocketHandler {
       });
 
 
-      socket.on("invite_friend", ({ recipientId, senderId, senderName, gameFormat = "5+0" }) => {
+      socket.on("invite_friend", ({ recipientId, senderId, senderName, gameFormat = "5+0", isPublic = false }) => {
         const recipientSocketId = this.userToSocket.get(recipientId);
         if (recipientSocketId) {
           this._io.to(recipientSocketId).emit("receive_friend_invite", {
             senderId,
             senderName: senderName || "A friend",
             gameFormat,
+            senderIsPublic: isPublic,
           });
-          console.log(`Invite sent from ${senderId} to ${recipientId}`);
+          console.log(`Invite sent from ${senderId} to ${recipientId} (Public: ${isPublic})`);
         } else {
           socket.emit("friend_offline", { recipientId });
         }
       });
 
-      socket.on("accept_friend_invite", async ({ senderId, recipientId, gameFormat = "5+0" }) => {
+      socket.on("accept_friend_invite", async ({ senderId, recipientId, gameFormat = "5+0", senderIsPublic = false, receiverIsPublic = false }) => {
         try {
           const senderSocketId = this.userToSocket.get(senderId);
           if (!senderSocketId) {
@@ -356,7 +358,10 @@ export class SocketHandler {
             return;
           }
 
-          const { gameId } = await this._createGameUseCase.execute(senderId, recipientId, gameFormat);
+          // Final game is public ONLY if BOTH agreed
+          const isGamePublic = senderIsPublic && receiverIsPublic;
+
+          const { gameId } = await this._createGameUseCase.execute(senderId, recipientId, gameFormat, undefined, isGamePublic);
 
           this.rooms.set(gameId, {
             white: senderSocketId,
@@ -472,6 +477,7 @@ export class SocketHandler {
             newBlackPlayerId,
             oldGame.getTimeControl(),
             oldGame.getDifficulty(),
+            oldGame.getIsPublic(),
           );
 
           // Update rooms map for the new game

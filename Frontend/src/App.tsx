@@ -78,14 +78,15 @@ function App() {
     senderId: string;
     senderName: string;
     gameFormat: string;
+    senderIsPublic: boolean;
   } | null>(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
 
   useEffect(() => {
     socket.on(
       "receive_friend_invite",
-      ({ senderId, senderName, gameFormat }) => {
-        setInviteData({ senderId, senderName, gameFormat });
+      ({ senderId, senderName, gameFormat, senderIsPublic }) => {
+        setInviteData({ senderId, senderName, gameFormat, senderIsPublic });
         setShowInviteModal(true);
       },
     );
@@ -116,7 +117,7 @@ function App() {
     };
   }, [navigate]);
 
-  const handleAcceptInvite = () => {
+  const handleAcceptInvite = (receiverIsPublic: boolean) => {
     const currentUserId =
       user?.id ||
       (window as Window & typeof globalThis & { userId?: string }).userId;
@@ -128,6 +129,8 @@ function App() {
         senderId: inviteData.senderId,
         recipientId: currentUserId,
         gameFormat: inviteData.gameFormat,
+        senderIsPublic: inviteData.senderIsPublic,
+        receiverIsPublic, // This now comes from the modal
       });
       setInviteData(null);
       setShowInviteModal(false);
@@ -166,7 +169,7 @@ function App() {
           setInviteData(null);
           setShowInviteModal(false);
         }}
-        onAccept={handleAcceptInvite}
+        onAccept={(receiverIsPublic: boolean) => handleAcceptInvite(receiverIsPublic)}
         onReject={handleRejectInvite}
       />
       <AppRoutes />

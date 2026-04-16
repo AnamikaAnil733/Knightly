@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Swords, XIcon, CheckIcon, Timer } from "lucide-react";
 
@@ -6,8 +7,9 @@ type Props = {
   senderId: string;
   senderName: string;
   gameFormat: string;
+  senderIsPublic?: boolean;
   onClose: () => void;
-  onAccept: () => void;
+  onAccept: (isPublic: boolean) => void;
   onReject: () => void;
 };
 
@@ -15,10 +17,12 @@ export function InviteModal({
   isOpen,
   senderName,
   gameFormat,
+  senderIsPublic = false,
   onClose,
   onAccept,
   onReject,
 }: Props) {
+  const [receiverIsPublic, setReceiverIsPublic] = useState(senderIsPublic);
   return (
     <AnimatePresence>
       {isOpen && (
@@ -68,19 +72,61 @@ export function InviteModal({
                 has challenged you to a match.
               </p>
 
-              {/* Game Info */}
-              <div className="bg-white/5 rounded-xl p-4 mb-8 flex items-center justify-between border border-white/5">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-[#FFD166]/10 rounded-lg">
-                    <Timer className="w-5 h-5 text-[#FFD166]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#64748B] uppercase font-bold tracking-wider">
-                      Time Control
-                    </p>
-                    <p className="text-white font-bold">{gameFormat}</p>
+              {/* Game Info & Public Toggle */}
+              <div className="space-y-4 mb-8">
+                <div className="bg-white/5 rounded-xl p-4 flex items-center justify-between border border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-[#FFD166]/10 rounded-lg">
+                      <Timer className="w-5 h-5 text-[#FFD166]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-[#64748B] uppercase font-bold tracking-wider">
+                        Time Control
+                      </p>
+                      <p className="text-white font-bold">{gameFormat}</p>
+                    </div>
                   </div>
                 </div>
+
+                <div className="bg-white/5 rounded-xl p-4 flex items-center justify-between border border-white/5">
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs text-[#64748B] uppercase font-bold tracking-wider">
+                      Match Visibility
+                    </p>
+                    <div className="flex items-center gap-2">
+                       <span className={`text-[10px] font-black tracking-widest uppercase px-1.5 py-0.5 rounded ${senderIsPublic ? "bg-[#06D6A0]/10 text-[#06D6A0]" : "bg-white/5 text-[#94A3B8]"}`}>
+                         Sender: {senderIsPublic ? "Public" : "Private"}
+                       </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-bold text-white">Make Public?</span>
+                    <button
+                      onClick={() => setReceiverIsPublic(!receiverIsPublic)}
+                      className={`w-12 h-6 rounded-full transition-all relative ${
+                        receiverIsPublic ? "bg-[#FFD166]" : "bg-white/10"
+                      }`}
+                    >
+                      <div
+                        className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${
+                          receiverIsPublic ? "left-7" : "left-1"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+                
+                {senderIsPublic && !receiverIsPublic && (
+                  <p className="text-[10px] text-[#FFD166]/60 italic">
+                    Note: Match will be private unless you also agree to make it public.
+                  </p>
+                )}
+                {!senderIsPublic && receiverIsPublic && (
+                  <p className="text-[10px] text-[#FFD166]/60 italic">
+                    Note: Match will be private because the sender requested a private game.
+                  </p>
+                )}
               </div>
 
               {/* Actions */}
@@ -96,7 +142,7 @@ export function InviteModal({
                 </button>
                 <button
                   onClick={() => {
-                    onAccept();
+                    onAccept(receiverIsPublic);
                     onClose();
                   }}
                   className="flex-1 px-6 py-4 rounded-xl bg-[#FFD166] text-[#0F172A] font-black shadow-[0_4px_20px_rgba(255,209,102,0.4)] hover:bg-[#F4C14D] hover:shadow-[0_6px_25px_rgba(255,209,102,0.5)] transition-all active:scale-[0.98] flex items-center justify-center gap-2"

@@ -38,6 +38,7 @@ export class MongoChessGameMapper {
       doc.whiteRatingChange,
       doc.blackRatingChange,
       doc.difficulty,
+      doc.isPublic ?? false,
       doc.createdAt,
     );
   }
@@ -70,6 +71,7 @@ export class MongoChessGameMapper {
       whiteRatingChange: entity.getWhiteRatingChange(),
       blackRatingChange: entity.getBlackRatingChange(),
       difficulty: entity.getDifficulty(),
+      isPublic: entity.getIsPublic(),
     };
   }
 }

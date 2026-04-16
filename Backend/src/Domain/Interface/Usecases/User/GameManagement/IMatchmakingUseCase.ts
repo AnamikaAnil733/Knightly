@@ -4,6 +4,7 @@ export type QueuePlayer = {
     rating: number;
     joinedAt: number;
     timeControl: string; // "1+0", "3+2", etc.
+    isPublic: boolean;
   };
 
 export type MatchResult =

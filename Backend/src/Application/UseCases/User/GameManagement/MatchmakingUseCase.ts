@@ -9,7 +9,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
   constructor(
     private readonly createGameUseCase: {
-      execute(whiteId?: string, blackId?: string, timeControl?: string): Promise<{ gameId: string }>;
+      execute(whiteId?: string, blackId?: string, timeControl?: string, difficulty?: number, isPublic?: boolean): Promise<{ gameId: string }>;
     },
   ) {}
 
@@ -25,10 +25,13 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
 
     const now = Date.now();
 
-    // Look for an opponent in the queue with the SAME time control
+    // Look for an opponent in the queue with the SAME time control AND visibility
     const opponentIndex = this.queue.findIndex((qPlayer) => {
       // Must have the same time control
       if (qPlayer.timeControl !== player.timeControl) return false;
+
+      // Must have the same visibility preference (Public matches with Public, Private with Private)
+      if (qPlayer.isPublic !== player.isPublic) return false;
 
       const timeInQueue = (now - qPlayer.joinedAt) / 1000;
       const myTimeInQueue = (now - player.joinedAt) / 1000;
@@ -48,6 +51,9 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
     // match found remove opponent from queue
     const opponent = this.queue.splice(opponentIndex, 1)[0];
 
+    // If BOTH players want the game to be public, make it public
+    const isGamePublic = player.isPublic && opponent.isPublic;
+
     const whiteFirst = Math.random() < 0.5;
     const white = whiteFirst ? player : opponent;
     const black = whiteFirst ? opponent : player;
@@ -56,6 +62,8 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
       white.userId,
       black.userId,
       player.timeControl, // Pass the time control to game creation
+      undefined,
+      isGamePublic,
     );
 
     return {

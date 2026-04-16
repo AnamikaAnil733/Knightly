@@ -45,3 +45,8 @@ export const getGameHistory = async () => {
   const res = await axios.get("/user/games/history");
   return res.data.data;
 };
+
+export const getLiveGames = async () => {
+  const res = await axios.get("/user/games/live");
+  return res.data.data;
+};

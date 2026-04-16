@@ -95,9 +95,9 @@ const gameModes: GameMode[] = [
 export function GameSelectionPage() {
   const navigate = useNavigate();
   const [selectedBotLevel, setSelectedBotLevel] = React.useState<{
-    id: string;
     label: string;
   } | null>(null);
+  const [isPublic, setIsPublic] = React.useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -157,6 +157,30 @@ export function GameSelectionPage() {
           </motion.p>
         </div>
 
+        {/* Public Toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="max-w-md mx-auto mb-12 p-1 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between"
+        >
+          <div className="px-6 py-3">
+            <h4 className="text-white font-bold text-sm">Public Match</h4>
+            <p className="text-[#C9CAD9]/60 text-xs">Allow others to spectate</p>
+          </div>
+          <button
+            onClick={() => setIsPublic(!isPublic)}
+            className={`mr-3 w-14 h-8 rounded-full transition-all duration-300 relative ${
+              isPublic ? "bg-gradient-to-r from-[#3A6FF7] to-[#6B2EFF]" : "bg-white/10"
+            }`}
+          >
+            <motion.div
+              animate={{ x: isPublic ? 24 : 4 }}
+              className="absolute top-1 w-6 h-6 bg-white rounded-full shadow-lg"
+            />
+          </button>
+        </motion.div>
+
         {/* Game Modes Grid */}
         <motion.div
           variants={containerVariants}
@@ -176,7 +200,11 @@ export function GameSelectionPage() {
                   setSelectedBotLevel(firstOption);
                 } else {
                   navigate("/waiting", {
-                    state: { format: firstOption.id, modeName: mode.name },
+                    state: { 
+                      format: firstOption.id, 
+                      modeName: mode.name,
+                      isPublic 
+                    },
                   });
                 }
               }}
@@ -219,7 +247,11 @@ export function GameSelectionPage() {
                           setSelectedBotLevel(option);
                         } else {
                           navigate("/waiting", {
-                            state: { format: option.id, modeName: mode.name },
+                            state: { 
+                              format: option.id, 
+                              modeName: mode.name,
+                              isPublic 
+                            },
                           });
                         }
                       }}
@@ -250,6 +282,7 @@ export function GameSelectionPage() {
                   format: selectedBotLevel.id,
                   modeName: "Play Computer",
                   preferredColor: color,
+                  isPublic,
                 },
               });
               setSelectedBotLevel(null);

@@ -28,6 +28,7 @@ import BlogDetailPage from "../Pages/User/BlogDetailPage";
 import BlogWorkspacePage from "../Pages/User/BlogWorkspacePage";
 import BlogManagement from "../Pages/Admin/BlogManagement";
 import BlogDashboardPage from "../Pages/User/BlogDashboardPage";
+import { LiveGamesPage } from "../Pages/User/LiveGamesPage";
 
 export default function AppRoutes() {
   return (
@@ -35,6 +36,7 @@ export default function AppRoutes() {
       <Route path="/" element={<AuthPage initialMode="SIGNUP" role="USER" />} />
       <Route path="/verify-otp" element={<OTPVerify mode="signup" />} />
       <Route path="/landing-page" element={<LandingPage />} />
+      <Route path="/live" element={<LiveGamesPage />} />
       <Route path="/leaderboard" element={<LeaderBoardPage />} />
       <Route path="/leaderboard/:type" element={<LeaderBoardPage />} />
       <Route path="/admin/login" element={<LoginPage role="ADMIN" />} />

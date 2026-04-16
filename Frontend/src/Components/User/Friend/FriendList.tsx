@@ -49,6 +49,7 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
   };
 
   const [selectedFormat, setSelectedFormat] = useState("5+0");
+  const [isPublic, setIsPublic] = useState(false);
 
   const inviteFriend = (friendId: string, senderId: string | undefined) => {
     const finalSenderId =
@@ -63,6 +64,7 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
       senderId: finalSenderId,
       senderName: localStorage.getItem("displayname") || "A friend",
       gameFormat: selectedFormat,
+      isPublic: isPublic,
     });
     toast.success(`Invite sent (${selectedFormat})!`);
   };
@@ -145,6 +147,22 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
             <User className="w-6 h-6 text-[#FFD166]" />
             Your Friends
           </h2>
+
+          <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-2xl border border-white/5">
+            <span className="text-xs font-bold text-[#94A3B8]">Public Match</span>
+            <button
+              onClick={() => setIsPublic(!isPublic)}
+              className={`w-10 h-5 rounded-full transition-all relative ${
+                isPublic ? "bg-[#FFD166]" : "bg-white/10"
+              }`}
+            >
+              <div
+                className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${
+                  isPublic ? "left-6" : "left-1"
+                }`}
+              />
+            </button>
+          </div>
         </div>
 
         {/* Category Tabs */}

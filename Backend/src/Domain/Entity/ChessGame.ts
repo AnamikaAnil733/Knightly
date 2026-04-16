@@ -16,6 +16,7 @@ export class ChessGame extends BaseEntity {
     private _whiteRatingChange?: number,
     private _blackRatingChange?: number,
     private _difficulty?: number,
+    private _isPublic: boolean = false,
     createdAt?: Date,
   ) {
     super(id, createdAt);
@@ -135,5 +136,13 @@ export class ChessGame extends BaseEntity {
 
   getCreatedAt(): Date | undefined {
     return this.createdAt;
+  }
+  
+  getIsPublic(): boolean {
+    return this._isPublic;
+  }
+
+  setIsPublic(isPublic: boolean): void {
+    this._isPublic = isPublic;
   }
 }

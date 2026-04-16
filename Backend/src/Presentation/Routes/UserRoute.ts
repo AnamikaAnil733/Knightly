@@ -45,6 +45,7 @@ export class UserRoutes {
       USER_ROUTES.GET_GAME_HISTORY,
       gameController.getGameHistory,
     );
+    this.router.get(USER_ROUTES.GET_LIVE_GAMES, gameController.getLiveGames);
     this.router.get(USER_ROUTES.GET_GAME, gameController.getGame);
     this.router.get(USER_ROUTES.LEGAL_MOVES, gameController.legalMove);
     this.router.post(USER_ROUTES.MAKE_MOVE, gameController.makeMove);

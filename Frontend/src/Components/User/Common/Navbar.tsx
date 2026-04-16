@@ -52,6 +52,7 @@ export function Navbar() {
   const navLinks = [
     { to: "/landing-page", label: "Home" },
     { to: "/play", label: "Play", asExternal: true },
+    { to: "/live", label: "Live" },
     { to: "/leaderboard", label: "Leaderboard", asExternal: true },
     {
       to: "/friends",

@@ -26,6 +26,7 @@ export interface ChessGameSchemaType {
   whiteRatingChange?: number;
   blackRatingChange?: number;
   difficulty?: number; // Bot level 1-6
+  isPublic: boolean;
 }
 
 export const ChessGameSchema = new Schema<ChessGameSchemaType>(
@@ -97,6 +98,10 @@ export const ChessGameSchema = new Schema<ChessGameSchemaType>(
       type: Number,
       min: 1,
       max: 6,
+    },
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
   },
   {

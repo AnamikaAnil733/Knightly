@@ -40,4 +40,16 @@ export class ChessGameRepository
       }
     });
   }
+
+  async findLivePublicGames(): Promise<ChessGame[]> {
+    const docs = await this.model
+      .find({
+        status: { $in: ["ACTIVE", "CHECK"] },
+        isPublic: true,
+      })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
+  }
 }

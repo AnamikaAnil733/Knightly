@@ -6,6 +6,7 @@ import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/Game
 import { IGetLegalMovesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLegalMovesUseCase";
 import { IMakeMoveUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IMakeMoveUseCase";
 import { IReviewGameUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IReviewGameUseCase";
+import { IGetLivePublicGamesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLivePublicGamesUseCase";
 import {
   CreateGameSchema,
   GetGameSchema,
@@ -24,7 +25,18 @@ export class GameController {
     private readonly _makeMoveUseCase: IMakeMoveUseCase,
     private readonly _reviewGameUseCase: IReviewGameUseCase,
     private readonly _getGameHistoryUseCase: GetGameHistoryUseCase,
+    private readonly _getLivePublicGamesUseCase: IGetLivePublicGamesUseCase,
   ) {}
+
+  getLiveGames = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const games = await this._getLivePublicGamesUseCase.execute();
+      res.status(HttpStatusCodes.OK).json({ success: true, data: games });
+    } catch (error) {
+      next(error);
+    }
+  };
+
 
   createGame = async (req: Request, res: Response): Promise<Response> => {
     try {

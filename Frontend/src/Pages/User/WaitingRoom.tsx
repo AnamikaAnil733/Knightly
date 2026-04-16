@@ -16,6 +16,7 @@ export function WaitingRoom() {
     format = "3+0",
     modeName: initialModeName = "Blitz",
     preferredColor = "RANDOM",
+    isPublic = false,
   } = location.state || {};
   const modeName = format.startsWith("level-")
     ? "Play Computer"
@@ -47,9 +48,9 @@ export function WaitingRoom() {
 
     // Step 2: Tell backend we are looking for a match with SPECIFIC format
     if (modeName === "Play Computer") {
-      socket.emit("playComputer", user.id, format, preferredColor);
+      socket.emit("playComputer", user.id, format, preferredColor, isPublic);
     } else {
-      socket.emit("findMatch", user.id, format);
+      socket.emit("findMatch", user.id, format, isPublic);
     }
 
     // Animated dots for the "Looking for opponent" text

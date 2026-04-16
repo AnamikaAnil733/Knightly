@@ -11,7 +11,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
         private readonly ChessGameRepository : IBaseRepository<ChessGame>,
   ){}
 
-  async execute(whitePlayerId?: string, blackPlayerId?: string, timeControl: string = "5+0", difficulty?: number): Promise<{ gameId: string }> {
+  async execute(whitePlayerId?: string, blackPlayerId?: string, timeControl: string = "5+0", difficulty?: number, isPublic: boolean = false): Promise<{ gameId: string }> {
     let config = TIME_CONTROLS[timeControl];
 
     if (!config && timeControl.startsWith("level-")) {
@@ -42,6 +42,7 @@ export class CreateGameUseCase implements ICreateGameUseCase{
       undefined, // whiteRatingChange
       undefined, // blackRatingChange
       difficulty,
+      isPublic,
     );
 
     const savedGame = await this.ChessGameRepository.create(game);
