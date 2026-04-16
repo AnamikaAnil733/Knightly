@@ -72,7 +72,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   const {
     register: regSignup,
     handleSubmit: handleSignupSubmit,
-    watch,
     getValues,
     formState: { errors: signupErrors },
   } = useForm<SignupFormData>({
@@ -559,7 +558,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       {
                         required: "Confirm password",
                         validate: (val) =>
-                          val === watch("password") || "Passwords do not match",
+                          val === getValues("password") ||
+                          "Passwords do not match",
                       },
                     );
                     return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { MessageSquare, Send, Trash2, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -23,11 +23,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
 
   const user = useSelector((state: RootState) => state.userAuth.user);
 
-  useEffect(() => {
-    fetchComments();
-  }, [blogId]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getBlogComments(blogId);
@@ -37,7 +33,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ blogId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [blogId, fetchComments]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

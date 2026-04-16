@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
 import { BlogMasonryGrid } from "../../Components/User/Blog/BlogMasonryGrid";
 import { getAllBlogs } from "../../Service/Api/BlogApi";
 import { BlogResponseDTO, BlogCategory } from "../../Types/BlogTypes";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { PenSquareIcon, PlusIcon, Sparkles, Search, SlidersHorizontal, ArrowUpDown } from "lucide-react";
+import { PenSquareIcon, PlusIcon, Sparkles, Search } from "lucide-react";
 
 const BlogListPage: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState<BlogCategory | "ALL">("ALL");
+  const [activeCategory, setActiveCategory] = useState<BlogCategory | "ALL">(
+    "ALL",
+  );
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { scrollY } = useScroll();
 
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 400], [1, 1.1]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchBlogs();
-    }, 400); // 400ms debounce
-
-    return () => clearTimeout(timer);
-  }, [searchTerm, activeCategory]);
-
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getAllBlogs({
@@ -41,7 +40,15 @@ const BlogListPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm, activeCategory]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchBlogs();
+    }, 400); // 400ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, activeCategory, fetchBlogs]);
 
   return (
     <div className="min-h-screen bg-[#060918] font-inter text-white overflow-x-hidden">
@@ -143,8 +150,12 @@ const BlogListPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 mb-16 relative z-30">
           <div className="flex flex-col md:flex-row gap-8 items-center justify-between bg-white/[0.02] border border-white/10 p-4 md:p-2 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl">
             {/* Search Bar */}
-            <div className={`relative flex-1 group transition-all duration-500 ${isSearchFocused ? 'md:flex-[1.5]' : 'flex-1'}`}>
-              <div className={`absolute inset-y-0 left-6 flex items-center pointer-events-none transition-colors duration-300 ${isSearchFocused ? 'text-gold' : 'text-gray-500'}`}>
+            <div
+              className={`relative flex-1 group transition-all duration-500 ${isSearchFocused ? "md:flex-[1.5]" : "flex-1"}`}
+            >
+              <div
+                className={`absolute inset-y-0 left-6 flex items-center pointer-events-none transition-colors duration-300 ${isSearchFocused ? "text-gold" : "text-gray-500"}`}
+              >
                 <Search size={20} strokeWidth={2.5} />
               </div>
               <input
@@ -169,7 +180,7 @@ const BlogListPage: React.FC = () => {
               {["ALL", ...Object.values(BlogCategory)].map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat as any)}
+                  onClick={() => setActiveCategory(cat as BlogCategory | "ALL")}
                   className={`px-6 py-3 rounded-full text-xs font-black uppercase tracking-[2px] transition-all duration-300 whitespace-nowrap ${
                     activeCategory === cat
                       ? "bg-gold text-navy-dark shadow-[0_4px_20px_rgba(212,175,55,0.4)] scale-105"
@@ -205,14 +216,24 @@ const BlogListPage: React.FC = () => {
               className="py-40 text-center"
             >
               <div className="inline-block p-10 rounded-full bg-white/5 border border-white/10 mb-8">
-                <Search size={64} className="text-gray-600 mx-auto" strokeWidth={1} />
+                <Search
+                  size={64}
+                  className="text-gray-600 mx-auto"
+                  strokeWidth={1}
+                />
               </div>
-              <h3 className="text-4xl font-cinzel font-bold text-white mb-4">No Chronicles Found</h3>
+              <h3 className="text-4xl font-cinzel font-bold text-white mb-4">
+                No Chronicles Found
+              </h3>
               <p className="text-gray-light max-w-md mx-auto italic opacity-60">
-                The library archives do not contain manuscripts matching your search criteria.
+                The library archives do not contain manuscripts matching your
+                search criteria.
               </p>
               <button
-                onClick={() => { setSearchTerm(""); setActiveCategory("ALL"); }}
+                onClick={() => {
+                  setSearchTerm("");
+                  setActiveCategory("ALL");
+                }}
                 className="mt-10 text-gold font-bold uppercase tracking-[3px] text-xs hover:text-white transition-colors border-b border-gold/30 pb-1"
               >
                 Clear all filters

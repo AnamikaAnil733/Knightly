@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
@@ -66,13 +66,7 @@ const BlogDashboardPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  useEffect(() => {
-    if (user) {
-      loadUserBlogs();
-    }
-  }, [user, debouncedSearch, activeStatus, currentPage]);
-
-  const loadUserBlogs = async () => {
+  const loadUserBlogs = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getUserBlogs({
@@ -93,7 +87,13 @@ const BlogDashboardPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [debouncedSearch, activeStatus, currentPage]);
+
+  useEffect(() => {
+    if (user) {
+      loadUserBlogs();
+    }
+  }, [user, debouncedSearch, activeStatus, currentPage, loadUserBlogs]);
 
   const handleDeleteClick = (id: string, title: string) => {
     setDeleteModal({
