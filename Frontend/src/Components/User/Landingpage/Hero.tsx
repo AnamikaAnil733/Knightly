@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Tilt from "react-parallax-tilt";
 import { useNavigate } from "react-router-dom";
+import { Sparkles, Crown, Star } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -219,7 +220,7 @@ export function Hero() {
           className="absolute inset-0 z-[1]"
           style={{
             background:
-              "radial-gradient(circle at center, rgba(11,20,55,0.4), #0B1437)",
+              "radial-gradient(circle at center, rgba(11,20,55,0.7), #0B1437)",
           }}
         />
 
@@ -238,58 +239,53 @@ export function Hero() {
             perspective={2000}
             style={{ width: "fit-content", margin: "0 auto" }}
           >
-            <h1
-              className="hero-heading text-6xl mb-6 font-cinzel"
-              style={{
-                fontFamily: "'Cinzel', serif",
-                textShadow: "0 0 40px rgba(255,209,102,0.4)",
-                background: "linear-gradient(to bottom, #fff, #FFD166)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Where Strategy Meets Royalty
+            <h1 className="hero-heading text-6xl mb-6  md:text-8xl font-cinzel font-bold tracking-tighter text-white">
+              Where Strategy Meets
+              <span className="text-gold italic block ">Royalty</span>
             </h1>
+
             <p
               className="hero-subtext text-2xl mb-10 font-light tracking-wider"
-              style={{ fontFamily: "'Poppins', sans-serif", color: "#AAB3D1" }}
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                color: "#E2E8F0",
+                textShadow: "0 2px 10px rgba(0,0,0,0.9)",
+              }}
             >
               Command the board. Master the game. Experience the royal pursuit
               of excellence.
             </p>
             <button
-              className="hero-button inline-block cursor-pointer rounded-full px-10 py-4 text-lg font-semibold tracking-wider transition-all duration-[400ms]"
+              className="hero-button inline-flex items-center gap-3 cursor-pointer rounded-full px-12 py-5 text-lg font-bold tracking-widest transition-all duration-[400ms]"
               style={{
                 fontFamily: "'Poppins', sans-serif",
                 backgroundColor: "#0B1437",
                 backgroundImage:
-                  "linear-gradient(to bottom right, rgba(79,124,255,0.1), transparent)",
-                border: "1px solid rgba(79,124,255,0.6)",
-                color: "#4F7CFF",
+                  "linear-gradient(to bottom right, rgba(255,209,102,0.1), transparent)",
+                border: "2px solid #FFD166",
+                color: "#FFD166",
                 boxShadow:
-                  "0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(109,93,246,0.2)",
+                  "0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255,209,102,0.2)",
               }}
               onMouseEnter={(e) => {
                 const b = e.currentTarget;
                 b.style.transform = "scale(1.05) translateY(-2px)";
-                b.style.backgroundColor = "#1A1F4F";
-                b.style.borderColor = "#4F7CFF";
+                b.style.backgroundColor = "#FFD166";
+                b.style.color = "#0B1437";
                 b.style.boxShadow =
-                  "0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(109,93,246,0.4)";
-                b.style.color = "#ffffff";
+                  "0 20px 50px rgba(255,209,102,0.4), 0 0 35px rgba(255,209,102,0.3)";
               }}
               onMouseLeave={(e) => {
                 const b = e.currentTarget;
                 b.style.transform = "scale(1) translateY(0)";
                 b.style.backgroundColor = "#0B1437";
-                b.style.borderColor = "rgba(79,124,255,0.6)";
+                b.style.color = "#FFD166";
                 b.style.boxShadow =
-                  "0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(109,93,246,0.2)";
-                b.style.color = "#4F7CFF";
+                  "0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(255,209,102,0.2)";
               }}
               onClick={() => navigate("/play")}
             >
+              <Sparkles className="w-5 h-5" />
               Begin Your Reign
             </button>
           </Tilt>

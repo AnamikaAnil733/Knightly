@@ -51,14 +51,25 @@ const BlogListPage: React.FC = () => {
   }, [searchTerm, activeCategory, fetchBlogs]);
 
   return (
-    <div className="min-h-screen bg-[#060918] font-inter text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#0B1437] font-['Poppins'] text-white overflow-x-hidden relative">
+      {/* Page-wide subtle background texture */}
+      <div 
+        className="fixed inset-0 z-0 opacity-20 pointer-events-none"
+        style={{ 
+          backgroundImage: 'url(/images/blogs-background-v2.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          filter: 'blur(80px)'
+        }}
+      />
       <Navbar />
 
-      <main className="relative">
+      <main className="relative z-10">
         {/* Animated Background Elements */}
         <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-accent/10 blur-[150px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-electric/10 blur-[150px] rounded-full animate-pulse delay-1000" />
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#6D5DF6]/10 blur-[150px] rounded-full animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#FFD166]/5 blur-[150px] rounded-full animate-pulse delay-1000" />
         </div>
 
         {/* Cinematic Hero Section */}
@@ -67,21 +78,28 @@ const BlogListPage: React.FC = () => {
             style={{ opacity: heroOpacity, scale: heroScale }}
             className="absolute inset-0 z-0"
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#060918]/60 to-[#060918] z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0B1437]/60 to-[#0B1437] z-10" />
             <img
-              src="https://images.unsplash.com/photo-1529692236671-f1f6e9460272?auto=format&fit=crop&q=80&w=2000"
-              alt="Chess Library"
-              className="w-full h-full object-cover opacity-30"
+              src="/images/blogs-background-v2.png"
+              alt="The Royal Archives"
+              className="w-full h-full object-cover opacity-80"
             />
           </motion.div>
+
+          {/* Sparkle Particles Overlay */}
+          <div className="absolute inset-0 pointer-events-none z-10 opacity-30">
+            <div className="absolute top-[20%] left-[15%] w-1 h-1 bg-[#FFD166] rounded-full animate-ping" />
+            <div className="absolute top-[40%] right-[20%] w-1.5 h-1.5 bg-[#FFD166] rounded-full animate-pulse delay-300" />
+            <div className="absolute bottom-[30%] left-[30%] w-1 h-1 bg-[#FFD166] rounded-full animate-bounce delay-700" />
+          </div>
 
           <div className="relative z-20 text-center max-w-5xl">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-gold text-xs font-black uppercase tracking-[5px] mb-10 backdrop-blur-md"
+              className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[#FFD166] text-xs font-black uppercase tracking-[5px] mb-10 backdrop-blur-md"
             >
-              <Sparkles size={16} /> The Grand Library
+              <Sparkles size={16} /> THE ROYAL ARCHIVES
             </motion.div>
 
             <motion.h1
@@ -100,10 +118,10 @@ const BlogListPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-gray-light max-w-2xl mx-auto text-lg md:text-xl mb-14 leading-relaxed font-light italic opacity-80"
+              className="text-[#E2E8F0] max-w-2xl mx-auto text-lg md:text-xl mb-14 leading-relaxed font-light italic opacity-90 drop-shadow-lg"
             >
-              "In the game of kings, knowledge is the strongest move." Master
-              the board through advanced strategy and timeless wisdom.
+              "In the game of kings, knowledge is the strongest move." <br />
+              Master the board through strategy and timeless wisdom.
             </motion.p>
 
             <motion.div
@@ -114,9 +132,9 @@ const BlogListPage: React.FC = () => {
             >
               <Link
                 to="/blog/create"
-                className="group relative px-12 py-5 bg-gold hover:bg-gold-light text-navy-dark font-black rounded-2xl transition-all shadow-[0_0_50px_rgba(212,175,55,0.2)] hover:shadow-gold/40 flex items-center gap-3 overflow-hidden"
+                className="group relative px-12 py-5 bg-gradient-to-r from-[#4F7CFF] to-[#6D5DF6] text-white font-black rounded-2xl transition-all shadow-[0_15px_40px_rgba(79,124,255,0.3)] hover:scale-105 active:scale-95 flex items-center gap-3 overflow-hidden border border-white/10"
               >
-                <div className="absolute inset-0 bg-white/30 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
+                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 skew-x-12" />
                 <PenSquareIcon size={22} />
                 <span className="uppercase tracking-[3px] text-xs">
                   Write Chronicle
@@ -130,9 +148,9 @@ const BlogListPage: React.FC = () => {
                     behavior: "smooth",
                   })
                 }
-                className="px-12 py-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-black uppercase tracking-[3px] text-xs backdrop-blur-md transition-all hover:border-white/30"
+                className="px-12 py-5 bg-[#0B1437]/60 hover:bg-[#FFD166] hover:text-[#0B1437] border-2 border-[#FFD166] rounded-2xl text-[#FFD166] font-black uppercase tracking-[3px] text-xs backdrop-blur-md transition-all shadow-xl"
               >
-                Explore Library
+                Explore Archives
               </button>
             </motion.div>
           </div>
@@ -140,9 +158,9 @@ const BlogListPage: React.FC = () => {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/30"
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[#FFD166]/40"
           >
-            <div className="w-[1px] h-20 bg-gradient-to-b from-transparent via-white/30 to-transparent mx-auto" />
+            <div className="w-[2px] h-20 bg-gradient-to-b from-transparent via-[#FFD166]/50 to-transparent mx-auto" />
           </motion.div>
         </section>
 

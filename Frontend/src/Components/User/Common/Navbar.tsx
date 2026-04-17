@@ -51,7 +51,10 @@ export function Navbar() {
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsUserDropdownOpen(false);
       }
     }
@@ -85,16 +88,31 @@ export function Navbar() {
   ];
 
   const userMenuItems = [
-    { to: "/user/profile", label: "My Profile", icon: <UserIcon className="w-4 h-4" /> },
-    { to: "/dashboard/blogs", label: "My Blogs", icon: <LayoutDashboard className="w-4 h-4" /> },
-    { to: "/settings", label: "Settings", icon: <SettingsIcon className="w-4 h-4" /> },
+    {
+      to: "/user/profile",
+      label: "My Profile",
+      icon: <UserIcon className="w-4 h-4" />,
+    },
+    {
+      to: "/dashboard/blogs",
+      label: "My Blogs",
+      icon: <LayoutDashboard className="w-4 h-4" />,
+    },
+    {
+      to: "/settings",
+      label: "Settings",
+      icon: <SettingsIcon className="w-4 h-4" />,
+    },
   ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0B1437]/90 backdrop-blur-lg border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/landing-page" className="flex items-center gap-2 flex-shrink-0">
+        <Link
+          to="/landing-page"
+          className="flex items-center gap-2 flex-shrink-0"
+        >
           <CrownIcon className="w-8 h-8 text-[#FFD166]" />
           <span
             className="text-2xl font-bold text-[#FFD166] hidden sm:block"
@@ -151,7 +169,9 @@ export function Navbar() {
                   <span className="text-sm font-medium text-white max-w-[100px] truncate">
                     {user.displayname}
                   </span>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-transform ${isUserDropdownOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
 
                 <AnimatePresence>
@@ -163,9 +183,11 @@ export function Navbar() {
                       className="absolute right-0 mt-3 w-56 bg-[#11193F] border border-white/10 rounded-2xl shadow-2xl overflow-hidden py-2"
                     >
                       <div className="px-4 py-2 mb-2 border-b border-white/5">
-                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Account</p>
+                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+                          Account
+                        </p>
                       </div>
-                      
+
                       {userMenuItems.map((item) => (
                         <Link
                           key={item.to}
@@ -179,7 +201,7 @@ export function Navbar() {
                       ))}
 
                       <div className="h-px bg-white/5 my-2" />
-                      
+
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all font-medium"
@@ -214,7 +236,11 @@ export function Navbar() {
             className="lg:hidden p-2 text-white hover:text-[#4F7CFF] transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            {isMenuOpen ? (
+              <X className="w-7 h-7" />
+            ) : (
+              <Menu className="w-7 h-7" />
+            )}
           </button>
         </div>
       </div>
@@ -247,7 +273,7 @@ export function Navbar() {
                   )}
                 </Link>
               ))}
-              
+
               {user && (
                 <button
                   onClick={handleLogout}

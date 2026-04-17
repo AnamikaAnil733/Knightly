@@ -73,11 +73,14 @@ const levels: DifficultyLevel[] = [
   },
 ];
 
+import { PremiumModal } from "../../Components/User/Puzzle/PremiumModal";
+
 export function PuzzleTactics() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
   const [solveCount, setSolveCount] = useState<number>(0);
   const [isLoadingCount, setIsLoadingCount] = useState(true);
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   const todayDifficulty = getDailyDifficulty();
   const todayLabel = getTodayLabel();
@@ -104,8 +107,7 @@ export function PuzzleTactics() {
 
   const handleStartPuzzle = (difficulty: string) => {
     if (!user?.premium && solveCount >= PUZZLE_LIMIT) {
-      alert("Daily puzzle limit (5) reached for free account. Upgrade to Knightly Premium for unlimited puzzles!");
-      navigate("/pricing");
+      setIsPremiumModalOpen(true);
       return;
     }
     navigate(`/puzzle/solve/${difficulty}`);
@@ -229,7 +231,8 @@ export function PuzzleTactics() {
                     Difficulty
                   </h3>
                   <p className="text-[#C9CAD9] text-sm mt-1 opacity-80">
-                    Difficulty rotates daily. {!user?.premium && (
+                    Difficulty rotates daily.{" "}
+                    {!user?.premium && (
                       <span className="text-[#FFD166] font-bold">
                         Progress: {solveCount}/{PUZZLE_LIMIT} puzzles
                       </span>
@@ -242,9 +245,9 @@ export function PuzzleTactics() {
                 whileTap={!isLimited ? { scale: 0.95 } : {}}
                 onClick={() => handleStartPuzzle(todayDifficulty)}
                 className={`px-8 py-4 rounded-2xl font-bold text-base shadow-lg shadow-black/30 transition-all whitespace-nowrap mt-4 md:mt-0 ${
-                  isLimited 
-                  ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5" 
-                  : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
+                  isLimited
+                    ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5"
+                    : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
                 }`}
               >
                 {isLimited ? (
@@ -335,9 +338,9 @@ export function PuzzleTactics() {
                       whileTap={!isLimited ? { scale: 0.95 } : {}}
                       onClick={() => handleStartPuzzle(level.id)}
                       className={`px-4 py-2 rounded-lg text-xs font-bold shadow-lg transition-all ${
-                        isLimited 
-                        ? "bg-gray-700/50 text-gray-500 cursor-not-allowed" 
-                        : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
+                        isLimited
+                          ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
+                          : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
                       }`}
                     >
                       {isLimited ? "Locked" : "Start Solving"}
@@ -416,6 +419,10 @@ export function PuzzleTactics() {
           animation: bounce-slow 6s ease-in-out infinite;
         }
       `}</style>
+      <PremiumModal
+        isOpen={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+      />
     </div>
   );
 }

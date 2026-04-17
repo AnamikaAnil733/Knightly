@@ -7,6 +7,8 @@ import { getLessons } from "../../Service/Api/LearnApi";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { Lesson } from "../../Types/LessonTypes";
 
+import { PremiumModal } from "../../Components/User/Puzzle/PremiumModal";
+
 const CATEGORY_LABELS: Record<string, string> = {
   GETTING_STARTED: "Getting Started",
   TACTICS: "Tactics",
@@ -20,6 +22,7 @@ const LessonListPage: React.FC = () => {
   const navigate = useNavigate();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -76,6 +79,7 @@ const LessonListPage: React.FC = () => {
                   order={lesson.order}
                   category={lesson.category}
                   isPremium={lesson.isPremium}
+                  onPremiumClick={() => setIsPremiumModalOpen(true)}
                 />
               ))}
             </div>
@@ -83,6 +87,11 @@ const LessonListPage: React.FC = () => {
         </div>
       </main>
       <Footer />
+      <PremiumModal
+        isOpen={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+        message="This is a Premium Masterclass. Upgrade to Knightly Premium to unlock our full curriculum and learn from the best!"
+      />
     </div>
   );
 };

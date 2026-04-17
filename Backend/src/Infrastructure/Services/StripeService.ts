@@ -40,4 +40,19 @@ export default class StripeService implements IStripeService {
   public constructEvent(payload: string | Buffer, sig: string, secret: string): any {
     return this.stripe.webhooks.constructEvent(payload, sig, secret);
   }
+
+  async retrieveCheckoutSession(sessionId: string): Promise<{
+    paymentStatus: string;
+    clientReferenceId: string | null;
+    subscriptionId: string | null;
+    customerId: string | null;
+  }> {
+    const session = await this.stripe.checkout.sessions.retrieve(sessionId);
+    return {
+      paymentStatus: session.payment_status,
+      clientReferenceId: session.client_reference_id ?? null,
+      subscriptionId: (session.subscription as string) ?? null,
+      customerId: (session.customer as string) ?? null,
+    };
+  }
 }

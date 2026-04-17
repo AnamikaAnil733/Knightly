@@ -1,10 +1,22 @@
 import React from "react";
-import { Check, Crown, Zap, Shield, BookOpen, Puzzle } from "lucide-react";
+import {
+  Check,
+  Crown,
+  Zap,
+  Shield,
+  BookOpen,
+  Puzzle,
+  ChevronLeft,
+  Sparkles,
+  Star,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { PaymentService } from "../../Service/Api/PaymentService";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const PricingPage: React.FC = () => {
+  const navigate = useNavigate();
   const handleUpgrade = async () => {
     try {
       const { url } = await PaymentService.createCheckoutSession();
@@ -17,106 +29,166 @@ const PricingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white py-20 px-4">
-      <div className="max-w-6xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text text-transparent">
-            Unleash Your Potential
-          </h1>
-          <p className="text-gray-400 text-xl mb-16 max-w-2xl mx-auto">
-            Master the board with Knightly Premium. Get unlimited access to
-            advanced training tools and exclusive features.
-          </p>
-        </motion.div>
+    <div className="h-screen bg-[#0B1437] text-white overflow-hidden relative font-['Poppins'] flex flex-col">
+      {/* Background Ornaments */}
+      <div className="absolute top-[-10%] right-[-5%] w-[60%] h-[60%] bg-[#4F7CFF]/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[60%] h-[60%] bg-[#6D5DF6]/10 blur-[150px] rounded-full pointer-events-none" />
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Free Tier */}
-          <motion.div
+      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10 w-full h-full flex flex-col justify-between">
+        {/* Header Navigation */}
+        <header className="">
+          <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-[#151518] p-8 rounded-3xl border border-white/5 flex flex-col"
+            onClick={() => navigate("/landing-page")}
+            className="flex items-center gap-2 text-[#AAB3D1] hover:text-white transition-all group px-4 py-2 rounded-full bg-white/5 border border-white/10"
           >
-            <h2 className="text-2xl font-bold mb-2">Free</h2>
-            <p className="text-4xl font-black mb-6">$0</p>
-            <ul className="space-y-4 mb-8 text-left flex-grow">
-              <li className="flex items-center gap-3 text-gray-400">
-                <Check className="text-green-500 w-5 h-5" /> Unlimited Online
-                Play
-              </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <Check className="text-green-500 w-5 h-5" /> Basic Lessons
-              </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <Check className="text-green-500 w-5 h-5" /> 5 Puzzles Daily
-              </li>
-              <li className="flex items-center gap-3 text-gray-400/50">
-                <Shield className="w-5 h-5" /> Ad-Supported
-              </li>
+            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-semibold text-xs tracking-wide">Back</span>
+          </motion.button>
+        </header>
+
+        {/* Hero Section */}
+        <div className="text-center">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFD166]/10 border border-[#FFD166]/30 text-[#FFD166] text-[10px] font-black mb-4 tracking-[0.2em] uppercase"
+          >
+            <Star className="w-3 h-3 fill-[#FFD166]" />
+            Royal Memberships
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-5xl lg:text-6xl mb-4 font-cinzel tracking-tight"
+            style={{
+              fontFamily: "'Cinzel', serif",
+              background: "linear-gradient(to bottom, #fff, #FFD166)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Claim Your Path
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[#AAB3D1] text-base lg:text-lg max-w-xl mx-auto font-light"
+          >
+            Command the board with professional tools and unlimited access.
+          </motion.p>
+        </div>
+
+        {/* Pricing Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto items-stretch py-4 overflow-hidden">
+          {/* Free Tier */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col p-8 rounded-[2rem] bg-[#11193F]/40 backdrop-blur-xl border border-white/5 relative"
+          >
+            <div className="mb-6">
+              <h2 className="text-[#AAB3D1] font-bold text-[10px] tracking-[0.2em] uppercase mb-2">
+                The Squire
+              </h2>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-black text-white">$0</span>
+                <span className="text-[#AAB3D1] text-xs">/forever</span>
+              </div>
+            </div>
+
+            <ul className="space-y-4 mb-8 flex-grow overflow-y-auto no-scrollbar">
+              {[
+                { text: "Unlimited Online Matchmaking", icon: Shield },
+                { text: "Access to Beginner Academy", icon: BookOpen },
+                { text: "5 Daily Tactical Puzzles", icon: Puzzle },
+                { text: "Standard Profile View", icon: Star },
+              ].map((item, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center gap-3 text-[#AAB3D1]"
+                >
+                  <Check className="w-4 h-4 text-emerald-500" />
+                  <span className="text-sm">{item.text}</span>
+                </li>
+              ))}
             </ul>
+
             <button
               disabled
-              className="w-full py-4 rounded-xl bg-white/5 text-gray-500 font-bold cursor-not-allowed"
+              className="w-full py-4 rounded-xl bg-white/5 text-[#AAB3D1] font-black text-xs tracking-widest uppercase cursor-not-allowed border border-white/5"
             >
-              Current Plan
+              ACTIVE
             </button>
           </motion.div>
 
           {/* Premium Tier */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-gradient-to-b from-[#1a1a1e] to-[#0a0a0b] p-8 rounded-3xl border-2 border-amber-500/50 relative overflow-hidden shadow-[0_0_50px_-12px_rgba(245,158,11,0.3)]"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col p-8 rounded-[2rem] bg-gradient-to-br from-[#1A1F4F] to-[#0B1437] border-2 border-[#FFD166]/30 relative overflow-hidden shadow-2xl"
           >
-            <div className="absolute top-0 right-0 bg-amber-500 text-black px-4 py-1 rounded-bl-xl font-bold text-sm tracking-wider">
-              MOST POPULAR
+            <div className="absolute top-6 right-[-30px] bg-[#FFD166] text-black px-10 py-1 rotate-45 font-black text-[9px] tracking-widest">
+              PRO
             </div>
-            <div className="flex items-center gap-2 mb-2">
-              <Crown className="text-amber-500 w-6 h-6 fill-amber-500" />
-              <h2 className="text-2xl font-bold">Premium</h2>
+
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-[#FFD166] mb-2">
+                <Crown className="w-4 h-4 fill-[#FFD166]" />
+                <h2 className="font-black text-[10px] tracking-[0.2em] uppercase">
+                  The Grandmaster
+                </h2>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-black text-white">$9.99</span>
+                <span className="text-[#C9CAD9] text-xs">/month</span>
+              </div>
             </div>
-            <p className="text-4xl font-black mb-6">
-              $9.99
-              <span className="text-base text-gray-400 font-normal">/mo</span>
-            </p>
-            <ul className="space-y-4 mb-8 text-left flex-grow">
-              <li className="flex items-center gap-3">
-                <Zap className="text-amber-500 w-5 h-5 fill-amber-500" />{" "}
-                Unlimited Puzzles
-              </li>
-              <li className="flex items-center gap-3">
-                <BookOpen className="text-amber-500 w-5 h-5" /> ALL Master
-                Lessons
-              </li>
-              <li className="flex items-center gap-3">
-                <Crown className="text-amber-500 w-5 h-5" /> Exclusive Profile
-                Badge
-              </li>
-              <li className="flex items-center gap-3">
-                <Shield className="text-amber-500 w-5 h-5" /> Ad-Free Experience
-              </li>
-              <li className="flex items-center gap-3">
-                <Puzzle className="text-amber-500 w-5 h-5" /> Advanced Game
-                Analysis
-              </li>
+
+            <ul className="space-y-4 mb-8 flex-grow overflow-y-auto no-scrollbar">
+              {[
+                { text: "Unlimited Tactical Puzzles", icon: Zap },
+                { text: "ALL Pro Academy Lessons", icon: BookOpen },
+                { text: "Advanced Engine Analysis", icon: Puzzle },
+                { text: "Exclusive Profile Badge", icon: Crown },
+                { text: "Ad-Free Concentration Zone", icon: Shield },
+              ].map((item, idx) => (
+                <li key={idx} className="flex items-center gap-3 text-white">
+                  <div className="w-5 h-5 rounded-lg bg-[#FFD166]/10 flex items-center justify-center shrink-0">
+                    <item.icon className="w-3 h-3 text-[#FFD166]" />
+                  </div>
+                  <span className="text-sm font-bold">{item.text}</span>
+                </li>
+              ))}
             </ul>
+
             <button
               onClick={handleUpgrade}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-600 text-black font-bold text-lg hover:scale-[1.02] transition-transform active:scale-[0.98]"
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-[#4F7CFF] to-[#6D5DF6] text-white font-black text-xs tracking-[0.2em] uppercase hover:scale-[1.02] shadow-xl relative overflow-hidden group/btn"
             >
-              Upgrade Now
+              UPGRADE NOW
             </button>
           </motion.div>
         </div>
 
-        <p className="mt-12 text-gray-500 text-sm">
-          Cancel anytime. Secure payment via Stripe.
-        </p>
+        {/* Footer info */}
+        <footer className="py-4 text-center">
+          <p className="text-[#AAB3D1]/40 text-[10px] font-medium tracking-wide">
+            Secure payment via Stripe • Cancel anytime
+          </p>
+        </footer>
+      </div>
+
+      {/* Decorative Watermarks */}
+      <div className="absolute top-1/2 left-5 -translate-y-1/2 opacity-[0.03] pointer-events-none hidden xl:block">
+        <Crown className="w-48 h-48 text-white rotate-[-15deg]" />
+      </div>
+      <div className="absolute bottom-5 right-5 opacity-[0.03] pointer-events-none hidden xl:block">
+        <Sparkles className="w-32 h-32 text-[#FFD166] rotate-12" />
       </div>
     </div>
   );

@@ -19,11 +19,11 @@ export const BlogMasonryCard: React.FC<BlogMasonryCardProps> = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="break-inside-avoid mb-6 group relative bg-navy-card rounded-2xl overflow-hidden border border-white/5 shadow-xl hover:shadow-gold/20 transition-all duration-500"
+      className="break-inside-avoid mb-6 group relative bg-[#11193F]/60 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/5 shadow-xl hover:shadow-[#FFD166]/10 transition-all duration-500"
     >
       <Link to={`/blogs/${blog.slug}`} className="block relative h-auto">
         {/* Cover Image */}
-        <div className="relative overflow-hidden bg-navy-dark">
+        <div className="relative overflow-hidden bg-[#0B1437]">
           <img
             src={
               blog.coverImage ||
@@ -34,53 +34,58 @@ export const BlogMasonryCard: React.FC<BlogMasonryCardProps> = ({
           />
 
           {/* Hover Overlay */}
-          <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 bg-black/40">
+          <div className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 bg-[#0B1437]/60">
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               whileHover={{ y: 0, opacity: 1 }}
               className="flex items-center justify-between"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-gold/20 backdrop-blur-md flex items-center justify-center text-gold border border-gold/30">
+                <div className="w-8 h-8 rounded-full bg-[#FFD166]/20 backdrop-blur-md flex items-center justify-center text-[#FFD166] border border-[#FFD166]/30">
                   <Eye size={14} />
                 </div>
                 <span className="text-[10px] text-white/80 font-bold">
                   {blog.viewCount || 0} Views
                 </span>
               </div>
-              <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-navy-dark shadow-xl">
+              <div className="w-10 h-10 rounded-full bg-[#FFD166] flex items-center justify-center text-[#0B1437] shadow-xl">
                 <ArrowUpRight size={20} />
               </div>
             </motion.div>
           </div>
 
           <div className="absolute top-4 left-4 z-20">
-            <span className="px-3 py-1 bg-black/40 backdrop-blur-md text-gold text-[9px] font-black rounded-lg uppercase tracking-widest border border-white/10 group-hover:border-gold/50 transition-colors">
-              {blog.category}
+            <span className="px-3 py-1 bg-[#0B1437]/80 backdrop-blur-md text-[#FFD166] text-[9px] font-black rounded-lg uppercase tracking-widest border border-white/10 group-hover:border-[#FFD166]/50 transition-colors">
+              {blog.category.replace("_", " ")}
             </span>
           </div>
         </div>
 
-        {/* Content Section (Visible or Minimal) */}
-        <div className="p-5 bg-navy-card">
-          <div className="flex items-center gap-2 mb-2">
+        {/* Content Section */}
+        <div className="p-5">
+          <div className="flex items-center gap-2 mb-3">
             {blog.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
-                className="text-[8px] text-blue-electric font-bold tracking-widest uppercase opacity-70"
+                className="text-[8px] text-[#4F7CFF] font-black tracking-[0.2em] uppercase opacity-80"
               >
                 #{tag}
               </span>
             ))}
           </div>
-          <h3 className="text-base font-cinzel font-bold text-white mb-2 line-clamp-2 group-hover:text-gold transition-colors leading-snug">
+          <h3 className="text-base font-cinzel font-bold text-white mb-3 line-clamp-2 group-hover:text-[#FFD166] transition-colors leading-snug">
             {blog.title}
           </h3>
-          <div className="flex items-center justify-between pt-3 border-t border-white/5">
-            <span className="text-[9px] text-gray-light font-bold uppercase tracking-tighter opacity-60">
-              {blog.authorRole === "ADMIN" ? "♔ Grandmaster" : "♟ Tactician"}
-            </span>
-            <span className="text-[9px] text-gray-light font-medium flex items-center gap-1 opacity-50">
+          <div className="flex items-center justify-between pt-4 border-t border-white/5">
+            <div className="flex items-center gap-2">
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${blog.authorRole === "ADMIN" ? "bg-[#FFD166]" : "bg-[#4F7CFF]"}`}
+              />
+              <span className="text-[9px] text-[#AAB3D1] font-black uppercase tracking-widest">
+                {blog.authorRole === "ADMIN" ? "♔ Grandmaster" : "♟ Tactician"}
+              </span>
+            </div>
+            <span className="text-[9px] text-[#AAB3D1] font-medium flex items-center gap-1.5 opacity-60">
               <Clock size={10} />
               {new Date(blog.createdAt).toLocaleDateString(undefined, {
                 month: "short",

@@ -239,7 +239,9 @@ export function GameReviewPage() {
                     <Crown className="w-5 h-5 text-black" />
                   </div>
                 </div>
-                <h3 className="text-lg font-bold text-[#F7E7CE] mb-1">Advanced Analysis</h3>
+                <h3 className="text-lg font-bold text-[#F7E7CE] mb-1">
+                  Advanced Analysis
+                </h3>
                 <p className="text-xs text-gray-400 mb-4 px-4 line-clamp-2">
                   Blunder detection, move classifications, and master insights.
                 </p>

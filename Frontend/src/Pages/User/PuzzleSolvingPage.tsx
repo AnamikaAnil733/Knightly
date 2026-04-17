@@ -24,6 +24,7 @@ import {
 } from "../../Service/Api/UserPuzzleApi";
 import { isTodaysDifficulty } from "../../Utils/GetDailyDifficulty";
 import toast from "react-hot-toast";
+import { PremiumModal } from "../../Components/User/Puzzle/PremiumModal";
 
 // Difficulty config
 const difficultyConfig = {
@@ -90,6 +91,8 @@ export function PuzzleSolvingPage() {
   const [loading, setLoading] = useState(true);
   const [moveIndex, setMoveIndex] = useState(0);
   const [playerSide, setPlayerSide] = useState<"white" | "black">("white");
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  const [limitMessage, setLimitMessage] = useState("");
 
   const board = useMemo(() => {
     return game.board().map((row) =>
@@ -125,24 +128,12 @@ export function PuzzleSolvingPage() {
         error.message ||
         "Failed to load puzzle";
 
-      if (errorMessage.includes("Daily puzzle limit reached")) {
-        toast.error(
-          (t) => (
-            <div className="flex flex-col gap-2">
-              <span>{errorMessage}</span>
-              <button
-                onClick={() => {
-                  toast.dismiss(t.id);
-                  navigate("/pricing");
-                }}
-                className="bg-amber-500 text-black px-3 py-1 rounded-md font-bold text-xs"
-              >
-                Upgrade to Premium
-              </button>
-            </div>
-          ),
-          { duration: 6000 },
-        );
+      if (
+        errorMessage.includes("Daily puzzle limit reached") ||
+        errorMessage.includes("Upgrade to Premium")
+      ) {
+        setLimitMessage(errorMessage);
+        setIsPremiumModalOpen(true);
       } else {
         toast.error(errorMessage);
       }
@@ -526,6 +517,11 @@ export function PuzzleSolvingPage() {
           background: rgba(255, 255, 255, 0.2);
         }
       `}</style>
+      <PremiumModal
+        isOpen={isPremiumModalOpen}
+        onClose={() => setIsPremiumModalOpen(false)}
+        message={limitMessage}
+      />
     </div>
   );
 }

@@ -1,4 +1,10 @@
-import { PaletteIcon, GridIcon, SlidersIcon, UserIcon, Crown } from "lucide-react";
+import {
+  PaletteIcon,
+  GridIcon,
+  SlidersIcon,
+  UserIcon,
+  Crown,
+} from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../../Store/Store";
