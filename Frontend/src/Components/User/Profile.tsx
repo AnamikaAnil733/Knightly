@@ -8,7 +8,13 @@ import toast from "react-hot-toast";
 import axios from "../../Service/Api/Axios/Useraxios";
 
 // Icons
-import { TrophyIcon, FlameIcon, ClockIcon, TargetIcon } from "lucide-react";
+import {
+  TrophyIcon,
+  FlameIcon,
+  ClockIcon,
+  TargetIcon,
+  Crown,
+} from "lucide-react";
 import { GameHistoryList } from "./GameHistoryList";
 import { PerformanceChart } from "./PerformanceChart";
 
@@ -91,8 +97,11 @@ export function ProfileUser() {
             </div>
 
             <div>
-              <h1 className="text-4xl font-bold text-gold">
+              <h1 className="text-4xl font-bold text-gold flex items-center gap-2">
                 {user.displayname}
+                {user.premium && (
+                  <Crown className="w-6 h-6 text-amber-500 fill-amber-500" />
+                )}
               </h1>
 
               <div className="mt-3">

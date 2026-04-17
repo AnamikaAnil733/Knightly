@@ -6,6 +6,7 @@ export interface LessonSummaryDTO {
   category: LessonCategory;
   difficulty: LessonDifficulty;
   order: number;
+  isPremium: boolean;
 }
 
 export interface LessonDetailDTO {
@@ -15,6 +16,7 @@ export interface LessonDetailDTO {
   difficulty: LessonDifficulty;
   content: string;
   order: number;
+  isPremium: boolean;
   fen?: string;
   createdAt: Date;
   updatedAt: Date;

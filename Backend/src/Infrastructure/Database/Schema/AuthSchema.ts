@@ -30,6 +30,8 @@ export interface AuthSchemaType{
     rewards: string[];
     achievements: string[];
     subscriptionStart?: Date;
+    stripeCustomerId?: string;
+    stripeSubscriptionId?: string;
     createdAt:Date;
     avatarKey:string;
 }
@@ -93,6 +95,8 @@ export const authSchema = new Schema<AuthSchemaType>(
     rewards: { type: [String], default: [] },
     achievements: { type: [String], default: [] },
     subscriptionStart: { type: Date },
+    stripeCustomerId: { type: String },
+    stripeSubscriptionId: { type: String },
     avatarKey: { type: String,default:null },
 
   },

@@ -4,6 +4,7 @@ export interface Lesson {
   difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   order: number;
   category: string;
+  isPremium: boolean;
 }
 
 export interface LessonDetail {

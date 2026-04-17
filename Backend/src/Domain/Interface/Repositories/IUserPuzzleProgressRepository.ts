@@ -7,4 +7,5 @@ export interface IUserPuzzleProgressRepository {
   ): Promise<EUserPuzzleprogress | null>;
   save(progress: EUserPuzzleprogress): Promise<EUserPuzzleprogress>;
   getSolvedPuzzles(userId: string): Promise<string[]>;
+  countSolvedToday(userId: string): Promise<number>;
 }

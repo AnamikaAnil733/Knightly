@@ -21,6 +21,8 @@ export default class EAuth {
   private _rewards: string[];
   private _achievements: string[];
   private _subscriptionStart?: Date;
+  private _stripeCustomerId?: string;
+  private _stripeSubscriptionId?: string;
   private _ratingHistory: { rating: number; date: Date; type: string }[];
 
 
@@ -53,6 +55,8 @@ export default class EAuth {
         rewards?: string[];
         achievements?: string[];
         subscriptionStart?: Date;
+        stripeCustomerId?: string;
+        stripeSubscriptionId?: string;
 
         avatarUrl?: string | null;
         avatarSeed?: string;
@@ -84,6 +88,8 @@ export default class EAuth {
     this._rewards = params.rewards ?? [];
     this._achievements = params.achievements ?? [];
     this._subscriptionStart = params.subscriptionStart;
+    this._stripeCustomerId = params.stripeCustomerId;
+    this._stripeSubscriptionId = params.stripeSubscriptionId;
     this._ratingHistory = params.ratingHistory ?? [];
 
     this._avatarUrl = params.avatarUrl ?? null;
@@ -118,6 +124,8 @@ export default class EAuth {
   get updatedAt(): Date { return this._updatedAt; }
   get ratingHistory(): { rating: number; date: Date; type: string }[] { return this._ratingHistory; }
   get subscriptionStart():Date|undefined{ return this._subscriptionStart;}
+  get stripeCustomerId(): string | undefined { return this._stripeCustomerId; }
+  get stripeSubscriptionId(): string | undefined { return this._stripeSubscriptionId; }
 
   get avatarUrl(): string | null { return this._avatarUrl; }
   get avatarSeed(): string { return this._avatarSeed; }
@@ -167,6 +175,13 @@ export default class EAuth {
   public addDraw(): void {
     this._gamesPlayed++;
     this._currentStreak = 0;
+  }
+
+  public updatePremiumStatus(isPremium: boolean, subscriptionId?: string, customerId?: string) {
+    this._premium = isPremium;
+    if (subscriptionId) this._stripeSubscriptionId = subscriptionId;
+    if (customerId) this._stripeCustomerId = customerId;
+    if (isPremium) this._subscriptionStart = new Date();
   }
 
 

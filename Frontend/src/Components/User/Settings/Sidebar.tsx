@@ -1,9 +1,13 @@
-import { PaletteIcon, GridIcon, SlidersIcon, UserIcon } from "lucide-react";
+import { PaletteIcon, GridIcon, SlidersIcon, UserIcon, Crown } from "lucide-react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { RootState } from "../../../Store/Store";
 interface SidebarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
 }
 export const Sidebar = ({ activeSection, setActiveSection }: SidebarProps) => {
+  const user = useSelector((state: RootState) => state.userAuth.user);
   const navItems = [
     {
       id: "theme",
@@ -51,6 +55,36 @@ export const Sidebar = ({ activeSection, setActiveSection }: SidebarProps) => {
           ))}
         </ul>
       </nav>
+
+      {!user?.premium && (
+        <div className="mt-8 p-4 rounded-2xl bg-gradient-to-br from-[#F7E7CE]/10 to-[#D4AF37]/5 border border-[#F7E7CE]/20">
+          <div className="flex items-center gap-2 mb-2 text-[#E7D4B5]">
+            <Crown className="w-5 h-5 fill-[#E7D4B5]" />
+            <span className="font-bold text-sm tracking-wide">PREMIUM</span>
+          </div>
+          <p className="text-xs text-gray-400 mb-4 leading-relaxed">
+            Unlock unlimited puzzles and advanced engine analysis.
+          </p>
+          <Link
+            to="/pricing"
+            className="block w-full py-2.5 text-center rounded-xl bg-gradient-to-r from-[#F7E7CE] to-[#E7D4B5] text-black font-bold text-sm hover:scale-[1.02] transition-transform active:scale-[0.98]"
+          >
+            Upgrade Now
+          </Link>
+        </div>
+      )}
+
+      {user?.premium && (
+        <div className="mt-8 p-4 rounded-2xl bg-[#1A2352]/50 border border-[#F7E7CE]/20 flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7E7CE] to-[#E7D4B5]">
+            <Crown className="w-5 h-5 text-black fill-black" />
+          </div>
+          <div>
+            <p className="text-white font-bold text-sm">Knightly Pro</p>
+            <p className="text-xs text-[#E7D4B5]/80">Active Member</p>
+          </div>
+        </div>
+      )}
     </aside>
   );
 };

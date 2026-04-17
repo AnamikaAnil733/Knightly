@@ -46,4 +46,15 @@ implements IUserPuzzleProgressRepository
       "puzzleId",
     );
   }
+
+  async countSolvedToday(userId: string): Promise<number> {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    return ProgressPuzzleModel.countDocuments({
+      userId,
+      solved: true,
+      solvedAt: { $gte: todayStart },
+    });
+  }
 }

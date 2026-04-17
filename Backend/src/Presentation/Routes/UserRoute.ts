@@ -60,6 +60,10 @@ export class UserRoutes {
       userPuzzleController.validateMove,
     );
     this.router.get(
+      USER_ROUTES.GET_PUZZLE_SOLVE_COUNT,
+      userPuzzleController.getSolveCount,
+    );
+    this.router.get(
       USER_ROUTES.LEADERBOARD,
       leaderBoardController.getLeaderBoard,
     );

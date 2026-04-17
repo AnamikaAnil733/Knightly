@@ -15,6 +15,8 @@ export default class UserEntity {
   private _rewards: string[];
   private _achievements?: string[];
   private _subscriptionStart?: Date;
+  private _stripeCustomerId?: string;
+  private _stripeSubscriptionId?: string;
   private _createdAt: Date;
   private _role: UserRole;
 
@@ -33,6 +35,8 @@ export default class UserEntity {
     rewards?: string[];
     achievements?: string[];
     subscriptionStart?: Date;
+    stripeCustomerId?: string;
+    stripeSubscriptionId?: string;
     createdAt?: Date;
     role: UserRole;
   }) {
@@ -50,6 +54,8 @@ export default class UserEntity {
     this._rewards = params.rewards ?? [];
     this._achievements = params.achievements ?? [];
     this._subscriptionStart = params.subscriptionStart;
+    this._stripeCustomerId = params.stripeCustomerId;
+    this._stripeSubscriptionId = params.stripeSubscriptionId;
     this._createdAt = params.createdAt ?? new Date();
     this._role = params.role;
   }
@@ -96,6 +102,12 @@ export default class UserEntity {
   get subscriptionStart() {
     return this._subscriptionStart;
   }
+  get stripeCustomerId() {
+    return this._stripeCustomerId;
+  }
+  get stripeSubscriptionId() {
+    return this._stripeSubscriptionId;
+  }
 
   set password(newPassword: string | undefined) {
     this._password = newPassword;
@@ -132,5 +144,12 @@ export default class UserEntity {
 
   public unblock() {
     this._isBlocked = false;
+  }
+
+  public updatePremiumStatus(isPremium: boolean, subscriptionId?: string, customerId?: string) {
+    this._premium = isPremium;
+    if (subscriptionId) this._stripeSubscriptionId = subscriptionId;
+    if (customerId) this._stripeCustomerId = customerId;
+    if (isPremium) this._subscriptionStart = new Date();
   }
 }

@@ -144,8 +144,16 @@ export class GameController {
       }
 
       const { gameId } = result.data;
+      const userId = (req as any).user?.id;
 
-      const analysis = await this._reviewGameUseCase.execute(gameId);
+      if (!userId) {
+        throw new CustomError(
+          HttpStatusCodes.UNAUTHORIZED,
+          MESSAGES.UNAUTHORIZED
+        );
+      }
+
+      const analysis = await this._reviewGameUseCase.execute(gameId, userId);
       res.status(HttpStatusCodes.OK).json({ success: true, analysis });
     } catch (error) {
       next(error);

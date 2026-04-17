@@ -119,10 +119,33 @@ export function PuzzleSolvingPage() {
       setPlayerSide(newGame.turn() === "w" ? "white" : "black");
       setMoveIndex(0);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to load puzzle";
-      toast.error(errorMessage);
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to load puzzle";
+
+      if (errorMessage.includes("Daily puzzle limit reached")) {
+        toast.error(
+          (t) => (
+            <div className="flex flex-col gap-2">
+              <span>{errorMessage}</span>
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  navigate("/pricing");
+                }}
+                className="bg-amber-500 text-black px-3 py-1 rounded-md font-bold text-xs"
+              >
+                Upgrade to Premium
+              </button>
+            </div>
+          ),
+          { duration: 6000 },
+        );
+      } else {
+        toast.error(errorMessage);
+      }
       setLoading(false);
     }
   }, [difficulty]);

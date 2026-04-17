@@ -20,6 +20,8 @@ export interface User {
   rewards?: string[];
   achievements?: string[];
   subscriptionStart?: Date;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
   createdAt?: Date;
   role: UserRole;
   avatarKey: string;

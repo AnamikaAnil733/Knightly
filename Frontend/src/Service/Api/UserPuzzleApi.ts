@@ -16,3 +16,7 @@ export const validatePuzzleMove = async (
   });
   return response.data;
 };
+export const getSolveCount = async () => {
+  const response = await axios.get("/user/puzzles/solve-count");
+  return response.data;
+};

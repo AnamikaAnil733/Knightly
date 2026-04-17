@@ -14,6 +14,7 @@ export default class CreateLessonUseCase implements ICreateLessonUseCase {
     content: string;
     order: number;
     fen?: string;
+    isPremium?: boolean;
   }): Promise<LessonDetailDTO> {
     const lesson = new LessonEntity(params);
     const created = await this.lessonRepository.create(lesson);
@@ -25,6 +26,7 @@ export default class CreateLessonUseCase implements ICreateLessonUseCase {
       difficulty: created.difficulty,
       content: created.content,
       order: created.order,
+      isPremium: created.isPremium,
       fen: created.fen,
       createdAt: created.createdAt,
       updatedAt: created.updatedAt,

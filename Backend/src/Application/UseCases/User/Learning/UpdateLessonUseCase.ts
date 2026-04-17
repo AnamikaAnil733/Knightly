@@ -14,6 +14,7 @@ export default class UpdateLessonUseCase implements IUpdateLessonUseCase {
     difficulty?: LessonDifficulty;
     content?: string;
     order?: number;
+    isPremium?: boolean;
     fen?: string;
   }): Promise<LessonDetailDTO> {
     const lesson = await this.lessonRepository.findById(id);
@@ -31,6 +32,7 @@ export default class UpdateLessonUseCase implements IUpdateLessonUseCase {
       difficulty: updated.difficulty,
       content: updated.content,
       order: updated.order,
+      isPremium: updated.isPremium,
       fen: updated.fen,
       createdAt: updated.createdAt,
       updatedAt: updated.updatedAt,

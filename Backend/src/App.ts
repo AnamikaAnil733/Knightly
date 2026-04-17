@@ -9,6 +9,7 @@ import { AuthRoutes } from "./Presentation/Routes/AuthRoute";
 import { userRoutes } from "./Infrastructure/Composition/UserComposition";
 import { adminRoutes } from "./Infrastructure/Composition/AdminComposition";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
+import { paymentRoutes } from "./Infrastructure/Composition/PaymentComposition";
 import { RatingUpdateService } from "./Domain/Chess/Service/RatingUpdateService";
 import { StockfishService } from "./Domain/Chess/Service/StockfishService";
 
@@ -71,7 +72,13 @@ export class App {
     this.app.use(cors(corsOptions));
 
     this.app.use(cookieParser());
-    this.app.use(express.json());
+    this.app.use(
+      express.json({
+        verify: (req: any, res, buf) => {
+          req.rawBody = buf;
+        },
+      })
+    );
     this.app.use(express.urlencoded({ extended: true }));
   }
 
@@ -85,6 +92,7 @@ export class App {
     this.app.use("/api/auth", authRoutes.router);
     this.app.use("/api/admin",adminRoutes.router);
     this.app.use("/api/user",userRoutes.router);
+    this.app.use("/api/payment", paymentRoutes.router);
   }
 
   private setErrorHandlerMiddleware() {

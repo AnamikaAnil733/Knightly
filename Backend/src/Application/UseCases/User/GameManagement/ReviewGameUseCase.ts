@@ -1,19 +1,31 @@
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
+import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
+import EAuth from "../../../../Domain/Entity/Auth";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { StockfishService } from "../../../../Domain/Chess/Service/StockfishService";
 import { IReviewGameUseCase, ReviewMoveAnalysis } from "../../../../Domain/Interface/Usecases/User/GameManagement/IReviewGameUseCase";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
+import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
 export class ReviewGameUseCase implements IReviewGameUseCase {
   constructor(
     private readonly _chessGameRepository: IChessGameRepository,
     private readonly _stockfishService: StockfishService,
+    private readonly _userRepository: IBaseRepository<EAuth, string>
   ) {}
 
-  async execute(gameId: string): Promise<ReviewMoveAnalysis[]> {
-    const game = await this._chessGameRepository.findById(gameId);
+  async execute(gameId: string, userId: string): Promise<ReviewMoveAnalysis[]> {
+    const [game, user] = await Promise.all([
+      this._chessGameRepository.findById(gameId),
+      this._userRepository.findById(userId)
+    ]);
 
     if (!game) {
-      throw new Error(MESSAGES.GAME_NOT_FOUND);
+      throw new CustomError(HttpStatusCodes.NOT_FOUND, MESSAGES.GAME_NOT_FOUND);
+    }
+
+    if (!user || !user.premium) {
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, "Premium membership required for advanced game analysis.");
     }
 
     const gameState = game.getGameState();

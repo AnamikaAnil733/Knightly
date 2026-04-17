@@ -1,5 +1,9 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/Store";
+import { getSolveCount } from "../../Service/Api/UserPuzzleApi";
 import { DifficultyLevel } from "../../Types/PuzzleTypes";
 
 import {
@@ -14,6 +18,7 @@ import {
   ShieldCheck,
   Calendar,
   Sparkles,
+  Lock,
 } from "lucide-react";
 import {
   getDailyDifficulty,
@@ -70,9 +75,41 @@ const levels: DifficultyLevel[] = [
 
 export function PuzzleTactics() {
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.userAuth.user);
+  const [solveCount, setSolveCount] = useState<number>(0);
+  const [isLoadingCount, setIsLoadingCount] = useState(true);
+
   const todayDifficulty = getDailyDifficulty();
   const todayLabel = getTodayLabel();
   const todayConfig = levels.find((l) => l.id === todayDifficulty)!;
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const data = await getSolveCount();
+        if (data.success) {
+          setSolveCount(data.count);
+        }
+      } catch (err) {
+        console.error("Failed to fetch solve count:", err);
+      } finally {
+        setIsLoadingCount(false);
+      }
+    };
+    fetchCount();
+  }, []);
+
+  const PUZZLE_LIMIT = 5;
+  const isLimited = !user?.premium && solveCount >= PUZZLE_LIMIT;
+
+  const handleStartPuzzle = (difficulty: string) => {
+    if (!user?.premium && solveCount >= PUZZLE_LIMIT) {
+      alert("Daily puzzle limit (5) reached for free account. Upgrade to Knightly Premium for unlimited puzzles!");
+      navigate("/pricing");
+      return;
+    }
+    navigate(`/puzzle/solve/${difficulty}`);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -192,18 +229,31 @@ export function PuzzleTactics() {
                     Difficulty
                   </h3>
                   <p className="text-[#C9CAD9] text-sm mt-1 opacity-80">
-                    Difficulty rotates daily. Come back each day for a fresh
-                    challenge!
+                    Difficulty rotates daily. {!user?.premium && (
+                      <span className="text-[#FFD166] font-bold">
+                        Progress: {solveCount}/{PUZZLE_LIMIT} puzzles
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/puzzle/solve/${todayDifficulty}`)}
-                className={`px-8 py-4 rounded-2xl bg-gradient-to-r ${todayConfig.color} text-white font-bold text-base shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40 transition-all whitespace-nowrap`}
+                whileHover={!isLimited ? { scale: 1.05 } : {}}
+                whileTap={!isLimited ? { scale: 0.95 } : {}}
+                onClick={() => handleStartPuzzle(todayDifficulty)}
+                className={`px-8 py-4 rounded-2xl font-bold text-base shadow-lg shadow-black/30 transition-all whitespace-nowrap mt-4 md:mt-0 ${
+                  isLimited 
+                  ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5" 
+                  : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
+                }`}
               >
-                Start Today's Puzzle
+                {isLimited ? (
+                  <span className="flex items-center gap-2">
+                    <Lock className="w-4 h-4" /> Limit Reached
+                  </span>
+                ) : (
+                  "Start Today's Puzzle"
+                )}
               </motion.button>
             </div>
           </div>
@@ -282,11 +332,15 @@ export function PuzzleTactics() {
                       <span>{level.tasks}</span>
                     </div>
                     <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => navigate(`/puzzle/solve/${level.id}`)}
-                      className={`px-4 py-2 rounded-lg bg-gradient-to-r ${level.color} text-white text-xs font-bold shadow-lg shadow-black/20 hover:shadow-black/40 transition-all`}
+                      whileTap={!isLimited ? { scale: 0.95 } : {}}
+                      onClick={() => handleStartPuzzle(level.id)}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold shadow-lg transition-all ${
+                        isLimited 
+                        ? "bg-gray-700/50 text-gray-500 cursor-not-allowed" 
+                        : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
+                      }`}
                     >
-                      Start Solving
+                      {isLimited ? "Locked" : "Start Solving"}
                     </motion.button>
                   </div>
                 </div>

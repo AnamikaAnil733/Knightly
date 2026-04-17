@@ -23,6 +23,7 @@ import { GetLivePublicGamesUseCase } from "../../Application/UseCases/User/GameM
 
 import { GetPuzzleDifficultyUsecase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleByDifficultyUseCase";
 import { ValidatePuzzlesMoves } from "../../Application/UseCases/User/PuzzleManagement/ValidatePuzzleUseCase";
+import { GetPuzzleSolveCountUseCase } from "../../Application/UseCases/User/PuzzleManagement/GetPuzzleSolveCountUseCase";
 
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/User/ProfileManagement/AvatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/User/ProfileManagement/SaveDiceBearAvatarUseCase";
@@ -78,12 +79,17 @@ const createGameUseCase = new CreateGameUseCase(GameRepo);
 const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, S3Service);
 const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
 const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
-const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(PuzzleRepo);
+const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(
+  PuzzleRepo,
+  ProgressPuzzleRepo,
+  UserRepo,
+);
 const validatePuzzleUsecase = new ValidatePuzzlesMoves(
   PuzzleRepo,
   ProgressPuzzleRepo,
 );
-const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService);
+const getPuzzleSolveCountUseCase = new GetPuzzleSolveCountUseCase(ProgressPuzzleRepo);
+const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService, UserRepo);
 const getGameHistoryUseCase = new GetGameHistoryUseCase(GameRepo, UserRepo);
 const getLivePublicGamesUseCase = new GetLivePublicGamesUseCase(GameRepo);
 const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, S3Service);
@@ -120,6 +126,7 @@ export const gameController = new GameController(
 export const userPuzzleController = new UserPuzzleController(
   getpuzzleUseCase,
   validatePuzzleUsecase,
+  getPuzzleSolveCountUseCase,
 );
 export const leaderBoardController = new LeaderBoardController(
   getLeaderBoardUseCase,

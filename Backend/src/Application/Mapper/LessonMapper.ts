@@ -9,6 +9,7 @@ export class LessonMapper {
       category: lesson.category,
       difficulty: lesson.difficulty,
       order: lesson.order,
+      isPremium: lesson.isPremium,
     };
   }
 
@@ -20,6 +21,7 @@ export class LessonMapper {
       difficulty: lesson.difficulty,
       content: lesson.content,
       order: lesson.order,
+      isPremium: lesson.isPremium,
       fen: lesson.fen,
       createdAt: lesson.createdAt,
       updatedAt: lesson.updatedAt,

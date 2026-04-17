@@ -75,6 +75,7 @@ const LessonListPage: React.FC = () => {
                   difficulty={lesson.difficulty}
                   order={lesson.order}
                   category={lesson.category}
+                  isPremium={lesson.isPremium}
                 />
               ))}
             </div>

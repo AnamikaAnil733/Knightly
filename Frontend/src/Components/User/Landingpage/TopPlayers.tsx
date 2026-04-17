@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CrownIcon } from "lucide-react";
+import { CrownIcon, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getLeaderboard } from "../../../Service/Api/ChessApi";
 import { LeaderboardEntry } from "../../../Types/LeaderBoardTypes";
@@ -25,6 +25,7 @@ export function TopPlayers() {
               averageRating: p.rating,
               rank: p.rank,
               avatarKey: p.avatarKey,
+              premium: p.premium,
               color: rankColors[index] || "#2E3A8C",
             }));
           setPlayers(formattedPlayers);
@@ -101,8 +102,11 @@ export function TopPlayers() {
                   </div>
                 )}
               </div>
-              <h3 className="text-white font-semibold mb-2">
+              <h3 className="text-white font-semibold mb-2 flex items-center justify-center gap-1">
                 {player.displayname}
+                {player.premium && (
+                  <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />
+                )}
               </h3>
               <p className="text-[#4F7CFF] text-2xl font-bold mb-1">
                 {player.averageRating}

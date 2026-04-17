@@ -28,6 +28,8 @@ export const UserSchema = new Schema<UserDocument>(
     rewards: { type: [String], default: [] },
     achievements: { type: [String], default: [] },
     subscriptionStart: { type: Date },
+    stripeCustomerId: { type: String },
+    stripeSubscriptionId: { type: String },
     createdAt: { type: Date, default: Date.now },
     role: { type: String, enum: Object.values(UserRole), required: true },
     avatarKey: { type: String },

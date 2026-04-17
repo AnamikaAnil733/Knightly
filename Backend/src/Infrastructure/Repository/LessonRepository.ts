@@ -12,6 +12,7 @@ export class LessonRepository implements ILessonRepository {
       difficulty: doc.difficulty,
       content: doc.content,
       order: doc.order,
+      isPremium: doc.isPremium,
       fen: doc.fen,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
@@ -25,6 +26,7 @@ export class LessonRepository implements ILessonRepository {
       difficulty: lesson.difficulty,
       content: lesson.content,
       order: lesson.order,
+      isPremium: lesson.isPremium,
       fen: lesson.fen,
     });
     return this.toEntity(doc);
@@ -53,6 +55,7 @@ export class LessonRepository implements ILessonRepository {
         difficulty: lesson.difficulty,
         content: lesson.content,
         order: lesson.order,
+        isPremium: lesson.isPremium,
         fen: lesson.fen,
       },
       { new: true },

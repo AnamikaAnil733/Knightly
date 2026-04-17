@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../Store/Store";
 import { Chessboard } from "../../Components/User/Match/ChessBoard";
 import { getGame, getGameReview } from "../../Service/Api/ChessApi";
 import { fenToBoardGrid, movesToFens } from "../../Utils/ChessUtils";
@@ -10,11 +12,14 @@ import {
   ChevronsLeft,
   ChevronsRight,
   ArrowLeft,
+  Lock,
+  Crown,
 } from "lucide-react";
 
 export function GameReviewPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.userAuth.user);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,15 +36,17 @@ export function GameReviewPage() {
       if (!gameId) return;
       try {
         setLoading(true);
-        const [game, reviewAnalysis] = await Promise.all([
-          getGame(gameId),
-          getGameReview(gameId),
-        ]);
-
+        const game = await getGame(gameId);
         const generatedFens = movesToFens(game.history);
         setFens(generatedFens);
         setMoveHistory(game.history);
-        setReviewData(reviewAnalysis);
+
+        if (user?.premium) {
+          const reviewAnalysis = await getGameReview(gameId);
+          setReviewData(reviewAnalysis);
+        } else {
+          setReviewData([]);
+        }
 
         // Start at the beginning
         setCurrentMoveIndex(0);
@@ -200,12 +207,12 @@ export function GameReviewPage() {
         {/* Right: Analysis & Controls */}
         <div className="w-full lg:w-[400px] flex flex-col bg-[#11193F]/50 rounded-xl border border-white/10 overflow-hidden">
           {/* Current Move Analysis Banner */}
-          <div className="p-4 border-b border-white/10 bg-black/20 flex flex-col items-center justify-center min-h-[100px]">
+          <div className="p-4 border-b border-white/10 bg-black/20 flex flex-col items-center justify-center min-h-[160px] relative">
             {currentMoveIndex === 0 ? (
               <h2 className="text-xl font-bold text-gray-300">
                 Starting Position
               </h2>
-            ) : currentReview ? (
+            ) : reviewData.length > 0 && currentReview ? (
               <div className="text-center">
                 <div
                   className={`text-3xl font-bold mb-1 ${getClassificationColor(currentReview.classification)}`}
@@ -224,6 +231,24 @@ export function GameReviewPage() {
                     "{currentReview.description}"
                   </p>
                 </div>
+              </div>
+            ) : !user?.premium ? (
+              <div className="text-center p-4">
+                <div className="flex justify-center mb-3">
+                  <div className="p-2 rounded-full bg-gradient-to-r from-[#F7E7CE] to-[#D4AF37]">
+                    <Crown className="w-5 h-5 text-black" />
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-[#F7E7CE] mb-1">Advanced Analysis</h3>
+                <p className="text-xs text-gray-400 mb-4 px-4 line-clamp-2">
+                  Blunder detection, move classifications, and master insights.
+                </p>
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-[#F7E7CE] via-[#E7D4B5] to-[#D4AF37] text-black font-bold text-xs uppercase tracking-wider hover:scale-105 transition-transform shadow-lg shadow-[#D4AF37]/20"
+                >
+                  Unlock with Premium
+                </Link>
               </div>
             ) : (
               <h2 className="text-xl font-bold text-gray-300">
@@ -251,11 +276,15 @@ export function GameReviewPage() {
                     {isWhite ? moveNum + "." : ""}
                   </span>
                   <span className="flex-1 font-mono">{moveText}</span>
-                  <span
-                    className={`font-bold ${getClassificationColor(data.classification)}`}
-                  >
-                    {getClassificationSymbol(data.classification)}
-                  </span>
+                  {user?.premium ? (
+                    <span
+                      className={`font-bold ${getClassificationColor(data.classification)}`}
+                    >
+                      {getClassificationSymbol(data.classification)}
+                    </span>
+                  ) : (
+                    <Lock className="w-3 h-3 text-gray-600 opacity-50" />
+                  )}
                 </button>
               );
             })}

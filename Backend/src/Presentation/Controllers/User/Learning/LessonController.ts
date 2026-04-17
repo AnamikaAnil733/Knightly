@@ -34,7 +34,8 @@ export class LessonController {
   getLessonById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const lesson = await this.getLessonByIdUseCase.execute(id);
+      const userId = (req as any).user?.id;
+      const lesson = await this.getLessonByIdUseCase.execute(id, userId);
       return res.status(HttpStatusCodes.OK).json({ success: true, lesson });
     } catch (error) {
       next(error);
@@ -43,8 +44,8 @@ export class LessonController {
 
   createLesson = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { title, category, difficulty, content, order, fen } = req.body;
-      const lesson = await this.createLessonUseCase.execute({ title, category, difficulty, content, order, fen });
+      const { title, category, difficulty, content, order, fen, isPremium } = req.body;
+      const lesson = await this.createLessonUseCase.execute({ title, category, difficulty, content, order, fen, isPremium });
       return res.status(HttpStatusCodes.CREATED).json({ success: true, lesson });
     } catch (error) {
       next(error);
@@ -54,8 +55,8 @@ export class LessonController {
   updateLesson = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { title, category, difficulty, content, order, fen } = req.body;
-      const lesson = await this.updateLessonUseCase.execute(id, { title, category, difficulty, content, order, fen });
+      const { title, category, difficulty, content, order, fen, isPremium } = req.body;
+      const lesson = await this.updateLessonUseCase.execute(id, { title, category, difficulty, content, order, fen, isPremium });
       return res.status(HttpStatusCodes.OK).json({ success: true, lesson });
     } catch (error) {
       next(error);

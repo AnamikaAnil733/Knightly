@@ -7,6 +7,7 @@ export interface LessonDocument extends Document {
   difficulty: LessonDifficulty;
   content: string;
   order: number;
+  isPremium: boolean;
   fen?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +28,7 @@ const LessonSchema = new Schema<LessonDocument>(
     },
     content: { type: String, required: true },
     order: { type: Number, required: true, default: 0 },
+    isPremium: { type: Boolean, default: false },
     fen: { type: String, required: false },
   },
   { timestamps: true },

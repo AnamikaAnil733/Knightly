@@ -4,5 +4,6 @@ export interface LeaderboardEntry {
   avatarKey: string;
   rating: number;
   averageRating: number;
+  premium: boolean;
   color?: string;
 }

@@ -29,6 +29,9 @@ import BlogWorkspacePage from "../Pages/User/BlogWorkspacePage";
 import BlogManagement from "../Pages/Admin/BlogManagement";
 import BlogDashboardPage from "../Pages/User/BlogDashboardPage";
 import { LiveGamesPage } from "../Pages/User/LiveGamesPage";
+import PricingPage from "../Pages/User/PricingPage";
+import SuccessPage from "../Pages/User/SuccessPage";
+import CancelPage from "../Pages/User/CancelPage";
 
 export default function AppRoutes() {
   return (
@@ -61,6 +64,9 @@ export default function AppRoutes() {
       <Route path="/learn/:category" element={<LessonListPage />} />
       <Route path="/learn/lesson/:id" element={<LessonPage />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/payment/success" element={<SuccessPage />} />
+      <Route path="/payment/cancel" element={<CancelPage />} />
 
       {/* Blog Routes */}
       <Route path="/blogs" element={<BlogListPage />} />

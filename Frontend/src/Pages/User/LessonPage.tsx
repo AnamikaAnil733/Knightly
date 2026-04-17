@@ -4,8 +4,9 @@ import { Navbar } from "../../Components/User/Common/Navbar";
 import { Footer } from "../../Components/User/Common/Footer";
 import { ChessboardPreview } from "../../Components/Admin/PuzzleManagement/ChessBoardPreview";
 import { getLessonById, getLessons } from "../../Service/Api/LearnApi";
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Crown, Lock } from "lucide-react";
 import { LessonDetail } from "../../Types/LessonTypes";
+import { motion } from "framer-motion";
 
 const DIFF_COLORS: Record<
   string,
@@ -29,10 +30,13 @@ const LessonPage: React.FC = () => {
     title: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPremiumLocked, setIsPremiumLocked] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoading(true);
+        setIsPremiumLocked(false);
         const data = await getLessonById(id!);
         setLesson(data.lesson);
 
@@ -51,7 +55,11 @@ const LessonPage: React.FC = () => {
           const next = sorted[idx + 1];
           setNextLesson({ id: next.id, title: next.title });
         }
-      } catch (err) {
+      } catch (err: any) {
+        const msg = err.response?.data?.message || err.message || "";
+        if (msg.includes("Premium membership required")) {
+          setIsPremiumLocked(true);
+        }
         console.error("Failed to fetch lesson:", err);
       } finally {
         setLoading(false);
@@ -67,6 +75,46 @@ const LessonPage: React.FC = () => {
         <main className="flex-grow flex items-center justify-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#FFD166]" />
         </main>
+      </div>
+    );
+  }
+
+  if (isPremiumLocked) {
+    return (
+      <div className="min-h-screen bg-[#0A0F2C] flex flex-col text-white">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center p-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-md w-full bg-[#11193F] border border-amber-500/20 rounded-[2rem] p-8 text-center"
+          >
+            <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock className="w-10 h-10 text-amber-500" />
+            </div>
+            <h1 className="text-3xl font-black mb-4">Master Lesson Locked</h1>
+            <p className="text-[#9ca3af] mb-10 leading-relaxed">
+              This advanced lesson is exclusive to Knightly Premium members.
+              Upgrade your account to unlock master training.
+            </p>
+            <div className="space-y-4">
+              <button
+                onClick={() => navigate("/pricing")}
+                className="w-full py-4 rounded-xl bg-amber-500 text-black font-bold flex items-center justify-center gap-2 hover:bg-amber-600 transition-all"
+              >
+                <Crown className="w-5 h-5 fill-black" />
+                Upgrade to Premium
+              </button>
+              <button
+                onClick={() => navigate("/learn")}
+                className="w-full py-4 rounded-xl bg-white/5 text-white font-bold hover:bg-white/10 transition-all"
+              >
+                Explore Free Lessons
+              </button>
+            </div>
+          </motion.div>
+        </main>
+        <Footer />
       </div>
     );
   }

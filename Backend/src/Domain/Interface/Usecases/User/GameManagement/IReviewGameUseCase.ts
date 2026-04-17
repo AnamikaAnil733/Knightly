@@ -6,5 +6,5 @@ export interface ReviewMoveAnalysis {
 }
 
 export interface IReviewGameUseCase {
-    execute(gameId: string): Promise<ReviewMoveAnalysis[]>;
+    execute(gameId: string, userId: string): Promise<ReviewMoveAnalysis[]>;
 }

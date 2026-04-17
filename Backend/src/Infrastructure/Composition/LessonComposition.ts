@@ -1,4 +1,5 @@
 import { LessonRepository } from "../Repository/LessonRepository";
+import { AuthRepository } from "../Repository/AuthRepository";
 import GetLessonsUseCase from "../../Application/UseCases/User/Learning/GetLessonsUseCase";
 import GetLessonByIdUseCase from "../../Application/UseCases/User/Learning/GetLessonByIdUseCase";
 import CreateLessonUseCase from "../../Application/UseCases/User/Learning/CreateLessonUseCase";
@@ -7,9 +8,10 @@ import DeleteLessonUseCase from "../../Application/UseCases/User/Learning/Delete
 import { LessonController } from "../../Presentation/Controllers/User/Learning/LessonController";
 
 const lessonRepository = new LessonRepository();
+const authRepository = new AuthRepository();
 
 const getLessonsUseCase = new GetLessonsUseCase(lessonRepository);
-const getLessonByIdUseCase = new GetLessonByIdUseCase(lessonRepository);
+const getLessonByIdUseCase = new GetLessonByIdUseCase(lessonRepository, authRepository);
 const createLessonUseCase = new CreateLessonUseCase(lessonRepository);
 const updateLessonUseCase = new UpdateLessonUseCase(lessonRepository);
 const deleteLessonUseCase = new DeleteLessonUseCase(lessonRepository);
