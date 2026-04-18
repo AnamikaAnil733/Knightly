@@ -53,14 +53,14 @@ const BlogListPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#0B1437] font-['Poppins'] text-white overflow-x-hidden relative">
       {/* Page-wide subtle background texture */}
-      <div 
+      <div
         className="fixed inset-0 z-0 opacity-20 pointer-events-none"
-        style={{ 
-          backgroundImage: 'url(/images/blogs-background-v2.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          filter: 'blur(80px)'
+        style={{
+          backgroundImage: "url(/images/blogs-background-v2.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          filter: "blur(80px)",
         }}
       />
       <Navbar />

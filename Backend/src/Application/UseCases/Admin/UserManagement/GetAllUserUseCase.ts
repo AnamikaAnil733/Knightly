@@ -16,7 +16,7 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
     page: number,
     limit: number,
     search?: string,
-    filter?: string,
+    filter?: "ALL" | "BLOCKED" | "UNBLOCKED" | "PREMIUM",
   ): Promise<GetAllUsersOutputDTO> {
     const skip = (page - 1) * limit;
 

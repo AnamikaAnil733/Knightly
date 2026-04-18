@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Tilt from "react-parallax-tilt";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Crown, Star } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 

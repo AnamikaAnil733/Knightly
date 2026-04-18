@@ -5,6 +5,7 @@ interface Props {
   setFilter: React.Dispatch<React.SetStateAction<UserFilter>>;
   blockedCount: number;
   unblockedCount: number;
+  premiumCount: number;
 }
 
 export function UserFilters({
@@ -12,6 +13,7 @@ export function UserFilters({
   setFilter,
   blockedCount,
   unblockedCount,
+  premiumCount,
 }: Props) {
   return (
     <div className="flex gap-3 flex-wrap">
@@ -49,6 +51,24 @@ export function UserFilters({
         `}
       >
         Unblocked ({unblockedCount})
+      </button>
+
+      {/* PREMIUM */}
+      <button
+        disabled={premiumCount === 0}
+        onClick={() =>
+          setFilter((prev) => (prev === "PREMIUM" ? "ALL" : "PREMIUM"))
+        }
+        className={`px-4 py-2 rounded-md text-sm border transition
+          ${
+            filter === "PREMIUM"
+              ? "bg-yellow-600 text-white border-yellow-600"
+              : "bg-[#11193F] text-gray-300 border-gray-700"
+          }
+          ${premiumCount === 0 && "opacity-40 cursor-not-allowed"}
+        `}
+      >
+        Premium ({premiumCount})
       </button>
 
       {/* CLEAR */}

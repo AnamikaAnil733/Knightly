@@ -9,6 +9,8 @@ import { AdminPuzzleController } from "../../Presentation/Controllers/Admin/Puzz
 import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
 import { UnBlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/UnBlockUserUseCase";
+import GetSubscriptionStatsUseCase from "../../Application/UseCases/Admin/UserManagement/GetSubscriptionStatsUseCase";
+import { GetSubscriptionStatsController } from "../../Presentation/Controllers/Admin/UserManagement/GetSubscriptionStatsController";
 import { CreatePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/CreatePuzzleUseCase";
 import { GetallPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/GetAllPuzzleUseCase";
 import { EditPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/EditPuzzleUseCase";
@@ -39,6 +41,7 @@ const chessGameRepo = new ChessGameRepository(GameModel);
 const getAllUsersUseCase = new GetAllUserUseCase(UserManagementRepo);
 const blockUserUseCase = new BlockUserUseCase(UserManagementRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagementRepo);
+const getSubscriptionStatsUseCase = new GetSubscriptionStatsUseCase(UserManagementRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(
   puzzleMangementRepo,
   puzzleValidationService,
@@ -67,6 +70,9 @@ export const getAllUserController = new GetAllUserController(
 export const banUserController = new BlockUserController(blockUserUseCase);
 export const unBanUserController = new UnBlockUserController(
   unBlockUserUserCase,
+);
+export const getSubscriptionStatsController = new GetSubscriptionStatsController(
+  getSubscriptionStatsUseCase,
 );
 
 export const PuzzleManagementController = new AdminPuzzleController(

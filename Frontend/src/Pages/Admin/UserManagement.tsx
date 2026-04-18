@@ -17,7 +17,7 @@ import { UserFilters } from "../../Components/Admin/UserManagement/UserFilters";
 
 /* ===================== TYPES ===================== */
 
-export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED";
+export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED" | "PREMIUM";
 
 type UsersResponse = {
   users: IUser[];
@@ -153,6 +153,11 @@ export function UserManagement() {
     [users],
   );
 
+  const premiumCount = useMemo(
+    () => users.filter((u) => u.premium).length,
+    [users],
+  );
+
   /* ===================== UI ===================== */
 
   return (
@@ -188,6 +193,7 @@ export function UserManagement() {
                   }}
                   blockedCount={blockedCount}
                   unblockedCount={unblockedCount}
+                  premiumCount={premiumCount}
                 />
               </div>
             </div>

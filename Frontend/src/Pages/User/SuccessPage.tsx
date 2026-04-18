@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Loader2,
   AlertCircle,
-  Play,
   BookOpen,
   Star,
   Sparkles,

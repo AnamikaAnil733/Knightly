@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getAllUserController,
   banUserController,
   unBanUserController,
+  getSubscriptionStatsController,
   PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
@@ -29,6 +30,7 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.USERS,getAllUserController.getallusers);
     this.router.patch(ADMIN_ROUTES.BAN_USER,banUserController.handleUserBan);
     this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
+    this.router.get(ADMIN_ROUTES.SUBSCRIPTION_STATS, getSubscriptionStatsController.stats);
 
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);

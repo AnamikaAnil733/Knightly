@@ -1,5 +1,5 @@
 import React from "react";
-import { XCircle, ArrowLeft } from "lucide-react";
+import { XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 

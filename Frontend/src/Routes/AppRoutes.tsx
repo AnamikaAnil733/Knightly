@@ -32,6 +32,7 @@ import { LiveGamesPage } from "../Pages/User/LiveGamesPage";
 import PricingPage from "../Pages/User/PricingPage";
 import SuccessPage from "../Pages/User/SuccessPage";
 import CancelPage from "../Pages/User/CancelPage";
+import { SubscriptionManagement } from "../Pages/Admin/SubscriptionManagement";
 
 export default function AppRoutes() {
   return (
@@ -87,6 +88,7 @@ export default function AppRoutes() {
         <Route path="puzzles" element={<PuzzleManagement />} />
         <Route path="lessons" element={<LessonManagement />} />
         <Route path="blogs" element={<BlogManagement />} />
+        <Route path="subscriptions" element={<SubscriptionManagement />} />
       </Route>
     </Routes>
   );
