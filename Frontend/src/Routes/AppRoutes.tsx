@@ -34,6 +34,7 @@ import SuccessPage from "../Pages/User/SuccessPage";
 import CancelPage from "../Pages/User/CancelPage";
 import { SubscriptionManagement } from "../Pages/Admin/SubscriptionManagement";
 import { TransactionManagement } from "../Pages/Admin/TransactionManagement";
+import { LiveGameMonitor } from "../Pages/Admin/LiveGameMonitor";
 
 export default function AppRoutes() {
   return (
@@ -91,6 +92,7 @@ export default function AppRoutes() {
         <Route path="blogs" element={<BlogManagement />} />
         <Route path="subscriptions" element={<SubscriptionManagement />} />
         <Route path="transactions" element={<TransactionManagement />} />
+        <Route path="live-games" element={<LiveGameMonitor />} />
       </Route>
     </Routes>
   );

@@ -4,6 +4,7 @@ import { getAllUserController,
   unBanUserController,
   getSubscriptionStatsController,
   getAllTransactionsController,
+  getAllLiveGamesController,
   PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
@@ -33,6 +34,7 @@ export class AdminRoutes{
     this.router.patch(ADMIN_ROUTES.UNBAN_USER,unBanUserController.handleUserUnBan);
     this.router.get(ADMIN_ROUTES.SUBSCRIPTION_STATS, getSubscriptionStatsController.stats);
     this.router.get(ADMIN_ROUTES.TRANSACTIONS, getAllTransactionsController.getAll);
+    this.router.get(ADMIN_ROUTES.LIVE_GAMES, getAllLiveGamesController.getAll);
 
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);

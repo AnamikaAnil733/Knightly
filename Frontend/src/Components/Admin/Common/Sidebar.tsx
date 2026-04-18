@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <GamepadIcon size={20} />,
       name: "Live Game Monitor",
-      path: "/live-games",
+      path: "/admin/live-games",
     },
     {
       icon: <BarChartIcon size={20} />,

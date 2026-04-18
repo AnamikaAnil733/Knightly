@@ -17,4 +17,5 @@ export const ADMIN_ROUTES = {
   MODERATE_BLOG: "/blogs/moderate",
   SUBSCRIPTION_STATS: "/subscriptions/stats",
   TRANSACTIONS: "/transactions",
+  LIVE_GAMES: "/live-games",
 } as const;

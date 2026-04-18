@@ -52,4 +52,15 @@ export class ChessGameRepository
 
     return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
   }
+
+  async findAllLiveGames(): Promise<ChessGame[]> {
+    const docs = await this.model
+      .find({
+        status: { $in: ["ACTIVE", "CHECK"] },
+      })
+      .sort({ createdAt: -1 })
+      .exec();
+
+    return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
+  }
 }

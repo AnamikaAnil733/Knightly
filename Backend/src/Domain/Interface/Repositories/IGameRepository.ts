@@ -7,4 +7,5 @@ export interface IChessGameRepository {
   findRecent(limit: number): Promise<ChessGame[]>;
   findByUserId(userId: string): Promise<ChessGame[]>;
   findLivePublicGames(): Promise<ChessGame[]>;
+  findAllLiveGames(): Promise<ChessGame[]>;
 }
