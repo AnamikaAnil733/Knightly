@@ -37,8 +37,48 @@ import { TransactionManagement } from "../Pages/Admin/TransactionManagement";
 import { LiveGameMonitor } from "../Pages/Admin/LiveGameMonitor";
 import { AnalyticsDashboard } from "../Pages/Admin/AnalyticsDashboard";
 import { AdminDashboard } from "../Pages/Admin/AdminDashboard";
+import { SystemSettings } from "../Pages/Admin/SystemSettings";
+import { MaintenancePage } from "../Pages/User/MaintenancePage";
+import { useSystemSettings } from "../Context/SystemSettingsContext";
+import { Navigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store/Store";
+import { UserRole } from "../Types/User";
 
 export default function AppRoutes() {
+  const { settings, isLoading: isSettingsLoading } = useSystemSettings();
+  const location = useLocation();
+  const auth = useSelector((state: RootState) => state.userAuth);
+  const user = auth.user;
+  const isAuthLoaded = auth.authLoaded;
+
+  // Logic: If maintenance is on, and we are NOT on an admin route or login, and NOT already on maintenance page, redirect.
+  // CRITICAL: We wait for both settings and auth to settle before we decide to block the user.
+  const isMaintenance = settings?.maintenanceMode;
+  const isAdmin = user?.role === UserRole.ADMIN;
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isAuthRoute = location.pathname === "/admin/login";
+
+  // Prevent flash or incorrect redirects while loading
+  if (isSettingsLoading || !isAuthLoaded) {
+    return null;
+  }
+
+  if (
+    isMaintenance &&
+    !isAdmin &&
+    !isAdminRoute &&
+    !isAuthRoute &&
+    location.pathname !== "/maintenance"
+  ) {
+    return <Navigate to="/maintenance" replace />;
+  }
+
+  // Auto-return: Redirect away from /maintenance if site is back online
+  if (!isMaintenance && location.pathname === "/maintenance") {
+    return <Navigate to="/landing-page" replace />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<AuthPage initialMode="SIGNUP" role="USER" />} />
@@ -79,6 +119,7 @@ export default function AppRoutes() {
       <Route path="/blog/create" element={<BlogWorkspacePage />} />
       <Route path="/blog/edit/:id" element={<BlogWorkspacePage />} />
       <Route path="/dashboard/blogs" element={<BlogDashboardPage />} />
+      <Route path="/maintenance" element={<MaintenancePage />} />
 
       <Route
         path="/admin"
@@ -98,6 +139,7 @@ export default function AppRoutes() {
         <Route path="transactions" element={<TransactionManagement />} />
         <Route path="live-games" element={<LiveGameMonitor />} />
         <Route path="analytics" element={<AnalyticsDashboard />} />
+        <Route path="settings" element={<SystemSettings />} />
       </Route>
     </Routes>
   );

@@ -6,6 +6,7 @@ import "./Index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { SystemSettingsProvider } from "./Context/SystemSettingsContext.tsx";
 
 import { BrowserRouter } from "react-router-dom";
 
@@ -18,7 +19,9 @@ createRoot(document.getElementById("root")!).render(
       <GoogleOAuthProvider clientId={ClintId}>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            <App />
+            <SystemSettingsProvider>
+              <App />
+            </SystemSettingsProvider>
           </BrowserRouter>
         </QueryClientProvider>
       </GoogleOAuthProvider>

@@ -23,6 +23,8 @@ import { GameModel } from "./Infrastructure/Database/Model/GameModel";
 import { errorHandler } from "./Presentation/Middleware/ErrorHandlingMiddleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { maintenanceMiddleware } from "./Presentation/Middleware/MaintenanceMiddleware";
+import { settingsRepo, tokenservice } from "./Infrastructure/Composition/AuthComposition";
 
 export class App {
   private app: Application;
@@ -80,6 +82,8 @@ export class App {
       }),
     );
     this.app.use(express.urlencoded({ extended: true }));
+    // Registration of Enterprise Maintenance Guard
+    this.app.use(maintenanceMiddleware(settingsRepo, tokenservice));
   }
 
   private async initializeDatabase(): Promise<void> {

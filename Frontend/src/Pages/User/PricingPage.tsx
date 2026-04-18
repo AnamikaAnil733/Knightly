@@ -14,9 +14,11 @@ import { motion } from "framer-motion";
 import { PaymentService } from "../../Service/Api/PaymentService";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useSystemSettings } from "../../Context/SystemSettingsContext";
 
 const PricingPage: React.FC = () => {
   const navigate = useNavigate();
+  const { settings } = useSystemSettings();
   const handleUpgrade = async () => {
     try {
       const { url } = await PaymentService.createCheckoutSession();
@@ -144,7 +146,9 @@ const PricingPage: React.FC = () => {
                 </h2>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-white">$9.99</span>
+                <span className="text-4xl font-black text-white">
+                  ${settings?.monthlyPrice || "9.99"}
+                </span>
                 <span className="text-[#C9CAD9] text-xs">/month</span>
               </div>
             </div>

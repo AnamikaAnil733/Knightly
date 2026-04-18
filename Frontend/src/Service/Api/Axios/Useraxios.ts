@@ -7,7 +7,12 @@ import {
 
 /* ===================== TYPES ===================== */
 
-const PUBLIC_ROUTES = ["/auth/login", "/auth/register", "/auth/refresh"];
+const PUBLIC_ROUTES = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh",
+  "/settings",
+];
 
 interface RefreshResponse {
   success: boolean;

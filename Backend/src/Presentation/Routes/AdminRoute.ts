@@ -6,6 +6,7 @@ import { getAllUserController,
   getAllTransactionsController,
   getAllLiveGamesController,
   getAdminAnalyticsController,
+  systemSettingsController,
   PuzzleManagementController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
@@ -37,6 +38,8 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.TRANSACTIONS, getAllTransactionsController.getAll);
     this.router.get(ADMIN_ROUTES.LIVE_GAMES, getAllLiveGamesController.getAll);
     this.router.get(ADMIN_ROUTES.GET_ANALYTICS, getAdminAnalyticsController.getAnalytics);
+    this.router.get(ADMIN_ROUTES.SYSTEM_SETTINGS, systemSettingsController.getSettings);
+    this.router.patch(ADMIN_ROUTES.SYSTEM_SETTINGS, systemSettingsController.updateSettings);
 
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);

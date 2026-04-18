@@ -35,6 +35,7 @@ export class AuthController {
     private _resetPasswordUseCase: IResetPasswordUseCase,
     private _googleAuthUseCase: IGoogleAuthUseCase,
     private _tokenService: ITokenService,
+    private _getPublicSettingsUseCase: any,
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -284,6 +285,17 @@ export class AuthController {
       return res.status(HttpStatusCodes.UNAUTHORIZED).json({
         message: MESSAGES.INVALID_REFRESH_TOKEN,
       });
+    }
+  };
+
+  // ---------------- PUBLIC SETTINGS ----------------
+  getPublicSettings = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const settings = await this._getPublicSettingsUseCase.execute();
+      res.status(HttpStatusCodes.OK).json(settings);
+    } catch (error) {
+      logger.error({ error }, "ERROR: AuthController - getPublicSettings");
+      next(error);
     }
   };
 }

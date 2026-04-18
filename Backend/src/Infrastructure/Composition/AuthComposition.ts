@@ -16,6 +16,9 @@ import { ResendOtpUseCase } from "../../Application/UseCases/Auth/ResendOtpUseCa
 import { ForgetPasswordUseCase } from "../../Application/UseCases/Auth/ForgetPasswordUsecase";
 import { ResetPaswordUseCase } from "../../Application/UseCases/Auth/ResetPasswordUseCase";
 import { GoogleAuthUseCase } from "../../Application/UseCases/Auth/GoogleAuthUseCase";
+import { SystemSettingsRepository } from "../Repository/SystemSettingsRepository";
+import { SystemSettingsModel } from "../Database/Model/SystemSettingsModel";
+import { GetPublicSettingsUseCase } from "../../Application/UseCases/Settings/GetPublicSettingsUseCase";
 
 
 const UserRepo = new AuthRepository();
@@ -23,8 +26,9 @@ const cache = new CachingService();
 const otpService = new OtpService(cache);
 const emailService = new EmailService();
 const hashService = new HashService();
-const tokenservice = new TokenService();
+export const tokenservice = new TokenService();
 const googleAuthService = new GoogleAuthService();
+export const settingsRepo = new SystemSettingsRepository(SystemSettingsModel);
 
 //useCases
 const verifyOtpUseCase = new VerifyOtpUseCase(otpService, cache);
@@ -50,6 +54,7 @@ const googleAuthUseCase = new GoogleAuthUseCase(
   googleAuthService,
   tokenservice,
 );
+const getPublicSettingsUseCase = new GetPublicSettingsUseCase(settingsRepo);
 
 //injection
 export const authController = new AuthController(
@@ -61,4 +66,5 @@ export const authController = new AuthController(
   resetPassword,
   googleAuthUseCase,
   tokenservice,
+  getPublicSettingsUseCase,
 );

@@ -17,11 +17,13 @@ import { RootState } from "../../../Store/Store";
 import { getPendingRequests } from "../../../Service/Api/FriendApi";
 import { socket } from "../../../Service/Socket";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSystemSettings } from "../../../Context/SystemSettingsContext";
 
 export function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
+  const { settings } = useSystemSettings();
   const [pendingCount, setPendingCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -118,7 +120,7 @@ export function Navbar() {
             className="text-2xl font-bold text-[#FFD166] hidden sm:block"
             style={{ fontFamily: "Cinzel, serif" }}
           >
-            Knightly
+            {settings?.platformName || "Knightly"}
           </span>
         </Link>
 

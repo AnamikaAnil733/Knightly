@@ -27,5 +27,6 @@ export class AuthRoutes {
     this.router.post(AUTH_ROUTES.RESET_PASSWORD, authController.resetPassword);
     this.router.post(AUTH_ROUTES.GOOGLE_AUTH, authController.googleAuth);
     this.router.post(AUTH_ROUTES.REFRESH, authController.refresh);
+    this.router.get(AUTH_ROUTES.GET_SETTINGS, authController.getPublicSettings);
   }
 }

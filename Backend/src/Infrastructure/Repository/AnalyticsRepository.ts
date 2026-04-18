@@ -8,7 +8,7 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   constructor(
     private readonly userModel: Model<any>,
     private readonly gameModel: Model<any>,
-    private readonly transactionModel: Model<any>
+    private readonly transactionModel: Model<any>,
   ) {}
 
   async getUserGrowthData(days: number): Promise<IUserGrowthData[]> {

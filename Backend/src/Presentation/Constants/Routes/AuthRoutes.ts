@@ -11,4 +11,5 @@ export const AUTH_ROUTES = {
 
   GOOGLE_AUTH: "/googleAuth",
   REFRESH: "/refresh",
+  GET_SETTINGS: "/settings",
 } as const;

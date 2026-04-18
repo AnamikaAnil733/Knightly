@@ -93,7 +93,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <SettingsIcon size={20} />,
       name: "System Settings",
-      path: "/settings-123",
+      path: "/admin/settings",
     },
   ];
   return (

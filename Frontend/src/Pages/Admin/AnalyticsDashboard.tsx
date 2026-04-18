@@ -1,9 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  LineChart, Line, PieChart, Pie, Cell, Legend, AreaChart, Area 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  AreaChart,
+  Area,
 } from "recharts";
-import { Users, Gamepad2, Banknote, UserPlus, TrendingUp, Activity } from "lucide-react";
+import {
+  Users,
+  Gamepad2,
+  Banknote,
+  UserPlus,
+  TrendingUp,
+  Activity,
+} from "lucide-react";
 import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
@@ -47,11 +67,16 @@ export function AnalyticsDashboard() {
 
   const getIcon = (name: string) => {
     switch (name) {
-      case "users": return <Users className="h-6 w-6 text-[#FFD166]" />;
-      case "gamepad": return <Gamepad2 className="h-6 w-6 text-[#FFD166]" />;
-      case "banknotes": return <Banknote className="h-6 w-6 text-[#FFD166]" />;
-      case "user-plus": return <UserPlus className="h-6 w-6 text-[#FFD166]" />;
-      default: return <TrendingUp className="h-6 w-6 text-[#FFD166]" />;
+      case "users":
+        return <Users className="h-6 w-6 text-[#FFD166]" />;
+      case "gamepad":
+        return <Gamepad2 className="h-6 w-6 text-[#FFD166]" />;
+      case "banknotes":
+        return <Banknote className="h-6 w-6 text-[#FFD166]" />;
+      case "user-plus":
+        return <UserPlus className="h-6 w-6 text-[#FFD166]" />;
+      default:
+        return <TrendingUp className="h-6 w-6 text-[#FFD166]" />;
     }
   };
 
@@ -64,19 +89,26 @@ export function AnalyticsDashboard() {
           </div>
           <div>
             <h1 className="text-3xl font-bold">Platform Analytics</h1>
-            <p className="text-gray-400 text-sm">Comprehensive performance metrics and growth data</p>
+            <p className="text-gray-400 text-sm">
+              Comprehensive performance metrics and growth data
+            </p>
           </div>
         </div>
 
         {/* SUMMARY CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {data?.stats.map((stat, i) => (
-            <div key={i} className="bg-[#11193F] p-6 rounded-2xl border border-[#1e2547] flex items-center gap-4 shadow-lg">
+            <div
+              key={i}
+              className="bg-[#11193F] p-6 rounded-2xl border border-[#1e2547] flex items-center gap-4 shadow-lg"
+            >
               <div className="p-3 bg-[#0A0F2C] rounded-xl border border-[#1e2547]">
                 {getIcon(stat.icon)}
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">{stat.label}</p>
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">
+                  {stat.label}
+                </p>
                 <p className="text-2xl font-bold text-white">{stat.value}</p>
               </div>
             </div>
@@ -95,23 +127,43 @@ export function AnalyticsDashboard() {
                 <AreaChart data={data?.growthData}>
                   <defs>
                     <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#FFD166" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#FFD166" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#FFD166" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#FFD166" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e2547" vertical={false} />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#4b5563" 
-                    fontSize={10} 
-                    tickFormatter={(str) => new Date(str).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#1e2547"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="date"
+                    stroke="#4b5563"
+                    fontSize={10}
+                    tickFormatter={(str) =>
+                      new Date(str).toLocaleDateString([], {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    }
                   />
                   <YAxis stroke="#4b5563" fontSize={10} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#0A0F2C', borderColor: '#1e2547', borderRadius: '8px' }}
-                    itemStyle={{ color: '#FFD166' }}
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0A0F2C",
+                      borderColor: "#1e2547",
+                      borderRadius: "8px",
+                    }}
+                    itemStyle={{ color: "#FFD166" }}
                   />
-                  <Area type="monotone" dataKey="count" stroke="#FFD166" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                  <Area
+                    type="monotone"
+                    dataKey="count"
+                    stroke="#FFD166"
+                    strokeWidth={3}
+                    fillOpacity={1}
+                    fill="url(#colorCount)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -131,13 +183,20 @@ export function AnalyticsDashboard() {
                     dataKey="count"
                   >
                     {data?.gameDistribution.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#0A0F2C', borderColor: '#1e2547', borderRadius: '8px' }}
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0A0F2C",
+                      borderColor: "#1e2547",
+                      borderRadius: "8px",
+                    }}
                   />
-                  <Legend verticalAlign="bottom" height={36}/>
+                  <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -146,25 +205,41 @@ export function AnalyticsDashboard() {
 
         {/* RECENT ACTIVITY MOCK/Placeholder for future extension */}
         <div className="bg-[#11193F] p-6 rounded-2xl border border-[#1e2547] shadow-xl mb-8">
-            <h3 className="text-lg font-bold mb-6">Activity Peak Hours (Estimated)</h3>
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={[
-                  { hour: '00', activity: 20 }, { hour: '04', activity: 10 }, 
-                  { hour: '08', activity: 40 }, { hour: '12', activity: 70 }, 
-                  { hour: '16', activity: 90 }, { hour: '20', activity: 100 }, 
-                  { hour: '23', activity: 50 },
-                ]}>
-                  <XAxis dataKey="hour" stroke="#4b5563" fontSize={10} name="Hour of Day" />
-                  <YAxis stroke="#4b5563" fontSize={10} hide />
-                  <Tooltip 
-                     cursor={{fill: '#1e2547'}}
-                     contentStyle={{ backgroundColor: '#0A0F2C', borderColor: '#1e2547', borderRadius: '8px' }}
-                  />
-                  <Bar dataKey="activity" fill="#118AB2" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+          <h3 className="text-lg font-bold mb-6">
+            Activity Peak Hours (Estimated)
+          </h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={[
+                  { hour: "00", activity: 20 },
+                  { hour: "04", activity: 10 },
+                  { hour: "08", activity: 40 },
+                  { hour: "12", activity: 70 },
+                  { hour: "16", activity: 90 },
+                  { hour: "20", activity: 100 },
+                  { hour: "23", activity: 50 },
+                ]}
+              >
+                <XAxis
+                  dataKey="hour"
+                  stroke="#4b5563"
+                  fontSize={10}
+                  name="Hour of Day"
+                />
+                <YAxis stroke="#4b5563" fontSize={10} hide />
+                <Tooltip
+                  cursor={{ fill: "#1e2547" }}
+                  contentStyle={{
+                    backgroundColor: "#0A0F2C",
+                    borderColor: "#1e2547",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar dataKey="activity" fill="#118AB2" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

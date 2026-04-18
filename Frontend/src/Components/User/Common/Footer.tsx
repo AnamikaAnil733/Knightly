@@ -6,7 +6,11 @@ import {
   YoutubeIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSystemSettings } from "../../../Context/SystemSettingsContext";
+
 export function Footer() {
+  const { settings } = useSystemSettings();
+
   return (
     <footer className="bg-[#0B1437] border-t border-white/10 py-12 px-6">
       <div className="max-w-7xl mx-auto">
@@ -20,7 +24,7 @@ export function Footer() {
                   fontFamily: "Cinzel, serif",
                 }}
               >
-                Knightly
+                {settings?.platformName || "Knightly"}
               </span>
             </div>
             <p className="text-[#AAB3D1] text-sm">
@@ -167,7 +171,7 @@ export function Footer() {
         </div>
         <div className="pt-8 border-t border-white/10 text-center">
           <p className="text-[#AAB3D1] text-sm">
-            © 2025 Knightly. All Rights Reserved.
+            © 2025 {settings?.platformName || "Knightly"}. All Rights Reserved.
           </p>
         </div>
       </div>
