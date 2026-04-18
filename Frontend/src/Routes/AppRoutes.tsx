@@ -33,6 +33,7 @@ import PricingPage from "../Pages/User/PricingPage";
 import SuccessPage from "../Pages/User/SuccessPage";
 import CancelPage from "../Pages/User/CancelPage";
 import { SubscriptionManagement } from "../Pages/Admin/SubscriptionManagement";
+import { TransactionManagement } from "../Pages/Admin/TransactionManagement";
 
 export default function AppRoutes() {
   return (
@@ -89,6 +90,7 @@ export default function AppRoutes() {
         <Route path="lessons" element={<LessonManagement />} />
         <Route path="blogs" element={<BlogManagement />} />
         <Route path="subscriptions" element={<SubscriptionManagement />} />
+        <Route path="transactions" element={<TransactionManagement />} />
       </Route>
     </Routes>
   );

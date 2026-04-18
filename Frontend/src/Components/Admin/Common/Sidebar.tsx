@@ -73,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <DollarSignIcon size={20} />,
       name: "Transactions",
-      path: "/transactions",
+      path: "/admin/transactions",
     },
     {
       icon: <GraduationCapIcon size={20} />,

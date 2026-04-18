@@ -16,4 +16,5 @@ export const ADMIN_ROUTES = {
   GET_BLOG_BY_ID: "/blogs/:id",
   MODERATE_BLOG: "/blogs/moderate",
   SUBSCRIPTION_STATS: "/subscriptions/stats",
+  TRANSACTIONS: "/transactions",
 } as const;

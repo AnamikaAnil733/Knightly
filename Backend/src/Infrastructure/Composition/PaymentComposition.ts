@@ -9,12 +9,15 @@ import { TokenService } from "../Services/TokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
 import express from "express";
 
+import { TransactionRepository } from "../Repository/TransactionRepository";
+
 const authRepository = new AuthRepository();
 const stripeService = new StripeService();
 const tokenService = new TokenService();
+const transactionRepository = new TransactionRepository();
 
 const createCheckoutSessionUseCase = new CreateCheckoutSessionUseCase(stripeService, authRepository as any);
-const stripeWebhookUseCase = new StripeWebhookUseCase(stripeService, authRepository as any);
+const stripeWebhookUseCase = new StripeWebhookUseCase(stripeService, authRepository as any, transactionRepository);
 const verifySessionUseCase = new VerifySessionUseCase(stripeService, authRepository as any);
 
 const paymentController = new PaymentController(

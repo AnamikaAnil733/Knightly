@@ -10,7 +10,10 @@ import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagem
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
 import { UnBlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/UnBlockUserUseCase";
 import GetSubscriptionStatsUseCase from "../../Application/UseCases/Admin/UserManagement/GetSubscriptionStatsUseCase";
+import GetAllTransactionsUseCase from "../../Application/UseCases/Admin/UserManagement/GetAllTransactionsUseCase";
 import { GetSubscriptionStatsController } from "../../Presentation/Controllers/Admin/UserManagement/GetSubscriptionStatsController";
+import { GetAllTransactionsController } from "../../Presentation/Controllers/Admin/UserManagement/GetAllTransactionsController";
+import { TransactionRepository } from "../Repository/TransactionRepository";
 import { CreatePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/CreatePuzzleUseCase";
 import { GetallPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/GetAllPuzzleUseCase";
 import { EditPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/EditPuzzleUseCase";
@@ -29,6 +32,7 @@ import { AdminRoutes } from "../../Presentation/Routes/AdminRoute";
 
 const UserManagementRepo = new UserManagementRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();
+const transactionRepo = new TransactionRepository();
 
 //service
 const tokenService = new TokenService();
@@ -42,6 +46,7 @@ const getAllUsersUseCase = new GetAllUserUseCase(UserManagementRepo);
 const blockUserUseCase = new BlockUserUseCase(UserManagementRepo);
 const unBlockUserUserCase = new UnBlockUserUseCase(UserManagementRepo);
 const getSubscriptionStatsUseCase = new GetSubscriptionStatsUseCase(UserManagementRepo);
+const getAllTransactionsUseCase = new GetAllTransactionsUseCase(transactionRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(
   puzzleMangementRepo,
   puzzleValidationService,
@@ -73,6 +78,9 @@ export const unBanUserController = new UnBlockUserController(
 );
 export const getSubscriptionStatsController = new GetSubscriptionStatsController(
   getSubscriptionStatsUseCase,
+);
+export const getAllTransactionsController = new GetAllTransactionsController(
+  getAllTransactionsUseCase,
 );
 
 export const PuzzleManagementController = new AdminPuzzleController(

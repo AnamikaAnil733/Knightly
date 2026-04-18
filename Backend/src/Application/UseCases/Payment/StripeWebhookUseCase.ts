@@ -1,6 +1,8 @@
 import { IStripeService } from "../../../Domain/Interface/Service/IStripeService";
 import { IBaseRepository } from "../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../Domain/Entity/Auth";
+import ETransaction from "../../../Domain/Entity/Transaction";
+import { ITransactionRepository } from "../../../Domain/Interface/Repositories/ITransactionRepository";
 import StripeService from "../../../Infrastructure/Services/StripeService";
 import Stripe from "stripe";
 
@@ -8,6 +10,7 @@ export default class StripeWebhookUseCase {
   constructor(
     private stripeService: StripeService,
     private userRepository: IBaseRepository<EAuth, string>,
+    private transactionRepository: ITransactionRepository,
   ) {}
 
   async execute(payload: any, sig: string): Promise<void> {
@@ -46,6 +49,18 @@ export default class StripeWebhookUseCase {
       if (user) {
         user.updatePremiumStatus(true, subscriptionId, customerId);
         await this.userRepository.update(user);
+
+        // Record the transaction
+        const transaction = new ETransaction({
+          userId,
+          amount: session.amount_total / 100, // Convert from cents
+          currency: session.currency,
+          status: "COMPLETED",
+          stripeSessionId: session.id,
+          stripeSubscriptionId: subscriptionId,
+          type: "SUBSCRIPTION",
+        });
+        await this.transactionRepository.create(transaction);
       }
     }
   }
