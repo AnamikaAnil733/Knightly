@@ -88,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <BarChartIcon size={20} />,
       name: "Analytics",
-      path: "/analytics",
+      path: "/admin/analytics",
     },
     {
       icon: <SettingsIcon size={20} />,

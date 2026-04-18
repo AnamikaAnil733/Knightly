@@ -24,12 +24,17 @@ import GetAllLiveGamesUseCase from "../../Application/UseCases/Admin/GameManagem
 import { GetAllLiveGamesController } from "../../Presentation/Controllers/Admin/GameManagement/GetAllLiveGamesController";
 import { AuthRepository } from "../Repository/AuthRepository";
 import { ChessGameRepository } from "../Repository/GameRepository";
+import { AnalyticsRepository } from "../Repository/AnalyticsRepository";
+import GetAdminAnalyticsUseCase from "../../Application/UseCases/Admin/Analytics/GetAdminAnalyticsUseCase";
+import { GetAdminAnalyticsController } from "../../Presentation/Controllers/Admin/Analytics/GetAdminAnalyticsController";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 import { PuzzleGeneratorService } from "../Services/PuzzleGeneratorService";
 
 import { TokenService } from "../Services/TokenService";
 import { PuzzleValidationService } from "../Services/PuzzleValidationService";
 
+import { authModel as AuthModel } from "../Database/Model/Authmodel";
+import { TransactionModel } from "../Database/Model/TransactionModel";
 import { GameModel } from "../Database/Model/GameModel";
 import { AdminRoutes } from "../../Presentation/Routes/AdminRoute";
 
@@ -37,6 +42,7 @@ const UserManagementRepo = new UserManagementRepository();
 const authRepo = new AuthRepository();
 const puzzleMangementRepo = new PuzzleManagementRepository();
 const transactionRepo = new TransactionRepository();
+const analyticsRepo = new AnalyticsRepository(AuthModel, GameModel, TransactionModel);
 
 //service
 const tokenService = new TokenService();
@@ -52,6 +58,7 @@ const unBlockUserUserCase = new UnBlockUserUseCase(UserManagementRepo);
 const getSubscriptionStatsUseCase = new GetSubscriptionStatsUseCase(UserManagementRepo);
 const getAllTransactionsUseCase = new GetAllTransactionsUseCase(transactionRepo);
 const getAllLiveGamesUseCase = new GetAllLiveGamesUseCase(chessGameRepo, authRepo);
+const getAdminAnalyticsUseCase = new GetAdminAnalyticsUseCase(analyticsRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(
   puzzleMangementRepo,
   puzzleValidationService,
@@ -89,6 +96,9 @@ export const getAllTransactionsController = new GetAllTransactionsController(
 );
 export const getAllLiveGamesController = new GetAllLiveGamesController(
   getAllLiveGamesUseCase,
+);
+export const getAdminAnalyticsController = new GetAdminAnalyticsController(
+  getAdminAnalyticsUseCase,
 );
 
 export const PuzzleManagementController = new AdminPuzzleController(

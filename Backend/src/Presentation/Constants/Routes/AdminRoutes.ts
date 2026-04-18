@@ -18,4 +18,5 @@ export const ADMIN_ROUTES = {
   SUBSCRIPTION_STATS: "/subscriptions/stats",
   TRANSACTIONS: "/transactions",
   LIVE_GAMES: "/live-games",
+  GET_ANALYTICS: "/analytics",
 } as const;
