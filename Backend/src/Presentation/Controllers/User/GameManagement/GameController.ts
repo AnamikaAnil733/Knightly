@@ -149,7 +149,7 @@ export class GameController {
       if (!userId) {
         throw new CustomError(
           HttpStatusCodes.UNAUTHORIZED,
-          MESSAGES.UNAUTHORIZED
+          MESSAGES.UNAUTHORIZED,
         );
       }
 

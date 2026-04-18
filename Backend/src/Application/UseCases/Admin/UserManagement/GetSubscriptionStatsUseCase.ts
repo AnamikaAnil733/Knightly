@@ -15,19 +15,19 @@ export default class GetSubscriptionStatsUseCase implements IGetSubscriptionStat
       totalUsers,
       currentMonthSubs,
       lastMonthSubs,
-      revenueData
+      revenueData,
     ] = await Promise.all([
       this.userRepository.count(undefined, "PREMIUM"),
       this.userRepository.count(undefined, "ALL"),
       this.userRepository.getSubscriptionCountByDateRange(startOfCurrentMonth, now),
       this.userRepository.getSubscriptionCountByDateRange(startOfLastMonth, endOfLastMonth),
-      this.userRepository.getRevenueByMonth()
+      this.userRepository.getRevenueByMonth(),
     ]);
 
     // Calculate growth percentage
     let growthChange = "0%";
     let growthTrend: "up" | "down" = "up";
-    
+
     if (lastMonthSubs > 0) {
       const change = ((currentMonthSubs - lastMonthSubs) / lastMonthSubs) * 100;
       growthTrend = change >= 0 ? "up" : "down";
@@ -39,7 +39,7 @@ export default class GetSubscriptionStatsUseCase implements IGetSubscriptionStat
 
     // Calculate premium conversion rate change (simulated comparison)
     const currentConversion = totalUsers > 0 ? (totalSubscribers / totalUsers) * 100 : 0;
-    
+
     // Monthly Revenue
     const monthlyRevenue = totalSubscribers * 9.99;
 
@@ -60,7 +60,7 @@ export default class GetSubscriptionStatsUseCase implements IGetSubscriptionStat
         {
           label: "Conversion Rate",
           value: `${currentConversion.toFixed(1)}%`,
-          change: "+0.5%", 
+          change: "+0.5%",
           trend: "up",
         },
         {
@@ -71,7 +71,7 @@ export default class GetSubscriptionStatsUseCase implements IGetSubscriptionStat
         },
       ],
       revenueData: revenueData.length > 0 ? revenueData.map(d => ({ name: d.month, revenue: d.revenue })) : [
-        { name: "No Data", revenue: 0 }
+        { name: "No Data", revenue: 0 },
       ],
     };
   }

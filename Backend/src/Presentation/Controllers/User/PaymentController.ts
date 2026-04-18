@@ -7,7 +7,7 @@ export default class PaymentController {
   constructor(
     private createCheckoutSessionUseCase: CreateCheckoutSessionUseCase,
     private stripeWebhookUseCase: StripeWebhookUseCase,
-    private verifySessionUseCase: VerifySessionUseCase
+    private verifySessionUseCase: VerifySessionUseCase,
   ) {}
 
   async createCheckoutSession(req: Request, res: Response) {

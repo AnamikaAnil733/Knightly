@@ -12,7 +12,9 @@ interface SubscriptionStatsProps {
   stats: StatItem[];
 }
 
-export const SubscriptionStats: React.FC<SubscriptionStatsProps> = ({ stats }) => {
+export const SubscriptionStats: React.FC<SubscriptionStatsProps> = ({
+  stats,
+}) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, index) => (
@@ -21,7 +23,9 @@ export const SubscriptionStats: React.FC<SubscriptionStatsProps> = ({ stats }) =
           className="bg-[#0A0F2C] border border-[#1e2547] rounded-xl p-6 shadow-lg hover:shadow-[#FFD166]/10 transition-all duration-300"
         >
           <div className="flex justify-between items-start mb-4">
-            <span className="text-gray-400 text-sm font-medium">{stat.label}</span>
+            <span className="text-gray-400 text-sm font-medium">
+              {stat.label}
+            </span>
             <div
               className={`flex items-center px-2 py-1 rounded-full text-xs font-bold ${
                 stat.trend === "up"

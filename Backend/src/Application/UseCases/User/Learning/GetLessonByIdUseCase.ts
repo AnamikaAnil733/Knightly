@@ -11,7 +11,7 @@ import { LessonMapper } from "../../../Mapper/LessonMapper";
 export default class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
   constructor(
     private lessonRepository: ILessonRepository,
-    private userRepository: IBaseRepository<EAuth, string>
+    private userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(id: string, userId?: string): Promise<LessonDetailDTO> {
@@ -27,7 +27,7 @@ export default class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
         throw new CustomError(HttpStatusCodes.FORBIDDEN, "Premium membership required to access this lesson.");
       }
     } else if (lesson.isPremium && !userId) {
-       throw new CustomError(HttpStatusCodes.FORBIDDEN, "Login and Premium membership required.");
+      throw new CustomError(HttpStatusCodes.FORBIDDEN, "Login and Premium membership required.");
     }
 
     return LessonMapper.toDetailDTO(lesson);

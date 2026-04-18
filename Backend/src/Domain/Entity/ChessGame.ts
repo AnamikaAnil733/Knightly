@@ -137,7 +137,7 @@ export class ChessGame extends BaseEntity {
   getCreatedAt(): Date | undefined {
     return this.createdAt;
   }
-  
+
   getIsPublic(): boolean {
     return this._isPublic;
   }

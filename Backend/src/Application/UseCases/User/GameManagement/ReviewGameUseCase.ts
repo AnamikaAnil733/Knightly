@@ -11,13 +11,13 @@ export class ReviewGameUseCase implements IReviewGameUseCase {
   constructor(
     private readonly _chessGameRepository: IChessGameRepository,
     private readonly _stockfishService: StockfishService,
-    private readonly _userRepository: IBaseRepository<EAuth, string>
+    private readonly _userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(gameId: string, userId: string): Promise<ReviewMoveAnalysis[]> {
     const [game, user] = await Promise.all([
       this._chessGameRepository.findById(gameId),
-      this._userRepository.findById(userId)
+      this._userRepository.findById(userId),
     ]);
 
     if (!game) {

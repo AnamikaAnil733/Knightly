@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  useQuery,
-  keepPreviousData,
-} from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { SearchIcon, CreditCard } from "lucide-react";
 
@@ -73,7 +70,9 @@ export function SubscriptionManagement() {
           <div className="p-2 bg-[#FFD166]/10 rounded-lg">
             <CreditCard className="h-8 w-8 text-[#FFD166]" />
           </div>
-          <h1 className="text-3xl font-bold text-white">Subscription Management</h1>
+          <h1 className="text-3xl font-bold text-white">
+            Subscription Management
+          </h1>
         </div>
 
         {/* STATS */}
@@ -113,7 +112,9 @@ export function SubscriptionManagement() {
                 </div>
               ) : users.length === 0 ? (
                 <div className="text-center text-gray-400 p-12 border-2 border-dashed border-[#1e2547] m-4 rounded-xl">
-                  {searchTerm ? "No subscribers match your search" : "No active subscribers found"}
+                  {searchTerm
+                    ? "No subscribers match your search"
+                    : "No active subscribers found"}
                 </div>
               ) : (
                 <UserTable
@@ -137,7 +138,8 @@ export function SubscriptionManagement() {
                 </button>
 
                 <span className="text-sm font-medium text-gray-400">
-                  Page <span className="text-white">{page}</span> of {totalPages}
+                  Page <span className="text-white">{page}</span> of{" "}
+                  {totalPages}
                 </span>
 
                 <button
@@ -160,7 +162,10 @@ export function SubscriptionManagement() {
                 <div className="p-4 bg-[#11193F] rounded-full mb-4">
                   <CreditCard className="h-8 w-8 text-gray-500" />
                 </div>
-                <p className="text-sm">Select a subscriber to view their full profile and membership details</p>
+                <p className="text-sm">
+                  Select a subscriber to view their full profile and membership
+                  details
+                </p>
               </div>
             )}
           </div>

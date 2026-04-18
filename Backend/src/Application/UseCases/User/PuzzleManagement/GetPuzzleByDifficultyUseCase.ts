@@ -11,7 +11,7 @@ export class GetPuzzleDifficultyUsecase implements IGetPuzzleByDifficulty {
   constructor(
     private readonly _puzzleRepository: IPuzzleRepository,
     private readonly _progressRepository: IUserPuzzleProgressRepository,
-    private readonly _userRepository: IBaseRepository<EAuth, string>
+    private readonly _userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(userId: string, difficulty: PuzzleType): Promise<UserPuzzleResponseDTO> {

@@ -20,7 +20,7 @@ const verifySessionUseCase = new VerifySessionUseCase(stripeService, authReposit
 const paymentController = new PaymentController(
   createCheckoutSessionUseCase,
   stripeWebhookUseCase,
-  verifySessionUseCase
+  verifySessionUseCase,
 );
 
 const router = express.Router();
@@ -29,18 +29,18 @@ const router = express.Router();
 router.post(
   "/create-checkout-session",
   authMiddleware([UserRole.USER], tokenService) as any,
-  (req: any, res: any) => paymentController.createCheckoutSession(req, res)
+  (req: any, res: any) => paymentController.createCheckoutSession(req, res),
 );
 
 router.post(
   "/verify-session",
   authMiddleware([UserRole.USER], tokenService) as any,
-  (req: any, res: any, next: any) => paymentController.verifySession(req, res, next)
+  (req: any, res: any, next: any) => paymentController.verifySession(req, res, next),
 );
 
 // Stripe sends raw body — must be BEFORE any global json parsing touches this route
 router.post("/webhook", express.raw({ type: "application/json" }), (req: any, res: any) =>
-  paymentController.handleWebhook(req, res)
+  paymentController.handleWebhook(req, res),
 );
 
 export const paymentRoutes = { router };

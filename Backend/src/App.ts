@@ -77,7 +77,7 @@ export class App {
         verify: (req: any, res, buf) => {
           req.rawBody = buf;
         },
-      })
+      }),
     );
     this.app.use(express.urlencoded({ extended: true }));
   }

@@ -7,7 +7,7 @@ import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 export default class VerifySessionUseCase {
   constructor(
     private stripeService: IStripeService,
-    private userRepository: IBaseRepository<EAuth, string>
+    private userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(sessionId: string, userId: string): Promise<{ premium: boolean }> {

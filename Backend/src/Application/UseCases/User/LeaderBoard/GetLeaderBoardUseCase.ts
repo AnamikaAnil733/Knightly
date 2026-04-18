@@ -20,7 +20,7 @@ export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
         : null;
 
       const ratings = Object.values(user.rating).filter((r): r is number => typeof r === "number");
-      const averageRating = ratings.length > 0 
+      const averageRating = ratings.length > 0
         ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length)
         : 0;
 
@@ -29,7 +29,7 @@ export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
         displayname: user.displayname,
         avatarKey: avatarUrl || "",
         rating: user.rating[gameType],
-        averageRating: averageRating,
+        averageRating,
       };
     }));
 

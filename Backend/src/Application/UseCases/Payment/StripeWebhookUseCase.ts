@@ -7,7 +7,7 @@ import Stripe from "stripe";
 export default class StripeWebhookUseCase {
   constructor(
     private stripeService: StripeService,
-    private userRepository: IBaseRepository<EAuth, string>
+    private userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(payload: any, sig: string): Promise<void> {
@@ -17,7 +17,7 @@ export default class StripeWebhookUseCase {
       event = this.stripeService.constructEvent(
         payload,
         sig,
-        process.env.STRIPE_WEBHOOK_SECRET || ""
+        process.env.STRIPE_WEBHOOK_SECRET || "",
       );
     } catch (err: any) {
       throw new Error(`Webhook Error: ${err.message}`);

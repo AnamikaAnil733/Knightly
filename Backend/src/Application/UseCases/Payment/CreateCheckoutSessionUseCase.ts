@@ -6,7 +6,7 @@ import { CustomError } from "../../../Domain/Entity/CustomError";
 export default class CreateCheckoutSessionUseCase {
   constructor(
     private stripeService: IStripeService,
-    private userRepository: IBaseRepository<EAuth, string>
+    private userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
   async execute(userId: string): Promise<string> {
