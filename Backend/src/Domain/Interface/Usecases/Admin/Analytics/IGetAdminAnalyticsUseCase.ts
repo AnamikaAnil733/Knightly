@@ -18,6 +18,8 @@ export interface IAdminAnalyticsDTO {
   growthData: IUserGrowthPoint[];
   gameDistribution: IGameModeDistribution[];
   stats: IAnalyticsStat[];
+  recentTransactions: any[];
+  recentUsers: any[];
 }
 
 export interface IGetAdminAnalyticsUseCase {

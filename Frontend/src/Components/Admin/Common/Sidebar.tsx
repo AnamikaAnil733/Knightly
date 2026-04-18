@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <LayoutDashboardIcon size={20} />,
       name: "Dashboard",
-      path: "/dashboard",
+      path: "/admin/dashboard",
     },
     {
       icon: <UsersIcon size={20} />,

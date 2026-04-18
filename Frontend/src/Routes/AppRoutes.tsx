@@ -36,6 +36,7 @@ import { SubscriptionManagement } from "../Pages/Admin/SubscriptionManagement";
 import { TransactionManagement } from "../Pages/Admin/TransactionManagement";
 import { LiveGameMonitor } from "../Pages/Admin/LiveGameMonitor";
 import { AnalyticsDashboard } from "../Pages/Admin/AnalyticsDashboard";
+import { AdminDashboard } from "../Pages/Admin/AdminDashboard";
 
 export default function AppRoutes() {
   return (
@@ -87,6 +88,8 @@ export default function AppRoutes() {
           </AdminProtectedRoute>
         }
       >
+        <Route index element={<AdminDashboard />} />
+        <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="puzzles" element={<PuzzleManagement />} />
         <Route path="lessons" element={<LessonManagement />} />

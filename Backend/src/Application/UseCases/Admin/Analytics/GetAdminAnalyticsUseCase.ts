@@ -4,11 +4,13 @@ import { IGetAdminAnalyticsUseCase, IAdminAnalyticsDTO } from "../../../../Domai
 export default class GetAdminAnalyticsUseCase implements IGetAdminAnalyticsUseCase {
   constructor(private readonly analyticsRepository: IAnalyticsRepository) {}
 
-  async execute() {
-    const [growthData, distributionData, generalStats] = await Promise.all([
+  async execute(): Promise<IAdminAnalyticsDTO> {
+    const [growthData, distributionData, generalStats, recentTransactions, recentUsers] = await Promise.all([
       this.analyticsRepository.getUserGrowthData(30),
       this.analyticsRepository.getGameDistribution(),
       this.analyticsRepository.getGeneralStats(),
+      this.analyticsRepository.getRecentTransactions(5),
+      this.analyticsRepository.getRecentUsers(5),
     ]);
 
     // Categorize game distribution for cleaner frontend charts
@@ -24,6 +26,8 @@ export default class GetAdminAnalyticsUseCase implements IGetAdminAnalyticsUseCa
         { label: "Lifetime Revenue", value: `$${generalStats.lifetimeRevenue.toFixed(2)}`, icon: "banknotes" },
         { label: "New Users (24h)", value: generalStats.newUsersToday.toString(), icon: "user-plus" },
       ],
+      recentTransactions,
+      recentUsers,
     };
   }
 

@@ -74,4 +74,22 @@ export class AnalyticsRepository implements IAnalyticsRepository {
       newUsersToday,
     };
   }
+
+  async getRecentTransactions(limit: number): Promise<any[]> {
+    return this.transactionModel
+      .find({ status: "COMPLETED" })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate("userId", "displayname email")
+      .lean();
+  }
+
+  async getRecentUsers(limit: number): Promise<any[]> {
+    return this.userModel
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .select("displayname email createdAt role avatarKey")
+      .lean();
+  }
 }
