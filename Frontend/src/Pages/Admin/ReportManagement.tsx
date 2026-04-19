@@ -242,9 +242,9 @@ export function ReportManagement() {
         </div>
 
         {/* Pagination */}
-        {data?.totalPages > 1 && (
+        {(data?.totalPages ?? 0) > 1 && (
           <div className="flex justify-center mt-8 gap-2">
-            {[...Array(data.totalPages)].map((_, i) => (
+            {[...Array(data?.totalPages)].map((_, i) => (
               <button
                 key={i}
                 onClick={() => setPage(i + 1)}

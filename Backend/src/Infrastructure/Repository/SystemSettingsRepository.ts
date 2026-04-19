@@ -8,16 +8,12 @@ export class SystemSettingsRepository implements ISystemSettingsRepository {
   async getSettings(): Promise<ISystemSettings> {
     const settings = await this._model.findOne();
     if (!settings) {
-      // Create default if not exists
       return this._model.create({});
     }
     return settings.toObject();
   }
 
   async updateSettings(settings: Partial<ISystemSettings>): Promise<ISystemSettings> {
-    // Robust Flattening Logic:
-    // This ensures that Mongoose treats { general: { maintenanceMode: true } }
-    // as a surgical update to 'general.maintenanceMode' rather than replacing the whole 'general' object.
     const updatePayload: any = {};
 
     if (settings.general) {

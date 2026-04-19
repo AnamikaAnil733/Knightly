@@ -20,7 +20,7 @@ export class ChessGameRepository
   }
 
   async findByUserId(userId: string): Promise<ChessGame[]> {
-    logger.info(`[Repository] Finding games for userId: ${userId}`);
+    logger.info(`Finding games for userId: ${userId}`);
     const docs = await this.model
       .find({
         $or: [{ whitePlayerId: userId }, { blackPlayerId: userId }],
@@ -28,14 +28,12 @@ export class ChessGameRepository
       .sort({ createdAt: -1 })
       .exec();
 
-    logger.info(`[Repository] Found ${docs.length} games`);
+    logger.info(`Found ${docs.length} games`);
     return docs.map((doc) => {
       try {
         return this.mapper.toEntityFromDocument(doc);
       } catch (err: any) {
-        logger.error(`[Repository] Error mapping game ${doc._id}:`, err);
-        // Rethrow or return a partially valid entity?
-        // For debugging, let's throw with the game ID.
+        logger.error(`Error mapping game ${doc._id}:`, err);
         throw new Error(`Corrupted game data for ${doc._id}: ${err.message}`);
       }
     });

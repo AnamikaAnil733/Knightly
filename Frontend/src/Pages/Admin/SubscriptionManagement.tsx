@@ -17,7 +17,7 @@ type SubscriptionResponse = {
 };
 
 type StatsResponse = {
-  stats: { label: string; value: string | number; icon: string }[];
+  stats: { label: string; value: string; change: string; trend: "up" | "down" }[];
   revenueData: { date: string; amount: number }[];
 };
 
