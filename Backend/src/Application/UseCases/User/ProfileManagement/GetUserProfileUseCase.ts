@@ -1,7 +1,7 @@
 // Application/UseCases/user/profileManagement/GetUserProfileUseCase.ts
 
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
-import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
+import { IMediaService } from "../../../../Domain/Interface/Service/IMediaService";
 import EAuth from "../../../../Domain/Entity/Auth";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
@@ -11,7 +11,7 @@ import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 export class GetUserProfileUseCase implements IGetUserProfileUseCase {
   constructor(
     private readonly _userRepo: IBaseRepository<EAuth>,
-    private readonly _storageService: IStorageService,
+    private readonly _mediaService: IMediaService,
   ) {}
 
   async execute(userId: string) {
@@ -43,9 +43,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
         MESSAGES.USER_DOESNT_EXIST,
       );
     }
-    const avatarUrl = user.avatarKey
-      ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
-      : null;
+    const avatarUrl = (await this._mediaService.resolveSignedUrl(user.avatarKey)) ?? null;
 
     return {
       id: user.id!,

@@ -16,23 +16,25 @@ import { AddCommentUseCase, GetBlogCommentsUseCase, DeleteCommentUseCase } from 
 import { CommentRepository } from "../Repository/CommentRepository";
 import { AuthRepository } from "../Repository/AuthRepository";
 import { S3StorageService } from "../Services/S3Service";
+import { MediaService } from "../Services/MediaService";
 
 const blogRepository = new BlogRepository();
 const commentRepository = new CommentRepository();
 const userRepository = new AuthRepository();
 const s3Service = new S3StorageService();
+const mediaService = new MediaService(s3Service);
 
 const createBlogUseCase = new CreateBlogUseCase(blogRepository);
 const moderateBlogUseCase = new ModerateBlogUseCase(blogRepository);
-const adminGetAllBlogsUseCase = new AdminGetAllBlogsUseCase(blogRepository, s3Service);
-const adminGetBlogByIdUseCase = new AdminGetBlogByIdUseCase(blogRepository, s3Service);
-const getAllBlogsUseCase = new GetAllBlogsUseCase(blogRepository, s3Service);
-const getBlogBySlugUseCase = new GetBlogBySlugUseCase(blogRepository, s3Service);
+const adminGetAllBlogsUseCase = new AdminGetAllBlogsUseCase(blogRepository, mediaService);
+const adminGetBlogByIdUseCase = new AdminGetBlogByIdUseCase(blogRepository, mediaService);
+const getAllBlogsUseCase = new GetAllBlogsUseCase(blogRepository, mediaService);
+const getBlogBySlugUseCase = new GetBlogBySlugUseCase(blogRepository, mediaService);
 const getCoverUploadUrlUseCase = new GetCoverUploadUrlUseCase(s3Service);
-const getUserBlogsUseCase = new GetUserBlogsUseCase(blogRepository, s3Service);
+const getUserBlogsUseCase = new GetUserBlogsUseCase(blogRepository, mediaService);
 const updateBlogUseCase = new UpdateBlogUseCase(blogRepository);
 const deleteBlogUseCase = new DeleteBlogUseCase(blogRepository);
-const getBlogByIdUseCase = new GetBlogByIdUseCase(blogRepository, s3Service);
+const getBlogByIdUseCase = new GetBlogByIdUseCase(blogRepository, mediaService);
 const toggleLikeUseCase = new ToggleLikeUseCase(blogRepository);
 const addCommentUseCase = new AddCommentUseCase(commentRepository);
 const getBlogCommentsUseCase = new GetBlogCommentsUseCase(commentRepository);

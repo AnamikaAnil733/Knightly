@@ -1,13 +1,13 @@
 import { IGetLeaderBoardUseCase } from "../../../../Domain/Interface/Usecases/User/LeaderBoard/ILeaderBoard";
 import { ILeaderBoardRepository } from "../../../../Domain/Interface/Repositories/ILeaderBoardRepository";
 import { LeaderBoardResponse } from "../../../../Domain/DTOs/UserDTOs";
-import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
+import { IMediaService } from "../../../../Domain/Interface/Service/IMediaService";
 
 
 export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
   constructor(
-        private _leaderRepo:ILeaderBoardRepository,
-        private readonly _storageService: IStorageService,
+        private readonly _leaderRepo: ILeaderBoardRepository,
+        private readonly _mediaService: IMediaService,
   ){}
 
   async execute(type: string): Promise<LeaderBoardResponse[]> {
@@ -15,9 +15,7 @@ export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
     const users = await this._leaderRepo.getTopPlayersByType(type, 10);
 
     return Promise.all(users.map(async (user, index) => {
-      const avatarUrl = user.avatarKey
-        ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200) // 12 hours
-        : null;
+      const avatarUrl = await this._mediaService.resolveSignedUrl(user.avatarKey);
 
       const ratings = Object.values(user.rating).filter((r): r is number => typeof r === "number");
       const averageRating = ratings.length > 0

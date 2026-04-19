@@ -4,7 +4,7 @@ import { IGetGameUseCase } from "../../../../Domain/Interface/Usecases/User/Game
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../../Domain/Entity/Auth";
-import { IStorageService } from "../../../../Domain/Interface/Service/IS3Service";
+import { IMediaService } from "../../../../Domain/Interface/Service/IMediaService";
 import { TIME_CONTROLS } from "../../../../Domain/Chess/Types/GameFormat";
 import { GameMapper } from "../../../Mapper/GameMapper";
 
@@ -12,7 +12,7 @@ export class GetGameUseCase implements IGetGameUseCase {
   constructor(
     private readonly _chessGameRepository: IChessGameRepository,
     private readonly _userRepo: IBaseRepository<EAuth>,
-    private readonly _storageService: IStorageService,
+    private readonly _mediaService: IMediaService,
   ) {}
 
   async execute(gameId: string): Promise<GameOutputDTO> {
@@ -61,9 +61,7 @@ export class GetGameUseCase implements IGetGameUseCase {
             id: user.id!,
             name: user.displayname,
             rating: user.getRating(ratingMode),
-            avatar: user.avatarKey
-              ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200)
-              : null,
+            avatar: (await this._mediaService.resolveSignedUrl(user.avatarKey)) ?? null,
           };
         }
       }
@@ -86,9 +84,7 @@ export class GetGameUseCase implements IGetGameUseCase {
             id: user.id!,
             name: user.displayname,
             rating: user.getRating(ratingMode),
-            avatar: user.avatarKey
-              ? await this._storageService.generateSignedGetUrl(user.avatarKey, 43200)
-              : null,
+            avatar: (await this._mediaService.resolveSignedUrl(user.avatarKey)) ?? null,
           };
         }
       }

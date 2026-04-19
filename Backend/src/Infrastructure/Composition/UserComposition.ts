@@ -45,6 +45,7 @@ import { CreateReportUseCase } from "../../Application/UseCases/User/Report/Crea
 import { TokenService } from "../Services/TokenService";
 import {  HashService } from "../Services/PasswordHashing";
 import { S3StorageService } from "../Services/S3Service";
+import { MediaService } from "../Services/MediaService";
 
 import {GameModel} from "../Database/Model/GameModel";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
@@ -68,6 +69,7 @@ const ReportRepo = new ReportRepository();
 const tokenService = new TokenService();
 const hashService = new HashService();
 const S3Service = new S3StorageService();
+const mediaService = new MediaService(S3Service);
 const stockfishService = new StockfishService();
 
 //usecase
@@ -78,9 +80,9 @@ const saveDiceBearAvatarUseCase = new SaveDiceBearAvatarUseCase(
   S3Service,
   UserRepo,
 );
-const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo, S3Service);
+const getUserProfileUseCase = new GetUserProfileUseCase(UserRepo, mediaService);
 const createGameUseCase = new CreateGameUseCase(GameRepo);
-const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, S3Service);
+const getGameUseCase = new GetGameUseCase(GameRepo, UserRepo, mediaService);
 const getLegalMovesUseCase = new GetLegalMovesUseCase(GameRepo);
 const makeMoveUseCase = new MakeMoveUsecase(GameRepo);
 const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(
@@ -96,13 +98,13 @@ const getPuzzleSolveCountUseCase = new GetPuzzleSolveCountUseCase(ProgressPuzzle
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService, UserRepo);
 const getGameHistoryUseCase = new GetGameHistoryUseCase(GameRepo, UserRepo);
 const getLivePublicGamesUseCase = new GetLivePublicGamesUseCase(GameRepo);
-const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, S3Service);
+const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, mediaService);
 
 const sendFriendRequestUseCase = new SendFriendRequestUseCase(FriendshipRepo, UserRepo);
 const acceptFriendRequestUseCase = new AcceptFriendRequestUseCase(FriendshipRepo);
-const getFriendsListUseCase = new GetFriendsListUseCase(FriendshipRepo, UserRepo, S3Service);
-const searchUsersUseCase = new SearchUsersUseCase(UserRepo, S3Service);
-const getPendingRequestsUseCase = new GetPendingRequestsUseCase(FriendshipRepo, UserRepo, S3Service);
+const getFriendsListUseCase = new GetFriendsListUseCase(FriendshipRepo, UserRepo, mediaService);
+const searchUsersUseCase = new SearchUsersUseCase(UserRepo, mediaService);
+const getPendingRequestsUseCase = new GetPendingRequestsUseCase(FriendshipRepo, UserRepo, mediaService);
 const rejectFriendRequestUseCase = new RejectFriendRequestUseCase(FriendshipRepo);
 const unfriendUseCase = new UnfriendUseCase(FriendshipRepo);
 const blockUserUseCase = new BlockUserUseCase(FriendshipRepo);

@@ -5,12 +5,12 @@ import { IGetBlogBySlugUseCase } from "../../../../Domain/Interface/Usecases/Use
 import { BlogStatus } from "../../../../Domain/Types/Blogtypes";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { IStorageService } from "Domain/Interface/Service/IS3Service";
+import { IMediaService } from "../../../../Domain/Interface/Service/IMediaService";
 
 export class GetBlogBySlugUseCase implements IGetBlogBySlugUseCase {
   constructor(
     private readonly _blogRepository: IBlogRepository,
-    private readonly _storageService: IStorageService,
+    private readonly _mediaService: IMediaService,
   ) {}
 
   async execute(slug: string): Promise<BlogResponseDTO> {
@@ -33,33 +33,8 @@ export class GetBlogBySlugUseCase implements IGetBlogBySlugUseCase {
     }
 
     const blogDTO = BlogMapper.toBlogResposeDTO(blog);
-    if (blogDTO.coverImage) {
-      let key = blogDTO.coverImage;
-      let shouldSign = false;
-
-      if (key.startsWith("http")) {
-        if (key.includes("knightly-avatars.s3")) {
-          try {
-            const urlObj = new URL(key);
-            key = urlObj.pathname.startsWith("/")
-              ? urlObj.pathname.substring(1)
-              : urlObj.pathname;
-            shouldSign = true;
-          } catch (e) {
-            console.error("Failed to parse legacy coverImage URL:", key);
-          }
-        }
-      } else {
-        shouldSign = true;
-      }
-
-      if (shouldSign) {
-        blogDTO.coverImage = await this._storageService.generateSignedGetUrl(
-          key,
-          43200, // 12 hours
-        );
-      }
-    }
+    // Process cover image signed URL
+    blogDTO.coverImage = await this._mediaService.resolveSignedUrl(blogDTO.coverImage);
 
     return blogDTO;
   }
