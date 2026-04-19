@@ -10,10 +10,7 @@ export class TransactionRepository
   implements ITransactionRepository
 {
   constructor() {
-    // We pass a mock mapper to super because BaseRepository expects one,
-    // but we'll override methods if needed.
-    // Actually, I'll create a proper mapper class if needed or just use static methods.
-    super(TransactionModel, TransactionMapper as any);
+    super(TransactionModel, TransactionMapper);
   }
 
   async getAll(skip: number, limit: number): Promise<ETransaction[]> {
@@ -24,7 +21,7 @@ export class TransactionRepository
       .skip(skip)
       .limit(limit);
 
-    return docs.map((doc) => TransactionMapper.toEntity(doc));
+    return docs.map((doc) => TransactionMapper.toEntityFromDocument(doc as any));
   }
 
   async count(): Promise<number> {

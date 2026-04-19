@@ -4,14 +4,16 @@ import toast from "react-hot-toast";
 import { DollarSign, SearchIcon, User, ExternalLink } from "lucide-react";
 import axios from "../../Service/Api/Axios/Adminaxios";
 
+type PopulatedUser = {
+  _id: string;
+  displayname: string;
+  email: string;
+  avatarUrl?: string;
+};
+
 type Transaction = {
   _id: string;
-  userId: {
-    _id: string;
-    displayname: string;
-    email: string;
-    avatarUrl?: string;
-  };
+  userId: PopulatedUser | string | null;
   amount: number;
   currency: string;
   status: string;
@@ -19,6 +21,14 @@ type Transaction = {
   type: string;
   createdAt: string;
 };
+
+/** Safely extract user fields regardless of whether userId is populated */
+function getUser(userId: PopulatedUser | string | null): PopulatedUser {
+  if (userId && typeof userId === "object" && "displayname" in userId) {
+    return userId;
+  }
+  return { _id: typeof userId === "string" ? userId : "unknown", displayname: "Unknown User", email: "N/A" };
+}
 
 type TransactionsResponse = {
   transactions: Transaction[];
@@ -53,13 +63,15 @@ export function TransactionManagement() {
   const transactions = data?.transactions ?? [];
   const totalPages = data?.totalPages ?? 1;
 
-  // Simple local filter for aesthetics until backend search is added
-  const filteredTransactions = transactions.filter(
-    (t) =>
-      t.userId.displayname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.userId.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.stripeSessionId.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredTransactions = transactions.filter((t) => {
+    const user = getUser(t.userId);
+    const term = searchTerm.toLowerCase();
+    return (
+      user.displayname.toLowerCase().includes(term) ||
+      user.email.toLowerCase().includes(term) ||
+      t.stripeSessionId.toLowerCase().includes(term)
+    );
+  });
 
   return (
     <div className="w-full min-h-screen p-6">
@@ -125,42 +137,47 @@ export function TransactionManagement() {
                     className="hover:bg-[#11193F] transition-colors group"
                   >
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-[#1e2547] flex items-center justify-center overflow-hidden border border-[#1e2547]">
-                          {tx.userId.avatarUrl ? (
-                            <img
-                              src={tx.userId.avatarUrl}
-                              alt="avatar"
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <User className="h-5 w-5 text-gray-500" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-white">
-                            {tx.userId.displayname}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {tx.userId.email}
-                          </p>
-                        </div>
-                      </div>
+                      {(() => {
+                        const user = getUser(tx.userId);
+                        return (
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-full bg-[#1e2547] flex items-center justify-center overflow-hidden border border-[#1e2547]">
+                              {user.avatarUrl ? (
+                                <img
+                                  src={user.avatarUrl}
+                                  alt="avatar"
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <User className="h-5 w-5 text-gray-500" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-white">
+                                {user.displayname}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {user.email}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td className="px-6 py-4 font-mono text-sm">
                       <span className="text-[#FFD166] font-bold">
-                        {tx.currency.toUpperCase() === "USD"
+                        {(tx.currency ?? "usd").toUpperCase() === "USD"
                           ? "$"
-                          : tx.currency.toUpperCase()}
-                        {tx.amount.toFixed(2)}
+                          : (tx.currency ?? "usd").toUpperCase()}
+                        {(tx.amount ?? 0).toFixed(2)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
-                          tx.status === "COMPLETED"
+                          (tx.status ?? "") === "COMPLETED"
                             ? "bg-green-500/10 text-green-500"
-                            : tx.status === "FAILED"
+                            : (tx.status ?? "") === "FAILED"
                               ? "bg-red-500/10 text-red-500"
                               : "bg-yellow-500/10 text-yellow-500"
                         }`}

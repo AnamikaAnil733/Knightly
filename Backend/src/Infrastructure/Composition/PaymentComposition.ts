@@ -18,7 +18,7 @@ const transactionRepository = new TransactionRepository();
 
 const createCheckoutSessionUseCase = new CreateCheckoutSessionUseCase(stripeService, authRepository as any);
 const stripeWebhookUseCase = new StripeWebhookUseCase(stripeService, authRepository as any, transactionRepository);
-const verifySessionUseCase = new VerifySessionUseCase(stripeService, authRepository as any);
+const verifySessionUseCase = new VerifySessionUseCase(stripeService, authRepository as any, transactionRepository);
 
 const paymentController = new PaymentController(
   createCheckoutSessionUseCase,
@@ -42,7 +42,8 @@ router.post(
 );
 
 // Stripe sends raw body — must be BEFORE any global json parsing touches this route
-router.post("/webhook", express.raw({ type: "application/json" }), (req: any, res: any) =>
+// Since App.ts already handles rawBody via verify callback, we don't need express.raw here
+router.post("/webhook", (req: any, res: any) =>
   paymentController.handleWebhook(req, res),
 );
 

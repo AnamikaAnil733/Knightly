@@ -48,4 +48,18 @@ export default class ETransaction {
   public fail() {
     this._status = "FAILED";
   }
+
+  public toJSON() {
+    return {
+      _id: this._id,
+      userId: this._userId,
+      amount: this._amount,
+      currency: this._currency,
+      status: this._status,
+      stripeSessionId: this._stripeSessionId,
+      stripeSubscriptionId: this._stripeSubscriptionId,
+      type: this._type,
+      createdAt: this._createdAt,
+    };
+  }
 }

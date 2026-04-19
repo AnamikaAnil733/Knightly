@@ -40,11 +40,16 @@ export default class StripeWebhookUseCase {
   }
 
   private async handleSubscriptionCreated(session: any) {
-    const userId = session.client_reference_id;
+    const userId = session.client_reference_id || session.metadata?.userId;
     const subscriptionId = session.subscription as string;
     const customerId = session.customer as string;
 
-    if (userId) {
+    if (!userId) {
+      console.error("Webhook Error: client_reference_id and metadata.userId are missing in session", session.id);
+      return;
+    }
+
+    try {
       const user = await this.userRepository.findById(userId);
       if (user) {
         user.updatePremiumStatus(true, subscriptionId, customerId);
@@ -53,15 +58,30 @@ export default class StripeWebhookUseCase {
         // Record the transaction
         const transaction = new ETransaction({
           userId,
-          amount: session.amount_total / 100, // Convert from cents
-          currency: session.currency,
+          amount: (session.amount_total || 0) / 100, // Convert from cents
+          currency: session.currency || "usd",
           status: "COMPLETED",
           stripeSessionId: session.id,
           stripeSubscriptionId: subscriptionId,
           type: "SUBSCRIPTION",
         });
-        await this.transactionRepository.create(transaction);
+
+        try {
+          await this.transactionRepository.create(transaction);
+        } catch (error: any) {
+          if (error.code === 11000) {
+            console.log("Transaction already recorded for session:", session.id);
+          } else {
+            console.error("Error creating transaction in webhook:", error.message);
+            throw error;
+          }
+        }
+      } else {
+        console.error("Webhook Error: User not found for ID:", userId);
       }
+    } catch (error: any) {
+      console.error("Webhook Error in handleSubscriptionCreated:", error.message);
+      throw error;
     }
   }
 

@@ -14,13 +14,13 @@ export const CreateBlogSchema = z.object({
     .string()
     .min(50, { message: "Content must be at least 50 characters long" }),
   tags: z.array(z.string()).optional(),
-  category: z.nativeEnum(BlogCategory, {
+  category: z.enum(BlogCategory, {
     message: "Invalid blog category",
   }),
   coverImage: z.string().optional().or(z.literal("")),
   authorId: z.string().min(1, { message: "Author ID is required" }),
   authorName: z.string().min(1, { message: "Author Name is required" }),
-  authorRole: z.nativeEnum(BlogAuthorRole, {
+  authorRole: z.enum(BlogAuthorRole, {
     message: "Invalid author role",
   }),
 });
@@ -42,13 +42,13 @@ export const UpdateBlogSchema = z.object({
     .min(50, { message: "Content must be at least 50 characters long" })
     .optional(),
   tags: z.array(z.string()).optional(),
-  category: z.nativeEnum(BlogCategory).optional(),
+  category: z.enum(BlogCategory).optional(),
   coverImage: z.string().optional().or(z.literal("")),
 });
 
 export const BlogModerationSchema = z.object({
   id: z.string().min(1, { message: "Blog ID is required" }),
-  status: z.nativeEnum(BlogStatus, {
+  status: z.enum(BlogStatus, {
     message: "Status must be either PUBLISHED or REJECTED",
   }),
   rejectionReason: z.string().optional(),
