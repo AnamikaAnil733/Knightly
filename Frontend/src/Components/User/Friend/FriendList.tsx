@@ -6,7 +6,16 @@ import {
   unblockUser,
 } from "../../../Service/Api/FriendApi";
 import { socket } from "../../../Service/Socket";
-import { User, Swords, UserPlus, UserMinus, Ban, Unlock } from "lucide-react";
+import {
+  User,
+  Swords,
+  UserPlus,
+  UserMinus,
+  Ban,
+  Unlock,
+  Flag,
+} from "lucide-react";
+import { ReportUserModal } from "../Common/ReportUserModal";
 import toast from "react-hot-toast";
 import { IFriend } from "../../../Types/Friend";
 
@@ -17,6 +26,9 @@ interface FriendListProps {
 const FriendList: React.FC<FriendListProps> = ({ userId }) => {
   const [friends, setFriends] = useState<IFriend[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [selectedFriendForReport, setSelectedFriendForReport] =
+    useState<IFriend | null>(null);
 
   useEffect(() => {
     fetchFriends();
@@ -298,11 +310,30 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
                   >
                     <Ban className="w-4 h-4" />
                   </button>
+                  <button
+                    onClick={() => {
+                      setSelectedFriendForReport(friend);
+                      setIsReportModalOpen(true);
+                    }}
+                    title="Report User"
+                    className="p-2 rounded-lg bg-white/5 text-white/40 hover:text-red-500 hover:bg-red-500/20 transition-all"
+                  >
+                    <Flag className="w-4 h-4" />
+                  </button>
                 </div>
               )}
             </div>
           ))}
         </div>
+      )}
+
+      {selectedFriendForReport && (
+        <ReportUserModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          reportedId={selectedFriendForReport.id}
+          reportedName={selectedFriendForReport.displayname}
+        />
       )}
     </div>
   );

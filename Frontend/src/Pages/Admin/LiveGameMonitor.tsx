@@ -24,7 +24,7 @@ type LiveGame = {
 
 export function LiveGameMonitor() {
   const navigate = useNavigate();
-  const [lastRefreshed, setLastRefreshed] = useState<Date>(new Date());
+  const [initialDate] = useState(new Date());
 
   const {
     data: games,
@@ -32,26 +32,23 @@ export function LiveGameMonitor() {
     isError,
     refetch,
     isFetching,
+    dataUpdatedAt,
   } = useQuery<LiveGame[]>({
     queryKey: ["admin-live-games"],
     queryFn: async () => {
       const res = await axios.get("/admin/live-games");
       return res.data;
     },
-    refetchInterval: 10000, // Auto refresh every 10 seconds
+    refetchInterval: 10000,
   });
+
+  const lastRefreshed = dataUpdatedAt ? new Date(dataUpdatedAt) : initialDate;
 
   useEffect(() => {
     if (isError) {
       toast.error("Failed to load live games");
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (!isFetching) {
-      setLastRefreshed(new Date());
-    }
-  }, [isFetching]);
 
   return (
     <div className="w-full min-h-screen p-6 bg-[#0A0F2C]">

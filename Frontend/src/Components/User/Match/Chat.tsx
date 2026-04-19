@@ -12,11 +12,17 @@ interface Message {
 interface ChatPanelProps {
   gameId: string;
   senderName: string;
+  messages: Message[];
+  readOnly?: boolean;
 }
 
-export function ChatPanel({ gameId, senderName }: ChatPanelProps) {
+export function ChatPanel({
+  gameId,
+  senderName,
+  messages,
+  readOnly = false,
+}: ChatPanelProps) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -26,19 +32,6 @@ export function ChatPanel({ gameId, senderName }: ChatPanelProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    // Listen for incoming messages
-    const handleNewMessage = (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-    };
-
-    socket.on("messageReceived", handleNewMessage);
-
-    return () => {
-      socket.off("messageReceived", handleNewMessage);
-    };
-  }, []);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -119,26 +112,28 @@ export function ChatPanel({ gameId, senderName }: ChatPanelProps) {
       </div>
 
       {/* Input */}
-      <div className="relative shrink-0">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Write a message..."
-          className="w-full px-4 py-3 pr-12 rounded-xl bg-[#0A0F2C]/60 border border-[#6B2EFF]/30 text-white text-sm placeholder-[#C9CAD9]/30 focus:outline-none focus:border-[#3A6FF7] focus:ring-1 focus:ring-[#3A6FF7] transition-all"
-        />
-        <button
-          onClick={handleSendMessage}
-          className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all ${
-            message.trim()
-              ? "bg-[#3A6FF7] hover:bg-[#6B2EFF] text-white"
-              : "bg-[#1C2445]/50 text-[#C9CAD9]/30"
-          }`}
-        >
-          <SendIcon className="w-4 h-4" />
-        </button>
-      </div>
+      {!readOnly && (
+        <div className="relative shrink-0">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Write a message..."
+            className="w-full px-4 py-3 pr-12 rounded-xl bg-[#0A0F2C]/60 border border-[#6B2EFF]/30 text-white text-sm placeholder-[#C9CAD9]/30 focus:outline-none focus:border-[#3A6FF7] focus:ring-1 focus:ring-[#3A6FF7] transition-all"
+          />
+          <button
+            onClick={handleSendMessage}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-all ${
+              message.trim()
+                ? "bg-[#3A6FF7] hover:bg-[#6B2EFF] text-white"
+                : "bg-[#1C2445]/50 text-[#C9CAD9]/30"
+            }`}
+          >
+            <SendIcon className="w-4 h-4" />
+          </button>
+        </div>
+      )}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;

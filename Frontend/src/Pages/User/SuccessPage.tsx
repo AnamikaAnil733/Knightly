@@ -41,10 +41,14 @@ const SuccessPage: React.FC = () => {
         // Update Redux state so UI immediately reflects premium status
         dispatch(updateUser({ premium: true }));
         setStatus("success");
-      } catch (err: any) {
+      } catch (err: unknown) {
+        const error = err as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
         const msg =
-          err.response?.data?.message ||
-          err.message ||
+          error.response?.data?.message ||
+          error.message ||
           "Failed to activate premium. Please contact support.";
         setErrorMsg(msg);
         setStatus("error");

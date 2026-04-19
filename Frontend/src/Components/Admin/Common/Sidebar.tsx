@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     {
       icon: <FlagIcon size={20} />,
       name: "Report Center",
-      path: "/reports",
+      path: "/admin/reports",
     },
     {
       icon: <AwardIcon size={20} />,

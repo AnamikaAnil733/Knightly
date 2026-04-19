@@ -20,4 +20,7 @@ export const ADMIN_ROUTES = {
   LIVE_GAMES: "/live-games",
   GET_ANALYTICS: "/analytics",
   SYSTEM_SETTINGS: "/settings",
+
+  REPORTS: "/reports",
+  MODERATE_REPORT: "/reports/:id/status",
 } as const;

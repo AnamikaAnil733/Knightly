@@ -29,18 +29,15 @@ export function Navbar() {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const loadPendingCount = async () => {
-    try {
-      const data = await getPendingRequests();
-      setPendingCount(data.requests?.length || 0);
-    } catch (err) {
-      console.error("Failed to load pending count:", err);
-    }
-  };
-
   useEffect(() => {
     if (user) {
-      loadPendingCount();
+      getPendingRequests()
+        .then((data) => {
+          setPendingCount(data.requests?.length || 0);
+        })
+        .catch((err) => {
+          console.error("Failed to load pending count:", err);
+        });
       socket.on("receive_friend_request", () => {
         setPendingCount((prev) => prev + 1);
       });

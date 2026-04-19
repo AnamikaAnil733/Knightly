@@ -6,7 +6,6 @@ import {
   UserPlus,
   ArrowRight,
   ShieldCheck,
-  FileText,
   Puzzle,
   BookOpen,
   MonitorPlay,
@@ -18,8 +17,19 @@ import { useEffect } from "react";
 
 type AnalyticsData = {
   stats: { label: string; value: string; icon: string }[];
-  recentTransactions: any[];
-  recentUsers: any[];
+  recentTransactions: {
+    _id: string;
+    amount: number;
+    createdAt: string;
+    userId?: { displayname: string; email: string };
+  }[];
+  recentUsers: {
+    _id: string;
+    displayname: string;
+    createdAt: string;
+    avatarKey?: string;
+    role: string;
+  }[];
 };
 
 export function AdminDashboard() {

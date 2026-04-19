@@ -11,6 +11,7 @@ import { GameOver } from "../../Components/User/Match/GameOver";
 import { ResignModal } from "../../Components/User/Match/ResignModal";
 import { DrawOfferModal } from "../../Components/User/Match/DrawOfferModal";
 import { RematchModal } from "../../Components/User/Match/RematchModal";
+import { ReportUserModal } from "../../Components/User/Common/ReportUserModal";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
 
@@ -24,11 +25,13 @@ import {
 
 import { BoardGrid, MoveDTO } from "../../Types/Chess";
 import { Turn, GameStatus } from "../../Types/Chess";
+import { ArrowLeft } from "lucide-react";
 
 export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
+  const admin = useSelector((state: RootState) => state.adminAuth.admin);
 
   const [board, setBoard] = useState<BoardGrid>([]);
   const [turn, setTurn] = useState<Turn>("WHITE");
@@ -59,6 +62,14 @@ export function Match() {
   const [myRole, setMyRole] = useState<"WHITE" | "BLACK" | "SPECTATOR" | null>(
     null,
   );
+  const [messages, setMessages] = useState<
+    { sender: string; text: string; time: string }[]
+  >([]);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportedUser, setReportedUser] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
   const myRoleRef = useRef(myRole);
   useEffect(() => {
     myRoleRef.current = myRole;
@@ -141,6 +152,10 @@ export function Match() {
       setIsRematchOffered(false);
     });
 
+    socket.on("messageReceived", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
     return () => {
       socket.off("gameUpdated");
       socket.off("moveError");
@@ -148,6 +163,7 @@ export function Match() {
       socket.off("drawOffered");
       socket.off("rematchOffered");
       socket.off("matchFound");
+      socket.off("messageReceived");
     };
   }, [navigate]);
   useEffect(() => {
@@ -309,10 +325,27 @@ export function Match() {
     }
   };
 
+  const handleReport = (player: { id: string; name: string }) => {
+    setReportedUser(player);
+    setIsReportModalOpen(true);
+  };
+
   if (!gameId || board.length === 0) {
     return (
-      <div className="w-full h-screen flex items-center justify-center text-white">
-        Loading game...
+      <div className="w-full h-screen bg-[#070B24] flex overflow-hidden relative">
+        {/* Admin Back Button Overlay (Spectators only) */}
+        {admin && myRole === "SPECTATOR" && (
+          <button
+            onClick={() => navigate("/admin/live-games")}
+            className="absolute top-4 left-4 z-[100] px-4 py-2 bg-[#FFD166] text-black rounded-lg font-bold flex items-center gap-2 hover:bg-[#FFD166]/80 transition-all shadow-xl shadow-black/50"
+          >
+            <ArrowLeft size={16} /> Back to Live Monitor
+          </button>
+        )}
+
+        <div className="w-full h-screen flex items-center justify-center text-white">
+          Loading game...
+        </div>
       </div>
     );
   }
@@ -335,9 +368,25 @@ export function Match() {
       {/* Header */}
       <div className="w-full px-6 py-3 bg-[#11193F]/40 backdrop-blur-sm border-b border-[#FFD166]/20 shrink-0 z-50">
         <div className="max-w-[1920px] mx-auto flex justify-between items-center text-white">
-          <h1 className="text-2xl font-bold text-[#FFD166] tracking-tight">
-            Knightly
-          </h1>
+          <div className="flex items-center gap-4">
+            {admin && myRole === "SPECTATOR" && (
+              <button
+                onClick={() => navigate("/admin/live-games")}
+                className="p-2 bg-[#FFD166]/10 hover:bg-[#FFD166]/20 rounded-lg text-[#FFD166] transition-all border border-[#FFD166]/20 flex items-center gap-2 group"
+              >
+                <ArrowLeft
+                  size={16}
+                  className="group-hover:-translate-x-1 transition-transform"
+                />
+                <span className="text-xs font-bold uppercase tracking-wider">
+                  Monitor
+                </span>
+              </button>
+            )}
+            <h1 className="text-2xl font-bold text-[#FFD166] tracking-tight">
+              Knightly
+            </h1>
+          </div>
           <span className="text-sm font-medium opacity-80 bg-[#ffffff]/10 px-3 py-1 rounded-full border border-[#ffffff]/10">
             {turn} to move
           </span>
@@ -496,19 +545,34 @@ export function Match() {
             <ChatPanel
               gameId={gameId || ""}
               senderName={user?.displayname || "Observer"}
+              messages={messages}
             />
           </div>
 
           {/* Controls: Bottom Section */}
           <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
-            <ControlBar onResign={handleResign} onDraw={handleOfferDraw} />
+            <ControlBar
+              onResign={handleResign}
+              onDraw={handleOfferDraw}
+              onReport={() => {
+                const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
+                if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
+              }}
+            />
           </div>
         </div>
 
         {/* Mobile/Tablet View for Sidebar */}
         <div className="lg:hidden w-full flex flex-col gap-4 p-4 bg-[#0A0F2C]">
           <div className="flex justify-center">
-            <ControlBar onResign={handleResign} onDraw={handleOfferDraw} />
+            <ControlBar
+              onResign={handleResign}
+              onDraw={handleOfferDraw}
+              onReport={() => {
+                const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
+                if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
+              }}
+            />
           </div>
           <div className="h-64">
             <MoveList history={history} status={status} />
@@ -517,10 +581,22 @@ export function Match() {
             <ChatPanel
               gameId={gameId || ""}
               senderName={user?.displayname || "Observer"}
+              messages={messages}
             />
           </div>
         </div>
       </div>
+
+      {reportedUser && (
+        <ReportUserModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          reportedId={reportedUser.id}
+          reportedName={reportedUser.name}
+          gameId={gameId}
+          chatMessages={messages}
+        />
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
   userPuzzleController,
   leaderBoardController,
   friendController,
+  reportController,
 } from "../../Infrastructure/Composition/UserComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
 import { blogController } from "../../Infrastructure/Composition/BlogComposition";
@@ -118,5 +119,8 @@ export class UserRoutes {
     this.router.post(USER_ROUTES.BLOG_COMMENTS, blogController.addComment);
     this.router.get(USER_ROUTES.BLOG_COMMENTS, blogController.getComments);
     this.router.delete(USER_ROUTES.BLOG_DELETE_COMMENT, blogController.deleteComment);
+
+    // Report Route
+    this.router.post(USER_ROUTES.REPORT, reportController.handleCreateReport);
   }
 }

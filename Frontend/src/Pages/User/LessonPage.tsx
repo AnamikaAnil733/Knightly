@@ -55,8 +55,12 @@ const LessonPage: React.FC = () => {
           const next = sorted[idx + 1];
           setNextLesson({ id: next.id, title: next.title });
         }
-      } catch (err: any) {
-        const msg = err.response?.data?.message || err.message || "";
+      } catch (err: unknown) {
+        const error = err as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
+        const msg = error.response?.data?.message || error.message || "";
         if (msg.includes("Premium membership required")) {
           setIsPremiumLocked(true);
         }

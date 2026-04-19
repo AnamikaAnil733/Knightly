@@ -41,7 +41,7 @@ export const SystemSettingsProvider: React.FC<{ children: ReactNode }> = ({
     },
     staleTime: 1000 * 5, // Reduce to 5 seconds for better reactivity
     placeholderData: defaultSettings,
-  } as any);
+  });
 
   return (
     <SystemSettingsContext.Provider
@@ -52,6 +52,7 @@ export const SystemSettingsProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSystemSettings = () => {
   const context = useContext(SystemSettingsContext);
   if (context === undefined) {

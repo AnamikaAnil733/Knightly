@@ -8,6 +8,7 @@ import { getAllUserController,
   getAdminAnalyticsController,
   systemSettingsController,
   PuzzleManagementController,
+  adminReportController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
 import { blogController } from "../../Infrastructure/Composition/BlogComposition";
@@ -59,5 +60,9 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.BLOGS, blogController.adminGetAllBlogs);
     this.router.get(ADMIN_ROUTES.GET_BLOG_BY_ID, blogController.adminGetBlogById);
     this.router.patch(ADMIN_ROUTES.MODERATE_BLOG, blogController.moderateBlog);
+
+    // Report management routes
+    this.router.get(ADMIN_ROUTES.REPORTS, adminReportController.handleGetReports);
+    this.router.patch(ADMIN_ROUTES.MODERATE_REPORT, adminReportController.handleUpdateStatus);
   }
 }

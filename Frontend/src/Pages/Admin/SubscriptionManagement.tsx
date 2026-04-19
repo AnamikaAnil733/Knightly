@@ -17,8 +17,8 @@ type SubscriptionResponse = {
 };
 
 type StatsResponse = {
-  stats: any[];
-  revenueData: any[];
+  stats: { label: string; value: string | number; icon: string }[];
+  revenueData: { date: string; amount: number }[];
 };
 
 const LIMIT = 10;

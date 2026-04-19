@@ -3,6 +3,7 @@ import { ChessGameRepository } from "../Repository/GameRepository";
 import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { FriendshipRepository } from "../Repository/FriendshipRepository";
+import { ReportRepository } from "../Repository/ReportRepository";
 
 import { EditProfileController } from "../../Presentation/Controllers/User/ProfileManagement/UpdateProfileController";
 import { ChangePassswordController } from "../../Presentation/Controllers/User/ProfileManagement/ChangePasswordController";
@@ -10,6 +11,7 @@ import { AvatarController } from "../../Presentation/Controllers/User/ProfileMan
 import { GameController } from "../../Presentation/Controllers/User/GameManagement/GameController";
 import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
 import { FriendController } from "../../Presentation/Controllers/User/FriendManagement/FriendController";
+import { ReportController } from "../../Presentation/Controllers/User/Report/ReportController";
 
 import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
 import { ChangePasswordUseCase } from "../../Application/UseCases/User/ProfileManagement/ChangePasswordUseCase";
@@ -37,6 +39,7 @@ import RejectFriendRequestUseCase from "../../Application/UseCases/User/FriendMa
 import UnfriendUseCase from "../../Application/UseCases/User/FriendManagement/UnfriendUseCase";
 import BlockUserUseCase from "../../Application/UseCases/User/FriendManagement/BlockUserUseCase";
 import UnblockUserUseCase from "../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
+import { CreateReportUseCase } from "../../Application/UseCases/User/Report/CreateReportUseCase";
 
 
 import { TokenService } from "../Services/TokenService";
@@ -59,6 +62,7 @@ const PuzzleRepo = new PuzzleManagementRepository();
 const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 const LeaderRepo = new LeaderBoardRepository();
 const FriendshipRepo = new FriendshipRepository();
+const ReportRepo = new ReportRepository();
 
 //service
 const tokenService = new TokenService();
@@ -103,6 +107,7 @@ const rejectFriendRequestUseCase = new RejectFriendRequestUseCase(FriendshipRepo
 const unfriendUseCase = new UnfriendUseCase(FriendshipRepo);
 const blockUserUseCase = new BlockUserUseCase(FriendshipRepo);
 const unblockUserUseCase = new UnblockUserUseCase(FriendshipRepo);
+const createReportUseCase = new CreateReportUseCase(ReportRepo);
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
@@ -142,4 +147,5 @@ export const friendController = new FriendController(
   blockUserUseCase,
   unblockUserUseCase,
 );
+export const reportController = new ReportController(createReportUseCase);
 export const userRoutes = new UserRoutes(tokenService);

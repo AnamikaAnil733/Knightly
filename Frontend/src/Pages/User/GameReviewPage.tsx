@@ -22,6 +22,7 @@ export function GameReviewPage() {
   const user = useSelector((state: RootState) => state.userAuth.user);
 
   const [loading, setLoading] = useState(true);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [board, setBoard] = useState<BoardGrid>([]);
@@ -32,7 +33,7 @@ export function GameReviewPage() {
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
 
   useEffect(() => {
-    const fetchReview = async () => {
+    const fetchGameData = async () => {
       if (!gameId) return;
       try {
         setLoading(true);
@@ -41,26 +42,32 @@ export function GameReviewPage() {
         setFens(generatedFens);
         setMoveHistory(game.history);
 
-        if (user?.premium) {
-          const reviewAnalysis = await getGameReview(gameId);
-          setReviewData(reviewAnalysis);
-        } else {
-          setReviewData([]);
-        }
-
         // Start at the beginning
         setCurrentMoveIndex(0);
         setBoard(fenToBoardGrid(generatedFens[0]));
+        setLoading(false);
+
+        // Fetch analysis in background
+        if (user?.premium) {
+          setAnalysisLoading(true);
+          try {
+            const reviewAnalysis = await getGameReview(gameId);
+            setReviewData(reviewAnalysis);
+          } catch (err) {
+            console.error("Analysis failed:", err);
+          } finally {
+            setAnalysisLoading(false);
+          }
+        }
       } catch (err) {
         console.error(err);
-        setError("Failed to load game review.");
-      } finally {
+        setError("Failed to load game.");
         setLoading(false);
       }
     };
 
-    fetchReview();
-  }, [gameId]);
+    fetchGameData();
+  }, [gameId, user?.premium]);
 
   useEffect(() => {
     if (
@@ -76,14 +83,14 @@ export function GameReviewPage() {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center text-white bg-gradient-to-br from-[#0A0F2C] to-[#1B1452]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
-        <h2>Analyzing Game with Stockfish...</h2>
+        <h2>Loading Game Replay...</h2>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="w-full h-screen flex -col items-center justify-center text-white bg-gradient-to-br from-[#0A0F2C] to-[#1B1452]">
+      <div className="w-full h-screen flex flex-col items-center justify-center text-white bg-gradient-to-br from-[#0A0F2C] to-[#1B1452]">
         <p className="text-red-500 mb-4">{error}</p>
         <button
           onClick={() => navigate(-1)}
@@ -99,11 +106,6 @@ export function GameReviewPage() {
     currentMoveIndex > 0 ? reviewData[currentMoveIndex - 1] : null;
 
   // Evaluation Bar logic
-  // Score is usually pawns * 100 on backend, but wait, we kept it as centipawns string or number
-  // Stockfish gives score in centipawns for the side to move. We negated it on the backend?
-  // Let's assume currentReview.evaluation.score is from white's perspective for simplicity or just display it.
-  // Actually, our backend review logic gave: currentEval
-  // Let's just use the raw score and mate to calculate fill percentage.
   let evalScore = 0;
   if (currentReview?.evaluation) {
     const { score, mate } = currentReview.evaluation;
@@ -208,6 +210,14 @@ export function GameReviewPage() {
         <div className="w-full lg:w-[400px] flex flex-col bg-[#11193F]/50 rounded-xl border border-white/10 overflow-hidden">
           {/* Current Move Analysis Banner */}
           <div className="p-4 border-b border-white/10 bg-black/20 flex flex-col items-center justify-center min-h-[160px] relative">
+            {analysisLoading && (
+              <div className="absolute top-2 right-2 flex items-center gap-2 px-2 py-1 bg-blue-500/20 rounded border border-blue-500/30">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-bold text-blue-400">
+                  Analysis Pending...
+                </span>
+              </div>
+            )}
             {currentMoveIndex === 0 ? (
               <h2 className="text-xl font-bold text-gray-300">
                 Starting Position

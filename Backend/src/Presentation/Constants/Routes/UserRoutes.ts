@@ -50,4 +50,6 @@ export const USER_ROUTES = {
 
   LEARN:"/learn",
   LEARN_ID:"/learn/:id",
+
+  REPORT: "/reports",
 } as const;

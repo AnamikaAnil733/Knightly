@@ -123,11 +123,13 @@ export interface GameOutputDTO{
       turn: "WHITE" | "BLACK";
     };
     whitePlayer?: {
+        id: string;
         name: string;
         rating: number;
         avatar: string | null;
     };
     blackPlayer?: {
+        id: string;
         name: string;
         rating: number;
         avatar: string | null;

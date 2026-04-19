@@ -39,6 +39,8 @@ import { AnalyticsDashboard } from "../Pages/Admin/AnalyticsDashboard";
 import { AdminDashboard } from "../Pages/Admin/AdminDashboard";
 import { SystemSettings } from "../Pages/Admin/SystemSettings";
 import { MaintenancePage } from "../Pages/User/MaintenancePage";
+import { ReportManagement } from "../Pages/Admin/ReportManagement";
+import { AdminMatchReview } from "../Pages/Admin/AdminMatchReview";
 import { useSystemSettings } from "../Context/SystemSettingsContext";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -140,6 +142,8 @@ export default function AppRoutes() {
         <Route path="live-games" element={<LiveGameMonitor />} />
         <Route path="analytics" element={<AnalyticsDashboard />} />
         <Route path="settings" element={<SystemSettings />} />
+        <Route path="reports" element={<ReportManagement />} />
+        <Route path="reports/review/:gameId" element={<AdminMatchReview />} />
       </Route>
     </Routes>
   );

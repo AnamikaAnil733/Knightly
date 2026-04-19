@@ -1,10 +1,12 @@
 import { UserManagementRepository } from "../Repository/UserRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
+import { ReportRepository } from "../Repository/ReportRepository";
 
 import { GetAllUserController } from "../../Presentation/Controllers/Admin/UserManagement/FindallUserController";
 import {  BlockUserController }  from "../../Presentation/Controllers/Admin/UserManagement/BlockUserController";
 import {  UnBlockUserController } from "../../Presentation/Controllers/Admin/UserManagement/UnBlockUserController";
 import { AdminPuzzleController } from "../../Presentation/Controllers/Admin/PuzzleManagement/PuzzleManagementAdmin";
+import { AdminReportController } from "../../Presentation/Controllers/Admin/Report/AdminReportController";
 
 import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
@@ -30,6 +32,8 @@ import { GetAdminAnalyticsController } from "../../Presentation/Controllers/Admi
 import { SystemSettingsRepository } from "../Repository/SystemSettingsRepository";
 import { GetSystemSettingsUseCase } from "../../Application/UseCases/Admin/Settings/GetSystemSettingsUseCase";
 import { UpdateSystemSettingsUseCase } from "../../Application/UseCases/Admin/Settings/UpdateSystemSettingsUseCase";
+import { GetReportsUseCase } from "../../Application/UseCases/Admin/Report/GetReportsUseCase";
+import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Report/UpdateReportStatusUseCase";
 import { SystemSettingsController } from "../../Presentation/Controllers/Admin/Settings/SystemSettingsController";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 import { PuzzleGeneratorService } from "../Services/PuzzleGeneratorService";
@@ -49,6 +53,7 @@ const puzzleMangementRepo = new PuzzleManagementRepository();
 const transactionRepo = new TransactionRepository();
 const analyticsRepo = new AnalyticsRepository(AuthModel, GameModel, TransactionModel);
 const systemSettingsRepo = new SystemSettingsRepository(SystemSettingsModel);
+const reportRepo = new ReportRepository();
 
 //service
 const tokenService = new TokenService();
@@ -67,6 +72,8 @@ const getAllLiveGamesUseCase = new GetAllLiveGamesUseCase(chessGameRepo, authRep
 const getAdminAnalyticsUseCase = new GetAdminAnalyticsUseCase(analyticsRepo);
 const getSystemSettingsUseCase = new GetSystemSettingsUseCase(systemSettingsRepo);
 const updateSystemSettingsUseCase = new UpdateSystemSettingsUseCase(systemSettingsRepo);
+const getReportsUseCase = new GetReportsUseCase(reportRepo);
+const updateReportStatusUseCase = new UpdateReportStatusUseCase(reportRepo);
 const createPuzzleUseCase = new CreatePuzzleUseCase(
   puzzleMangementRepo,
   puzzleValidationService,
@@ -113,6 +120,7 @@ export const systemSettingsController = new SystemSettingsController(
   getSystemSettingsUseCase,
   updateSystemSettingsUseCase,
 );
+export const adminReportController = new AdminReportController(getReportsUseCase, updateReportStatusUseCase);
 
 export const PuzzleManagementController = new AdminPuzzleController(
   createPuzzleUseCase,

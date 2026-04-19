@@ -35,7 +35,8 @@ export class GetGameUseCase implements IGetGameUseCase {
     const whiteId = game.getWhitePlayerId();
     const blackId = game.getBlackPlayerId();
 
-    let whitePlayer, blackPlayer;
+    let whitePlayer: { id: string; name: string; rating: number; avatar: string | null } | undefined;
+    let blackPlayer: { id: string; name: string; rating: number; avatar: string | null } | undefined;
 
     const timeControlConfig = TIME_CONTROLS[game.getTimeControl()] || TIME_CONTROLS["5+0"];
     const ratingMode = timeControlConfig.mode;
@@ -47,11 +48,17 @@ export class GetGameUseCase implements IGetGameUseCase {
       if (whiteId === "stockfish-bot") {
         const difficulty = game.getDifficulty() || 1;
         const botRating = 400 * difficulty;
-        whitePlayer = { name: "Stockfish Engine (Lvl " + difficulty + ")", rating: botRating, avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg" };
+        whitePlayer = {
+          id: "stockfish-bot",
+          name: "Stockfish Engine (Lvl " + difficulty + ")",
+          rating: botRating,
+          avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+        };
       } else {
         const user = await this._userRepo.findById(whiteId);
         if (user) {
           whitePlayer = {
+            id: user.id!,
             name: user.displayname,
             rating: user.getRating(ratingMode),
             avatar: user.avatarKey
@@ -66,11 +73,17 @@ export class GetGameUseCase implements IGetGameUseCase {
       if (blackId === "stockfish-bot") {
         const difficulty = game.getDifficulty() || 1;
         const botRating = 400 * difficulty;
-        blackPlayer = { name: "Stockfish Engine (Lvl " + difficulty + ")", rating: botRating, avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg" };
+        blackPlayer = {
+          id: "stockfish-bot",
+          name: "Stockfish Engine (Lvl " + difficulty + ")",
+          rating: botRating,
+          avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+        };
       } else {
         const user = await this._userRepo.findById(blackId);
         if (user) {
           blackPlayer = {
+            id: user.id!,
             name: user.displayname,
             rating: user.getRating(ratingMode),
             avatar: user.avatarKey

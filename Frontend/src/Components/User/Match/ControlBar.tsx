@@ -1,12 +1,13 @@
-import { FlagIcon, HandshakeIcon } from "lucide-react";
+import { FlagIcon, HandshakeIcon, AlertTriangle } from "lucide-react";
 
 type ControlBarProps = {
   onResign?: () => void;
   onDraw?: () => void;
   onRematch?: () => void;
+  onReport?: () => void;
 };
 
-export function ControlBar({ onResign, onDraw }: ControlBarProps) {
+export function ControlBar({ onResign, onDraw, onReport }: ControlBarProps) {
   return (
     <div className="grid grid-cols-3 lg:grid-cols-1 gap-3 w-full">
       {/* Offer Draw */}
@@ -34,6 +35,19 @@ export function ControlBar({ onResign, onDraw }: ControlBarProps) {
           <FlagIcon className="w-5 h-5 text-[#E74C3C] group-hover:scale-110 transition-transform" />
           <span className="font-medium text-[#E74C3C]/90 group-hover:text-[#E74C3C] text-sm">
             Resign
+          </span>
+        </div>
+      </button>
+
+      {/* Report */}
+      <button
+        onClick={onReport}
+        className="group w-full px-4 py-3 rounded-xl bg-orange-600/5 hover:bg-orange-600/10 border border-orange-600/20 hover:border-orange-600/40 transition-all duration-300"
+      >
+        <div className="flex items-center justify-center gap-3">
+          <AlertTriangle className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" />
+          <span className="font-medium text-orange-500/90 group-hover:text-orange-500 text-sm">
+            Report
           </span>
         </div>
       </button>

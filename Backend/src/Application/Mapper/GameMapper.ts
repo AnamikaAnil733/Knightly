@@ -5,8 +5,8 @@ import { GameOutputDTO, GameHistoryDTO, MoveDTO } from "../../Domain/DTOs/UserDT
 export class GameMapper {
   static toGameOutputDTO(
     game: ChessGame,
-    whitePlayer: { name: string; rating: number; avatar: string | null } | undefined,
-    blackPlayer: { name: string; rating: number; avatar: string | null } | undefined,
+    whitePlayer: { id: string; name: string; rating: number; avatar: string | null } | undefined,
+    blackPlayer: { id: string; name: string; rating: number; avatar: string | null } | undefined,
     modeName: string,
   ): GameOutputDTO {
     const gameState = game.getGameState();

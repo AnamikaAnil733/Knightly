@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Settings,
@@ -36,9 +36,12 @@ export function SystemSettings() {
     },
   });
 
-  useEffect(() => {
-    if (data) setFormData(data);
-  }, [data]);
+  // Initialize formData when data is loaded
+  const [prevData, setPrevData] = useState<SettingsData | null>(null);
+  if (data && data !== prevData) {
+    setPrevData(data);
+    setFormData(data);
+  }
 
   const updateMutation = useMutation({
     mutationFn: async (updatedSettings: SettingsData) => {
@@ -57,7 +60,7 @@ export function SystemSettings() {
   const handleChange = (
     section: keyof SettingsData,
     field: string,
-    value: any,
+    value: string | number | boolean,
   ) => {
     if (!formData) return;
     setFormData({
@@ -122,7 +125,7 @@ export function SystemSettings() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as "general" | "billing")}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${
                   activeTab === tab.id
                     ? "bg-[#FFD166] text-[#0A0F2C] shadow-lg shadow-[#FFD166]/10"

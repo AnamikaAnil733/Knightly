@@ -122,11 +122,13 @@ export function PuzzleSolvingPage() {
       setPlayerSide(newGame.turn() === "w" ? "white" : "black");
       setMoveIndex(0);
       setLoading(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
       const errorMessage =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to load puzzle";
+        err.response?.data?.message || err.message || "Failed to load puzzle";
 
       if (
         errorMessage.includes("Daily puzzle limit reached") ||

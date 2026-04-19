@@ -1,14 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Crown,
-  X,
-  Check,
-  ArrowRight,
-  Star,
-  Sparkles,
-  BookOpen,
-} from "lucide-react";
+import { Crown, X, Star, Sparkles, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface PremiumModalProps {

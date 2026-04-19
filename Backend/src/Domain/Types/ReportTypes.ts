@@ -1,0 +1,13 @@
+export enum ReportReason {
+  CHEATING = "CHEATING",
+  HARASSMENT = "HARASSMENT",
+  SPAM = "SPAM",
+  INAPPROPRIATE_CONTENT = "INAPPROPRIATE_CONTENT",
+  OTHER = "OTHER",
+}
+
+export enum ReportStatus {
+  PENDING = "PENDING",
+  RESOLVED = "RESOLVED",
+  DISMISSED = "DISMISSED",
+}

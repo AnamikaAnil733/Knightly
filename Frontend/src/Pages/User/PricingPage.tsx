@@ -23,9 +23,10 @@ const PricingPage: React.FC = () => {
     try {
       const { url } = await PaymentService.createCheckoutSession();
       window.location.href = url;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
       toast.error(
-        error.response?.data?.message || "Failed to start upgrade process",
+        err.response?.data?.message || "Failed to start upgrade process",
       );
     }
   };
