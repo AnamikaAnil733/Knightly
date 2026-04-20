@@ -1,15 +1,17 @@
 import { IStripeService } from "../../../Domain/Interface/Service/IStripeService";
 import { IBaseRepository } from "../../../Domain/Interface/Repositories/IBaseRepository";
+import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
 import EAuth from "../../../Domain/Entity/Auth";
 import ETransaction from "../../../Domain/Entity/Transaction";
 import { ITransactionRepository } from "../../../Domain/Interface/Repositories/ITransactionRepository";
 import StripeService from "../../../Infrastructure/Services/StripeService";
 import Stripe from "stripe";
+import IStripeWebhookUseCase from "../../../Domain/Interface/Usecases/Payment/IStripeWebhookUseCase";
 
-export default class StripeWebhookUseCase {
+export default class StripeWebhookUseCase implements IStripeWebhookUseCase {
   constructor(
     private stripeService: StripeService,
-    private userRepository: IBaseRepository<EAuth, string>,
+    private userRepository: IUserRepository,
     private transactionRepository: ITransactionRepository,
   ) {}
 
@@ -87,8 +89,19 @@ export default class StripeWebhookUseCase {
 
   private async handleSubscriptionDeleted(subscription: any) {
     const customerId = subscription.customer as string;
-    // Find user by customerId in repository
-    // This might need a new method in repository: findByStripeCustomerId
-    // For now, I'll assume we can update by checking subscriptionId or similar
+    
+    try {
+      const user = await this.userRepository.findByStripeCustomerId(customerId);
+      if (user) {
+        user.updatePremiumStatus(false);
+        await this.userRepository.update(user);
+        console.log(`Premium status revoked for user: ${user.email} (Stripe Customer: ${customerId})`);
+      } else {
+        console.error("Webhook Error: User not found for Stripe Customer ID:", customerId);
+      }
+    } catch (error: any) {
+      console.error("Webhook Error in handleSubscriptionDeleted:", error.message);
+      throw error;
+    }
   }
 }

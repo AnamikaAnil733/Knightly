@@ -5,8 +5,9 @@ import { CustomError } from "../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
 import { ITransactionRepository } from "../../../Domain/Interface/Repositories/ITransactionRepository";
 import ETransaction from "../../../Domain/Entity/Transaction";
+import IVerifySessionUseCase from "../../../Domain/Interface/Usecases/Payment/IVerifySessionUseCase";
 
-export default class VerifySessionUseCase {
+export default class VerifySessionUseCase implements IVerifySessionUseCase {
   constructor(
     private stripeService: IStripeService,
     private userRepository: IBaseRepository<EAuth, string>,

@@ -2,8 +2,9 @@ import { IStripeService } from "../../../Domain/Interface/Service/IStripeService
 import { IBaseRepository } from "../../../Domain/Interface/Repositories/IBaseRepository";
 import EAuth from "../../../Domain/Entity/Auth";
 import { CustomError } from "../../../Domain/Entity/CustomError";
+import ICreateCheckoutSessionUseCase from "../../../Domain/Interface/Usecases/Payment/ICreateCheckoutSessionUseCase";
 
-export default class CreateCheckoutSessionUseCase {
+export default class CreateCheckoutSessionUseCase implements ICreateCheckoutSessionUseCase {
   constructor(
     private stripeService: IStripeService,
     private userRepository: IBaseRepository<EAuth, string>,

@@ -2,8 +2,9 @@ import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { GameHistoryDTO } from "../../../../Domain/DTOs/UserDTOs";
 import { GameMapper } from "../../../Mapper/GameMapper";
+import IGetGameHistoryUseCase from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetGameHistoryUseCase";
 
-export class GetGameHistoryUseCase {
+export class GetGameHistoryUseCase implements IGetGameHistoryUseCase {
   constructor(
     private readonly _gameRepository: IChessGameRepository,
     private readonly _userRepository: IUserManagmentRepository,

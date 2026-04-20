@@ -1,15 +1,7 @@
 import { ISystemSettingsRepository } from "../../../Domain/Interface/Repositories/ISystemSettingsRepository";
+import IGetPublicSettingsUseCase, { IPublicSettings } from "../../../Domain/Interface/Usecases/Settings/IGetPublicSettingsUseCase";
 
-export interface IPublicSettings {
-  platformName: string;
-  maintenanceMode: boolean;
-  contactEmail: string;
-  monthlyPrice: number;
-  annualPrice: number;
-  currency: string;
-}
-
-export class GetPublicSettingsUseCase {
+export class GetPublicSettingsUseCase implements IGetPublicSettingsUseCase {
   constructor(private readonly _repo: ISystemSettingsRepository) {}
 
   async execute(): Promise<IPublicSettings> {

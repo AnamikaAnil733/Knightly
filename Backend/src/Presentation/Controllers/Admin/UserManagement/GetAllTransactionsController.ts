@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import GetAllTransactionsUseCase from "../../../../Application/UseCases/Admin/UserManagement/GetAllTransactionsUseCase";
+import IGetAllTransactionsUseCase from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetAllTransactionsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
 export class GetAllTransactionsController {
-  constructor(private readonly _getAllTransactionsUseCase: GetAllTransactionsUseCase) {}
+  constructor(private readonly _getAllTransactionsUseCase: IGetAllTransactionsUseCase) {}
 
   getAll = async (
     req: Request,

@@ -17,4 +17,9 @@ export class AuthRepository
     const doc = await this.model.findOne({ email }).exec();
     return doc ? this.mapper.toEntityFromDocument(doc) : null;
   }
+
+  async findByStripeCustomerId(customerId: string): Promise<EAuth | null> {
+    const doc = await this.model.findOne({ stripeCustomerId: customerId }).exec();
+    return doc ? this.mapper.toEntityFromDocument(doc) : null;
+  }
 }

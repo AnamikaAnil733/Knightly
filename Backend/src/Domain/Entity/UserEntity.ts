@@ -150,6 +150,12 @@ export default class UserEntity {
     this._premium = isPremium;
     if (subscriptionId) this._stripeSubscriptionId = subscriptionId;
     if (customerId) this._stripeCustomerId = customerId;
-    if (isPremium) this._subscriptionStart = new Date();
+
+    if (isPremium) {
+      this._subscriptionStart = new Date();
+    } else {
+      this._subscriptionStart = undefined;
+      this._stripeSubscriptionId = undefined;
+    }
   }
 }

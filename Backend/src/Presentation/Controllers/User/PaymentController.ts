@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import CreateCheckoutSessionUseCase from "../../../Application/UseCases/Payment/CreateCheckoutSessionUseCase";
-import StripeWebhookUseCase from "../../../Application/UseCases/Payment/StripeWebhookUseCase";
-import VerifySessionUseCase from "../../../Application/UseCases/Payment/VerifySessionUseCase";
+import ICreateCheckoutSessionUseCase from "../../../Domain/Interface/Usecases/Payment/ICreateCheckoutSessionUseCase";
+import IStripeWebhookUseCase from "../../../Domain/Interface/Usecases/Payment/IStripeWebhookUseCase";
+import IVerifySessionUseCase from "../../../Domain/Interface/Usecases/Payment/IVerifySessionUseCase";
 
 export default class PaymentController {
   constructor(
-    private createCheckoutSessionUseCase: CreateCheckoutSessionUseCase,
-    private stripeWebhookUseCase: StripeWebhookUseCase,
-    private verifySessionUseCase: VerifySessionUseCase,
+    private createCheckoutSessionUseCase: ICreateCheckoutSessionUseCase,
+    private stripeWebhookUseCase: IStripeWebhookUseCase,
+    private verifySessionUseCase: IVerifySessionUseCase,
   ) {}
 
   async createCheckoutSession(req: Request, res: Response) {

@@ -15,7 +15,7 @@ import {
   ReviewGameSchema,
 } from "../../../Validators/UserValidator";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
-import { GetGameHistoryUseCase } from "../../../../Application/UseCases/User/GameManagement/GetGameHistoryUseCase";
+import IGetGameHistoryUseCase from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetGameHistoryUseCase";
 
 export class GameController {
   constructor(
@@ -24,7 +24,7 @@ export class GameController {
     private readonly _getLegalMovesUseCase: IGetLegalMovesUseCase,
     private readonly _makeMoveUseCase: IMakeMoveUseCase,
     private readonly _reviewGameUseCase: IReviewGameUseCase,
-    private readonly _getGameHistoryUseCase: GetGameHistoryUseCase,
+    private readonly _getGameHistoryUseCase: IGetGameHistoryUseCase,
     private readonly _getLivePublicGamesUseCase: IGetLivePublicGamesUseCase,
   ) {}
 

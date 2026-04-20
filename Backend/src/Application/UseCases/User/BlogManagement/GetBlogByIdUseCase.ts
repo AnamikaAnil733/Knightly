@@ -19,7 +19,7 @@ export class GetBlogByIdUseCase implements IGetBlogByIdUseCase {
       throw new CustomError(HttpStatusCodes.NOT_FOUND, "Blog post not found");
     }
 
-    // Check ownership: only the author can fetch their own draft/rejected blogs by ID
+    // only the author can fetch their own draft
     if (!blog.isOwnedBy(userId)) {
       throw new CustomError(
         HttpStatusCodes.FORBIDDEN,
