@@ -8,7 +8,7 @@ import { BlogStatus } from "../../../../Domain/Types/Blogtypes";
 import { IModerateBlogUseCase } from "../../../../Domain/Interface/Usecases/Admin/BlogManagement/IModerateBlogUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
-import BlogEntity from "../../../../Domain/Entity/BlogEntity";
+
 
 export class ModerateBlogUseCase implements IModerateBlogUseCase {
   constructor(private readonly _blogRepository: IBlogRepository) {}

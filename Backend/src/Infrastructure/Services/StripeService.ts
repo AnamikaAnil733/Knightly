@@ -32,10 +32,7 @@ export default class StripeService implements IStripeService {
     return session.url!;
   }
 
-  async handleWebhook(sig: string, payload: any): Promise<void> {
-    // This will be implemented in the UseCase to maintain Clean Architecture
-    // But the service might need helper methods to verify signatures
-  }
+
 
   public constructEvent(payload: string | Buffer, sig: string, secret: string): any {
     return this.stripe.webhooks.constructEvent(payload, sig, secret);

@@ -1,11 +1,7 @@
-import { IStripeService } from "../../../Domain/Interface/Service/IStripeService";
-import { IBaseRepository } from "../../../Domain/Interface/Repositories/IBaseRepository";
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
-import EAuth from "../../../Domain/Entity/Auth";
 import ETransaction from "../../../Domain/Entity/Transaction";
 import { ITransactionRepository } from "../../../Domain/Interface/Repositories/ITransactionRepository";
 import StripeService from "../../../Infrastructure/Services/StripeService";
-import Stripe from "stripe";
 import IStripeWebhookUseCase from "../../../Domain/Interface/Usecases/Payment/IStripeWebhookUseCase";
 
 export default class StripeWebhookUseCase implements IStripeWebhookUseCase {
