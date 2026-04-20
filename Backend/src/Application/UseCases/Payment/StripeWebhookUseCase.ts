@@ -89,7 +89,7 @@ export default class StripeWebhookUseCase implements IStripeWebhookUseCase {
 
   private async handleSubscriptionDeleted(subscription: any) {
     const customerId = subscription.customer as string;
-    
+
     try {
       const user = await this.userRepository.findByStripeCustomerId(customerId);
       if (user) {

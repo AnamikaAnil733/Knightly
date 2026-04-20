@@ -9,4 +9,4 @@ export interface IPublicSettings {
 
 export default interface IGetPublicSettingsUseCase {
   execute(): Promise<IPublicSettings>;
-}
+};;;;;;;;;;

@@ -27,7 +27,11 @@ function getUser(userId: PopulatedUser | string | null): PopulatedUser {
   if (userId && typeof userId === "object" && "displayname" in userId) {
     return userId;
   }
-  return { _id: typeof userId === "string" ? userId : "unknown", displayname: "Unknown User", email: "N/A" };
+  return {
+    _id: typeof userId === "string" ? userId : "unknown",
+    displayname: "Unknown User",
+    email: "N/A",
+  };
 }
 
 type TransactionsResponse = {
