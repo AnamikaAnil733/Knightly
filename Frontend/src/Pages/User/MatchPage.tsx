@@ -232,7 +232,15 @@ export function Match() {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [turn, status, gameId, blackPlayer?.name, gameFormat, whitePlayer?.name]);
+  }, [
+    turn,
+    status,
+    gameId,
+    blackPlayer?.name,
+    gameFormat,
+    whitePlayer?.name,
+    isBotMatch,
+  ]);
 
   const handleSquareClick = async (row: number, col: number) => {
     if (!gameId) return;

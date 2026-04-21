@@ -54,7 +54,7 @@ export const AdminBlogManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [filter, debouncedSearch]);
+  }, [filter, debouncedSearch, currentPage, itemsPerPage]);
 
   useEffect(() => {
     const handler = setTimeout(() => {

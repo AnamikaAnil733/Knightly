@@ -47,7 +47,7 @@ const BlogListPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [searchTerm, activeCategory]);
+  }, [searchTerm, activeCategory, currentPage, itemsPerPage]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

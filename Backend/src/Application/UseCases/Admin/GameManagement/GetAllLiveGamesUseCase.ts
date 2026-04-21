@@ -9,7 +9,7 @@ export default class GetAllLiveGamesUseCase implements IGetAllLiveGamesUseCase {
     private readonly userRepository: IBaseRepository<EAuth, string>,
   ) {}
 
-  async execute() {
+  async execute(): Promise<ILiveGameDTO[]> {
     const liveGames = await this.gameRepository.findAllLiveGames();
 
     // Map games with player details
@@ -30,15 +30,17 @@ export default class GetAllLiveGamesUseCase implements IGetAllLiveGamesUseCase {
           status: game.getStatus(),
           timeControl,
           whitePlayer: whitePlayer ? {
+            id: whitePlayer.id!,
             name: whitePlayer.displayname,
             rating: whitePlayer.getRating(this.getRatingType(timeControl)),
             avatar: whitePlayer.avatarUrl || null,
-          } : { name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
+          } : { id: "bot", name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
           blackPlayer: blackPlayer ? {
+            id: blackPlayer.id!,
             name: blackPlayer.displayname,
             rating: blackPlayer.getRating(this.getRatingType(timeControl)),
             avatar: blackPlayer.avatarUrl || null,
-          } : { name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
+          } : { id: "bot", name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
           createdAt: game.createdAt,
         };
       }),
