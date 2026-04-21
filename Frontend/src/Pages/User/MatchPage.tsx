@@ -78,11 +78,13 @@ export function Match() {
   const [whiteTime, setWhiteTime] = useState<number>(0);
   const [blackTime, setBlackTime] = useState<number>(0);
   const [whitePlayer, setWhitePlayer] = useState<{
+    id: string;
     name: string;
     rating: number;
     avatar: string | null;
   } | null>(null);
   const [blackPlayer, setBlackPlayer] = useState<{
+    id: string;
     name: string;
     rating: number;
     avatar: string | null;

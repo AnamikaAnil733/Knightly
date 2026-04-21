@@ -32,11 +32,13 @@ export function GameReviewPage() {
 
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
   const [whitePlayer, setWhitePlayer] = useState<{
+    id: string;
     name: string;
     rating: number;
     avatar: string | null;
   } | null>(null);
   const [blackPlayer, setBlackPlayer] = useState<{
+    id: string;
     name: string;
     rating: number;
     avatar: string | null;

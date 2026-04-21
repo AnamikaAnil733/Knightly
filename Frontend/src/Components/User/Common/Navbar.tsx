@@ -70,7 +70,15 @@ export function Navbar() {
     setIsUserDropdownOpen(false);
   }
 
-  const mainNavLinks = [
+  interface NavLink {
+    to: string;
+    label: string;
+    asExternal?: boolean;
+    icon?: React.ReactNode;
+    hasBadge?: boolean;
+  }
+
+  const mainNavLinks: NavLink[] = [
     { to: "/landing-page", label: "Home" },
     { to: "/play", label: "Play", asExternal: true },
     { to: "/live", label: "Live" },
@@ -86,7 +94,7 @@ export function Navbar() {
     { to: "/about", label: "About" },
   ];
 
-  const userMenuItems = [
+  const userMenuItems: NavLink[] = [
     {
       to: "/user/profile",
       label: "My Profile",

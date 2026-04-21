@@ -79,6 +79,7 @@ export function PuzzleTactics() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
   const [solveCount, setSolveCount] = useState<number>(0);
+  const [, setIsLoadingCount] = useState(true);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
 
   const todayDifficulty = getDailyDifficulty();
