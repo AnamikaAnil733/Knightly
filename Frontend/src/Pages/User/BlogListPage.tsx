@@ -214,7 +214,9 @@ const BlogListPage: React.FC = () => {
               {["ALL", ...Object.values(BlogCategory)].map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => handleCategoryChange(cat as BlogCategory | "ALL")}
+                  onClick={() =>
+                    handleCategoryChange(cat as BlogCategory | "ALL")
+                  }
                   className={`px-6 py-3 rounded-full text-xs font-black uppercase tracking-[2px] transition-all duration-300 whitespace-nowrap ${
                     activeCategory === cat
                       ? "bg-gold text-navy-dark shadow-[0_4px_20px_rgba(212,175,55,0.4)] scale-105"

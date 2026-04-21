@@ -1,6 +1,7 @@
 // eslint.config.js  (must be js, not json)
 
 import js from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
 export default [
@@ -32,7 +33,7 @@ export default [
       "no-trailing-spaces": "error",
       "eol-last": ["error", "always"],
       quotes: ["error", "double", { avoidEscape: true }],
-      semi: ["error", "always"],
+      // semi: ["error", "always"],
       indent: ["error", 2, { SwitchCase: 1 }],
       "comma-dangle": ["error", "always-multiline"],
 
@@ -40,5 +41,6 @@ export default [
       // "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/ban-ts-comment": "off"
     }
-  }
+  },
+  eslintConfigPrettier
 ];

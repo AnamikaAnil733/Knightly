@@ -326,7 +326,9 @@ export function GameReviewPage() {
                 { label: "Blunder", color: "bg-red-500" },
               ].map((l) => (
                 <div key={l.label} className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${l.color} shadow-[0_0_8px_currentColor]`} />
+                  <div
+                    className={`w-2 h-2 rounded-full ${l.color} shadow-[0_0_8px_currentColor]`}
+                  />
                   <span className="font-bold tracking-wide">{l.label}</span>
                 </div>
               ))}
@@ -391,7 +393,7 @@ export function GameReviewPage() {
                 }}
               >
                 <div className="w-full h-full max-w-full max-h-full">
-                   <Chessboard
+                  <Chessboard
                     board={board}
                     selectedSquare={null}
                     legalMoves={[]}
@@ -521,18 +523,27 @@ export function GameReviewPage() {
 
             {currentMoveIndex === 0 ? (
               <div className="text-center p-4">
-                <h3 className="text-lg font-bold text-gray-300">Initial Position</h3>
-                <p className="text-xs text-gray-500">Study the opening strategy.</p>
+                <h3 className="text-lg font-bold text-gray-300">
+                  Initial Position
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Study the opening strategy.
+                </p>
               </div>
             ) : currentReview ? (
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`text-2xl font-black tracking-tighter ${getClassificationColor(currentReview.classification)}`}>
+                  <div
+                    className={`text-2xl font-black tracking-tighter ${getClassificationColor(currentReview.classification)}`}
+                  >
                     {currentReview.classification}
                   </div>
                   <div className="flex-1 h-px bg-white/10" />
                   <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
-                    Eval: {currentReview.evaluation?.mate ? `M${currentReview.evaluation.mate}` : (currentReview.evaluation?.score / 100).toFixed(2)}
+                    Eval:{" "}
+                    {currentReview.evaluation?.mate
+                      ? `M${currentReview.evaluation.mate}`
+                      : (currentReview.evaluation?.score / 100).toFixed(2)}
                   </div>
                 </div>
                 <p className="text-[13px] text-gray-300 leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5 italic">
@@ -545,7 +556,10 @@ export function GameReviewPage() {
                 <h3 className="text-sm font-bold text-yellow-500 mb-1">
                   Master Insights Locked
                 </h3>
-                <Link to="/pricing" className="text-[10px] font-black text-blue-400 hover:underline uppercase tracking-[0.2em]">
+                <Link
+                  to="/pricing"
+                  className="text-[10px] font-black text-blue-400 hover:underline uppercase tracking-[0.2em]"
+                >
                   Upgrade
                 </Link>
               </div>
