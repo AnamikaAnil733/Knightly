@@ -33,12 +33,12 @@ export default class GetAllLiveGamesUseCase implements IGetAllLiveGamesUseCase {
             name: whitePlayer.displayname,
             rating: whitePlayer.getRating(this.getRatingType(timeControl)),
             avatar: whitePlayer.avatarUrl || null,
-          } : { name: "Stockfish", rating: 0, avatar: null },
+          } : { name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
           blackPlayer: blackPlayer ? {
             name: blackPlayer.displayname,
             rating: blackPlayer.getRating(this.getRatingType(timeControl)),
             avatar: blackPlayer.avatarUrl || null,
-          } : { name: "Stockfish", rating: 0, avatar: null },
+          } : { name: "Stockfish", rating: 0, avatar: "/images/stockfish-avatar.png" },
           createdAt: game.createdAt,
         };
       }),

@@ -31,7 +31,7 @@ interface FailedRequest {
 /* ===================== AXIOS INSTANCE ===================== */
 
 const userApi = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true, // REQUIRED for refresh cookies
   headers: {
     "Content-Type": "application/json",

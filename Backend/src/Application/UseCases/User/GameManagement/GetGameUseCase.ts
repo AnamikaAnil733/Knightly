@@ -52,7 +52,7 @@ export class GetGameUseCase implements IGetGameUseCase {
           id: "stockfish-bot",
           name: "Stockfish Engine (Lvl " + difficulty + ")",
           rating: botRating,
-          avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+          avatar: "/images/stockfish-avatar.png",
         };
       } else {
         const user = await this._userRepo.findById(whiteId);
@@ -75,7 +75,7 @@ export class GetGameUseCase implements IGetGameUseCase {
           id: "stockfish-bot",
           name: "Stockfish Engine (Lvl " + difficulty + ")",
           rating: botRating,
-          avatar: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+          avatar: "/images/stockfish-avatar.png",
         };
       } else {
         const user = await this._userRepo.findById(blackId);

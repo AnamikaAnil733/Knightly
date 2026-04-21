@@ -13,6 +13,7 @@ import {
 import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { PenSquareIcon, PlusIcon, Sparkles, Search } from "lucide-react";
+import Pagination from "../../Components/Reuseable/Pagination";
 
 const BlogListPage: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
@@ -21,6 +22,9 @@ const BlogListPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<BlogCategory | "ALL">(
     "ALL",
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 8;
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { scrollY } = useScroll();
 
@@ -33,8 +37,11 @@ const BlogListPage: React.FC = () => {
       const data = await getAllBlogs({
         search: searchTerm,
         category: activeCategory === "ALL" ? undefined : activeCategory,
+        page: currentPage,
+        limit: itemsPerPage,
       });
       setBlogs(data.blogs);
+      setTotalItems(data.total);
     } catch {
       toast.error("Failed to fetch blogs. Please try again later.");
     } finally {
@@ -48,7 +55,16 @@ const BlogListPage: React.FC = () => {
     }, 400); // 400ms debounce
 
     return () => clearTimeout(timer);
-  }, [searchTerm, activeCategory, fetchBlogs]);
+  }, [searchTerm, activeCategory, currentPage, fetchBlogs]);
+
+  const handleCategoryChange = (cat: BlogCategory | "ALL") => {
+    setActiveCategory(cat);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="min-h-screen bg-[#0B1437] font-['Poppins'] text-white overflow-x-hidden relative">
@@ -198,7 +214,7 @@ const BlogListPage: React.FC = () => {
               {["ALL", ...Object.values(BlogCategory)].map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat as BlogCategory | "ALL")}
+                  onClick={() => handleCategoryChange(cat as BlogCategory | "ALL")}
                   className={`px-6 py-3 rounded-full text-xs font-black uppercase tracking-[2px] transition-all duration-300 whitespace-nowrap ${
                     activeCategory === cat
                       ? "bg-gold text-navy-dark shadow-[0_4px_20px_rgba(212,175,55,0.4)] scale-105"
@@ -275,6 +291,17 @@ const BlogListPage: React.FC = () => {
               className="relative z-10"
             >
               <BlogMasonryGrid blogs={blogs} />
+
+              {/* Pagination */}
+              <div className="mt-16 px-12">
+                <Pagination
+                  currentPage={currentPage}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  label="chronicles"
+                />
+              </div>
             </motion.div>
           )}
         </div>

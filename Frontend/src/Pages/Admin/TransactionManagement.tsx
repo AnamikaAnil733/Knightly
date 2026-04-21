@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { DollarSign, SearchIcon, User, ExternalLink } from "lucide-react";
+import { DollarSign, SearchIcon, ExternalLink } from "lucide-react";
 import axios from "../../Service/Api/Axios/Adminaxios";
 
 type PopulatedUser = {
@@ -145,7 +145,7 @@ export function TransactionManagement() {
                         const user = getUser(tx.userId);
                         return (
                           <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-[#1e2547] flex items-center justify-center overflow-hidden border border-[#1e2547]">
+                            {/* <div className="h-10 w-10 rounded-full bg-[#1e2547] flex items-center justify-center overflow-hidden border border-[#1e2547]">
                               {user.avatarUrl ? (
                                 <img
                                   src={user.avatarUrl}
@@ -155,7 +155,7 @@ export function TransactionManagement() {
                               ) : (
                                 <User className="h-5 w-5 text-gray-500" />
                               )}
-                            </div>
+                            </div> */}
                             <div>
                               <p className="text-sm font-medium text-white">
                                 {user.displayname}

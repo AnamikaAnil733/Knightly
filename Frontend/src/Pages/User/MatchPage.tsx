@@ -196,13 +196,16 @@ export function Match() {
     init();
   }, [gameId, navigate]);
 
+  const isBotMatch =
+    gameFormat?.startsWith("level-") ||
+    whitePlayer?.name.includes("Stockfish") ||
+    blackPlayer?.name.includes("Stockfish");
+
   useEffect(() => {
     if (
       (status !== "ACTIVE" && status !== "CHECK") ||
       gameFormat === "NO_TIMER" ||
-      gameFormat.startsWith("level-") ||
-      whitePlayer?.name.includes("Stockfish") ||
-      blackPlayer?.name.includes("Stockfish")
+      isBotMatch
     )
       return;
 
@@ -417,10 +420,7 @@ export function Match() {
                     : blackPlayer?.avatar || ""
                 }
                 time={
-                  gameFormat === "NO_TIMER" ||
-                  gameFormat.startsWith("level-") ||
-                  whitePlayer?.name.includes("Stockfish") ||
-                  blackPlayer?.name.includes("Stockfish")
+                  gameFormat === "NO_TIMER" || isBotMatch
                     ? ""
                     : formatTime(myRole === "BLACK" ? whiteTime : blackTime)
                 }
@@ -519,10 +519,7 @@ export function Match() {
                     : whitePlayer?.avatar || ""
                 }
                 time={
-                  gameFormat === "NO_TIMER" ||
-                  gameFormat.startsWith("level-") ||
-                  whitePlayer?.name.includes("Stockfish") ||
-                  blackPlayer?.name.includes("Stockfish")
+                  gameFormat === "NO_TIMER" || isBotMatch
                     ? ""
                     : formatTime(myRole === "BLACK" ? blackTime : whiteTime)
                 }
@@ -541,13 +538,15 @@ export function Match() {
           </div>
 
           {/* Chat: Middle Section */}
-          <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
-            <ChatPanel
-              gameId={gameId || ""}
-              senderName={user?.displayname || "Observer"}
-              messages={messages}
-            />
-          </div>
+          {!isBotMatch && (
+            <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
+              <ChatPanel
+                gameId={gameId || ""}
+                senderName={user?.displayname || "Observer"}
+                messages={messages}
+              />
+            </div>
+          )}
 
           {/* Controls: Bottom Section */}
           <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
@@ -558,6 +557,8 @@ export function Match() {
                 const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
                 if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
               }}
+              hideDraw={isBotMatch}
+              hideReport={isBotMatch}
             />
           </div>
         </div>
@@ -572,18 +573,22 @@ export function Match() {
                 const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
                 if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
               }}
+              hideDraw={isBotMatch}
+              hideReport={isBotMatch}
             />
           </div>
           <div className="h-64">
             <MoveList history={history} status={status} />
           </div>
-          <div className="h-64">
-            <ChatPanel
-              gameId={gameId || ""}
-              senderName={user?.displayname || "Observer"}
-              messages={messages}
-            />
-          </div>
+          {!isBotMatch && (
+            <div className="h-64">
+              <ChatPanel
+                gameId={gameId || ""}
+                senderName={user?.displayname || "Observer"}
+                messages={messages}
+              />
+            </div>
+          )}
         </div>
       </div>
 

@@ -5,26 +5,38 @@ type ControlBarProps = {
   onDraw?: () => void;
   onRematch?: () => void;
   onReport?: () => void;
+  hideDraw?: boolean;
+  hideReport?: boolean;
 };
 
-export function ControlBar({ onResign, onDraw, onReport }: ControlBarProps) {
+export function ControlBar({
+  onResign,
+  onDraw,
+  onReport,
+  hideDraw = false,
+  hideReport = false,
+}: ControlBarProps) {
   return (
-    <div className="grid grid-cols-3 lg:grid-cols-1 gap-3 w-full">
+    <div
+      className={`grid ${hideDraw && hideReport ? "grid-cols-1" : "grid-cols-3 lg:grid-cols-1"} gap-3 w-full`}
+    >
       {/* Offer Draw */}
-      <button
-        onClick={onDraw}
-        className="group relative w-full px-4 py-3 rounded-xl bg-[#FFD166]/5 hover:bg-[#FFD166]/10 border border-[#FFD166]/20 hover:border-[#FFD166]/40 transition-all duration-300"
-      >
-        <div className="flex items-center justify-center gap-3">
-          <HandshakeIcon className="w-5 h-5 text-[#FFD166] group-hover:scale-110 transition-transform" />
-          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm hidden lg:inline">
-            Offer Draw
-          </span>
-          <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm lg:hidden">
-            Draw
-          </span>
-        </div>
-      </button>
+      {!hideDraw && (
+        <button
+          onClick={onDraw}
+          className="group relative w-full px-4 py-3 rounded-xl bg-[#FFD166]/5 hover:bg-[#FFD166]/10 border border-[#FFD166]/20 hover:border-[#FFD166]/40 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center gap-3">
+            <HandshakeIcon className="w-5 h-5 text-[#FFD166] group-hover:scale-110 transition-transform" />
+            <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm hidden lg:inline">
+              Offer Draw
+            </span>
+            <span className="font-medium text-[#FFD166]/90 group-hover:text-[#FFD166] text-sm lg:hidden">
+              Draw
+            </span>
+          </div>
+        </button>
+      )}
 
       {/* Resign */}
       <button
@@ -40,17 +52,19 @@ export function ControlBar({ onResign, onDraw, onReport }: ControlBarProps) {
       </button>
 
       {/* Report */}
-      <button
-        onClick={onReport}
-        className="group w-full px-4 py-3 rounded-xl bg-orange-600/5 hover:bg-orange-600/10 border border-orange-600/20 hover:border-orange-600/40 transition-all duration-300"
-      >
-        <div className="flex items-center justify-center gap-3">
-          <AlertTriangle className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" />
-          <span className="font-medium text-orange-500/90 group-hover:text-orange-500 text-sm">
-            Report
-          </span>
-        </div>
-      </button>
+      {!hideReport && (
+        <button
+          onClick={onReport}
+          className="group w-full px-4 py-3 rounded-xl bg-orange-600/5 hover:bg-orange-600/10 border border-orange-600/20 hover:border-orange-600/40 transition-all duration-300"
+        >
+          <div className="flex items-center justify-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-orange-500 group-hover:scale-110 transition-transform" />
+            <span className="font-medium text-orange-500/90 group-hover:text-orange-500 text-sm">
+              Report
+            </span>
+          </div>
+        </button>
+      )}
     </div>
   );
 }

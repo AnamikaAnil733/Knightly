@@ -16,6 +16,7 @@ import {
   ChevronLeft,
   Search,
 } from "lucide-react";
+import Pagination from "../../Components/Reuseable/Pagination";
 
 export const AdminBlogManagement: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogResponseDTO[]>([]);
@@ -29,6 +30,9 @@ export const AdminBlogManagement: React.FC = () => {
   const [rejectionReason, setRejectionReason] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 8;
 
   const fetchBlogs = React.useCallback(async () => {
     try {
@@ -36,8 +40,11 @@ export const AdminBlogManagement: React.FC = () => {
       const data = await adminGetAllBlogs({
         status: filter,
         search: debouncedSearch,
+        page: currentPage,
+        limit: itemsPerPage,
       });
       setBlogs(data.blogs);
+      setTotalItems(data.total);
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -52,6 +59,7 @@ export const AdminBlogManagement: React.FC = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchTerm);
+      setCurrentPage(1); // Reset to first page on search
     }, 500);
 
     return () => {
@@ -62,6 +70,11 @@ export const AdminBlogManagement: React.FC = () => {
   useEffect(() => {
     fetchBlogs();
   }, [fetchBlogs]);
+
+  const handleFilterChange = (status: BlogStatus) => {
+    setFilter(status);
+    setCurrentPage(1); // Reset to first page on filter change
+  };
 
   const handleModerate = async (
     id: string,
@@ -124,7 +137,7 @@ export const AdminBlogManagement: React.FC = () => {
           {Object.values(BlogStatus).map((s) => (
             <button
               key={s}
-              onClick={() => setFilter(s)}
+              onClick={() => handleFilterChange(s)}
               className={`px-4 py-2 rounded-md text-xs font-bold transition-all ${
                 filter === s
                   ? "bg-purple-accent text-white"
@@ -218,6 +231,19 @@ export const AdminBlogManagement: React.FC = () => {
           <p className="text-gray-500 font-cinzel">
             No blogs found in this state.
           </p>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {blogs.length > 0 && (
+        <div className="mt-8">
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            label="blogs"
+          />
         </div>
       )}
 

@@ -31,7 +31,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
         currentStreak: 0,
         rewards: [],
         achievements: [],
-        avatarUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+        avatarUrl: "/images/stockfish-avatar.png",
       };
     }
 

@@ -568,27 +568,29 @@ export function GameOver({
             className="w-full flex flex-col gap-3"
           >
             {/* Rematch Button */}
-            <button
-              onClick={onRematch}
-              disabled={rematchRequested && !rematchOffered}
-              className={`w-full py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-white font-semibold text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
-                rematchRequested && !rematchOffered
-                  ? "opacity-70 cursor-not-allowed"
-                  : ""
-              }`}
-              style={{
-                background: t.buttonGradient,
-                boxShadow: t.buttonGlow,
-                fontFamily: "Poppins, sans-serif",
-              }}
-            >
-              <Users className="w-5 h-5" />
-              {rematchOffered
-                ? "Accept Rematch"
-                : rematchRequested
-                  ? "Rematch Requested..."
-                  : "Rematch"}
-            </button>
+            {modeName !== "Play Computer" && (
+              <button
+                onClick={onRematch}
+                disabled={rematchRequested && !rematchOffered}
+                className={`w-full py-3.5 rounded-xl flex items-center justify-center gap-2.5 text-white font-semibold text-base transition-all duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+                  rematchRequested && !rematchOffered
+                    ? "opacity-70 cursor-not-allowed"
+                    : ""
+                }`}
+                style={{
+                  background: t.buttonGradient,
+                  boxShadow: t.buttonGlow,
+                  fontFamily: "Poppins, sans-serif",
+                }}
+              >
+                <Users className="w-5 h-5" />
+                {rematchOffered
+                  ? "Accept Rematch"
+                  : rematchRequested
+                    ? "Rematch Requested..."
+                    : "Rematch"}
+              </button>
+            )}
 
             {/* New Game Button */}
             <button
