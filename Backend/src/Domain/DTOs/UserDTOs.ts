@@ -145,6 +145,7 @@ export interface UserPuzzleResponseDTO {
     fen: string;
     difficulty: PuzzleType;
     description?: string;
+    solution?: string[];
   }
 
 

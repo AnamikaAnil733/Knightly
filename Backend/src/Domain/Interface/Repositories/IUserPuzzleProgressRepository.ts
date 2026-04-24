@@ -8,4 +8,5 @@ export interface IUserPuzzleProgressRepository {
   save(progress: EUserPuzzleprogress): Promise<EUserPuzzleprogress>;
   getSolvedPuzzles(userId: string): Promise<string[]>;
   countSolvedToday(userId: string): Promise<number>;
+  getSolveHistory(userId: string): Promise<Date[]>;
 }

@@ -21,10 +21,17 @@ import { Chessboard } from "../../Components/User/Match/ChessBoard";
 import {
   fetchPuzzleByDifficulty,
   validatePuzzleMove,
+  fetchDailyPuzzle,
 } from "../../Service/Api/UserPuzzleApi";
-import { isTodaysDifficulty } from "../../Utils/GetDailyDifficulty";
+import {
+  isTodaysDifficulty,
+  getDailyDifficulty,
+} from "../../Utils/GetDailyDifficulty";
 import toast from "react-hot-toast";
 import { PremiumModal } from "../../Components/User/Puzzle/PremiumModal";
+import { StreakModal } from "../../Components/User/Puzzle/StreakModal";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../Store/Slices/Auth/UserAuthSlice";
 
 // Difficulty config
 const difficultyConfig = {
@@ -73,6 +80,7 @@ const pieceTypeMap: Record<
 export function PuzzleSolvingPage() {
   const { difficulty = "easy" } = useParams<{ difficulty: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const config =
     difficultyConfig[difficulty as keyof typeof difficultyConfig] ||
     difficultyConfig.easy;
@@ -93,6 +101,14 @@ export function PuzzleSolvingPage() {
   const [playerSide, setPlayerSide] = useState<"white" | "black">("white");
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [limitMessage, setLimitMessage] = useState("");
+  const [solution, setSolution] = useState<string[]>([]);
+  const [hintSquare, setHintSquare] = useState<{
+    row: number;
+    col: number;
+  } | null>(null);
+  const [hintCooldown, setHintCooldown] = useState(0);
+  const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
+  const [currentStreakCount, setCurrentStreakCount] = useState(0);
 
   const board = useMemo(() => {
     return game.board().map((row) =>
@@ -110,9 +126,13 @@ export function PuzzleSolvingPage() {
   const loadNewPuzzle = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await fetchPuzzleByDifficulty(difficulty);
+      const data =
+        difficulty === "daily"
+          ? await fetchDailyPuzzle()
+          : await fetchPuzzleByDifficulty(difficulty);
       setIsSolved(false);
       setIsWrong(false);
+      setHintSquare(null);
       // Removed redundant setLoading(true)
       const newGame = new Chess(data.fen);
       setGame(newGame);
@@ -121,6 +141,7 @@ export function PuzzleSolvingPage() {
       setInitialFen(data.fen);
       setPlayerSide(newGame.turn() === "w" ? "white" : "black");
       setMoveIndex(0);
+      setSolution(data.solution || []);
       setLoading(false);
     } catch (error: unknown) {
       const err = error as {
@@ -150,8 +171,21 @@ export function PuzzleSolvingPage() {
     return () => clearTimeout(timer);
   }, [loadNewPuzzle]); // Only trigger when the difficulty string CHANGES from the URL
 
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval>;
+    if (hintCooldown > 0) {
+      timer = setInterval(() => {
+        setHintCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [hintCooldown]);
+
   const handleSquareClick = async (row: number, col: number) => {
     if (isSolved || loading) return;
+    setHintSquare(null);
 
     const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
     const square = `${files[col]}${8 - row}`;
@@ -197,11 +231,23 @@ export function PuzzleSolvingPage() {
                   setMoveIndex((prev) => prev + 2); // User + Engine
                   if (result.solved) {
                     setIsSolved(true);
+                    if (result.currentStreak !== undefined) {
+                      dispatch(
+                        updateUser({ currentStreak: result.currentStreak }),
+                      );
+                      setCurrentStreakCount(result.currentStreak);
+                      setIsStreakModalOpen(true);
+                    }
                   }
                 }, 500);
               } else if (result.solved) {
                 setMoveIndex((prev) => prev + 1); // User only (last move)
                 setIsSolved(true);
+                if (result.currentStreak !== undefined) {
+                  dispatch(updateUser({ currentStreak: result.currentStreak }));
+                  setCurrentStreakCount(result.currentStreak);
+                  setIsStreakModalOpen(true);
+                }
               }
             } else {
               // Wrong move — revert to position before the bad move
@@ -238,6 +284,7 @@ export function PuzzleSolvingPage() {
     setIsWrong(false);
     setMoveIndex(0);
     setSelectedSquare(null);
+    setHintSquare(null);
   };
 
   const legalMoves = useMemo(() => {
@@ -250,6 +297,31 @@ export function PuzzleSolvingPage() {
       type: "NORMAL" as const,
     }));
   }, [selectedSquare, game]);
+
+  const handleHint = () => {
+    if (
+      isSolved ||
+      loading ||
+      !solution ||
+      solution.length <= moveIndex ||
+      hintCooldown > 0
+    )
+      return;
+
+    const nextMoveSan = solution[moveIndex];
+    // Find the move in the current legal moves to identify the piece
+    const moves = game.moves({ verbose: true });
+    const moveInfo = moves.find((m) => m.san === nextMoveSan);
+
+    if (moveInfo) {
+      // Convert square name (e.g., 'e2') to {row, col}
+      const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+      const col = files.indexOf(moveInfo.from[0]);
+      const row = 8 - parseInt(moveInfo.from[1]);
+      setHintSquare({ row, col });
+      setHintCooldown(30);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0F2C] text-white flex flex-col font-['Inter']">
@@ -327,12 +399,12 @@ export function PuzzleSolvingPage() {
                 >
                   <div
                     className="relative 
-  bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900
-  border border-indigo-500/40
-  p-8 rounded-2xl
-  shadow-[0_0_30px_rgba(99,102,241,0.15)]
-  flex flex-col items-center gap-4
-  backdrop-blur-sm"
+    bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900
+    border border-indigo-500/40
+    p-8 rounded-2xl
+    shadow-[0_0_30px_rgba(99,102,241,0.15)]
+    flex flex-col items-center gap-4
+    backdrop-blur-sm"
                   >
                     <div className="absolute inset-0 rounded-2xl bg-indigo-500/5 pointer-events-none" />
                     <CheckCircle2 className="w-14 h-14 text-indigo-400 drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]" />
@@ -388,6 +460,7 @@ export function PuzzleSolvingPage() {
                   selectedSquare={selectedSquare}
                   legalMoves={legalMoves}
                   orientation={playerSide}
+                  hintSquare={hintSquare}
                 />
               )}
             </div>
@@ -401,9 +474,19 @@ export function PuzzleSolvingPage() {
               <RotateCcw className="w-5 h-5 text-blue-400 group-hover:rotate-[-45deg] transition-transform" />
               Reset
             </button>
-            <button className="flex-1 py-4 px-6 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center gap-3 font-semibold group">
-              <Lightbulb className="w-5 h-5 text-yellow-400 group-hover:scale-110 transition-transform" />
-              Hint
+            <button
+              onClick={handleHint}
+              disabled={hintCooldown > 0}
+              className={`flex-1 py-4 px-6 rounded-2xl border transition-all flex items-center justify-center gap-3 font-semibold group ${
+                hintCooldown > 0
+                  ? "bg-gray-800/20 border-white/5 text-white/30 cursor-not-allowed"
+                  : "bg-white/5 hover:bg-white/10 border-white/10"
+              }`}
+            >
+              <Lightbulb
+                className={`w-5 h-5 transition-transform ${hintCooldown > 0 ? "text-gray-600" : "text-yellow-400 group-hover:scale-110"}`}
+              />
+              {hintCooldown > 0 ? `Hint (${hintCooldown}s)` : "Hint"}
             </button>
             <button
               onClick={loadNewPuzzle}
@@ -523,6 +606,16 @@ export function PuzzleSolvingPage() {
         isOpen={isPremiumModalOpen}
         onClose={() => setIsPremiumModalOpen(false)}
         message={limitMessage}
+      />
+      <StreakModal
+        isOpen={isStreakModalOpen}
+        onClose={() => setIsStreakModalOpen(false)}
+        onKeepPracticing={() => {
+          setIsStreakModalOpen(false);
+          const targetDifficulty = getDailyDifficulty();
+          navigate(`/puzzle/solve/${targetDifficulty}`);
+        }}
+        streakCount={currentStreakCount}
       />
     </div>
   );

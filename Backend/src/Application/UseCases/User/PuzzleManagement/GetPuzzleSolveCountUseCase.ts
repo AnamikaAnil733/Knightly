@@ -6,7 +6,9 @@ export class GetPuzzleSolveCountUseCase implements IGetPuzzleSolveCountUseCase {
         private readonly _progressRepository: IUserPuzzleProgressRepository,
   ) {}
 
-  async execute(userId: string): Promise<number> {
-    return this._progressRepository.countSolvedToday(userId);
+  async execute(userId: string): Promise<{ today: number; total: number }> {
+    const today = await this._progressRepository.countSolvedToday(userId);
+    const solvedPuzzles = await this._progressRepository.getSolvedPuzzles(userId);
+    return { today, total: solvedPuzzles.length };
   }
 }

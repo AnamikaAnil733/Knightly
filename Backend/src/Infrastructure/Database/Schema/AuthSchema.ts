@@ -32,6 +32,7 @@ export interface AuthSchemaType{
     subscriptionStart?: Date;
     stripeCustomerId?: string;
     stripeSubscriptionId?: string;
+    lastPuzzleSolveDate?: Date;
     createdAt:Date;
     avatarKey:string;
 }
@@ -97,6 +98,7 @@ export const authSchema = new Schema<AuthSchemaType>(
     subscriptionStart: { type: Date },
     stripeCustomerId: { type: String },
     stripeSubscriptionId: { type: String },
+    lastPuzzleSolveDate: { type: Date },
     avatarKey: { type: String,default:null },
 
   },

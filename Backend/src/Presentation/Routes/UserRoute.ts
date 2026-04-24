@@ -56,6 +56,10 @@ export class UserRoutes {
       USER_ROUTES.GET_PUZZLE_BY_DIFFICULTY,
       userPuzzleController.getPuzzle,
     );
+    this.router.get(
+      USER_ROUTES.GET_DAILY_PUZZLE,
+      userPuzzleController.getDailyPuzzle,
+    );
     this.router.post(
       USER_ROUTES.VALIDATE_PUZZLE_MOVE,
       userPuzzleController.validateMove,
@@ -63,6 +67,10 @@ export class UserRoutes {
     this.router.get(
       USER_ROUTES.GET_PUZZLE_SOLVE_COUNT,
       userPuzzleController.getSolveCount,
+    );
+    this.router.get(
+      USER_ROUTES.GET_PUZZLE_HISTORY,
+      userPuzzleController.getSolveHistory,
     );
     this.router.get(
       USER_ROUTES.LEADERBOARD,

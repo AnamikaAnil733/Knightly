@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
-import { getSolveCount } from "../../Service/Api/UserPuzzleApi";
+import {
+  getSolveCount,
+  fetchSolveHistory,
+} from "../../Service/Api/UserPuzzleApi";
+import { StreakCalendar } from "../../Components/User/Puzzle/StreakCalendar";
 import { DifficultyLevel } from "../../Types/PuzzleTypes";
 
 import {
   ChevronLeft,
-  Brain,
   Zap,
   Target,
   Trophy,
-  Star,
   Flame,
   Lightbulb,
   ShieldCheck,
   Calendar,
   Sparkles,
-  Lock,
+  X,
 } from "lucide-react";
 import {
   getDailyDifficulty,
@@ -79,8 +81,11 @@ export function PuzzleTactics() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.userAuth.user);
   const [solveCount, setSolveCount] = useState<number>(0);
+  const [totalSolveCount, setTotalSolveCount] = useState<number>(0);
   const [, setIsLoadingCount] = useState(true);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  const [solveHistory, setSolveHistory] = useState<string[]>([]);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const todayDifficulty = getDailyDifficulty();
   const todayLabel = getTodayLabel();
@@ -91,7 +96,8 @@ export function PuzzleTactics() {
       try {
         const data = await getSolveCount();
         if (data.success) {
-          setSolveCount(data.count);
+          setSolveCount(data.today);
+          setTotalSolveCount(data.total);
         }
       } catch (err) {
         console.error("Failed to fetch solve count:", err);
@@ -99,7 +105,20 @@ export function PuzzleTactics() {
         setIsLoadingCount(false);
       }
     };
+
+    const fetchHistory = async () => {
+      try {
+        const response = await fetchSolveHistory();
+        if (response.success) {
+          setSolveHistory(response.history);
+        }
+      } catch (err) {
+        console.error("Failed to fetch solve history:", err);
+      }
+    };
+
     fetchCount();
+    fetchHistory();
   }, []);
 
   const PUZZLE_LIMIT = 5;
@@ -137,7 +156,7 @@ export function PuzzleTactics() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0F2C] text-white relative overflow-hidden font-['Inter']">
+    <div className="h-screen bg-[#0A0F2C] text-white relative overflow-hidden font-['Inter'] flex flex-col">
       {/* Dynamic Background Elements */}
       <div className="absolute top-[-5%] right-[-5%] w-[50%] h-[50%] bg-[#3A6FF7]/10 blur-[150px] rounded-full pointer-events-none animate-pulse" />
       <div className="absolute bottom-[-5%] left-[-5%] w-[50%] h-[50%] bg-[#6B2EFF]/10 blur-[150px] rounded-full pointer-events-none animate-pulse" />
@@ -145,9 +164,9 @@ export function PuzzleTactics() {
       {/* Decorative Grid Pattern */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 py-4 lg:py-6 relative z-10 w-full h-full flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="mb-12 flex items-center justify-between">
+        <header className="mb-6 lg:mb-8 flex items-center justify-between shrink-0">
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -155,47 +174,48 @@ export function PuzzleTactics() {
             className="flex items-center gap-2 text-[#C9CAD9] hover:text-white transition-all group px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10"
           >
             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Dashboard</span>
+            <span className="font-medium text-sm">Dashboard</span>
           </motion.button>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center gap-3 bg-gradient-to-r from-[#FFD166]/20 to-transparent px-4 py-2 rounded-full border border-[#FFD166]/30"
+            onClick={() => setIsCalendarOpen(true)}
+            className="flex items-center gap-3 bg-gradient-to-r from-[#FFD166]/20 to-transparent px-4 py-2 rounded-full border border-[#FFD166]/30 shadow-[0_0_15px_rgba(255,209,102,0.1)] cursor-pointer hover:bg-[#FFD166]/30 transition-all active:scale-95 group/streak"
           >
-            <Star className="w-5 h-5 text-[#FFD166] fill-[#FFD166]" />
-            <span className="text-[#FFD166] font-bold">
-              Daily Streak: 5 Days
+            <Flame className="w-5 h-5 text-[#FFD166] fill-[#FFD166] group-hover/streak:animate-bounce" />
+            <span className="text-[#FFD166] font-bold text-sm">
+              Daily Streak: {user?.currentStreak || 0} Days
             </span>
           </motion.div>
         </header>
 
+        {/* Top Section: Hero + Calendar */}
         {/* Hero Section */}
-        <div className="text-center mb-20">
+        <div className="text-left mb-6 shrink-0">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3A6FF7]/20 border border-[#3A6FF7]/30 text-[#3A6FF7] text-sm font-bold mb-6 tracking-wider uppercase"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#3A6FF7]/20 border border-[#3A6FF7]/30 text-[#3A6FF7] text-[10px] font-bold mb-3 tracking-wider uppercase"
           >
-            <Target className="w-4 h-4" />
-            Tactical Training
+            <Target className="w-3 h-3" />
+            Tactical Training • {totalSolveCount} Solved
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-white to-[#FFD166] bg-clip-text text-transparent font-['Poppins'] tracking-tight"
+            className="text-3xl md:text-4xl lg:text-5xl font-black mb-2 bg-gradient-to-r from-white via-white to-[#FFD166] bg-clip-text text-transparent tracking-tight leading-[1.1]"
           >
-            Puzzle Tactics
+            Tactical Masterclass
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-[#C9CAD9] text-xl max-w-2xl mx-auto leading-relaxed"
+            className="text-[#C9CAD9] text-sm lg:text-base leading-relaxed opacity-70 max-w-xl"
           >
-            Sharpen your vision and master the art of the endgame. Select a
-            difficulty level and start solving.
+            Sharpen your vision and master the art of the endgame.
           </motion.p>
         </div>
 
@@ -204,34 +224,32 @@ export function PuzzleTactics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-16 relative"
+          className="mb-8 shrink-0"
         >
           <div
             className={`relative overflow-hidden rounded-[2rem] bg-gradient-to-r ${todayConfig.color} p-[1px]`}
           >
-            <div className="bg-[#0A0F2C]/90 backdrop-blur-2xl rounded-[2rem] p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="bg-[#0A0F2C]/90 backdrop-blur-2xl rounded-[2rem] p-5 lg:p-6 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-5">
                 <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${todayConfig.color} flex items-center justify-center shadow-2xl shadow-black/40 animate-pulse`}
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-br ${todayConfig.color} flex items-center justify-center shadow-2xl shadow-black/40 animate-pulse`}
                 >
-                  <Calendar className="w-8 h-8 text-white" />
+                  <Calendar className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="w-4 h-4 text-[#FFD166]" />
-                    <span className="text-xs font-bold text-[#FFD166] uppercase tracking-widest">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <Sparkles className="w-3 h-3 text-[#FFD166]" />
+                    <span className="text-[9px] font-bold text-[#FFD166] uppercase tracking-widest">
                       Today's Challenge
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white">
+                  <h3 className="text-lg lg:text-xl font-bold text-white">
                     {todayLabel} —{" "}
                     <span className={todayConfig.accent}>
                       {todayConfig.name}
-                    </span>{" "}
-                    Difficulty
+                    </span>
                   </h3>
-                  <p className="text-[#C9CAD9] text-sm mt-1 opacity-80">
-                    Difficulty rotates daily.{" "}
+                  <p className="text-[#C9CAD9] text-[10px] mt-0.5 opacity-80">
                     {!user?.premium && (
                       <span className="text-[#FFD166] font-bold">
                         Progress: {solveCount}/{PUZZLE_LIMIT} puzzles
@@ -243,20 +261,14 @@ export function PuzzleTactics() {
               <motion.button
                 whileHover={!isLimited ? { scale: 1.05 } : {}}
                 whileTap={!isLimited ? { scale: 0.95 } : {}}
-                onClick={() => handleStartPuzzle(todayDifficulty)}
-                className={`px-8 py-4 rounded-2xl font-bold text-base shadow-lg shadow-black/30 transition-all whitespace-nowrap mt-4 md:mt-0 ${
+                onClick={() => handleStartPuzzle("daily")}
+                className={`px-6 py-3 rounded-xl font-bold text-xs shadow-lg shadow-black/30 transition-all whitespace-nowrap ${
                   isLimited
                     ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5"
                     : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
                 }`}
               >
-                {isLimited ? (
-                  <span className="flex items-center gap-2">
-                    <Lock className="w-4 h-4" /> Limit Reached
-                  </span>
-                ) : (
-                  "Start Today's Puzzle"
-                )}
+                {isLimited ? "Limit Reached" : "Start Today's Puzzle"}
               </motion.button>
             </div>
           </div>
@@ -267,148 +279,154 @@ export function PuzzleTactics() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 shrink-0"
         >
           {levels.map((level) => (
             <motion.div
               key={level.id}
               variants={cardVariants}
-              whileHover={{ y: -12, transition: { duration: 0.3 } }}
-              className="group relative h-full"
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="group relative"
             >
-              {/* Card Container */}
               <div
-                className={`h-full flex flex-col p-8 rounded-[2rem] bg-[#11193F]/40 backdrop-blur-2xl border transition-all duration-500 relative overflow-hidden ${
+                className={`flex flex-col p-5 lg:p-6 rounded-[1.5rem] bg-[#11193F]/40 backdrop-blur-2xl border transition-all duration-500 relative overflow-hidden ${
                   isTodaysDifficulty(level.id)
                     ? "border-[#FFD166]/40 ring-1 ring-[#FFD166]/20 group-hover:border-[#FFD166]/60"
                     : "border-white/5 group-hover:border-[#3A6FF7]/40"
                 }`}
               >
-                {/* TODAY Badge */}
                 {isTodaysDifficulty(level.id) && (
                   <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/30 z-10">
-                    <Sparkles className="w-3 h-3 text-[#FFD166]" />
-                    <span className="text-[10px] font-bold text-[#FFD166] uppercase tracking-widest">
+                    <span className="text-[9px] font-bold text-[#FFD166] uppercase tracking-widest">
                       Today
                     </span>
                   </div>
                 )}
 
-                {/* Background Glow */}
                 <div
-                  className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${
-                    level.color
-                  } ${
-                    isTodaysDifficulty(level.id) ? "opacity-10" : "opacity-0"
-                  } group-hover:opacity-10 blur-3xl transition-opacity duration-500`}
-                />
-
-                {/* Level Icon */}
-                <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center mb-8 shadow-2xl shadow-black/40 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}
+                  className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center mb-6 shadow-2xl shadow-black/40 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shrink-0`}
                 >
-                  <level.icon className="w-8 h-8 text-white" />
+                  <level.icon className="w-7 h-7 text-white" />
                 </div>
 
                 <div className="flex-grow">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-2xl font-bold group-hover:text-white transition-colors">
+                  <div className="flex items-start justify-between mb-3 gap-2">
+                    <h3 className="text-xl font-bold group-hover:text-white transition-colors">
                       {level.name}
                     </h3>
                     <span
-                      className={`text-xs font-bold px-2 py-1 rounded-md bg-white/5 border border-white/10 ${level.accent}`}
+                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 border border-white/10 whitespace-nowrap ${level.accent}`}
                     >
                       {level.ratingRange}
                     </span>
                   </div>
 
-                  <p className="text-[#C9CAD9] text-sm leading-relaxed mb-8 opacity-80 group-hover:opacity-100 transition-opacity">
+                  <p className="text-[#C9CAD9] text-[11px] leading-relaxed mb-4 opacity-70 group-hover:opacity-100 transition-opacity line-clamp-2">
                     {level.description}
                   </p>
                 </div>
 
-                {/* Footer Info */}
                 <div className="mt-auto">
-                  <div className="flex items-center justify-between py-4 border-t border-white/5">
-                    <div className="flex items-center gap-2 text-white/60 text-xs">
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-2 text-white/40 text-[10px]">
                       <Flame className="w-3 h-3 text-[#FFD166]" />
                       <span>{level.tasks}</span>
                     </div>
                     <motion.button
                       whileTap={!isLimited ? { scale: 0.95 } : {}}
                       onClick={() => handleStartPuzzle(level.id)}
-                      className={`px-4 py-2 rounded-lg text-xs font-bold shadow-lg transition-all ${
+                      className={`px-4 py-2 rounded-lg text-[10px] font-bold shadow-lg transition-all uppercase tracking-tight ${
                         isLimited
                           ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
                           : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
                       }`}
                     >
-                      {isLimited ? "Locked" : "Start Solving"}
+                      {isLimited ? "Locked" : "Solve"}
                     </motion.button>
                   </div>
                 </div>
               </div>
 
-              {/* Outer Shadow Effect */}
               <div
                 className={`absolute inset-0 -z-10 bg-gradient-to-br ${level.color} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 rounded-[2rem] px-4`}
               />
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Stats Section / Motivation */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-24 p-12 rounded-[2.5rem] bg-gradient-to-r from-[#11193F]/60 to-[#1B1452]/60 backdrop-blur-3xl border border-white/10 relative overflow-hidden"
-        >
-          <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-[#3A6FF7]/10 to-transparent pointer-events-none" />
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6 font-['Poppins']">
-                Master the Board
-              </h2>
-              <p className="text-[#C9CAD9] mb-8 leading-relaxed">
-                Consistent practice is the key to rising in the ranks. Our
-                puzzles are curated from thousands of real matches, helping you
-                recognize winning patterns instantly.
-              </p>
-              <div className="flex gap-8">
-                <div>
-                  <div className="text-3xl font-bold text-[#FFD166]">
-                    15,400+
-                  </div>
-                  <div className="text-sm text-[#C9CAD9]">Puzzles Solved</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-[#3A6FF7]">184</div>
-                  <div className="text-sm text-[#C9CAD9]">Active Solvers</div>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center md:justify-end">
-              <div className="relative">
-                <div className="w-48 h-48 rounded-full bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] flex items-center justify-center shadow-[0_0_50px_rgba(58,111,247,0.3)] animate-bounce-slow">
-                  <Brain className="w-24 h-24 text-white" />
-                </div>
-                {/* Decorative particles */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#FFD166] rounded-full blur-lg animate-pulse" />
-                <div className="absolute -bottom-8 left-12 w-12 h-12 bg-[#6B2EFF] rounded-full blur-xl animate-pulse" />
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
 
-      {/* Footer Branding */}
-      <div className="py-12 text-center border-t border-white/5 mt-12">
-        <p className="text-[#C9CAD9]/30 text-xs tracking-[0.2em] font-medium uppercase">
+      {/* Compact Footer Branding */}
+      <div className="py-4 text-center shrink-0">
+        <p className="text-[#C9CAD9]/20 text-[8px] tracking-[0.3em] font-medium uppercase">
           Knightly Tactical Engine • v2.4.0
         </p>
       </div>
+
+      <AnimatePresence>
+        {isCalendarOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCalendarOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-2xl bg-[#0A0F2C] border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 lg:p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-[#FFD166]/10 border border-[#FFD166]/20">
+                      <Flame className="w-5 h-5 text-[#FFD166]" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold">Monthly Activity</h2>
+                      <p className="text-xs text-[#C9CAD9]/50">
+                        Your tactical consistency
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsCalendarOpen(false)}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="bg-[#11193F]/40 rounded-[2rem] border border-white/5 overflow-hidden p-6 lg:p-8">
+                  <StreakCalendar
+                    history={solveHistory}
+                    showCurrentMonthOnly={true}
+                    hideHeader={true}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
 
       <style>{`
         @keyframes bounce-slow {

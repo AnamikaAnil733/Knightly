@@ -19,6 +19,7 @@ type ChessboardProps = {
   legalMoves?: { row: number; col: number; type?: "EN_PASSANT" | "NORMAL" }[];
   onSquareClick?: (row: number, col: number) => void;
   orientation?: "white" | "black";
+  hintSquare?: { row: number; col: number } | null;
 };
 
 interface PositionedPiece extends ChessPiece {
@@ -36,6 +37,7 @@ export function Chessboard({
   legalMoves = [],
   onSquareClick,
   orientation = "white",
+  hintSquare = null,
 }: ChessboardProps) {
   const isFlipped = orientation === "black";
 
@@ -186,6 +188,10 @@ export function Chessboard({
                   m.type === "EN_PASSANT",
               );
 
+              const isHinted =
+                hintSquare?.row === actualRowIndex &&
+                hintSquare?.col === actualColIndex;
+
               return (
                 <div
                   key={`${actualRowIndex}-${actualColIndex}`}
@@ -212,9 +218,11 @@ export function Chessboard({
                   style={{
                     backgroundColor: isSelected
                       ? theme.selected
-                      : isLight
-                        ? theme.light
-                        : theme.dark,
+                      : isHinted
+                        ? "rgba(58, 111, 247, 0.4)" // Match primary blue with transparency
+                        : isLight
+                          ? theme.light
+                          : theme.dark,
                     borderColor: isSelected ? theme.selected : "transparent",
                     borderRight:
                       displayColIndex < 7

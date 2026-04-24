@@ -35,7 +35,7 @@ export class PuzzleManagementRepository
     }
 
     const [docs, total] = await Promise.all([
-      this.model.find(query).sort("-createdAt").skip(skip).limit(limit),
+      this.model.find(query).sort({ createdAt: -1, _id: 1 }).skip(skip).limit(limit),
 
       this.model.countDocuments(query),
     ]);

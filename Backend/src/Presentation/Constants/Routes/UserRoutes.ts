@@ -18,8 +18,10 @@ export const USER_ROUTES = {
   GET_LIVE_GAMES: "/games/live",
 
   GET_PUZZLE_BY_DIFFICULTY: "/puzzles/difficulty/:difficulty",
+  GET_DAILY_PUZZLE: "/puzzles/daily",
   VALIDATE_PUZZLE_MOVE: "/puzzles/:puzzleId/validate",
   GET_PUZZLE_SOLVE_COUNT: "/puzzles/solve-count",
+  GET_PUZZLE_HISTORY: "/puzzles/history",
 
   LEADERBOARD: "/leaderboard/:type",
 

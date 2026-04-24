@@ -17,6 +17,9 @@ import {
 } from "lucide-react";
 import { GameHistoryList } from "./GameHistoryList";
 import { PerformanceChart } from "./PerformanceChart";
+import { StreakCalendar } from "./Puzzle/StreakCalendar";
+import { fetchSolveHistory } from "../../Service/Api/UserPuzzleApi";
+import { useEffect } from "react";
 
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = () => {
@@ -30,6 +33,21 @@ export function ProfileUser() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
+  const [solveHistory, setSolveHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const response = await fetchSolveHistory();
+        if (response.success) {
+          setSolveHistory(response.history);
+        }
+      } catch (err) {
+        console.error("Failed to fetch solve history:", err);
+      }
+    };
+    fetchHistory();
+  }, []);
 
   if (!user) {
     return <p className="text-center text-white pt-32">Loading profile...</p>;
@@ -166,8 +184,9 @@ export function ProfileUser() {
         ))}
       </div>
 
-      <div className="max-w-7xl mx-auto mt-12">
+      <div className="max-w-7xl mx-auto mt-12 space-y-12">
         <PerformanceChart data={user.ratingHistory || []} />
+        <StreakCalendar history={solveHistory} weeksToShow={52} />
         <GameHistoryList />
       </div>
     </div>

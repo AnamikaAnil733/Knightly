@@ -24,6 +24,7 @@ export class PuzzleMapper{
       fen: puzzle.fen,
       difficulty: puzzle.difficulty,
       description: puzzle.description,
+      solution: puzzle.moves,
     };
   }
 }

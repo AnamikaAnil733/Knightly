@@ -23,6 +23,7 @@ export default class EAuth {
   private _subscriptionStart?: Date;
   private _stripeCustomerId?: string;
   private _stripeSubscriptionId?: string;
+  private _lastPuzzleSolveDate?: Date;
   private _ratingHistory: { rating: number; date: Date; type: string }[];
 
 
@@ -57,6 +58,7 @@ export default class EAuth {
         subscriptionStart?: Date;
         stripeCustomerId?: string;
         stripeSubscriptionId?: string;
+        lastPuzzleSolveDate?: Date;
 
         avatarUrl?: string | null;
         avatarSeed?: string;
@@ -90,6 +92,7 @@ export default class EAuth {
     this._subscriptionStart = params.subscriptionStart;
     this._stripeCustomerId = params.stripeCustomerId;
     this._stripeSubscriptionId = params.stripeSubscriptionId;
+    this._lastPuzzleSolveDate = params.lastPuzzleSolveDate;
     this._ratingHistory = params.ratingHistory ?? [];
 
     this._avatarUrl = params.avatarUrl ?? null;
@@ -126,6 +129,7 @@ export default class EAuth {
   get subscriptionStart():Date|undefined{ return this._subscriptionStart;}
   get stripeCustomerId(): string | undefined { return this._stripeCustomerId; }
   get stripeSubscriptionId(): string | undefined { return this._stripeSubscriptionId; }
+  get lastPuzzleSolveDate(): Date | undefined { return this._lastPuzzleSolveDate; }
 
   get avatarUrl(): string | null { return this._avatarUrl; }
   get avatarSeed(): string { return this._avatarSeed; }
@@ -188,6 +192,38 @@ export default class EAuth {
       this._subscriptionStart = undefined;
       this._stripeSubscriptionId = undefined;
     }
+  }
+
+  public updatePuzzleStreak(today: Date): void {
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const isSameDay = (d1: Date, d2: Date) =>
+      d1.getUTCFullYear() === d2.getUTCFullYear() &&
+      d1.getUTCMonth() === d2.getUTCMonth() &&
+      d1.getUTCDate() === d2.getUTCDate();
+
+    if (
+      this._lastPuzzleSolveDate &&
+      isSameDay(this._lastPuzzleSolveDate, today)
+    ) {
+      return;
+    }
+
+    if (
+      this._lastPuzzleSolveDate &&
+      isSameDay(this._lastPuzzleSolveDate, yesterday)
+    ) {
+      this._currentStreak++;
+    } else {
+      this._currentStreak = 1;
+    }
+
+    if (this._currentStreak > this._longestStreak) {
+      this._longestStreak = this._currentStreak;
+    }
+
+    this._lastPuzzleSolveDate = today;
   }
 
 

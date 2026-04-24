@@ -57,4 +57,15 @@ implements IUserPuzzleProgressRepository
       solvedAt: { $gte: todayStart },
     });
   }
+
+  async getSolveHistory(userId: string): Promise<Date[]> {
+    const solvedPuzzles = await ProgressPuzzleModel.find(
+      { userId, solved: true },
+      { solvedAt: 1, _id: 0 },
+    ).lean();
+
+    return solvedPuzzles
+      .map((p) => p.solvedAt)
+      .filter((date): date is Date => !!date);
+  }
 }

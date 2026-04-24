@@ -7,12 +7,16 @@ import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { IGetPuzzleSolveCountUseCase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetPuzzleSolveCountUseCase";
+import { IGetDailyPuzzleUseCase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetDailyPuzzleUseCase";
+import { IGetPuzzleSolveHistoryUseCase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetPuzzleSolveHistoryUseCase";
 
 export class UserPuzzleController {
   constructor(
     private readonly _getPuzzleUsecase: IGetPuzzleByDifficulty,
     private readonly _validateMoves: IValidateMoveusecase,
     private readonly _getSolveCount: IGetPuzzleSolveCountUseCase,
+    private readonly _getDailyPuzzle: IGetDailyPuzzleUseCase,
+    private readonly _getSolveHistory: IGetPuzzleSolveHistoryUseCase,
   ) {}
 
   getSolveCount = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +25,31 @@ export class UserPuzzleController {
       if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
 
       const count = await this._getSolveCount.execute(userId);
-      return res.status(200).json({ success: true, count });
+      return res.status(200).json({ success: true, ...count });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getSolveHistory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+
+      const history = await this._getSolveHistory.execute(userId);
+      return res.status(200).json({ success: true, history });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getDailyPuzzle = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) throw new CustomError(HttpStatusCodes.UNAUTHORIZED, MESSAGES.UNAUTHORIZED);
+
+      const puzzle = await this._getDailyPuzzle.execute(userId);
+      return res.status(200).json(puzzle);
     } catch (error) {
       next(error);
     }

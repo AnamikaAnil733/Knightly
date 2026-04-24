@@ -85,3 +85,16 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Global Overflow Management */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Ensure only one scrollbar if using a layout wrapper */
+#root {
+  min-height: 100vh;
+}

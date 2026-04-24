@@ -8,3 +8,11 @@ export interface DifficultyLevel {
   accent: string;
   tasks: string;
 }
+
+export interface UserPuzzleResponseDTO {
+  id: string;
+  fen: string;
+  difficulty: string;
+  description?: string;
+  solution?: string[];
+}
