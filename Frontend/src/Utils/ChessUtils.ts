@@ -70,3 +70,23 @@ export const movesToFens = (moves: MoveDTO[]): string[] => {
 
   return fens;
 };
+
+export const findCheckSquare = (
+  fen: string,
+): { row: number; col: number } | null => {
+  const chess = new Chess(fen);
+  if (!chess.inCheck()) return null;
+
+  const turn = chess.turn();
+  const board = chess.board();
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const piece = board[r][c];
+      if (piece && piece.type === "k" && piece.color === turn) {
+        return { row: r, col: c };
+      }
+    }
+  }
+  return null;
+};

@@ -24,8 +24,10 @@ import {
 } from "../../Service/Api/ChessApi";
 
 import { BoardGrid, MoveDTO } from "../../Types/Chess";
+import { findCheckSquare, movesToFens } from "../../Utils/ChessUtils";
 import { Turn, GameStatus } from "../../Types/Chess";
 import { ArrowLeft } from "lucide-react";
+import { useMemo } from "react";
 
 export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -92,6 +94,15 @@ export function Match() {
   const lastUpdate = useRef<number>(0);
   const serverWhite = useRef<number>(0);
   const serverBlack = useRef<number>(0);
+
+  const orientation = myRole === "BLACK" ? "black" : "white";
+
+  const checkSquare = useMemo(() => {
+    if (status !== "CHECK" && status !== "CHECKMATE") return null;
+    const fens = movesToFens(history);
+    const currentFen = fens[fens.length - 1];
+    return findCheckSquare(currentFen);
+  }, [status, history]);
 
   //  Join socket room
   useEffect(() => {
@@ -374,8 +385,6 @@ export function Match() {
     return `${mm}:${ss}`;
   };
 
-  const orientation = myRole === "BLACK" ? "black" : "white";
-
   return (
     <div className="w-full h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col overflow-hidden">
       {/* Header */}
@@ -454,6 +463,10 @@ export function Match() {
                   legalMoves={legalMoves}
                   onSquareClick={handleSquareClick}
                   orientation={orientation}
+                  lastMove={
+                    history.length > 0 ? history[history.length - 1] : null
+                  }
+                  checkSquare={checkSquare}
                 />
               </div>
 

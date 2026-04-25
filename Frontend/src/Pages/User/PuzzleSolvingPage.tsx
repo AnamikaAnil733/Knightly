@@ -461,6 +461,40 @@ export function PuzzleSolvingPage() {
                   legalMoves={legalMoves}
                   orientation={playerSide}
                   hintSquare={hintSquare}
+                  checkSquare={(() => {
+                    if (!game.inCheck()) return null;
+                    const turn = game.turn();
+                    const board = game.board();
+                    for (let r = 0; r < 8; r++) {
+                      for (let c = 0; c < 8; c++) {
+                        const piece = board[r][c];
+                        if (
+                          piece &&
+                          piece.type === "k" &&
+                          piece.color === turn
+                        ) {
+                          return { row: r, col: c };
+                        }
+                      }
+                    }
+                    return null;
+                  })()}
+                  lastMove={(() => {
+                    const history = game.history({ verbose: true });
+                    if (history.length === 0) return null;
+                    const move = history[history.length - 1];
+                    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+                    return {
+                      from: {
+                        row: 8 - parseInt(move.from[1]),
+                        col: files.indexOf(move.from[0]),
+                      },
+                      to: {
+                        row: 8 - parseInt(move.to[1]),
+                        col: files.indexOf(move.to[0]),
+                      },
+                    };
+                  })()}
                 />
               )}
             </div>

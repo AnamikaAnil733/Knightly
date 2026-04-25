@@ -20,6 +20,11 @@ type ChessboardProps = {
   onSquareClick?: (row: number, col: number) => void;
   orientation?: "white" | "black";
   hintSquare?: { row: number; col: number } | null;
+  lastMove?: {
+    from: { row: number; col: number };
+    to: { row: number; col: number };
+  } | null;
+  checkSquare?: { row: number; col: number } | null;
 };
 
 interface PositionedPiece extends ChessPiece {
@@ -38,6 +43,8 @@ export function Chessboard({
   onSquareClick,
   orientation = "white",
   hintSquare = null,
+  lastMove = null,
+  checkSquare = null,
 }: ChessboardProps) {
   const isFlipped = orientation === "black";
 
@@ -192,6 +199,16 @@ export function Chessboard({
                 hintSquare?.row === actualRowIndex &&
                 hintSquare?.col === actualColIndex;
 
+              const isLastMove =
+                (lastMove?.from.row === actualRowIndex &&
+                  lastMove?.from.col === actualColIndex) ||
+                (lastMove?.to.row === actualRowIndex &&
+                  lastMove?.to.col === actualColIndex);
+
+              const isCheck =
+                checkSquare?.row === actualRowIndex &&
+                checkSquare?.col === actualColIndex;
+
               return (
                 <div
                   key={`${actualRowIndex}-${actualColIndex}`}
@@ -205,25 +222,19 @@ export function Chessboard({
                    flex items-center justify-center
                    cursor-pointer select-none
                    transition-all duration-200
-                   ${isSelected ? "ring-4 ring-inset" : ""}
-                   ${
-                     isLegalMove
-                       ? isEnPassant
-                         ? "after:absolute after:w-5 after:h-5 after:border-2 after:bg-[#394f64] after:rounded-full after:z-50"
-                         : "after:absolute after:w-4 after:h-4 after:bg-[#394f64]/80 after:rounded-full after:z-50"
-                       : ""
-                   }
-                   
+                   ${isSelected ? "ring-2 ring-inset ring-white/50" : ""}
                  `}
                   style={{
                     backgroundColor: isSelected
                       ? theme.selected
                       : isHinted
-                        ? "rgba(58, 111, 247, 0.4)" // Match primary blue with transparency
+                        ? "rgba(58, 111, 247, 0.4)"
                         : isLight
                           ? theme.light
                           : theme.dark,
-                    borderColor: isSelected ? theme.selected : "transparent",
+                    borderColor: isSelected
+                      ? "rgba(255,255,255,0.4)"
+                      : "transparent",
                     borderRight:
                       displayColIndex < 7
                         ? "1px solid rgba(255, 209, 102, 0.1)"
@@ -234,10 +245,43 @@ export function Chessboard({
                         : "none",
                   }}
                 >
+                  {/* Modern Legal Move Indicators */}
+                  {isLegalMove && (
+                    <div
+                      className={`absolute z-20 rounded-full pointer-events-none transition-all duration-300 ${
+                        board[actualRowIndex][actualColIndex] || isEnPassant
+                          ? "w-[90%] h-[90%] border-[6px] border-black/20"
+                          : "w-5 h-5 bg-black/25"
+                      }`}
+                    />
+                  )}
+
+                  {/* Modern Check Highlight with Pulse */}
+                  {isCheck && (
+                    <motion.div
+                      initial={{ opacity: 0.6, scale: 0.95 }}
+                      animate={{
+                        opacity: [0.6, 0.9, 0.6],
+                        scale: [0.95, 1, 0.95],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="absolute inset-0 z-0 bg-gradient-to-br from-red-500/80 to-red-900/60 shadow-[inset_0_0_30px_rgba(239,68,68,1)] border-2 border-red-500/50"
+                    />
+                  )}
+
+                  {/* Modern Last Move Highlight */}
+                  {isLastMove && !isCheck && !isSelected && (
+                    <div className="absolute inset-0 z-0 bg-yellow-400/40 shadow-[inset_0_0_20px_rgba(250,204,21,0.5)] border-2 border-yellow-400/30" />
+                  )}
+
                   {/* Rank Numbers (1-8) - Top Left of first col */}
                   {displayColIndex === 0 && (
                     <span
-                      className={`absolute top-0.5 left-0.5 text-[15px] sm:text-s font-bold leading-none select-none`}
+                      className={`absolute top-0.5 left-0.5 text-[15px] sm:text-s font-bold leading-none select-none z-10`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayRanks[displayRowIndex]}
@@ -247,7 +291,7 @@ export function Chessboard({
                   {/* File Letters (a-h) - Bottom Right of last row */}
                   {displayRowIndex === 7 && (
                     <span
-                      className={`absolute bottom-0.5 right-0.5 text-[15px] sm:text-s font-bold leading-none select-none`}
+                      className={`absolute bottom-0.5 right-0.5 text-[15px] sm:text-s font-bold leading-none select-none z-10`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayFiles[displayColIndex]}

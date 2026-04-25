@@ -16,3 +16,17 @@ export interface UserPuzzleResponseDTO {
   description?: string;
   solution?: string[];
 }
+
+export interface CalendarDay {
+  date: Date;
+  isSolved: boolean;
+  isCurrentMonth: boolean;
+}
+
+export interface StreakCalendarProps {
+  history: string[];
+  weeksToShow?: number;
+  compact?: boolean;
+  showCurrentMonthOnly?: boolean;
+  hideHeader?: boolean;
+}

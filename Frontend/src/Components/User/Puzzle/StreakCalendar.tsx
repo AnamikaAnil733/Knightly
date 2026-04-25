@@ -1,14 +1,7 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Tooltip } from "react-tooltip";
-
-interface StreakCalendarProps {
-  history: string[]; // Array of ISO date strings
-  weeksToShow?: number;
-  compact?: boolean;
-  showCurrentMonthOnly?: boolean;
-  hideHeader?: boolean;
-}
+import { StreakCalendarProps, CalendarDay } from "../../../Types/PuzzleTypes";
 
 export const StreakCalendar: React.FC<StreakCalendarProps> = ({
   history,
@@ -21,7 +14,7 @@ export const StreakCalendar: React.FC<StreakCalendarProps> = ({
   const calendarData = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const data = [];
+    const data: CalendarDay[] = [];
 
     let startDate: Date;
     let endDate: Date;
@@ -65,7 +58,7 @@ export const StreakCalendar: React.FC<StreakCalendarProps> = ({
   }, [history, showCurrentMonthOnly, weeksToShow]);
 
   // Group into weeks for the grid
-  const weeks = [];
+  const weeks: CalendarDay[][] = [];
   for (let i = 0; i < calendarData.length; i += 7) {
     weeks.push(calendarData.slice(i, i + 7));
   }

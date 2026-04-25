@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Store/Store";
 import { Chessboard } from "../../Components/User/Match/ChessBoard";
 import { getGame, getGameReview } from "../../Service/Api/ChessApi";
-import { fenToBoardGrid, movesToFens } from "../../Utils/ChessUtils";
+import {
+  fenToBoardGrid,
+  movesToFens,
+  findCheckSquare,
+} from "../../Utils/ChessUtils";
 import { BoardGrid, MoveDTO, AnalysisData } from "../../Types/Chess";
 import {
   ChevronLeft,
@@ -122,6 +126,12 @@ export function GameReviewPage() {
     ) {
       setBoard(fenToBoardGrid(fens[currentMoveIndex]));
     }
+  }, [currentMoveIndex, fens]);
+
+  const checkSquare = useMemo(() => {
+    return currentMoveIndex >= 0 && fens[currentMoveIndex]
+      ? findCheckSquare(fens[currentMoveIndex])
+      : null;
   }, [currentMoveIndex, fens]);
 
   if (loading) {
@@ -401,6 +411,12 @@ export function GameReviewPage() {
                     legalMoves={[]}
                     onSquareClick={() => {}}
                     orientation="white"
+                    lastMove={
+                      currentMoveIndex > 0
+                        ? moveHistory[currentMoveIndex - 1]
+                        : null
+                    }
+                    checkSquare={checkSquare}
                   />
                 </div>
               </div>
