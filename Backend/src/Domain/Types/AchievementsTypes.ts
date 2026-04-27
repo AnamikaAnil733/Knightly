@@ -1,0 +1,1 @@
+export type CriteriaType = 'GAMES_WON' | 'GAMES_PLAYED' | 'PUZZLES_SOLVED' | 'STREAK_DAYS';
