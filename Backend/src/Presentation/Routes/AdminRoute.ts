@@ -9,6 +9,7 @@ import { getAllUserController,
   systemSettingsController,
   PuzzleManagementController,
   adminReportController,
+  achievementController,
 } from "../../Infrastructure/Composition/AdminComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
 import { blogController } from "../../Infrastructure/Composition/BlogComposition";
@@ -49,6 +50,8 @@ export class AdminRoutes{
     this.router.post(ADMIN_ROUTES.SYNC_LICHESS_PUZZLE, PuzzleManagementController.syncDailyPuzzle);
     this.router.post(ADMIN_ROUTES.GENERATE_AI_PUZZLES, PuzzleManagementController.generatePuzzlesFromGame);
     this.router.post(ADMIN_ROUTES.GENERATE_PUZZLE_FROM_GAME, PuzzleManagementController.generatePuzzlesFromGame);
+
+    this.router.post(ADMIN_ROUTES.CREATE_ACHIEVEMENTS,achievementController.createAchievements);
 
     // Lesson management routes
     this.router.post("/lessons", lessonController.createLesson);

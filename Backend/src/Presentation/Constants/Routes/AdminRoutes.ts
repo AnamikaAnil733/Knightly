@@ -23,4 +23,6 @@ export const ADMIN_ROUTES = {
 
   REPORTS: "/reports",
   MODERATE_REPORT: "/reports/:id/status",
+
+  CREATE_ACHIEVEMENTS: "/achievements/create",
 } as const;

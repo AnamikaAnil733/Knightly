@@ -1,12 +1,15 @@
 import { UserManagementRepository } from "../Repository/UserRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { ReportRepository } from "../Repository/ReportRepository";
+import { AchievementsRepository } from "../Repository/AchievementsRepository";
 
 import { GetAllUserController } from "../../Presentation/Controllers/Admin/UserManagement/FindallUserController";
 import {  BlockUserController }  from "../../Presentation/Controllers/Admin/UserManagement/BlockUserController";
 import {  UnBlockUserController } from "../../Presentation/Controllers/Admin/UserManagement/UnBlockUserController";
 import { AdminPuzzleController } from "../../Presentation/Controllers/Admin/PuzzleManagement/PuzzleManagementAdmin";
 import { AdminReportController } from "../../Presentation/Controllers/Admin/Report/AdminReportController";
+import { SystemSettingsController } from "../../Presentation/Controllers/Admin/Settings/SystemSettingsController";
+import { AchievementController } from "../../Presentation/Controllers/Admin/AchievementManagement/AchievementController";
 
 import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
@@ -34,10 +37,13 @@ import { GetSystemSettingsUseCase } from "../../Application/UseCases/Admin/Setti
 import { UpdateSystemSettingsUseCase } from "../../Application/UseCases/Admin/Settings/UpdateSystemSettingsUseCase";
 import { GetReportsUseCase } from "../../Application/UseCases/Admin/Report/GetReportsUseCase";
 import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Report/UpdateReportStatusUseCase";
-import { SystemSettingsController } from "../../Presentation/Controllers/Admin/Settings/SystemSettingsController";
+import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/AddAchievements";
+
+
+
+
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 import { PuzzleGeneratorService } from "../Services/PuzzleGeneratorService";
-
 import { TokenService } from "../Services/TokenService";
 import { PuzzleValidationService } from "../Services/PuzzleValidationService";
 
@@ -54,6 +60,7 @@ const transactionRepo = new TransactionRepository();
 const analyticsRepo = new AnalyticsRepository(AuthModel, GameModel, TransactionModel);
 const systemSettingsRepo = new SystemSettingsRepository(SystemSettingsModel);
 const reportRepo = new ReportRepository();
+const achievementsRepo = new AchievementsRepository();
 
 //service
 const tokenService = new TokenService();
@@ -95,6 +102,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
   puzzleMangementRepo,
   chessGameRepo,
 );
+const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 
 export const getAllUserController = new GetAllUserController(
   getAllUsersUseCase,
@@ -129,6 +137,9 @@ export const PuzzleManagementController = new AdminPuzzleController(
   softDeletePuzzleUseCase,
   syncLichessPuzzleUseCase,
   generatePuzzleFromGameUseCase,
+);
+export const achievementController = new AchievementController(
+  addAchievementsUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);
