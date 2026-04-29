@@ -37,9 +37,10 @@ import { GetSystemSettingsUseCase } from "../../Application/UseCases/Admin/Setti
 import { UpdateSystemSettingsUseCase } from "../../Application/UseCases/Admin/Settings/UpdateSystemSettingsUseCase";
 import { GetReportsUseCase } from "../../Application/UseCases/Admin/Report/GetReportsUseCase";
 import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Report/UpdateReportStatusUseCase";
-import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/AddAchievements";
-import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/GetAllAchievements";
-import { UpdateAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/UpdateAchievementsUseCase";
+import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/AddAchievementsUseCase";
+import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/GetAllAchievementsUseCase";
+import { UpdateAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement/UpdateAchievementsUseCase";
+import { DeleteAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/DeleteAchievementUseCase";
 
 
 
@@ -107,6 +108,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
 const updateAchievementUseCase = new UpdateAchievementUseCase(achievementsRepo)
+const deleteAchievementUseCase = new DeleteAchievementsUseCase(achievementsRepo)
 
 
 export const getAllUserController = new GetAllUserController(
@@ -147,6 +149,7 @@ export const achievementController = new AchievementController(
   addAchievementsUseCase,
   getAllAchievementsUseCase,
   updateAchievementUseCase,
+  deleteAchievementUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

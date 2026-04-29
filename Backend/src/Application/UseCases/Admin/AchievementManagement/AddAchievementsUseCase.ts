@@ -1,4 +1,4 @@
-import { IAddAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IAddAchievementsUseCase";
+import { IAddAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IAddAchievementsUseCase";
 import AchievementEntity from "../../../../Domain/Entity/AchievementEntity";
 import { IAchievementsRepository } from "../../../../Domain/Interface/Repositories/IAchievementsRepository";
 import { CreateAchievementDTO } from "../../../../Domain/DTOs/AchievementsDTO";

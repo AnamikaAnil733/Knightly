@@ -1,4 +1,4 @@
-import { IGetAllAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievementsUseCase";
+import { IGetAllAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IGetAllAchievementsUseCase";
 import { IAchievementsRepository } from "../../../../Domain/Interface/Repositories/IAchievementsRepository";
 import { AchievementResponseDTO } from "../../../../Domain/DTOs/AchievementsDTO";
 import {AchievementMapper} from "../../../Mapper/AchievementMapper";

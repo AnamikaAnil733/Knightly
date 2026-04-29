@@ -40,10 +40,11 @@ export const MESSAGES = {
   PROFILE_UPDATE_SUCCESS: "Profile updated sucessfully",
   OTP_VERIFY_SUCCESS: "OTP verified successfully. Please login.",
   USER_REGISTER_SUCCESS: "User registered successfully",
-  LOGIN_SUCCESS: "Logged in successfully",
+  LOGIN_SUCCESS: "Logged in successfulPUZZLE_DELETE_SUCCESSly",
   OTP_SENT_SUCCESS: "OTP sent successfully",
   OTP_SENT_EMAIL: "OTP sent to email",
   PASSWORD_RESET: "Password reset successfully",
   REFRESH_TOKEN_MISSING: "Refresh token missing",
   INVALID_REFRESH_TOKEN: "Invalid refresh token",
+  ACHIEVEMENT_DELETE_SUCCESS:"Achievement deleted successfully"
 };

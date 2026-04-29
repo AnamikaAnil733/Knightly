@@ -6,12 +6,14 @@ import {
   getAllAchievementsApi,
   createAchievementApi,
   updateAchievementApi,
+  deleteAchievementApi,
   type Achievement,
   type CreateAchievementPayload,
   type UpdateAchievementPayload,
 } from "../../Service/Api/AdminAchievementApi";
 import { AchievementTable } from "../../Components/Admin/AchievementManagement/AchievementTable";
 import { AchievementModal } from "../../Components/Admin/AchievementManagement/AchievementModal";
+import { DeleteAchievementModal } from "../../Components/Admin/AchievementManagement/DeleteAchievementModal";
 
 /* ─── Stat card helper ──────────────────────────────────── */
 function StatCard({
@@ -40,6 +42,9 @@ export function AchievementManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // null = Create mode, Achievement = Edit mode
   const [editingAchievement, setEditingAchievement] =
+    useState<Achievement | null>(null);
+  // null = closed, Achievement = confirm delete
+  const [deletingAchievement, setDeletingAchievement] =
     useState<Achievement | null>(null);
 
   /* ── Fetch ───────────────────────────────────────────── */
@@ -80,6 +85,18 @@ export function AchievementManagement() {
   const handleEdit = (achievement: Achievement) => {
     setEditingAchievement(achievement);
     setIsModalOpen(true);
+  };
+
+  /* ── Open delete confirm ─────────────────────────────── */
+  const handleDeleteRequest = (achievement: Achievement) => {
+    setDeletingAchievement(achievement);
+  };
+
+  /* ── Confirm delete ──────────────────────────────────── */
+  const handleDelete = async (id: string) => {
+    await deleteAchievementApi(id);
+    toast.success("Achievement deleted!");
+    fetchAchievements();
   };
 
   /* ── Close modal ─────────────────────────────────────── */
@@ -160,15 +177,25 @@ export function AchievementManagement() {
         achievements={achievements}
         loading={loading}
         onEdit={handleEdit}
+        onDelete={handleDeleteRequest}
       />
 
-      {/* ── Modal (Create or Edit) ──────────────────────── */}
+      {/* ── Edit / Create Modal ────────────────────────── */}
       {isModalOpen && (
         <AchievementModal
           onClose={handleClose}
           onSave={handleCreate}
           onUpdate={handleUpdate}
           editData={editingAchievement}
+        />
+      )}
+
+      {/* ── Delete Confirmation Modal ──────────────────── */}
+      {deletingAchievement && (
+        <DeleteAchievementModal
+          achievement={deletingAchievement}
+          onClose={() => setDeletingAchievement(null)}
+          onConfirm={handleDelete}
         />
       )}
     </div>

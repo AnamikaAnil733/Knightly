@@ -1,4 +1,4 @@
-import { Pencil, Trophy } from "lucide-react";
+import { Pencil, Trophy, Trash2 } from "lucide-react";
 import type { Achievement } from "../../../Service/Api/AdminAchievementApi";
 import { ICON_OPTIONS, CRITERIA_OPTIONS } from "./AchievementConstants";
 
@@ -11,11 +11,12 @@ const CRITERIA_COLORS: Record<string, string> = {
 
 interface Props {
   achievements: Achievement[];
-  loading: boolean;
-  onEdit: (achievement: Achievement) => void;
+  loading:      boolean;
+  onEdit:       (achievement: Achievement) => void;
+  onDelete:     (achievement: Achievement) => void;
 }
 
-export function AchievementTable({ achievements, loading, onEdit }: Props) {
+export function AchievementTable({ achievements, loading, onEdit, onDelete }: Props) {
   if (loading) {
     return (
       <div className="rounded-2xl border border-white/10 bg-[#0A0F2C]/60 overflow-hidden">
@@ -54,7 +55,7 @@ export function AchievementTable({ achievements, loading, onEdit }: Props) {
     <div className="rounded-2xl border border-white/10 bg-[#0A0F2C]/60 overflow-hidden">
       {/* Table header */}
       <div
-        className="grid grid-cols-[48px_1fr_160px_120px_60px] items-center
+        className="grid grid-cols-[48px_1fr_160px_120px_96px] items-center
                       px-5 py-3 border-b border-white/10 bg-white/5"
       >
         <span />
@@ -68,7 +69,7 @@ export function AchievementTable({ achievements, loading, onEdit }: Props) {
           Target
         </span>
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">
-          Edit
+          Actions
         </span>
       </div>
 
@@ -84,7 +85,7 @@ export function AchievementTable({ achievements, loading, onEdit }: Props) {
           return (
             <div
               key={a.id}
-              className="grid grid-cols-[48px_1fr_160px_120px_60px] items-center
+              className="grid grid-cols-[48px_1fr_160px_120px_96px] items-center
                          px-5 py-4 hover:bg-white/5 transition-colors group"
             >
               {/* Icon */}
@@ -124,8 +125,8 @@ export function AchievementTable({ achievements, loading, onEdit }: Props) {
                 </span>
               </div>
 
-              {/* Edit button */}
-              <div className="flex justify-center">
+              {/* Actions: Edit + Delete */}
+              <div className="flex items-center justify-center gap-1">
                 <button
                   onClick={() => onEdit(a)}
                   title="Edit achievement"
@@ -134,6 +135,15 @@ export function AchievementTable({ achievements, loading, onEdit }: Props) {
                              hover:border-[#FFD166]/20 transition-all duration-200"
                 >
                   <Pencil size={15} />
+                </button>
+                <button
+                  onClick={() => onDelete(a)}
+                  title="Delete achievement"
+                  className="p-2 rounded-lg text-gray-500 hover:text-red-400
+                             hover:bg-red-400/10 border border-transparent
+                             hover:border-red-400/20 transition-all duration-200"
+                >
+                  <Trash2 size={15} />
                 </button>
               </div>
             </div>

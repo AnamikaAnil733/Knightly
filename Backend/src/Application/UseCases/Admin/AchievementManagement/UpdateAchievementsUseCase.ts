@@ -1,4 +1,4 @@
-import {IUpdateAchievementUseCase} from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IUpdateAchievements";
+import {IUpdateAchievementUseCase} from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IUpdateAchievements";
 import { UpdateAchievementDTO,AchievementResponseDTO } from "../../../../Domain/DTOs/AchievementsDTO";
 import { IAchievementsRepository } from "../../../../Domain/Interface/Repositories/IAchievementsRepository";
 import { AchievementMapper } from "../../../Mapper/AchievementMapper";

@@ -50,3 +50,7 @@ export const updateAchievementApi = async (
   const response = await axios.patch(`/admin/achievements/${id}`, data);
   return response.data.data;
 };
+
+export const deleteAchievementApi = async (id: string): Promise<void> => {
+  await axios.delete(`/admin/achievements/${id}`);
+};

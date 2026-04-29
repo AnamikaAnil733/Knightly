@@ -1,16 +1,19 @@
 import { Request, Response,NextFunction } from "express";
-import {IAddAchievements} from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IAddAchievementsUseCase";
+import {IAddAchievementsUseCase} from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IAddAchievementsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { CreateAchievementSchema ,UpdateAchievementSchema} from "../../../Validators/AchievementsValidator";
 import { AchievementMapper } from "../../../../Application/Mapper/AchievementMapper";
-import { IGetAllAchievements } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievementsUseCase";
-import { IUpdateAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IUpdateAchievements";
+import { IGetAllAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IGetAllAchievementsUseCase";
+import { IUpdateAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IUpdateAchievements";
+import { IDeleteAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IDeleteAchievementsUseCase";
+import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 
 
 export class AchievementController {
-    constructor(private readonly _addAchievements:IAddAchievements,
-          private readonly _getAllAchievements:IGetAllAchievements,
+    constructor(private readonly _addAchievements:IAddAchievementsUseCase,
+          private readonly _getAllAchievements:IGetAllAchievementsUseCase,
           private readonly _updateAchievements:IUpdateAchievementUseCase,
+          private readonly _deleteAchievement:IDeleteAchievementUseCase,
     ){
        
     }
@@ -57,6 +60,20 @@ export class AchievementController {
 
         }catch(error){
        next(error)
+        }
+    }
+
+    public deleteAchievement = async(req:Request,res:Response,next:NextFunction)=>{
+        try{
+            const {id} = req.params;
+            await this._deleteAchievement.execute(id);
+            return res.status(HttpStatusCodes.OK).json({
+                success:true,
+                message:MESSAGES.ACHIEVEMENT_DELETE_SUCCESS,
+            })
+
+        }catch(error){
+         next(error)
         }
     }
 }

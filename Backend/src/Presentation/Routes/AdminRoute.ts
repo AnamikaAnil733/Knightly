@@ -57,6 +57,7 @@ export class AdminRoutes{
     this.router.post(ADMIN_ROUTES.CREATE_ACHIEVEMENTS, achievementController.createAchievements);
     this.router.get(ADMIN_ROUTES.GET_ACHIEVEMENTS, achievementController.getAllAchievements);
     this.router.patch(ADMIN_ROUTES.UPDATE_ACHIEVEMENT, achievementController.updateAchievement);
+    this.router.delete(ADMIN_ROUTES.DELETE_ACHIEVEMENT,achievementController.deleteAchievement);
 
     // Lesson management routes
     this.router.post(ADMIN_ROUTES.LESSON, lessonController.createLesson);
