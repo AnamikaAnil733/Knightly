@@ -13,6 +13,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         navigateFallback: "index.html",
+        maximumFileSizeToCacheInBytes: 3000000,
         navigateFallbackAllowlist: [
           /^\/user/,
           /^\/play/,
