@@ -58,10 +58,13 @@ export const StreakCalendar: React.FC<StreakCalendarProps> = ({
   }, [history, showCurrentMonthOnly, weeksToShow]);
 
   // Group into weeks for the grid
-  const weeks: CalendarDay[][] = [];
-  for (let i = 0; i < calendarData.length; i += 7) {
-    weeks.push(calendarData.slice(i, i + 7));
-  }
+  const weeks = useMemo(() => {
+    const result: CalendarDay[][] = [];
+    for (let i = 0; i < calendarData.length; i += 7) {
+      result.push(calendarData.slice(i, i + 7));
+    }
+    return result;
+  }, [calendarData]);
 
   const monthLabels = useMemo(() => {
     if (showCurrentMonthOnly) return [];
