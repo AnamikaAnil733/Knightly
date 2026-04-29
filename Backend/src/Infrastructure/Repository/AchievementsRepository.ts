@@ -8,6 +8,14 @@ export class AchievementsRepository extends BaseRepository<AchievementEntity,Ach
     constructor(){
         super(AchievementModel,new MongoAchievementMapper());
     }
+
+    async findAll(): Promise<AchievementEntity[]> {
+        
+        const achievements = await AchievementModel.find().sort({createdAt:-1});
+        const mapper = new MongoAchievementMapper();
+        return achievements.map(doc => mapper.toEntityFromDocument(doc))
+
 }
+} 
 
     

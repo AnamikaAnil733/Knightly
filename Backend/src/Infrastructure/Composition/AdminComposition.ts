@@ -38,6 +38,7 @@ import { UpdateSystemSettingsUseCase } from "../../Application/UseCases/Admin/Se
 import { GetReportsUseCase } from "../../Application/UseCases/Admin/Report/GetReportsUseCase";
 import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Report/UpdateReportStatusUseCase";
 import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/AddAchievements";
+import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/GetAllAchievements";
 
 
 
@@ -103,6 +104,8 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
   chessGameRepo,
 );
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
+const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
+
 
 export const getAllUserController = new GetAllUserController(
   getAllUsersUseCase,
@@ -140,6 +143,7 @@ export const PuzzleManagementController = new AdminPuzzleController(
 );
 export const achievementController = new AchievementController(
   addAchievementsUseCase,
+  getAllAchievementsUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

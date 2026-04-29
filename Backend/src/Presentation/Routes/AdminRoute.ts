@@ -52,6 +52,7 @@ export class AdminRoutes{
     this.router.post(ADMIN_ROUTES.GENERATE_PUZZLE_FROM_GAME, PuzzleManagementController.generatePuzzlesFromGame);
 
     this.router.post(ADMIN_ROUTES.CREATE_ACHIEVEMENTS,achievementController.createAchievements);
+    this.router.get(ADMIN_ROUTES.GET_ACHIEVEMENTS,achievementController.getAllAchievements);
 
     // Lesson management routes
     this.router.post("/lessons", lessonController.createLesson);
