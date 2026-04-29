@@ -1,10 +1,10 @@
-import { IGetAllAchievements } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievements";
+import { IGetAllAchievementsUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievementsUseCase";
 import { IAchievementsRepository } from "../../../../Domain/Interface/Repositories/IAchievementsRepository";
 import { AchievementResponseDTO } from "../../../../Domain/DTOs/AchievementsDTO";
 import {AchievementMapper} from "../../../Mapper/AchievementMapper";
 
 
-export class GetAllAchievementsUseCase implements IGetAllAchievements{
+export class GetAllAchievementsUseCase implements IGetAllAchievementsUseCase{
     constructor(private readonly _achievementsRepository:IAchievementsRepository){}
 
     async execute(): Promise<AchievementResponseDTO[]> {

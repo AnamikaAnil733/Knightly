@@ -1,5 +1,5 @@
 import { AchievementResponseDTO } from "../../../../DTOs/AchievementsDTO";
 
-export interface IGetAllAchievements{
+export interface IGetAllAchievementsUseCase{
     execute():Promise<AchievementResponseDTO[]>;
 }

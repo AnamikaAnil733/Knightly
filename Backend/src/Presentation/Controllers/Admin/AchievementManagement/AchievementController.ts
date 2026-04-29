@@ -1,9 +1,9 @@
 import { Request, Response,NextFunction } from "express";
-import {IAddAchievements} from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IAddAchievements";
+import {IAddAchievements} from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IAddAchievementsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { CreateAchievementSchema ,UpdateAchievementSchema} from "../../../Validators/AchievementsValidator";
 import { AchievementMapper } from "../../../../Application/Mapper/AchievementMapper";
-import { IGetAllAchievements } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievements";
+import { IGetAllAchievements } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievementsUseCase";
 import { IUpdateAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IUpdateAchievements";
 
 
