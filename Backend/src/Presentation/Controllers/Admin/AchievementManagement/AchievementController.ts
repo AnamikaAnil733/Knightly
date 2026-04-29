@@ -1,4 +1,5 @@
 import { Request, Response,NextFunction } from "express";
+import { Types } from "mongoose";
 import {IAddAchievementsUseCase} from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IAddAchievementsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { CreateAchievementSchema ,UpdateAchievementSchema} from "../../../Validators/AchievementsValidator";
@@ -7,6 +8,7 @@ import { IGetAllAchievementsUseCase } from "../../../../Domain/Interface/Usecase
 import { IUpdateAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IUpdateAchievements";
 import { IDeleteAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchievementManagement/IDeleteAchievementsUseCase";
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
+import { CustomError } from "../../../../Domain/Entity/CustomError";
 
 
 export class AchievementController {
@@ -50,6 +52,9 @@ export class AchievementController {
     public updateAchievement = async(req:Request,res:Response,next:NextFunction)=>{
         try{
 
+            if (!Types.ObjectId.isValid(req.params.id)) {
+                throw new CustomError(HttpStatusCodes.BAD_REQUEST, "Invalid achievement ID");
+            }
             const validateAchievement = UpdateAchievementSchema.parse({ id: req.params.id ,...req.body});
             const acheivement = await this._updateAchievements.execute(validateAchievement)
             return res.status(HttpStatusCodes.ACCEPTED).json({
@@ -66,6 +71,9 @@ export class AchievementController {
     public deleteAchievement = async(req:Request,res:Response,next:NextFunction)=>{
         try{
             const {id} = req.params;
+            if (!Types.ObjectId.isValid(id)) {
+                throw new CustomError(HttpStatusCodes.BAD_REQUEST, "Invalid achievement ID");
+            }
             await this._deleteAchievement.execute(id);
             return res.status(HttpStatusCodes.OK).json({
                 success:true,

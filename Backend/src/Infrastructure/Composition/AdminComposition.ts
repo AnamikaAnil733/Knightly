@@ -40,7 +40,7 @@ import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Repo
 import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/AddAchievementsUseCase";
 import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/GetAllAchievementsUseCase";
 import { UpdateAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement/UpdateAchievementsUseCase";
-import { DeleteAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/DeleteAchievementUseCase";
+import { DeleteAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement/DeleteAchievementUseCase";
 
 
 
@@ -108,7 +108,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
 const updateAchievementUseCase = new UpdateAchievementUseCase(achievementsRepo)
-const deleteAchievementUseCase = new DeleteAchievementsUseCase(achievementsRepo)
+const deleteAchievementUseCase = new DeleteAchievementUseCase(achievementsRepo)
 
 
 export const getAllUserController = new GetAllUserController(

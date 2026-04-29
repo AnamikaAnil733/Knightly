@@ -10,7 +10,7 @@ export interface AchievementDocument extends Document {
 }
 
 export const AchievementSchema = new Schema<AchievementDocument>({
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   icon: { type: String, default: 'Trophy' },
   criteriaType: { 
@@ -20,4 +20,4 @@ export const AchievementSchema = new Schema<AchievementDocument>({
   },
   criteriaValue: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
