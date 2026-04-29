@@ -43,6 +43,7 @@ export class AdminRoutes{
     this.router.get(ADMIN_ROUTES.SYSTEM_SETTINGS, systemSettingsController.getSettings);
     this.router.patch(ADMIN_ROUTES.SYSTEM_SETTINGS, systemSettingsController.updateSettings);
 
+    //Puzzle Management routes
     this.router.post(ADMIN_ROUTES.CREATEPUZZLES,PuzzleManagementController.createPuzzle);
     this.router.get(ADMIN_ROUTES.PUZZLES,PuzzleManagementController.getAllPuzzles);
     this.router.patch(ADMIN_ROUTES.EDITPUZZLE,PuzzleManagementController.editPuzzles);
@@ -51,15 +52,17 @@ export class AdminRoutes{
     this.router.post(ADMIN_ROUTES.GENERATE_AI_PUZZLES, PuzzleManagementController.generatePuzzlesFromGame);
     this.router.post(ADMIN_ROUTES.GENERATE_PUZZLE_FROM_GAME, PuzzleManagementController.generatePuzzlesFromGame);
 
+
+    // Achievement Management routes
     this.router.post(ADMIN_ROUTES.CREATE_ACHIEVEMENTS,achievementController.createAchievements);
     this.router.get(ADMIN_ROUTES.GET_ACHIEVEMENTS,achievementController.getAllAchievements);
 
     // Lesson management routes
-    this.router.post("/lessons", lessonController.createLesson);
-    this.router.put("/lessons/:id", lessonController.updateLesson);
-    this.router.delete("/lessons/:id", lessonController.deleteLesson);
-    this.router.get("/lessons", lessonController.getLessons);
-
+    this.router.post(ADMIN_ROUTES.LESSON, lessonController.createLesson);
+    this.router.put(ADMIN_ROUTES.EDIT_LESSON, lessonController.updateLesson);
+    this.router.delete(ADMIN_ROUTES.DELETE_LESSON, lessonController.deleteLesson);
+    this.router.get(ADMIN_ROUTES.CREATE_LESSON, lessonController.getLessons);
+    
     // Blog management routes
     this.router.get(ADMIN_ROUTES.BLOGS, blogController.adminGetAllBlogs);
     this.router.get(ADMIN_ROUTES.GET_BLOG_BY_ID, blogController.adminGetBlogById);

@@ -24,6 +24,13 @@ export const ADMIN_ROUTES = {
   REPORTS: "/reports",
   MODERATE_REPORT: "/reports/:id/status",
 
+  LESSON:"/lessons",
+  EDIT_LESSON:"/lessons/:id",
+  DELETE_LESSON:"/lessons/:id",
+  CREATE_LESSON:"/lessons",
+
+
   CREATE_ACHIEVEMENTS: "/achievements/create",
   GET_ACHIEVEMENTS: "/achievements",
+  
 } as const;

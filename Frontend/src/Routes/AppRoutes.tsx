@@ -40,6 +40,7 @@ import { AdminDashboard } from "../Pages/Admin/AdminDashboard";
 import { SystemSettings } from "../Pages/Admin/SystemSettings";
 import { MaintenancePage } from "../Pages/User/MaintenancePage";
 import { ReportManagement } from "../Pages/Admin/ReportManagement";
+import { AchievementManagement } from "../Pages/Admin/AchievementManagement";
 import { AdminMatchReview } from "../Pages/Admin/AdminMatchReview";
 import { useSystemSettings } from "../Context/SystemSettingsContext";
 import { Navigate, useLocation } from "react-router-dom";
@@ -144,6 +145,7 @@ export default function AppRoutes() {
         <Route path="settings" element={<SystemSettings />} />
         <Route path="reports" element={<ReportManagement />} />
         <Route path="reports/review/:gameId" element={<AdminMatchReview />} />
+        <Route path="achievements" element={<AchievementManagement />} />
       </Route>
     </Routes>
   );

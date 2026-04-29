@@ -62,8 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
     },
     {
       icon: <AwardIcon size={20} />,
-      name: "Rewards & Achievements",
-      path: "/rewards",
+      name: "Achievements",
+      path: "/admin/achievements",
     },
     {
       icon: <CreditCardIcon size={20} />,
