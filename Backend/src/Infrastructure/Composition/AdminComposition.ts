@@ -39,6 +39,7 @@ import { GetReportsUseCase } from "../../Application/UseCases/Admin/Report/GetRe
 import { UpdateReportStatusUseCase } from "../../Application/UseCases/Admin/Report/UpdateReportStatusUseCase";
 import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/AddAchievements";
 import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/GetAllAchievements";
+import { UpdateAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement.ts/UpdateAchievementsUseCase";
 
 
 
@@ -105,6 +106,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
 );
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
+const updateAchievementUseCase = new UpdateAchievementUseCase(achievementsRepo)
 
 
 export const getAllUserController = new GetAllUserController(
@@ -144,6 +146,7 @@ export const PuzzleManagementController = new AdminPuzzleController(
 export const achievementController = new AchievementController(
   addAchievementsUseCase,
   getAllAchievementsUseCase,
+  updateAchievementUseCase,
 );
 
 export const adminRoutes = new AdminRoutes(tokenService);

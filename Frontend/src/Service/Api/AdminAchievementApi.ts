@@ -23,6 +23,14 @@ export interface CreateAchievementPayload {
   criteriaValue: number;
 }
 
+export interface UpdateAchievementPayload {
+  title?: string;
+  description?: string;
+  icon?: string;
+  criteriaType?: CriteriaType;
+  criteriaValue?: number;
+}
+
 export const createAchievementApi = async (
   data: CreateAchievementPayload,
 ): Promise<Achievement> => {
@@ -32,5 +40,13 @@ export const createAchievementApi = async (
 
 export const getAllAchievementsApi = async (): Promise<Achievement[]> => {
   const response = await axios.get("/admin/achievements");
+  return response.data.data;
+};
+
+export const updateAchievementApi = async (
+  id: string,
+  data: UpdateAchievementPayload,
+): Promise<Achievement> => {
+  const response = await axios.patch(`/admin/achievements/${id}`, data);
   return response.data.data;
 };

@@ -1,15 +1,16 @@
 import { Request, Response,NextFunction } from "express";
 import {IAddAchievements} from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IAddAchievements";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import { CreateAchievementSchema } from "../../../Validators/AchievementsValidator";
+import { CreateAchievementSchema ,UpdateAchievementSchema} from "../../../Validators/AchievementsValidator";
 import { AchievementMapper } from "../../../../Application/Mapper/AchievementMapper";
 import { IGetAllAchievements } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IGetAllAchievements";
-
+import { IUpdateAchievementUseCase } from "../../../../Domain/Interface/Usecases/Admin/AchevementManagement/IUpdateAchievements";
 
 
 export class AchievementController {
     constructor(private readonly _addAchievements:IAddAchievements,
           private readonly _getAllAchievements:IGetAllAchievements,
+          private readonly _updateAchievements:IUpdateAchievementUseCase,
     ){
        
     }
@@ -40,6 +41,22 @@ export class AchievementController {
         }
         catch(error){
          next(error)
+        }
+    }
+
+    public updateAchievement = async(req:Request,res:Response,next:NextFunction)=>{
+        try{
+
+            const validateAchievement = UpdateAchievementSchema.parse({ id: req.params.id ,...req.body});
+            const acheivement = await this._updateAchievements.execute(validateAchievement)
+            return res.status(HttpStatusCodes.ACCEPTED).json({
+                success: true,
+                message: "Achievement updated successfully",
+                data: acheivement
+            })
+
+        }catch(error){
+       next(error)
         }
     }
 }

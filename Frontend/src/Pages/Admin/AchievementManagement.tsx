@@ -5,8 +5,10 @@ import toast from "react-hot-toast";
 import {
   getAllAchievementsApi,
   createAchievementApi,
+  updateAchievementApi,
   type Achievement,
   type CreateAchievementPayload,
+  type UpdateAchievementPayload,
 } from "../../Service/Api/AdminAchievementApi";
 import { AchievementTable } from "../../Components/Admin/AchievementManagement/AchievementTable";
 import { AchievementModal } from "../../Components/Admin/AchievementManagement/AchievementModal";
@@ -26,6 +28,8 @@ export function AchievementManagement() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading]           = useState(true);
   const [isModalOpen, setIsModalOpen]   = useState(false);
+  // null = Create mode, Achievement = Edit mode
+  const [editingAchievement, setEditingAchievement] = useState<Achievement | null>(null);
 
   /* ── Fetch ───────────────────────────────────────────── */
   const fetchAchievements = async () => {
@@ -49,11 +53,30 @@ export function AchievementManagement() {
     fetchAchievements();
   };
 
+  /* ── Update ──────────────────────────────────────────── */
+  const handleUpdate = async (id: string, payload: UpdateAchievementPayload) => {
+    await updateAchievementApi(id, payload);
+    toast.success("Achievement updated!");
+    fetchAchievements();
+  };
+
+  /* ── Open edit modal ─────────────────────────────────── */
+  const handleEdit = (achievement: Achievement) => {
+    setEditingAchievement(achievement);
+    setIsModalOpen(true);
+  };
+
+  /* ── Close modal ─────────────────────────────────────── */
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setEditingAchievement(null);
+  };
+
   /* ── Derived stats ───────────────────────────────────── */
-  const total          = achievements.length;
-  const byGames        = achievements.filter(a => a.criteriaType === "GAMES_WON" || a.criteriaType === "GAMES_PLAYED").length;
-  const byPuzzles      = achievements.filter(a => a.criteriaType === "PUZZLES_SOLVED").length;
-  const byStreak       = achievements.filter(a => a.criteriaType === "STREAK_DAYS").length;
+  const total     = achievements.length;
+  const byGames   = achievements.filter(a => a.criteriaType === "GAMES_WON" || a.criteriaType === "GAMES_PLAYED").length;
+  const byPuzzles = achievements.filter(a => a.criteriaType === "PUZZLES_SOLVED").length;
+  const byStreak  = achievements.filter(a => a.criteriaType === "STREAK_DAYS").length;
 
   /* ── Render ──────────────────────────────────────────── */
   return (
@@ -78,7 +101,7 @@ export function AchievementManagement() {
 
         <button
           id="btn-add-achievement"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => { setEditingAchievement(null); setIsModalOpen(true); }}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
                      bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] text-white
                      border border-[#FFD166]/30
@@ -92,20 +115,26 @@ export function AchievementManagement() {
 
       {/* ── Stat Cards ─────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Total"          value={total}     color="text-white"         />
-        <StatCard label="Game-based"     value={byGames}   color="text-[#FFD166]"     />
-        <StatCard label="Puzzle-based"   value={byPuzzles} color="text-purple-400"    />
-        <StatCard label="Streak-based"   value={byStreak}  color="text-orange-400"    />
+        <StatCard label="Total"        value={total}     color="text-white"      />
+        <StatCard label="Game-based"   value={byGames}   color="text-[#FFD166]"  />
+        <StatCard label="Puzzle-based" value={byPuzzles} color="text-purple-400" />
+        <StatCard label="Streak-based" value={byStreak}  color="text-orange-400" />
       </div>
 
       {/* ── Table ──────────────────────────────────────── */}
-      <AchievementTable achievements={achievements} loading={loading} />
+      <AchievementTable
+        achievements={achievements}
+        loading={loading}
+        onEdit={handleEdit}
+      />
 
-      {/* ── Modal ──────────────────────────────────────── */}
+      {/* ── Modal (Create or Edit) ──────────────────────── */}
       {isModalOpen && (
         <AchievementModal
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleClose}
           onSave={handleCreate}
+          onUpdate={handleUpdate}
+          editData={editingAchievement}
         />
       )}
     </div>

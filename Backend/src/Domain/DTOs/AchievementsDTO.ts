@@ -16,3 +16,13 @@ export interface AchievementResponseDTO {
     criteriaType: CriteriaType;
     criteriaValue: number;
 }
+
+
+export interface UpdateAchievementDTO {
+    id: string; 
+    title?: string;
+    description?: string;
+    icon?: string;
+    criteriaType?: CriteriaType;
+    criteriaValue?: number;
+}

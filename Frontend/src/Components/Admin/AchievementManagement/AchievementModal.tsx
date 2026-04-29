@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { X, Trophy, Flame, Target, Zap, Star, Shield, Crown, Award } from "lucide-react";
-import type { CreateAchievementPayload, CriteriaType } from "../../../Service/Api/AdminAchievementApi";
+import { X, Trophy, Flame, Target, Zap, Star, Shield, Crown, Award, Pencil } from "lucide-react";
+import type {
+  Achievement,
+  CreateAchievementPayload,
+  CriteriaType,
+  UpdateAchievementPayload,
+} from "../../../Service/Api/AdminAchievementApi";
 
 /* ─── Icon catalogue ──────────────────────────────────────── */
 export const ICON_OPTIONS = [
@@ -14,7 +19,7 @@ export const ICON_OPTIONS = [
   { name: "Award",   Component: Award   },
 ];
 
-const CRITERIA_OPTIONS: { value: CriteriaType; label: string }[] = [
+export const CRITERIA_OPTIONS: { value: CriteriaType; label: string }[] = [
   { value: "GAMES_WON",      label: "Games Won"      },
   { value: "GAMES_PLAYED",   label: "Games Played"   },
   { value: "PUZZLES_SOLVED", label: "Puzzles Solved" },
@@ -22,26 +27,32 @@ const CRITERIA_OPTIONS: { value: CriteriaType; label: string }[] = [
 ];
 
 interface Props {
-  onClose: () => void;
-  onSave:  (data: CreateAchievementPayload) => Promise<void>;
+  onClose:    () => void;
+  onSave:     (data: CreateAchievementPayload) => Promise<void>;
+  onUpdate?:  (id: string, data: UpdateAchievementPayload) => Promise<void>;
+  // Pass the existing achievement to switch to Edit mode
+  editData?:  Achievement | null;
 }
 
-export function AchievementModal({ onClose, onSave }: Props) {
+export function AchievementModal({ onClose, onSave, onUpdate, editData }: Props) {
+  const isEditMode = !!editData;
+
   const [form, setForm] = useState<CreateAchievementPayload>({
-    title:         "",
-    description:   "",
-    icon:          "Trophy",
-    criteriaType:  "GAMES_WON",
-    criteriaValue: 1,
+    title:         editData?.title         ?? "",
+    description:   editData?.description   ?? "",
+    icon:          editData?.icon          ?? "Trophy",
+    criteriaType:  editData?.criteriaType  ?? "GAMES_WON",
+    criteriaValue: editData?.criteriaValue ?? 1,
   });
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors]   = useState<Partial<Record<keyof CreateAchievementPayload, string>>>({});
 
   /* ── Validation ─────────────────────────────────────────── */
   const validate = () => {
     const e: typeof errors = {};
-    if (form.title.length < 3)        e.title        = "Title must be at least 3 characters.";
-    if (form.description.length < 10) e.description  = "Description must be at least 10 characters.";
+    if (form.title.length < 3)        e.title         = "Title must be at least 3 characters.";
+    if (form.description.length < 10) e.description   = "Description must be at least 10 characters.";
     if (form.criteriaValue < 1)       e.criteriaValue = "Value must be at least 1.";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -52,7 +63,11 @@ export function AchievementModal({ onClose, onSave }: Props) {
     if (!validate()) return;
     setLoading(true);
     try {
-      await onSave(form);
+      if (isEditMode && onUpdate) {
+        await onUpdate(editData!.id, form);
+      } else {
+        await onSave(form);
+      }
       onClose();
     } finally {
       setLoading(false);
@@ -68,15 +83,30 @@ export function AchievementModal({ onClose, onSave }: Props) {
       <div
         className="relative w-full max-w-lg rounded-2xl border border-[#3A6FF7]/40
                    bg-gradient-to-br from-[#0A0F2C] via-[#0d1535] to-[#060B2E]
-                   shadow-[0_0_60px_rgba(58,111,247,0.2)] animate-fadeIn"
+                   shadow-[0_0_60px_rgba(58,111,247,0.2)]"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-[#6B2EFF] to-[#3A6FF7] rounded-lg">
-              <Award size={20} className="text-white" />
+            <div className={`p-2 rounded-lg ${isEditMode
+              ? "bg-gradient-to-br from-[#FFD166]/30 to-amber-600/30 border border-[#FFD166]/30"
+              : "bg-gradient-to-br from-[#6B2EFF] to-[#3A6FF7]"
+            }`}>
+              {isEditMode
+                ? <Pencil size={20} className="text-[#FFD166]" />
+                : <Award   size={20} className="text-white"    />
+              }
             </div>
-            <h2 className="text-lg font-semibold text-white">New Achievement</h2>
+            <div>
+              <h2 className="text-lg font-semibold text-white">
+                {isEditMode ? "Edit Achievement" : "New Achievement"}
+              </h2>
+              {isEditMode && (
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Editing: <span className="text-[#FFD166]">{editData?.title}</span>
+                </p>
+              )}
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -202,14 +232,18 @@ export function AchievementModal({ onClose, onSave }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-lg text-sm font-semibold text-white
-                         bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7]
-                         border border-[#FFD166]/30
-                         hover:shadow-[0_0_20px_rgba(107,46,255,0.5)]
+              className={`px-6 py-2.5 rounded-lg text-sm font-semibold text-white
+                         border transition-all duration-300
                          disabled:opacity-50 disabled:cursor-not-allowed
-                         transition-all duration-300"
+                         ${isEditMode
+                           ? "bg-gradient-to-r from-amber-600 to-[#FFD166] border-[#FFD166]/30 hover:shadow-[0_0_20px_rgba(255,209,102,0.4)] text-[#0A0F2C]"
+                           : "bg-gradient-to-r from-[#6B2EFF] to-[#3A6FF7] border-[#FFD166]/30 hover:shadow-[0_0_20px_rgba(107,46,255,0.5)]"
+                         }`}
             >
-              {loading ? "Creating..." : "Create Achievement"}
+              {loading
+                ? (isEditMode ? "Saving..." : "Creating...")
+                : (isEditMode ? "Save Changes" : "Create Achievement")
+              }
             </button>
           </div>
         </form>

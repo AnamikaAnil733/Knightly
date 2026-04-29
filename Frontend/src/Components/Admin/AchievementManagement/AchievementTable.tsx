@@ -1,4 +1,4 @@
-import { Trophy, Flame, Target, Zap, Star, Shield, Crown, Award } from "lucide-react";
+import { Pencil, Trophy, Flame, Target, Zap, Star, Shield, Crown, Award } from "lucide-react";
 import type { Achievement } from "../../../Service/Api/AdminAchievementApi";
 
 /* ─── Icon resolver ─────────────────────────────────────── */
@@ -23,9 +23,10 @@ const CRITERIA_COLORS: Record<string, string> = {
 interface Props {
   achievements: Achievement[];
   loading:      boolean;
+  onEdit:       (achievement: Achievement) => void;
 }
 
-export function AchievementTable({ achievements, loading }: Props) {
+export function AchievementTable({ achievements, loading, onEdit }: Props) {
   if (loading) {
     return (
       <div className="rounded-2xl border border-white/10 bg-[#0A0F2C]/60 overflow-hidden">
@@ -59,13 +60,13 @@ export function AchievementTable({ achievements, loading }: Props) {
   return (
     <div className="rounded-2xl border border-white/10 bg-[#0A0F2C]/60 overflow-hidden">
       {/* Table header */}
-      <div className="grid grid-cols-[48px_1fr_160px_140px_80px] items-center
+      <div className="grid grid-cols-[48px_1fr_160px_120px_60px] items-center
                       px-5 py-3 border-b border-white/10 bg-white/5">
         <span />
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Achievement</span>
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Criteria</span>
         <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Target</span>
-        <span />
+        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider text-center">Edit</span>
       </div>
 
       {/* Rows */}
@@ -77,7 +78,7 @@ export function AchievementTable({ achievements, loading }: Props) {
           return (
             <div
               key={a.id}
-              className="grid grid-cols-[48px_1fr_160px_140px_80px] items-center
+              className="grid grid-cols-[48px_1fr_160px_120px_60px] items-center
                          px-5 py-4 hover:bg-white/5 transition-colors group"
             >
               {/* Icon */}
@@ -106,8 +107,18 @@ export function AchievementTable({ achievements, loading }: Props) {
                 <span className="text-sm font-bold text-white">{a.criteriaValue}</span>
               </div>
 
-              {/* Actions placeholder */}
-              <div />
+              {/* Edit button */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => onEdit(a)}
+                  title="Edit achievement"
+                  className="p-2 rounded-lg text-gray-500 hover:text-[#FFD166]
+                             hover:bg-[#FFD166]/10 border border-transparent
+                             hover:border-[#FFD166]/20 transition-all duration-200"
+                >
+                  <Pencil size={15} />
+                </button>
+              </div>
             </div>
           );
         })}

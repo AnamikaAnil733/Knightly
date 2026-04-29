@@ -1,5 +1,5 @@
 import AchievementEntity from "../../Domain/Entity/AchievementEntity";
-import { CreateAchievementDTO ,AchievementResponseDTO} from "../../Domain/DTOs/AchievementsDTO";
+import { CreateAchievementDTO ,AchievementResponseDTO,UpdateAchievementDTO} from "../../Domain/DTOs/AchievementsDTO";
 
 export class AchievementMapper {
    public static toEntity(achievement:CreateAchievementDTO):AchievementEntity{
@@ -22,4 +22,14 @@ export class AchievementMapper {
       criteriaValue:achievement.criteriaValue
     }
    }
+   public static toEntityForUpdate(dto: UpdateAchievementDTO): AchievementEntity {
+    return new AchievementEntity({
+        id: dto.id,              
+        title: dto.title ?? "",
+        description: dto.description ?? "",
+        icon: dto.icon,
+        criteriaType: dto.criteriaType ?? "GAMES_WON",
+        criteriaValue: dto.criteriaValue ?? 1,
+    });
+}
 }

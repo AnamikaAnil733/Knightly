@@ -32,5 +32,5 @@ export const ADMIN_ROUTES = {
 
   CREATE_ACHIEVEMENTS: "/achievements/create",
   GET_ACHIEVEMENTS: "/achievements",
-  
+  UPDATE_ACHIEVEMENT: "/achievements/:id",
 } as const;
