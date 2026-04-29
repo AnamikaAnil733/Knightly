@@ -11,12 +11,17 @@ const CRITERIA_COLORS: Record<string, string> = {
 
 interface Props {
   achievements: Achievement[];
-  loading:      boolean;
-  onEdit:       (achievement: Achievement) => void;
-  onDelete:     (achievement: Achievement) => void;
+  loading: boolean;
+  onEdit: (achievement: Achievement) => void;
+  onDelete: (achievement: Achievement) => void;
 }
 
-export function AchievementTable({ achievements, loading, onEdit, onDelete }: Props) {
+export function AchievementTable({
+  achievements,
+  loading,
+  onEdit,
+  onDelete,
+}: Props) {
   if (loading) {
     return (
       <div className="rounded-2xl border border-white/10 bg-[#0A0F2C]/60 overflow-hidden">

@@ -4,11 +4,15 @@ import type { Achievement } from "../../../Service/Api/AdminAchievementApi";
 
 interface Props {
   achievement: Achievement;
-  onClose:     () => void;
-  onConfirm:   (id: string) => Promise<void>;
+  onClose: () => void;
+  onConfirm: (id: string) => Promise<void>;
 }
 
-export function DeleteAchievementModal({ achievement, onClose, onConfirm }: Props) {
+export function DeleteAchievementModal({
+  achievement,
+  onClose,
+  onConfirm,
+}: Props) {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
@@ -23,10 +27,11 @@ export function DeleteAchievementModal({ achievement, onClose, onConfirm }: Prop
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-2xl border border-red-500/20
+      <div
+        className="relative w-full max-w-md rounded-2xl border border-red-500/20
                       bg-gradient-to-br from-[#0A0F2C] via-[#0d1535] to-[#060B2E]
-                      shadow-[0_0_60px_rgba(239,68,68,0.15)]">
-
+                      shadow-[0_0_60px_rgba(239,68,68,0.15)]"
+      >
         {/* Close */}
         <button
           onClick={onClose}
@@ -39,12 +44,16 @@ export function DeleteAchievementModal({ achievement, onClose, onConfirm }: Prop
         {/* Body */}
         <div className="p-8 flex flex-col items-center text-center">
           {/* Warning icon */}
-          <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20
-                          flex items-center justify-center mb-5">
+          <div
+            className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20
+                          flex items-center justify-center mb-5"
+          >
             <AlertTriangle size={28} className="text-red-400" />
           </div>
 
-          <h2 className="text-xl font-bold text-white mb-2">Delete Achievement</h2>
+          <h2 className="text-xl font-bold text-white mb-2">
+            Delete Achievement
+          </h2>
           <p className="text-sm text-gray-400 mb-1">
             You are about to permanently delete:
           </p>
