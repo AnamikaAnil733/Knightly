@@ -8,6 +8,7 @@ import {
   leaderBoardController,
   friendController,
   reportController,
+  userAchievementController,
 } from "../../Infrastructure/Composition/UserComposition";
 import { lessonController } from "../../Infrastructure/Composition/LessonComposition";
 import { blogController } from "../../Infrastructure/Composition/BlogComposition";
@@ -130,5 +131,10 @@ export class UserRoutes {
 
     // Report Route
     this.router.post(USER_ROUTES.REPORT, reportController.handleCreateReport);
+
+    // Achievement routes
+    this.router.get(USER_ROUTES.EARNED_ACHIEVEMENTS, userAchievementController.getEarnedAchievements);
+    this.router.get(USER_ROUTES.ALL_ACHIEVEMENTS, userAchievementController.getAllAchievements);
+    this.router.post(USER_ROUTES.CHECK_ACHIEVEMENTS, userAchievementController.checkProgress);
   }
 }

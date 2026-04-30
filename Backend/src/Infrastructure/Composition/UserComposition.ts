@@ -5,6 +5,8 @@ import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRe
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { FriendshipRepository } from "../Repository/FriendshipRepository";
 import { ReportRepository } from "../Repository/ReportRepository";
+import { AchievementsRepository } from "../Repository/AchievementsRepository";
+import { UserAchievementRepository } from "../Repository/UserAchievementRepository";
 
 import { EditProfileController } from "../../Presentation/Controllers/User/ProfileManagement/UpdateProfileController";
 import { ChangePassswordController } from "../../Presentation/Controllers/User/ProfileManagement/ChangePasswordController";
@@ -13,6 +15,7 @@ import { GameController } from "../../Presentation/Controllers/User/GameManageme
 import { UserPuzzleController } from "../../Presentation/Controllers/User/PuzzleManagement/PuzzleController";
 import { FriendController } from "../../Presentation/Controllers/User/FriendManagement/FriendController";
 import { ReportController } from "../../Presentation/Controllers/User/Report/ReportController";
+import { UserAchievementController } from "../../Presentation/Controllers/User/Achievement/UserAchievementController";
 
 import {  EditUserUseCase } from "../../Application/UseCases/User/ProfileManagement/EditUseCase";
 import { ChangePasswordUseCase } from "../../Application/UseCases/User/ProfileManagement/ChangePasswordUseCase";
@@ -44,11 +47,16 @@ import BlockUserUseCase from "../../Application/UseCases/User/FriendManagement/B
 import UnblockUserUseCase from "../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
 import { CreateReportUseCase } from "../../Application/UseCases/User/Report/CreateReportUseCase";
 
+import { GetEarnedAchievementsUseCase } from "../../Application/UseCases/User/Achievement/GetEarnedAchievementsUseCase";
+import { CheckAndAwardAchievementUseCase } from "../../Application/UseCases/User/Achievement/CheckAndAwardAchievementUseCase";
+import { GetAllAchievementsWithProgressUseCase } from "../../Application/UseCases/User/Achievement/GetAllAchievementsWithProgressUseCase";
+
 
 import { TokenService } from "../Services/TokenService";
 import {  HashService } from "../Services/PasswordHashing";
 import { S3StorageService } from "../Services/S3Service";
 import { MediaService } from "../Services/MediaService";
+import { AchievementService } from "../Services/AchievementService";
 
 import {GameModel} from "../Database/Model/GameModel";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
@@ -68,6 +76,8 @@ const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 const LeaderRepo = new LeaderBoardRepository();
 const FriendshipRepo = new FriendshipRepository();
 const ReportRepo = new ReportRepository();
+const AchievementRepo = new AchievementsRepository();
+const UserAchievementRepo = new UserAchievementRepository();
 
 //service
 const tokenService = new TokenService();
@@ -75,6 +85,7 @@ const hashService = new HashService();
 const S3Service = new S3StorageService();
 const mediaService = new MediaService(S3Service);
 const stockfishService = new StockfishService();
+const achievementService = new AchievementService(AchievementRepo,UserAchievementRepo);
 
 //usecase
 const editUserUseCase = new EditUserUseCase(UserRepo);
@@ -94,11 +105,7 @@ const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(
   ProgressPuzzleRepo,
   UserRepo,
 );
-const validatePuzzleUsecase = new ValidatePuzzlesMoves(
-  PuzzleRepo,
-  ProgressPuzzleRepo,
-  AuthRepo,
-);
+
 const getPuzzleSolveCountUseCase = new GetPuzzleSolveCountUseCase(ProgressPuzzleRepo);
 const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(PuzzleRepo);
 const getPuzzleSolveHistoryUseCase = new GetPuzzleSolveHistoryUseCase(ProgressPuzzleRepo);
@@ -117,6 +124,17 @@ const unfriendUseCase = new UnfriendUseCase(FriendshipRepo);
 const blockUserUseCase = new BlockUserUseCase(FriendshipRepo);
 const unblockUserUseCase = new UnblockUserUseCase(FriendshipRepo);
 const createReportUseCase = new CreateReportUseCase(ReportRepo);
+
+const getEarnedAchievementsUseCase = new GetEarnedAchievementsUseCase(UserAchievementRepo, AchievementRepo);
+const checkAndAwardAchievementUseCase = new CheckAndAwardAchievementUseCase(achievementService);
+const getAllAchievementsWithProgressUseCase = new GetAllAchievementsWithProgressUseCase(AchievementRepo, UserAchievementRepo);
+const validatePuzzleUsecase = new ValidatePuzzlesMoves(
+  PuzzleRepo,
+  ProgressPuzzleRepo,
+  AuthRepo,
+  checkAndAwardAchievementUseCase,
+  getPuzzleSolveCountUseCase
+);
 
 
 export const editUserController = new EditProfileController(editUserUseCase);
@@ -159,4 +177,6 @@ export const friendController = new FriendController(
   unblockUserUseCase,
 );
 export const reportController = new ReportController(createReportUseCase);
+export const userAchievementController = new UserAchievementController(getEarnedAchievementsUseCase, checkAndAwardAchievementUseCase, getAllAchievementsWithProgressUseCase);
+export const achievementServiceLive = achievementService; // Export for App.ts
 export const userRoutes = new UserRoutes(tokenService);

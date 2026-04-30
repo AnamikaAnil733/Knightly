@@ -27,8 +27,6 @@ const paymentController = new PaymentController(
 );
 
 const router = express.Router();
-
-// Protected routes (require auth)
 router.post(
   "/create-checkout-session",
   authMiddleware([UserRole.USER], tokenService) as any,
@@ -41,8 +39,7 @@ router.post(
   (req: any, res: any, next: any) => paymentController.verifySession(req, res, next),
 );
 
-// Stripe sends raw body — must be BEFORE any global json parsing touches this route
-// Since App.ts already handles rawBody via verify callback, we don't need express.raw here
+
 router.post("/webhook", (req: any, res: any) =>
   paymentController.handleWebhook(req, res),
 );

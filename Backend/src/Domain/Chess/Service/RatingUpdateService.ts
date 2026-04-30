@@ -3,11 +3,15 @@ import { ChessGame } from "../../Entity/ChessGame";
 import { EloCalculator } from "./EloRatingCalculator";
 import EAuth from "../../Entity/Auth";
 import { IUserRepository } from "../../Interface/Repositories/IUserRepository";
+import { IAchievementService } from "../../Interface/Service/IAchievementService";
 
 export type TimeControl = "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 
 export class RatingUpdateService {
-  constructor(private readonly _userRepo: IUserRepository) {}
+  constructor(
+    private readonly _userRepo: IUserRepository,
+    private readonly _achievementService: IAchievementService
+  ) {}
 
   public async updateRatings(game: ChessGame): Promise<{
     whiteNew: number;
@@ -83,6 +87,18 @@ export class RatingUpdateService {
     if (!u1 || !u2) {
       console.error(`Failed to persist rating updates in DB for ${game.id}`);
     }
+
+    // Auto-trigger achievements
+    await Promise.all([
+      // Check for both players: Games Played
+      this._achievementService.checkAchievements(whiteId, 'GAMES_PLAYED', whitePlayer.gamesPlayed),
+      this._achievementService.checkAchievements(blackId, 'GAMES_PLAYED', blackPlayer.gamesPlayed),
+      
+      // Check for winner: Games Won
+      score === 1 ? this._achievementService.checkAchievements(whiteId, 'GAMES_WON', whitePlayer.gamesWin) : Promise.resolve(),
+      score === 0 ? this._achievementService.checkAchievements(blackId, 'GAMES_WON', blackPlayer.gamesWin) : Promise.resolve(),
+    ]);
+
 
     game.setRatingUpdated();
 

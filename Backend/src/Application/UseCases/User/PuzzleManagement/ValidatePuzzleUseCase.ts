@@ -3,12 +3,16 @@ import { IPuzzleRepository } from "../../../../Domain/Interface/Repositories/IPu
 import { IUserPuzzleProgressRepository } from "../../../../Domain/Interface/Repositories/IUserPuzzleProgressRepository";
 import { EUserPuzzleprogress } from "../../../../Domain/Entity/UserPuzzleProgress";
 import { IUserRepository } from "../../../../Domain/Interface/Repositories/IUserRepository";
+import { ICheckAndAwardAchievementUseCase } from "../../../../Domain/Interface/Usecases/User/AchievementManagement/ICheckAndAwardAchievementUseCase";
+import { IGetPuzzleSolveCountUseCase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetPuzzleSolveCountUseCase";
 
 export class ValidatePuzzlesMoves implements IValidateMoveusecase {
   constructor(
     private readonly _puzzleRepository: IPuzzleRepository,
     private readonly _progressRepository: IUserPuzzleProgressRepository,
     private readonly _userRepository: IUserRepository,
+    private readonly _checkAndAward: ICheckAndAwardAchievementUseCase,
+    private readonly _getPuzzleCount: IGetPuzzleSolveCountUseCase
   ) {}
 
   async execute(input: {
@@ -51,6 +55,11 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
       progress.attempts = moveIndex + 1;
       progress.markSolved();
       await this._progressRepository.save(progress);
+      
+      // Auto-trigger achievements for PUZZLES_SOLVED
+      const { total } = await this._getPuzzleCount.execute(userId);
+      await this._checkAndAward.execute(userId, 'PUZZLES_SOLVED', total);
+
       const currentStreak = await this._handleStreak(userId, puzzleId);
       return {
         correct: true,
@@ -68,6 +77,11 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
       progress.attempts = moveIndex + 2;
       progress.markSolved();
       await this._progressRepository.save(progress);
+
+      // Auto-trigger achievements for PUZZLES_SOLVED
+      const { total } = await this._getPuzzleCount.execute(userId);
+      await this._checkAndAward.execute(userId, 'PUZZLES_SOLVED', total);
+
       const currentStreak = await this._handleStreak(userId, puzzleId);
       return {
         correct: true,
@@ -106,6 +120,10 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
       if (user) {
         user.updatePuzzleStreak(now);
         await this._userRepository.update(user);
+
+        // Auto-trigger achievements for strakdays
+        await this._checkAndAward.execute(userId, 'STREAK_DAYS', user.currentStreak);
+
         return user.currentStreak;
       }
     }

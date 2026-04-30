@@ -54,4 +54,8 @@ export const USER_ROUTES = {
   LEARN_ID:"/learn/:id",
 
   REPORT: "/reports",
+
+  EARNED_ACHIEVEMENTS: "/achievements/earned",
+  CHECK_ACHIEVEMENTS: "/achievements/check",
+  ALL_ACHIEVEMENTS: "/achievements/all",
 } as const;

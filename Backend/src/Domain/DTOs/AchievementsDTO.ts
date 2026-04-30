@@ -26,3 +26,7 @@ export interface UpdateAchievementDTO {
     criteriaType?: CriteriaType;
     criteriaValue?: number;
 }
+export interface AchievementProgressDTO extends AchievementResponseDTO {
+    isEarned: boolean;
+    earnedAt?: Date;
+}

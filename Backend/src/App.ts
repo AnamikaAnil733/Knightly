@@ -6,7 +6,7 @@ import http from "http";
 import {Server} from "socket.io";
 import { MongoDB } from "./Infrastructure/Database/Mongodbconnection";
 import { AuthRoutes } from "./Presentation/Routes/AuthRoute";
-import { userRoutes } from "./Infrastructure/Composition/UserComposition";
+import { userRoutes, achievementServiceLive } from "./Infrastructure/Composition/UserComposition";
 import { adminRoutes } from "./Infrastructure/Composition/AdminComposition";
 import { SocketHandler } from "./Infrastructure/Socket/SocketHandler";
 import { paymentRoutes } from "./Infrastructure/Composition/PaymentComposition";
@@ -53,7 +53,7 @@ export class App {
     const createGameUseCase = new CreateGameUseCase(gameRepo);
     const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
     const authRepo = new AuthRepository();
-    const ratingUpdateService = new RatingUpdateService(authRepo);
+    const ratingUpdateService = new RatingUpdateService(authRepo, achievementServiceLive);
     const stockfishService = new StockfishService();
 
     const socketHandler = new SocketHandler(

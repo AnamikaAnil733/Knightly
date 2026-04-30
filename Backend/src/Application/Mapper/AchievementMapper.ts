@@ -12,7 +12,7 @@ export class AchievementMapper {
   })
    }
 
-   public static toResponseDTO(achievement:AchievementEntity):AchievementResponseDTO{
+   public  static toResponseDTO(achievement:AchievementEntity):AchievementResponseDTO{
     return {
       id:achievement.id!,
       title:achievement.title,
