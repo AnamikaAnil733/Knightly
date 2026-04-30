@@ -55,14 +55,12 @@ export default function AppRoutes() {
   const user = auth.user;
   const isAuthLoaded = auth.authLoaded;
 
-  // Logic: If maintenance is on, and we are NOT on an admin route or login, and NOT already on maintenance page, redirect.
-  // CRITICAL: We wait for both settings and auth to settle before we decide to block the user.
+
   const isMaintenance = settings?.maintenanceMode;
   const isAdmin = user?.role === UserRole.ADMIN;
   const isAdminRoute = location.pathname.startsWith("/admin");
   const isAuthRoute = location.pathname === "/admin/login";
 
-  // Prevent flash or incorrect redirects while loading
   if (isSettingsLoading || !isAuthLoaded) {
     return null;
   }
@@ -77,7 +75,6 @@ export default function AppRoutes() {
     return <Navigate to="/maintenance" replace />;
   }
 
-  // Auto-return: Redirect away from /maintenance if site is back online
   if (!isMaintenance && location.pathname === "/maintenance") {
     return <Navigate to="/landing-page" replace />;
   }

@@ -20,6 +20,7 @@ import { PerformanceChart } from "./PerformanceChart";
 import { StreakCalendar } from "./Puzzle/StreakCalendar";
 import { fetchSolveHistory } from "../../Service/Api/UserPuzzleApi";
 import { useEffect } from "react";
+import { AchievementSection } from "./Achievement/AchievementSection";
 
 /* ---------------- DiceBear URL Generator ---------------- */
 const generateDiceBearUrl = () => {
@@ -187,6 +188,7 @@ export function ProfileUser() {
       <div className="max-w-7xl mx-auto mt-12 space-y-12">
         <PerformanceChart data={user.ratingHistory || []} />
         <StreakCalendar history={solveHistory} weeksToShow={52} />
+        <AchievementSection />
         <GameHistoryList />
       </div>
     </div>
