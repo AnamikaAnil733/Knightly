@@ -1,6 +1,7 @@
 import { IUserPuzzleProgressRepository } from "../../Domain/Interface/Repositories/IUserPuzzleProgressRepository";
 import { EUserPuzzleprogress } from "../../Domain/Entity/UserPuzzleProgress";
 import { ProgressPuzzleModel } from "../Database/Model/PuzzleModel";
+import { MongoUserPuzzleProgressMapper } from "../Mapper/MongoUserPuzzleProgressMapper";
 
 export class UserPuzzleProgressRepository
 implements IUserPuzzleProgressRepository
@@ -11,34 +12,17 @@ implements IUserPuzzleProgressRepository
   ): Promise<EUserPuzzleprogress | null> {
     const doc = await ProgressPuzzleModel.findOne({ userId, puzzleId });
     if (!doc) return null;
-    return new EUserPuzzleprogress({
-      id: doc._id.toString(),
-      userId: doc.userId,
-      puzzleId: doc.puzzleId,
-      solved: doc.solved,
-      attempts: doc.attempts,
-      solvedAt: doc.solvedAt,
-    });
+    return MongoUserPuzzleProgressMapper.toEntityFromDocument(doc as any);
   }
 
   async save(progress: EUserPuzzleprogress): Promise<EUserPuzzleprogress> {
+    const data = MongoUserPuzzleProgressMapper.toDocumentFromEntity(progress);
     const updated = await ProgressPuzzleModel.findOneAndUpdate(
       { userId: progress.userId, puzzleId: progress.puzzleId },
-      {
-        solved: progress.solved,
-        attempts: progress.attempts,
-        solvedAt: progress.solvedAt,
-      },
+      data,
       { upsert: true, new: true },
     );
-    return new EUserPuzzleprogress({
-      id: updated._id.toString(),
-      userId: updated.userId,
-      puzzleId: updated.puzzleId,
-      solved: updated.solved,
-      attempts: updated.attempts,
-      solvedAt: updated.solvedAt,
-    });
+    return MongoUserPuzzleProgressMapper.toEntityFromDocument(updated as any);
   }
 
   async getSolvedPuzzles(userId: string): Promise<string[]> {
@@ -65,7 +49,7 @@ implements IUserPuzzleProgressRepository
     ).lean();
 
     return solvedPuzzles
-      .map((p) => p.solvedAt)
+      .map((p) => (p as any).solvedAt)
       .filter((date): date is Date => !!date);
   }
 }

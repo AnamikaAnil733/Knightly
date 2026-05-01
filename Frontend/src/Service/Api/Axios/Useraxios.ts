@@ -130,7 +130,7 @@ userApi.interceptors.response.use(
     }
 
     if (error.response?.status === 403) {
-      const data = error.response.data as any;
+      const data = error.response.data as { forceLogout?: boolean };
       if (data?.forceLogout) {
         Store.dispatch(logout());
       }

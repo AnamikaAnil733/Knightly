@@ -2,15 +2,12 @@ import { FriendshipModel } from "../Database/Schema/FriendshipSchema";
 import FriendshipEntity from "../../Domain/Entity/FriendshipEntity";
 import { IFriendshipRepository}from "../../Domain/Interface/Repositories/IFriendshipRepository";
 import { FriendshipStatus } from "../../Domain/Types/FriendshipStatus";
-
+import { MongoFriendshipMapper } from "../Mapper/MongoFriendshipMapper";
 
 export  class FriendshipRepository implements IFriendshipRepository {
   async create(friendship: FriendshipEntity): Promise<void> {
-    await FriendshipModel.create({
-      requesterId: friendship.requesterId,
-      recipientId: friendship.recipientId,
-      status: friendship.status,
-    } as any);
+    const data = MongoFriendshipMapper.toDocumentFromEntity(friendship);
+    await FriendshipModel.create(data);
   }
 
   async update(friendship: FriendshipEntity): Promise<void> {
@@ -36,13 +33,7 @@ export  class FriendshipRepository implements IFriendshipRepository {
 
     if (!doc) return null;
 
-    return new FriendshipEntity({
-      requesterId: doc.requesterId.toString(),
-      recipientId: doc.recipientId.toString(),
-      status: doc.status,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-    });
+    return MongoFriendshipMapper.toEntityFromDocument(doc as any);
   }
 
   async findFriendsByUserId(userId: string): Promise<FriendshipEntity[]> {
@@ -55,16 +46,7 @@ export  class FriendshipRepository implements IFriendshipRepository {
     };
     const docs = await FriendshipModel.find(query);
 
-    return docs.map(
-      (doc) =>
-        new FriendshipEntity({
-          requesterId: doc.requesterId.toString(),
-          recipientId: doc.recipientId.toString(),
-          status: doc.status,
-          createdAt: doc.createdAt,
-          updatedAt: doc.updatedAt,
-        }),
-    );
+    return docs.map((doc) => MongoFriendshipMapper.toEntityFromDocument(doc as any));
   }
 
   async findPendingRequests(userId: string): Promise<FriendshipEntity[]> {
@@ -74,16 +56,7 @@ export  class FriendshipRepository implements IFriendshipRepository {
     };
     const docs = await FriendshipModel.find(query);
 
-    return docs.map(
-      (doc) =>
-        new FriendshipEntity({
-          requesterId: doc.requesterId.toString(),
-          recipientId: doc.recipientId.toString(),
-          status: doc.status,
-          createdAt: doc.createdAt,
-          updatedAt: doc.updatedAt,
-        }),
-    );
+    return docs.map((doc) => MongoFriendshipMapper.toEntityFromDocument(doc as any));
   }
 
   async delete(user1: string, user2: string): Promise<void> {

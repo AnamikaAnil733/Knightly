@@ -1,20 +1,31 @@
-import { ICommentRepository } from "../../../../Infrastructure/Repository/CommentRepository";
+import { ICommentRepository } from "../../../../Domain/Interface/Repositories/ICommentRepository";
 import { CommentDTO, AddCommentInputDTO } from "../../../../Domain/DTOs/CommentDTOs";
 import { IAddCommentUseCase, IGetBlogCommentsUseCase, IDeleteCommentUseCase } from "../../../../Domain/Interface/Usecases/User/BlogManagement/ICommentUseCases";
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
+import { CommentEntity } from "../../../../Domain/Entity/CommentEntity";
+import { CommentMapper } from "../../../Mapper/CommentMapper";
 
 export class AddCommentUseCase implements IAddCommentUseCase {
   constructor(private readonly _commentRepository: ICommentRepository) {}
   async execute(data: AddCommentInputDTO): Promise<CommentDTO> {
-    return await this._commentRepository.create(data);
+    const comment = new CommentEntity({
+      blogId: data.blogId,
+      authorId: data.authorId,
+      authorName: data.authorName,
+      authorAvatar: data.authorAvatar,
+      content: data.content,
+    });
+    const saved = await this._commentRepository.create(comment);
+    return CommentMapper.toDTO(saved);
   }
 }
 
 export class GetBlogCommentsUseCase implements IGetBlogCommentsUseCase {
   constructor(private readonly _commentRepository: ICommentRepository) {}
   async execute(blogId: string): Promise<CommentDTO[]> {
-    return await this._commentRepository.findByBlogId(blogId);
+    const comments = await this._commentRepository.findByBlogId(blogId);
+    return CommentMapper.toDTOList(comments);
   }
 }
 

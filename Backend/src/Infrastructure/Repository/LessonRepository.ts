@@ -2,34 +2,13 @@ import { LessonModel } from "../Database/Schema/LessonSchema";
 import LessonEntity from "../../Domain/Entity/LessonEntity";
 import { ILessonRepository } from "../../Domain/Interface/Repositories/ILessonRepository";
 import { LessonCategory, LessonDifficulty } from "../../Domain/Types/LessonTypes";
+import { MongoLessonMapper } from "../Mapper/MongoLessonMapper";
 
 export class LessonRepository implements ILessonRepository {
-  private toEntity(doc: any): LessonEntity {
-    return new LessonEntity({
-      id: doc._id.toString(),
-      title: doc.title,
-      category: doc.category,
-      difficulty: doc.difficulty,
-      content: doc.content,
-      order: doc.order,
-      isPremium: doc.isPremium,
-      fen: doc.fen,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-    });
-  }
-
   async create(lesson: LessonEntity): Promise<LessonEntity> {
-    const doc = await LessonModel.create({
-      title: lesson.title,
-      category: lesson.category,
-      difficulty: lesson.difficulty,
-      content: lesson.content,
-      order: lesson.order,
-      isPremium: lesson.isPremium,
-      fen: lesson.fen,
-    });
-    return this.toEntity(doc);
+    const data = MongoLessonMapper.toDocumentFromEntity(lesson);
+    const doc = await LessonModel.create(data);
+    return MongoLessonMapper.toEntityFromDocument(doc as any);
   }
 
   async findAll(filters?: { category?: LessonCategory; difficulty?: LessonDifficulty }): Promise<LessonEntity[]> {
@@ -37,31 +16,20 @@ export class LessonRepository implements ILessonRepository {
     if (filters?.category) query.category = filters.category;
     if (filters?.difficulty) query.difficulty = filters.difficulty;
     const docs = await LessonModel.find(query).sort({ order: 1 });
-    return docs.map((d) => this.toEntity(d));
+    return docs.map((d) => MongoLessonMapper.toEntityFromDocument(d as any));
   }
 
   async findById(id: string): Promise<LessonEntity | null> {
     const doc = await LessonModel.findById(id);
     if (!doc) return null;
-    return this.toEntity(doc);
+    return MongoLessonMapper.toEntityFromDocument(doc as any);
   }
 
   async update(id: string, lesson: LessonEntity): Promise<LessonEntity | null> {
-    const doc = await LessonModel.findByIdAndUpdate(
-      id,
-      {
-        title: lesson.title,
-        category: lesson.category,
-        difficulty: lesson.difficulty,
-        content: lesson.content,
-        order: lesson.order,
-        isPremium: lesson.isPremium,
-        fen: lesson.fen,
-      },
-      { new: true },
-    );
+    const data = MongoLessonMapper.toDocumentFromEntity(lesson);
+    const doc = await LessonModel.findByIdAndUpdate(id, data, { new: true });
     if (!doc) return null;
-    return this.toEntity(doc);
+    return MongoLessonMapper.toEntityFromDocument(doc as any);
   }
 
   async delete(id: string): Promise<void> {

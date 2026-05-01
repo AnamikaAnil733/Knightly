@@ -1,6 +1,6 @@
-import { ISystemSettings } from "../../../Infrastructure/Database/Schema/SystemSettingsSchema";
+import { SystemSettingsEntity } from "../../Entity/SystemSettingsEntity";
 
 export interface ISystemSettingsRepository {
-  getSettings(): Promise<ISystemSettings>;
-  updateSettings(settings: Partial<ISystemSettings>): Promise<ISystemSettings>;
+  getSettings(): Promise<SystemSettingsEntity>;
+  updateSettings(settings: Partial<SystemSettingsEntity>): Promise<SystemSettingsEntity>;
 }

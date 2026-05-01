@@ -1,40 +1,23 @@
-import { CommentDTO, AddCommentInputDTO } from "../../Domain/DTOs/CommentDTOs";
 import { CommentModel } from "../Database/Schema/CommentSchema";
-
-export interface ICommentRepository {
-  create(data: AddCommentInputDTO): Promise<CommentDTO>;
-  findByBlogId(blogId: string): Promise<CommentDTO[]>;
-  findById(id: string): Promise<CommentDTO | null>;
-  delete(id: string): Promise<boolean>;
-}
+import { CommentEntity } from "../../Domain/Entity/CommentEntity";
+import { ICommentRepository } from "../../Domain/Interface/Repositories/ICommentRepository";
+import { MongoCommentMapper } from "../Mapper/MongoCommentMapper";
 
 export class CommentRepository implements ICommentRepository {
-  private _mapToDTO(doc: any): CommentDTO {
-    return {
-      id: doc._id.toString(),
-      blogId: doc.blogId.toString(),
-      authorId: doc.authorId.toString(),
-      authorName: doc.authorName,
-      authorAvatar: doc.authorAvatar,
-      content: doc.content,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-    };
-  }
-
-  async create(data: AddCommentInputDTO): Promise<CommentDTO> {
+  async create(comment: CommentEntity): Promise<CommentEntity> {
+    const data = MongoCommentMapper.toDocumentFromEntity(comment);
     const doc = await CommentModel.create(data);
-    return this._mapToDTO(doc);
+    return MongoCommentMapper.toEntityFromDocument(doc as any);
   }
 
-  async findByBlogId(blogId: string): Promise<CommentDTO[]> {
+  async findByBlogId(blogId: string): Promise<CommentEntity[]> {
     const docs = await CommentModel.find({ blogId }).sort({ createdAt: -1 }).exec();
-    return docs.map((doc) => this._mapToDTO(doc));
+    return docs.map((doc) => MongoCommentMapper.toEntityFromDocument(doc as any));
   }
 
-  async findById(id: string): Promise<CommentDTO | null> {
+  async findById(id: string): Promise<CommentEntity | null> {
     const doc = await CommentModel.findById(id).exec();
-    return doc ? this._mapToDTO(doc) : null;
+    return doc ? MongoCommentMapper.toEntityFromDocument(doc as any) : null;
   }
 
   async delete(id: string): Promise<boolean> {

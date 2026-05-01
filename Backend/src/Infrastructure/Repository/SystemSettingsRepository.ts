@@ -1,19 +1,21 @@
 import { Model } from "mongoose";
 import { ISystemSettingsRepository } from "../../Domain/Interface/Repositories/ISystemSettingsRepository";
-import { ISystemSettings, SystemSettingsDocument } from "../Database/Schema/SystemSettingsSchema";
+import { SystemSettingsDocument } from "../Database/Schema/SystemSettingsSchema";
+import { SystemSettingsEntity } from "../../Domain/Entity/SystemSettingsEntity";
+import { MongoSystemSettingsMapper } from "../Mapper/MongoSystemSettingsMapper";
 
 export class SystemSettingsRepository implements ISystemSettingsRepository {
   constructor(private readonly _model: Model<SystemSettingsDocument>) {}
 
-  async getSettings(): Promise<ISystemSettings> {
-    const settings = await this._model.findOne();
+  async getSettings(): Promise<SystemSettingsEntity> {
+    let settings = await this._model.findOne();
     if (!settings) {
-      return this._model.create({});
+      settings = await this._model.create({});
     }
-    return settings.toObject();
+    return MongoSystemSettingsMapper.toEntityFromDocument(settings as any);
   }
 
-  async updateSettings(settings: Partial<ISystemSettings>): Promise<ISystemSettings> {
+  async updateSettings(settings: Partial<SystemSettingsEntity>): Promise<SystemSettingsEntity> {
     const updatePayload: any = {};
 
     if (settings.general) {
@@ -39,6 +41,6 @@ export class SystemSettingsRepository implements ISystemSettingsRepository {
       { $set: updatePayload },
       { new: true, upsert: true },
     );
-    return updated.toObject();
+    return MongoSystemSettingsMapper.toEntityFromDocument(updated as any);
   }
 }
