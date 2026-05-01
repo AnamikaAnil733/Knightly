@@ -1,3 +1,5 @@
+export type GameType = "RAPID" | "BULLET" | "CLASSICAL" | "BLITZ";
+
 export interface IUser {
   id: string;
   displayname: string;
@@ -22,7 +24,7 @@ export interface IUser {
   ratingHistory: {
     rating: number;
     date: string;
-    type: string;
+    type: GameType;
   }[];
 
   // Avatar

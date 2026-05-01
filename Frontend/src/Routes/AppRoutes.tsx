@@ -55,7 +55,6 @@ export default function AppRoutes() {
   const user = auth.user;
   const isAuthLoaded = auth.authLoaded;
 
-
   const isMaintenance = settings?.maintenanceMode;
   const isAdmin = user?.role === UserRole.ADMIN;
   const isAdminRoute = location.pathname.startsWith("/admin");

@@ -31,7 +31,7 @@ export class MongoAuthMapper{
       subscriptionStart: doc.subscriptionStart,
       stripeCustomerId: doc.stripeCustomerId,
       stripeSubscriptionId: doc.stripeSubscriptionId,
-      lastPuzzleSolveDate: doc.lastPuzzleSolveDate,
+      lastActivityDate: doc.lastPuzzleSolveDate,
       ratingHistory: doc.ratingHistory,
     });
   }
@@ -58,7 +58,7 @@ export class MongoAuthMapper{
       subscriptionStart: auth.subscriptionStart,
       stripeCustomerId: auth.stripeCustomerId,
       stripeSubscriptionId: auth.stripeSubscriptionId,
-      lastPuzzleSolveDate: auth.lastPuzzleSolveDate,
+      lastPuzzleSolveDate: auth.lastActivityDate,
       avatarKey: auth.avatarKey ?? null,
       ratingHistory: auth.ratingHistory,
     };

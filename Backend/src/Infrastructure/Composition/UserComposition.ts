@@ -108,7 +108,7 @@ const getpuzzleUseCase = new GetPuzzleDifficultyUsecase(
 
 const getPuzzleSolveCountUseCase = new GetPuzzleSolveCountUseCase(ProgressPuzzleRepo);
 const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(PuzzleRepo);
-const getPuzzleSolveHistoryUseCase = new GetPuzzleSolveHistoryUseCase(ProgressPuzzleRepo);
+const getPuzzleSolveHistoryUseCase = new GetPuzzleSolveHistoryUseCase(ProgressPuzzleRepo, GameRepo);
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService, UserRepo);
 const getGameHistoryUseCase = new GetGameHistoryUseCase(GameRepo, UserRepo);
 const getLivePublicGamesUseCase = new GetLivePublicGamesUseCase(GameRepo);
