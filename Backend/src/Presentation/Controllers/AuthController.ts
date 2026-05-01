@@ -7,6 +7,7 @@ import { IResendOtpUsecase } from "Domain/Interface/Usecases/Authentication/IRes
 import { IforgetPasswordUseCase } from "Domain/Interface/Usecases/Authentication/IforgetPasswordUseCase";
 import { IResetPasswordUseCase } from "Domain/Interface/Usecases/Authentication/IResetPasswordUseCase";
 import { IGoogleAuthUseCase } from "Domain/Interface/Usecases/Authentication/IGoogleAuthUseCase";
+import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
 
 import { logger } from "../../Infrastructure/Logger/Logger";
 
@@ -36,6 +37,7 @@ export class AuthController {
     private _googleAuthUseCase: IGoogleAuthUseCase,
     private _tokenService: ITokenService,
     private _getPublicSettingsUseCase: any,
+    private _userRepository: IUserRepository,
   ) {}
 
   // ---------------- VERIFY OTP ----------------
@@ -257,6 +259,13 @@ export class AuthController {
       }
 
       const payload = this._tokenService.verifyRefreshToken(refreshToken);
+
+      const user = await this._userRepository.findById(payload.userId);
+      if (user?.isBlocked) {
+        return res.status(HttpStatusCodes.FORBIDDEN).json({
+          message: MESSAGES.USER_BLOCKED,
+        });
+      }
 
       const accessToken = this._tokenService.generateAccessToken({
         userId: payload.userId,

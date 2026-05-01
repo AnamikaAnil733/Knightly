@@ -129,6 +129,13 @@ userApi.interceptors.response.use(
       }
     }
 
+    if (error.response?.status === 403) {
+      const data = error.response.data as any;
+      if (data?.forceLogout) {
+        Store.dispatch(logout());
+      }
+    }
+
     return Promise.reject(error);
   },
 );

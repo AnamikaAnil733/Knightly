@@ -179,4 +179,4 @@ export const friendController = new FriendController(
 export const reportController = new ReportController(createReportUseCase);
 export const userAchievementController = new UserAchievementController(getEarnedAchievementsUseCase, checkAndAwardAchievementUseCase, getAllAchievementsWithProgressUseCase);
 export const achievementServiceLive = achievementService; // Export for App.ts
-export const userRoutes = new UserRoutes(tokenService);
+export const userRoutes = new UserRoutes(tokenService, AuthRepo);

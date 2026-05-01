@@ -14,16 +14,18 @@ import { lessonController } from "../../Infrastructure/Composition/LessonComposi
 import { blogController } from "../../Infrastructure/Composition/BlogComposition";
 
 import { authMiddleware } from "../Middleware/AuthMiddleware";
+import { checkBlockedUser } from "../Middleware/BlockMiddleware";
 import { ITokenService } from "../../Domain/Interface/Service/ITokenService";
 import { UserRole } from "../../Domain/Types/UserRole";
 import { USER_ROUTES } from "../Constants/Routes/UserRoutes";
+import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
 
 export class UserRoutes {
   public readonly router: Router;
-  constructor(tokenService: ITokenService) {
+  constructor(tokenService: ITokenService, userRepository: IUserRepository) {
     this.router = Router();
     this.router.use(authMiddleware([UserRole.USER], tokenService));
-
+    this.router.use(checkBlockedUser(userRepository));
     this.initializeRoutes();
   }
 
@@ -78,7 +80,6 @@ export class UserRoutes {
       leaderBoardController.getLeaderBoard,
     );
 
-    // Friend Routes
     this.router.post(
       USER_ROUTES.FRIENDS.SEND_REQUEST,
       friendController.sendRequest,

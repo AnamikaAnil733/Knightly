@@ -18,6 +18,8 @@ import {
   ArrowLeft,
   Lock,
   Crown,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 export function GameReviewPage() {
@@ -48,6 +50,52 @@ export function GameReviewPage() {
     avatar: string | null;
   } | null>(null);
 
+  const [isTTSEnabled, setIsTTSEnabled] = useState(() => {
+    const saved = localStorage.getItem("knight-tts-enabled");
+    return saved === null ? true : saved === "true";
+  });
+
+  const speak = (text: string) => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    const selectVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) return null;
+
+      return (
+        voices.find(
+          (v) =>
+            v.lang.startsWith("en") &&
+            (v.name.includes("Google") ||
+              v.name.includes("Natural") ||
+              v.name.includes("Enhanced") ||
+              v.name.includes("Premium")),
+        ) ||
+        voices.find((v) => v.lang.startsWith("en")) ||
+        voices[0]
+      );
+    };
+
+    const voice = selectVoice();
+    if (voice) {
+      utterance.voice = voice;
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      // If voices aren't loaded yet, wait for them
+      window.speechSynthesis.onvoiceschanged = () => {
+        const retryVoice = selectVoice();
+        if (retryVoice) {
+          utterance.voice = retryVoice;
+          window.speechSynthesis.speak(utterance);
+        }
+        window.speechSynthesis.onvoiceschanged = null;
+      };
+    }
+  };
   const getStats = () => {
     if (reviewData.length === 0) return null;
     const counts: Record<string, number> = {
@@ -89,14 +137,12 @@ export function GameReviewPage() {
         setFens(generatedFens);
         setMoveHistory(game.history);
 
-        // Start at the beginning
         setCurrentMoveIndex(0);
         setBoard(fenToBoardGrid(generatedFens[0]));
         setWhitePlayer(game.whitePlayer);
         setBlackPlayer(game.blackPlayer);
         setLoading(false);
 
-        // Fetch analysis in background
         if (user?.premium) {
           setAnalysisLoading(true);
           try {
@@ -125,8 +171,26 @@ export function GameReviewPage() {
       currentMoveIndex < fens.length
     ) {
       setBoard(fenToBoardGrid(fens[currentMoveIndex]));
+
+      // TTS logic
+      if (
+        isTTSEnabled &&
+        currentMoveIndex > 0 &&
+        reviewData[currentMoveIndex - 1]
+      ) {
+        const review = reviewData[currentMoveIndex - 1];
+        const textToSpeak = `${review.classification}. ${review.description}`;
+        speak(textToSpeak);
+      }
     }
-  }, [currentMoveIndex, fens]);
+  }, [currentMoveIndex, fens, isTTSEnabled, reviewData]);
+
+  useEffect(() => {
+    localStorage.setItem("knight-tts-enabled", isTTSEnabled.toString());
+    if (!isTTSEnabled && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+  }, [isTTSEnabled]);
 
   const checkSquare = useMemo(() => {
     return currentMoveIndex >= 0 && fens[currentMoveIndex]
@@ -167,7 +231,7 @@ export function GameReviewPage() {
     if (mate !== null) {
       evalScore = mate > 0 ? 1000 : -1000;
     } else {
-      evalScore = score / 100; // convert to pawns
+      evalScore = score / 100;
     }
   }
 
@@ -264,6 +328,29 @@ export function GameReviewPage() {
         <h1 className="text-xl font-bold text-[#FFD166] tracking-tight">
           Game Review
         </h1>
+        <div className="flex-1" />
+        {user?.premium && (
+          <button
+            onClick={() => setIsTTSEnabled(!isTTSEnabled)}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-all duration-300 border ${
+              isTTSEnabled
+                ? "bg-[#FFD166]/20 border-[#FFD166]/50 text-[#FFD166] shadow-[0_0_15px_rgba(255,209,102,0.2)]"
+                : "bg-white/5 border-white/10 text-gray-400"
+            }`}
+            title={
+              isTTSEnabled ? "Disable Voice Insights" : "Enable Voice Insights"
+            }
+          >
+            {isTTSEnabled ? (
+              <Volume2 className="w-4 h-4 animate-pulse" />
+            ) : (
+              <VolumeX className="w-4 h-4" />
+            )}
+            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">
+              {isTTSEnabled ? "Voice Active" : "Voice Off"}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Main Content */}

@@ -82,7 +82,6 @@ export class App {
       }),
     );
     this.app.use(express.urlencoded({ extended: true }));
-    // Registration of Enterprise Maintenance Guard
     this.app.use(maintenanceMiddleware(settingsRepo, tokenservice));
   }
 

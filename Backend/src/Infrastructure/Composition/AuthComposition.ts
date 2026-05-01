@@ -67,4 +67,5 @@ export const authController = new AuthController(
   googleAuthUseCase,
   tokenservice,
   getPublicSettingsUseCase,
+  UserRepo,
 );
