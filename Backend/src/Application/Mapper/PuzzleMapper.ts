@@ -25,7 +25,7 @@ export class PuzzleMapper{
       difficulty: puzzle.difficulty,
       description: puzzle.description,
       solution: puzzle.moves,
-      isSolved: isSolved
+      isSolved
     };
   }
 }
