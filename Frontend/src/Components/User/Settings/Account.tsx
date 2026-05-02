@@ -5,9 +5,9 @@ import { SectionHeader } from "./Heading/Sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
-import axios from "../../../Service/Api/Axios/Useraxios";
 import { updateUser } from "../../../Store/Slices/Auth/UserAuthSlice";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { editUserProfile } from "../../../Service/Api/UserApi";
 
 export const AccountSettings = () => {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export const AccountSettings = () => {
 
   const editProfile = useMutation({
     mutationFn: async ({ displayname }: { displayname: string }) =>
-      axios.patch("/user/edit-profile", { displayname }),
+      editUserProfile({ displayname }),
 
     onSuccess: () => {
       dispatch(updateUser({ displayname: displayname }));

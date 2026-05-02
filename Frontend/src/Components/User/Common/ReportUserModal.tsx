@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Flag, XIcon, AlertCircle, Loader2 } from "lucide-react";
-import axios from "../../../Service/Api/Axios/Useraxios";
 import toast from "react-hot-toast";
 import { ChatMessage, ReportEvidence } from "../../../Types/ReportTypes";
+import { reportUser } from "../../../Service/Api/ReportApi";
 
 interface ReportUserModalProps {
   isOpen: boolean;
@@ -50,7 +50,7 @@ export const ReportUserModal = ({
         evidence.chatSnapshot = chatMessages.slice(-20);
       }
 
-      await axios.post("/user/reports", {
+      await reportUser({
         reportedId,
         reason,
         description,

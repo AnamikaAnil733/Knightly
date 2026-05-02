@@ -5,7 +5,6 @@ import { GameType } from "../../Types/UserTypes";
 import { getAvatarUrl } from "../../Utils/GetAvatarurl";
 import { updateUser } from "../../Store/Slices/Auth/UserAuthSlice";
 import toast from "react-hot-toast";
-import axios from "../../Service/Api/Axios/Useraxios";
 
 // Icons
 import { Flame, Clock, Target, Crown, ChevronRight, Zap } from "lucide-react";
@@ -14,6 +13,8 @@ import { PerformanceChart } from "./PerformanceChart";
 import { StreakCalendar } from "./Puzzle/StreakCalendar";
 import { fetchSolveHistory } from "../../Service/Api/UserPuzzleApi";
 import { AchievementSection } from "./Achievement/AchievementSection";
+import { getUserProfile } from "../../Service/Api/UserApi";
+import { updateDiceBearAvatar } from "../../Service/Api/AvatarApi";
 
 const generateDiceBearUrl = () => {
   const base = "https://api.dicebear.com/7.x/adventurer/svg";
@@ -69,8 +70,8 @@ export function ProfileUser() {
     if (avatarError) return;
     setAvatarError(true);
     try {
-      const profileRes = await axios.get("/user/profile");
-      dispatch(updateUser({ avatarUrl: profileRes.data.avatarUrl }));
+      const userData = await getUserProfile();
+      dispatch(updateUser({ avatarUrl: userData.avatarUrl }));
       setAvatarError(false);
     } catch {
       // silently fail
@@ -81,9 +82,9 @@ export function ProfileUser() {
     try {
       setLoading(true);
       const diceBearUrl = generateDiceBearUrl();
-      await axios.post("/user/avatar/dicebear", { diceBearUrl });
-      const profileRes = await axios.get("/user/profile");
-      dispatch(updateUser(profileRes.data));
+      await updateDiceBearAvatar(diceBearUrl);
+      const userData = await getUserProfile();
+      dispatch(updateUser(userData));
       toast.success("Avatar updated!");
     } catch {
       toast.error("Update failed");

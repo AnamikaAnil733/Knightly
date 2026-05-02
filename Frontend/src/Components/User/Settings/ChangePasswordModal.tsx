@@ -2,7 +2,7 @@ import { useState } from "react";
 import { XIcon, LockIcon, EyeOffIcon, EyeIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import userApi from "../../../Service/Api/Axios/Useraxios";
+import { changePasswordApi } from "../../../Service/Api/UserApi";
 
 interface Props {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
 
   const changePassword = useMutation({
     mutationFn: async () =>
-      userApi.patch("/user/change-password", {
+      changePasswordApi({
         currentPassword,
         newPassword,
       }),
@@ -166,7 +166,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
                 }
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300"
               >
-                {showPassword ? (
+                {showPassword.newPassword ? (
                   <EyeOffIcon size={20} />
                 ) : (
                   <EyeIcon size={20} />
@@ -201,7 +201,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
                 }
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300"
               >
-                {showPassword ? (
+                {showPassword.confirmPassword ? (
                   <EyeOffIcon size={20} />
                 ) : (
                   <EyeIcon size={20} />

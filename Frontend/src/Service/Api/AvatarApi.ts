@@ -13,3 +13,8 @@ export const getAvatarUploadUrl = async (contentType: string) => {
 export const updateAvatar = async (avatarUrl: string) => {
   await axios.patch("/user/update-avatar", { avatarUrl });
 };
+
+export const updateDiceBearAvatar = async (diceBearUrl: string) => {
+  const res = await axios.post("/user/avatar/dicebear", { diceBearUrl });
+  return res.data;
+};
