@@ -4,10 +4,5 @@ import { IBaseRepository } from "./IBaseRepository";
 export interface IUserRepository extends IBaseRepository<EAuth,string>{
   findByEmail(email: string): Promise<EAuth | null>;
   findByStripeCustomerId(customerId: string): Promise<EAuth | null>;
+  addAchievement(userId: string, achievementTitle: string): Promise<void>;
 }
-
-
-
-
-
-

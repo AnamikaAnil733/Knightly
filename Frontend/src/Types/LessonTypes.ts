@@ -14,5 +14,6 @@ export interface LessonDetail {
   difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   content: string;
   order: number;
+  isPremium: boolean;
   fen?: string;
 }

@@ -6,8 +6,8 @@ import LessonCard from "../../Components/User/Learning/LessonCard";
 import { getLessons } from "../../Service/Api/LearnApi";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { Lesson } from "../../Types/LessonTypes";
-
 import { PremiumModal } from "../../Components/User/Puzzle/PremiumModal";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CATEGORY_LABELS: Record<string, string> = {
   GETTING_STARTED: "Getting Started",
@@ -27,6 +27,7 @@ const LessonListPage: React.FC = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoading(true);
         const data = await getLessons({ category });
         setLessons(data.lessons || []);
       } catch (err) {
@@ -41,10 +42,10 @@ const LessonListPage: React.FC = () => {
   const categoryLabel = CATEGORY_LABELS[category ?? ""] ?? category;
 
   return (
-    <div className="min-h-screen bg-[#0A0F2C] flex flex-col">
+    <div className="min-h-screen bg-[#0A0F2C] flex flex-col relative">
       <Navbar />
-      <main className="flex-grow container mx-auto px-4 py-10 mt-16">
-        <div className="max-w-2xl mx-auto">
+      <main className="flex-grow container mx-auto px-4 py-10 mt-16 flex flex-col relative">
+        <div className="max-w-2xl mx-auto w-full">
           <button
             onClick={() => navigate("/learn")}
             className="flex items-center gap-2 text-[#9ca3af] hover:text-[#FFD166] transition-colors mb-8 text-sm font-bold"
@@ -58,32 +59,63 @@ const LessonListPage: React.FC = () => {
             <h1 className="text-3xl font-black text-white">{categoryLabel}</h1>
           </div>
 
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFD166]" />
-            </div>
-          ) : lessons.length === 0 ? (
-            <div className="text-center py-20 bg-[#11193F]/30 rounded-2xl border border-dashed border-white/5">
-              <p className="text-[#9ca3af]">
-                No lessons in this category yet. Check back soon!
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {lessons.map((lesson) => (
-                <LessonCard
-                  key={lesson.id}
-                  id={lesson.id}
-                  title={lesson.title}
-                  difficulty={lesson.difficulty}
-                  order={lesson.order}
-                  category={lesson.category}
-                  isPremium={lesson.isPremium}
-                  onPremiumClick={() => setIsPremiumModalOpen(true)}
-                />
-              ))}
-            </div>
-          )}
+          <div className="relative">
+            <AnimatePresence mode="wait">
+              {loading && lessons.length === 0 ? (
+                <motion.div
+                  key="initial-loader"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex justify-center py-20"
+                >
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFD166]" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={category || "lessons-list"}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className={`space-y-3 transition-opacity duration-300 ${loading ? "opacity-30 pointer-events-none" : "opacity-100"}`}
+                >
+                  {lessons.length === 0 ? (
+                    <div className="text-center py-20 bg-[#11193F]/30 rounded-2xl border border-dashed border-white/5">
+                      <p className="text-[#9ca3af]">
+                        No lessons in this category yet. Check back soon!
+                      </p>
+                    </div>
+                  ) : (
+                    lessons.map((lesson) => (
+                      <LessonCard
+                        key={lesson.id}
+                        id={lesson.id}
+                        title={lesson.title}
+                        difficulty={lesson.difficulty}
+                        order={lesson.order}
+                        category={lesson.category}
+                        isPremium={lesson.isPremium}
+                        onPremiumClick={() => setIsPremiumModalOpen(true)}
+                      />
+                    ))
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Subsequent load indicator */}
+            {loading && lessons.length > 0 && (
+              <div className="absolute top-0 right-0">
+                <div className="flex items-center gap-2 bg-[#11193F] border border-[#FFD166]/20 px-3 py-1.5 rounded-full shadow-xl">
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#FFD166]" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-[#FFD166]">
+                    Updating...
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </main>
       <Footer />

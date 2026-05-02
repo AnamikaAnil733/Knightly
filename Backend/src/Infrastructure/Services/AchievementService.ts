@@ -2,6 +2,7 @@ import { IAchievementService } from "../../Domain/Interface/Service/IAchievement
 import { CriteriaType } from "../../Domain/Types/AchievementsTypes";
 import { IAchievementsRepository } from "../../Domain/Interface/Repositories/IAchievementsRepository";
 import { IUserAchievementRepository } from "../../Domain/Interface/Repositories/IUserAchievementRepository";
+import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
 import  UserAchievementEntity from "../../Domain/Entity/UserAchievementEntity";
 
 
@@ -9,7 +10,8 @@ import  UserAchievementEntity from "../../Domain/Entity/UserAchievementEntity";
 export class AchievementService implements IAchievementService{
     constructor(
         private readonly _achievementsRepository: IAchievementsRepository,
-        private readonly _userAchievementRepository: IUserAchievementRepository
+        private readonly _userAchievementRepository: IUserAchievementRepository,
+        private readonly _userRepository: IUserRepository
     ){}
 
     async checkAchievements(userId: string, type: CriteriaType, currentValue: number): Promise<string[]> {
@@ -26,10 +28,12 @@ export class AchievementService implements IAchievementService{
                     achievementId:ach.id!
                 });
                 await this._userAchievementRepository.create(entity);
+                
+                await this._userRepository.addAchievement(userId, ach.title);
+                
                 earnedNewAchievements.push(ach.title);
             }
         }
         return earnedNewAchievements;
     }
 }
-

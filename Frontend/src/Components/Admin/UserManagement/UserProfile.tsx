@@ -96,15 +96,24 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
       </div>
       {/* Achievements */}
       <div className="p-6 border-b border-gray-800">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">ACHIEVEMENTS</h3>
-        <div className="space-y-1">
+        <h3 className="text-sm font-medium text-gray-400 mb-3 uppercase tracking-widest text-[10px] font-black">
+          ACHIEVEMENTS
+        </h3>
+        <div className="space-y-2">
           {user.achievements && user.achievements.length > 0 ? (
-            user.achievements.slice(0, 3).map((achievement, index) => (
-              <div key={index} className="flex items-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#6B2EFF] mr-2"></div>
-                <span className="text-xs text-gray-300">{achievement}</span>
-              </div>
-            ))
+            <div className="flex flex-wrap gap-2">
+              {user.achievements.map((achievement, index) => (
+                <div
+                  key={index}
+                  className="flex items-center bg-[#11193F] border border-[#6B2EFF]/20 px-2 py-1 rounded-md"
+                >
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#6B2EFF] mr-2"></div>
+                  <span className="text-[10px] font-bold text-gray-300">
+                    {achievement}
+                  </span>
+                </div>
+              ))}
+            </div>
           ) : (
             <p className="text-xs text-gray-500 italic">
               No achievements unlocked yet

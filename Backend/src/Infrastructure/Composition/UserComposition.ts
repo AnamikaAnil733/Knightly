@@ -85,7 +85,7 @@ const hashService = new HashService();
 const S3Service = new S3StorageService();
 const mediaService = new MediaService(S3Service);
 const stockfishService = new StockfishService();
-const achievementService = new AchievementService(AchievementRepo,UserAchievementRepo);
+const achievementService = new AchievementService(AchievementRepo,UserAchievementRepo, AuthRepo);
 
 //usecase
 const editUserUseCase = new EditUserUseCase(UserRepo);

@@ -22,4 +22,10 @@ export class AuthRepository
     const doc = await this.model.findOne({ stripeCustomerId: customerId }).exec();
     return doc ? this.mapper.toEntityFromDocument(doc) : null;
   }
+
+  async addAchievement(userId: string, achievementTitle: string): Promise<void> {
+    await this.model.findByIdAndUpdate(userId, {
+      $addToSet: { achievements: achievementTitle }
+    });
+  }
 }

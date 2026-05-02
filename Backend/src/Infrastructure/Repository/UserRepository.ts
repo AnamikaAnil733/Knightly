@@ -52,12 +52,34 @@ export class UserManagementRepository
     if (filter === "PREMIUM") {
       query.premium = true;
     }
-
-    const docs = await this.model
-      .find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    
+    const docs = await this.model.aggregate([
+      { $match: query },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "userachievements", 
+          localField: "_id",
+          foreignField: "userId",
+          as: "userAchRecords",
+        },
+      },
+      {
+        $lookup: {
+          from: "achievements",
+          localField: "userAchRecords.achievementId",
+          foreignField: "_id",
+          as: "achDetailRecords",
+        },
+      },
+      {
+        $addFields: {
+          achievements: "$achDetailRecords.title",
+        },
+      },
+    ]);
 
     return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
   }

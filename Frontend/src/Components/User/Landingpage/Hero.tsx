@@ -430,7 +430,7 @@ export function Hero() {
                 b.style.transform = "scale(1)";
                 b.style.boxShadow = "0 10px 20px rgba(109,93,246,0.3)";
               }}
-              onClick={() => (window.location.href = "/play")}
+              onClick={() => navigate("/play")}
             >
               Play Your First Game
             </button>
