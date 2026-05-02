@@ -12,7 +12,7 @@ export class TransactionMapper {
         _id: (doc.userId as any)._id?.toString() || doc.userId.toString(),
         displayname: (doc.userId as any).displayname || "Unknown User",
         email: (doc.userId as any).email || "N/A",
-        avatarUrl: (doc.userId as any).avatarKey || null, // Assuming you might want to resolve this later or use directly
+        avatarUrl: (doc.userId as any).avatarKey || null, 
       };
     } else if (!doc.userId) {
       // Handle orphaned transactions (user deleted)

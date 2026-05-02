@@ -74,7 +74,9 @@ const LessonPage: React.FC = () => {
     fetch();
   }, [id]);
 
-  const d = lesson ? DIFF_COLORS[lesson.difficulty] ?? DIFF_COLORS.BEGINNER : DIFF_COLORS.BEGINNER;
+  const d = lesson
+    ? (DIFF_COLORS[lesson.difficulty] ?? DIFF_COLORS.BEGINNER)
+    : DIFF_COLORS.BEGINNER;
 
   return (
     <div className="min-h-screen bg-[#0A0F2C] flex flex-col relative">
@@ -103,7 +105,9 @@ const LessonPage: React.FC = () => {
                 <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Lock className="w-10 h-10 text-amber-500" />
                 </div>
-                <h1 className="text-3xl font-black mb-4 text-white">Master Lesson Locked</h1>
+                <h1 className="text-3xl font-black mb-4 text-white">
+                  Master Lesson Locked
+                </h1>
                 <p className="text-[#9ca3af] mb-10 leading-relaxed">
                   This advanced lesson is exclusive to Knightly Premium members.
                   Upgrade your account to unlock master training.
@@ -210,7 +214,7 @@ const LessonPage: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
-        
+
         {/* Subtle loading indicator for subsequent loads */}
         {loading && lesson && (
           <div className="fixed top-20 right-8 z-[60]">

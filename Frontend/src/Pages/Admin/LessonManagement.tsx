@@ -141,7 +141,9 @@ export const LessonManagement: React.FC = () => {
                     className="w-full bg-[#0A0F2C] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-[#4b5563] focus:outline-none focus:border-[#FFD166]/50"
                     placeholder="Lesson title"
                     value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
                   />
                 </div>
 
@@ -276,9 +278,9 @@ export const LessonManagement: React.FC = () => {
             <div className="space-y-3">
               {lessons
                 .slice(
-                    (currentPage - 1) * ITEMS_PER_PAGE,
-                    currentPage * ITEMS_PER_PAGE,
-                  )
+                  (currentPage - 1) * ITEMS_PER_PAGE,
+                  currentPage * ITEMS_PER_PAGE,
+                )
                 .map((lesson) => (
                   <div
                     key={lesson.id}

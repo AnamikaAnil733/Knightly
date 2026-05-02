@@ -467,8 +467,8 @@ export function PuzzleSolvingPage() {
                         Mastery Achieved!
                       </h2>
                       <p className="text-[#C9CAD9] text-sm opacity-80 leading-relaxed">
-                        You've conquered every {config.name} puzzle in our library. 
-                        Come back later for new challenges!
+                        You've conquered every {config.name} puzzle in our
+                        library. Come back later for new challenges!
                       </p>
                     </div>
                     <div className="flex flex-col gap-3 w-full">

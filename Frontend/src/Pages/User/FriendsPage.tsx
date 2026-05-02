@@ -75,7 +75,6 @@ const FriendsPage: React.FC = () => {
       await sendFriendRequest(id);
       toast.success(`Friend request sent to ${name}!`);
 
-      // Emit socket event for real-time notification
       if (socket) {
         socket.emit("send_friend_request", {
           recipientId: id,

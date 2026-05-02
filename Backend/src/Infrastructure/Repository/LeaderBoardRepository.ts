@@ -11,6 +11,6 @@ export class LeaderBoardRepository implements ILeaderBoardRepository {
     })
       .sort({ [`rating.${gameType}`]: -1 })
       .limit(limit)
-      .select("displayname avatarKey rating");
+      .select("displayname avatarKey rating gamesWin currentStreak");
   }
 }

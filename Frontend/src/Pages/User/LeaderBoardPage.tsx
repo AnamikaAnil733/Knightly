@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getLeaderboard } from "../../Service/Api/ChessApi";
-import {
-  Trophy,
-  User,
-  TrendingUp,
-  Zap,
-  Flame,
-  Clock,
-  Award,
-} from "lucide-react";
+import { Trophy, User, Zap, Flame, Clock, Award } from "lucide-react";
 import { Navbar } from "../../Components/User/Common/Navbar";
 import { LeaderboardEntry } from "../../Types/LeaderBoardTypes";
 
@@ -29,7 +21,6 @@ export const LeaderBoardPage: React.FC = () => {
       setLoading(true);
       try {
         const data = await getLeaderboard(activeType);
-        // Ensure data exists and map properly
         setPlayers(data || []);
       } catch (error) {
         console.error("Failed to fetch leaderboard:", error);
@@ -39,6 +30,7 @@ export const LeaderBoardPage: React.FC = () => {
     };
     fetchLeaderboard();
   }, [activeType]);
+  console.log(players);
 
   const topThree = players.slice(0, 3);
   const remainingPlayers = players.slice(3);
@@ -238,7 +230,6 @@ export const LeaderBoardPage: React.FC = () => {
                 <th className="px-10 py-6">Rank</th>
                 <th className="px-10 py-6">Player</th>
                 <th className="px-10 py-6">Rating</th>
-                <th className="px-10 py-6">Country</th>
                 <th className="px-10 py-6 text-center">Wins</th>
                 <th className="px-10 py-6 text-right">Streak</th>
               </tr>
@@ -277,19 +268,12 @@ export const LeaderBoardPage: React.FC = () => {
                   <td className="px-10 py-5 font-medium text-white/80">
                     {player.rating}
                   </td>
-                  <td className="px-10 py-5">
-                    {/* Country Flags Placeholder */}
-                    <div className="w-8 h-6 bg-white/5 rounded border border-white/10 flex items-center justify-center text-[10px] text-white/20">
-                      FLAG
-                    </div>
-                  </td>
                   <td className="px-10 py-5 text-center font-medium text-white/80">
-                    {Math.floor(Math.random() * 500) + 100}
+                    {player.win}
                   </td>
                   <td className="px-10 py-5 text-right font-medium">
                     <div className="inline-flex items-center gap-2 text-[#3A6FF7]">
-                      <TrendingUp size={14} className="animate-bounce" />
-                      <span>{Math.floor(Math.random() * 10) + 1}</span>
+                      <span>{player.streak}</span>
                     </div>
                   </td>
                 </tr>

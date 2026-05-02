@@ -245,9 +245,6 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
                     alt={friend.displayname}
                     className="w-12 h-12 rounded-full border-2 border-white/10"
                   />
-                  {friend.status !== "BLOCKED" && (
-                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#11193F] rounded-full"></div>
-                  )}
                 </div>
                 <div>
                   <h3
@@ -255,12 +252,10 @@ const FriendList: React.FC<FriendListProps> = ({ userId }) => {
                   >
                     {friend.displayname}
                   </h3>
-                  {friend.status === "BLOCKED" ? (
+                  {friend.status === "BLOCKED" && (
                     <span className="text-[#EF476F] text-[10px] font-black tracking-widest uppercase bg-[#EF476F]/10 px-2 py-0.5 rounded-md mt-1 inline-block">
                       BLOCKED
                     </span>
-                  ) : (
-                    <p className="text-[#9ca3af] text-xs">Online</p>
                   )}
                 </div>
               </div>

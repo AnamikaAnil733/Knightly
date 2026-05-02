@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { PuzzleTable } from "../../Components/Admin/PuzzleManagement/PuzzleTable";
 import {
   PuzzleModal,
@@ -27,12 +27,7 @@ export function PuzzleManagement() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    fetchPuzzles();
-    fetchDailyPuzzle();
-  }, [page]);
-
-  const fetchPuzzles = async () => {
+  const fetchPuzzles = useCallback(async () => {
     try {
       const res = await getAllPuzzlesApi({ page, limit: 10 });
       setPuzzles(res.puzzles);
@@ -40,20 +35,64 @@ export function PuzzleManagement() {
     } catch (error) {
       console.error("Failed to fetch puzzles", error);
     }
-  };
+  }, [page]);
 
-  const fetchDailyPuzzle = async () => {
+  const fetchDailyPuzzle = useCallback(async () => {
     try {
       const res = await getDailyPuzzleApi();
       setDailyPuzzle({
         ...res,
         moves: res.solution || [],
-        solutionLength: res.solution?.length || 0
+        solutionLength: res.solution?.length || 0,
       } as Puzzle);
     } catch (error) {
       console.error("Failed to fetch daily puzzle", error);
     }
-  };
+  }, []);
+
+  const dailyFetchedRef = useRef(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        // Parallel fetch on initial mount, otherwise just paginated puzzles
+        if (!dailyFetchedRef.current) {
+          const [pRes, dRes] = await Promise.all([
+            getAllPuzzlesApi({ page, limit: 10 }),
+            getDailyPuzzleApi(),
+          ]);
+
+          if (isMounted) {
+            setPuzzles(pRes.puzzles);
+            setTotalPages(pRes.totalPages);
+            setDailyPuzzle({
+              ...dRes,
+              moves: dRes.solution || [],
+              solutionLength: dRes.solution?.length || 0,
+            } as Puzzle);
+            dailyFetchedRef.current = true;
+          }
+        } else {
+          // Just fetch the puzzles for the current page
+          const pRes = await getAllPuzzlesApi({ page, limit: 10 });
+          if (isMounted) {
+            setPuzzles(pRes.puzzles);
+            setTotalPages(pRes.totalPages);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch puzzle data:", error);
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [page]);
 
   const handleSavePuzzle = async (data: PuzzleFormData) => {
     try {
@@ -118,7 +157,7 @@ export function PuzzleManagement() {
     let loadingToast: string | undefined;
     try {
       loadingToast = toast.loading("AI Scanning recent games for puzzles...");
-      const res = await generatePuzzlesFromGameApi(""); 
+      const res = await generatePuzzlesFromGameApi("");
       toast.success(`${res.data.length} puzzles generated!`, {
         id: loadingToast,
       });

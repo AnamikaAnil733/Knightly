@@ -17,12 +17,13 @@ export function TopPlayers() {
           const rankColors = ["#4F7CFF", "#AAB3D1", "#6D5DF6", "#2E3A8C"];
           console.log(data[0]);
 
-          const formattedPlayers = data
+          const formattedPlayers = [...data]
+            .sort((a, b) => b.averageRating - a.averageRating)
             .slice(0, 4)
             .map((p: LeaderboardEntry, index: number) => ({
               displayname: p.displayname,
               rating: p.rating,
-              averageRating: p.rating,
+              averageRating: p.averageRating,
               rank: p.rank,
               avatarKey: p.avatarKey,
               premium: p.premium,

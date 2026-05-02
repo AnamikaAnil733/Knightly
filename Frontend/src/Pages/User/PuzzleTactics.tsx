@@ -9,7 +9,10 @@ import {
   fetchDailyPuzzle,
 } from "../../Service/Api/UserPuzzleApi";
 import { StreakCalendar } from "../../Components/User/Puzzle/StreakCalendar";
-import { DifficultyLevel, UserPuzzleResponseDTO } from "../../Types/PuzzleTypes";
+import {
+  DifficultyLevel,
+  UserPuzzleResponseDTO,
+} from "../../Types/PuzzleTypes";
 
 import {
   ChevronLeft,
@@ -88,7 +91,9 @@ export function PuzzleTactics() {
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [solveHistory, setSolveHistory] = useState<string[]>([]);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [dailyPuzzle, setDailyPuzzle] = useState<UserPuzzleResponseDTO | null>(null);
+  const [dailyPuzzle, setDailyPuzzle] = useState<UserPuzzleResponseDTO | null>(
+    null,
+  );
 
   const todayDifficulty = getDailyDifficulty();
   const todayLabel = getTodayLabel();
@@ -280,15 +285,15 @@ export function PuzzleTactics() {
                   isLimited
                     ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5"
                     : dailyPuzzle?.isSolved
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
-                    : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
+                      ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
+                      : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
                 }`}
               >
                 {isLimited
                   ? "Limit Reached"
                   : dailyPuzzle?.isSolved
-                  ? "Replay Today"
-                  : "Start Today's Puzzle"}
+                    ? "Replay Today"
+                    : "Start Today's Puzzle"}
               </motion.button>
             </div>
           </div>
@@ -373,15 +378,15 @@ export function PuzzleTactics() {
                         isLimited
                           ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
                           : completedCategories.includes(level.id.toLowerCase())
-                          ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
-                          : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
+                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
+                            : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
                       }`}
                     >
                       {isLimited
                         ? "Locked"
                         : completedCategories.includes(level.id.toLowerCase())
-                        ? "Replay All"
-                        : "Solve"}
+                          ? "Replay All"
+                          : "Solve"}
                     </motion.button>
                   </div>
                 </div>

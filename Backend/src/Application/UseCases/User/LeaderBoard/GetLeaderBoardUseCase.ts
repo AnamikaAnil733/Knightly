@@ -17,17 +17,16 @@ export class GetLeaderBoardUseCase implements IGetLeaderBoardUseCase{
     return Promise.all(users.map(async (user, index) => {
       const avatarUrl = await this._mediaService.resolveSignedUrl(user.avatarKey);
 
-      const ratings = Object.values(user.rating).filter((r): r is number => typeof r === "number");
-      const averageRating = ratings.length > 0
-        ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length)
-        : 0;
-
+      const averageRating =Math.floor((user.rating.BULLET +user.rating.BLITZ+user.rating.RAPID+user.rating.CLASSICAL)/4)
+      console.log(typeof user.gamesWin);
       return {
         rank: index + 1,
         displayname: user.displayname,
         avatarKey: avatarUrl || "",
         rating: user.rating[gameType],
         averageRating,
+        win:user.gamesWin,
+        streak:user.currentStreak,
       };
     }));
 

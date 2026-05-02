@@ -157,6 +157,8 @@ export interface LeaderBoardResponse {
   avatarKey: string;
   rating: number;
   averageRating: number;
+  gamesWin?:number;
+  streak:number;
 }
 
 
