@@ -41,6 +41,7 @@ import { AddAchievementsUseCase } from "../../Application/UseCases/Admin/Achieve
 import { GetAllAchievementsUseCase } from "../../Application/UseCases/Admin/AchievementManagement/GetAllAchievementsUseCase";
 import { UpdateAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement/UpdateAchievementsUseCase";
 import { DeleteAchievementUseCase } from "../../Application/UseCases/Admin/AchievementManagement/DeleteAchievementUseCase";
+import { GetDailyPuzzleUseCase } from "../../Application/UseCases/User/PuzzleManagement/GetDailyPuzzleUseCase";
 
 
 
@@ -105,6 +106,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
   puzzleMangementRepo,
   chessGameRepo,
 );
+const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(puzzleMangementRepo);
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
 const updateAchievementUseCase = new UpdateAchievementUseCase(achievementsRepo)
@@ -144,6 +146,7 @@ export const PuzzleManagementController = new AdminPuzzleController(
   softDeletePuzzleUseCase,
   syncLichessPuzzleUseCase,
   generatePuzzleFromGameUseCase,
+  getDailyPuzzleUseCase,
 );
 export const achievementController = new AchievementController(
   addAchievementsUseCase,

@@ -6,7 +6,7 @@ import { PuzzleMapper } from "../../../Mapper/PuzzleMapper";
 export class GetDailyPuzzleUseCase implements IGetDailyPuzzleUseCase {
   constructor(private readonly _puzzleRepository: IPuzzleRepository) {}
 
-  async execute(userId: string): Promise<UserPuzzleResponseDTO> {
+  async execute(userId?: string): Promise<UserPuzzleResponseDTO> {
     const { puzzles } = await this._puzzleRepository.findAll({ limit: 5000 });
     if (puzzles.length === 0) {
       throw new Error("No puzzles available in the library.");

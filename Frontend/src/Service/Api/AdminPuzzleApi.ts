@@ -41,6 +41,11 @@ export const syncLichessDailyPuzzleApi = async () => {
   return response.data;
 };
 
+export const getDailyPuzzleApi = async () => {
+  const response = await axios.get("/admin/daily-puzzle");
+  return response.data;
+};
+
 export const generatePuzzlesFromGameApi = async (gameId?: string) => {
   const url = gameId
     ? `/admin/generate-puzzle-from-game/${gameId}`

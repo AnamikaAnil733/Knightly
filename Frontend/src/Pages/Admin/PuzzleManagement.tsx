@@ -13,6 +13,7 @@ import {
   deletePuzzleApi,
   editPuzzlesApi,
   syncLichessDailyPuzzleApi,
+  getDailyPuzzleApi,
   generatePuzzlesFromGameApi,
 } from "../../Service/Api/AdminPuzzleApi";
 import toast from "react-hot-toast";
@@ -20,27 +21,20 @@ import { Puzzle } from "../../Types/PuzzleTypes";
 
 export function PuzzleManagement() {
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
+  const [dailyPuzzle, setDailyPuzzle] = useState<Puzzle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const fetchPuzzles = async () => {
-      try {
-        const res = await getAllPuzzlesApi({ page, limit: 10 });
-        setPuzzles(res.puzzles);
-        setTotalPages(res.totalPages);
-      } catch (error) {
-        console.error("Failed to fetch puzzles", error);
-      }
-    };
     fetchPuzzles();
+    fetchDailyPuzzle();
   }, [page]);
 
-  const fetchPuzzles = async (pageNumber = page) => {
+  const fetchPuzzles = async () => {
     try {
-      const res = await getAllPuzzlesApi({ page: pageNumber, limit: 10 });
+      const res = await getAllPuzzlesApi({ page, limit: 10 });
       setPuzzles(res.puzzles);
       setTotalPages(res.totalPages);
     } catch (error) {
@@ -48,10 +42,22 @@ export function PuzzleManagement() {
     }
   };
 
+  const fetchDailyPuzzle = async () => {
+    try {
+      const res = await getDailyPuzzleApi();
+      setDailyPuzzle({
+        ...res,
+        moves: res.solution || [],
+        solutionLength: res.solution?.length || 0
+      } as Puzzle);
+    } catch (error) {
+      console.error("Failed to fetch daily puzzle", error);
+    }
+  };
+
   const handleSavePuzzle = async (data: PuzzleFormData) => {
     try {
       if (editingPuzzle) {
-        // EDIT
         await editPuzzlesApi({
           id: editingPuzzle.id,
           fen: data.fen,
@@ -60,12 +66,12 @@ export function PuzzleManagement() {
           description: data.description,
         });
       } else {
-        // CREATE
         await createPuzzleApi(data);
       }
       setIsModalOpen(false);
       setEditingPuzzle(null);
       fetchPuzzles();
+      fetchDailyPuzzle();
     } catch (error) {
       console.error("Failed to save puzzle", error);
     }
@@ -80,6 +86,7 @@ export function PuzzleManagement() {
     try {
       await deletePuzzleApi(id);
       await fetchPuzzles();
+      fetchDailyPuzzle();
     } catch (error) {
       console.error("Failed to delete puzzle", error);
     }
@@ -92,6 +99,7 @@ export function PuzzleManagement() {
       await syncLichessDailyPuzzleApi();
       toast.success("Daily puzzle synced!", { id: loadingToast });
       fetchPuzzles();
+      fetchDailyPuzzle();
     } catch (error: unknown) {
       const errorResponse = error as {
         response?: { data?: { message?: string } };
@@ -110,11 +118,12 @@ export function PuzzleManagement() {
     let loadingToast: string | undefined;
     try {
       loadingToast = toast.loading("AI Scanning recent games for puzzles...");
-      const res = await generatePuzzlesFromGameApi(""); // Empty gameId triggers bulk scan
+      const res = await generatePuzzlesFromGameApi(""); 
       toast.success(`${res.data.length} puzzles generated!`, {
         id: loadingToast,
       });
       fetchPuzzles();
+      fetchDailyPuzzle();
     } catch (error: unknown) {
       const errorResponse = error as {
         response?: { data?: { message?: string } };
@@ -182,7 +191,7 @@ export function PuzzleManagement() {
         </div>
 
         <div className="lg:col-span-1">
-          {puzzles.length > 0 && <DailyPuzzle puzzle={puzzles[0]} />}
+          {dailyPuzzle && <DailyPuzzle puzzle={dailyPuzzle} />}
         </div>
       </div>
 

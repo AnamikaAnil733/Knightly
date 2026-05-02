@@ -8,6 +8,7 @@ import { ISoftDeleteUseCase } from "../../../../Domain/Interface/Usecases/Admin/
 import { MESSAGES } from "../../../../Domain/Constants/Messages/Messages";
 import { ISyncLichessDailyPuzzleUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/ISyncLichessDailyPuzzleUseCase";
 import { IGeneratePuzzleFromGameUseCase } from "../../../../Domain/Interface/Usecases/Admin/PuzzleManagement/IGeneratePuzzleFromGameUseCase";
+import { IGetDailyPuzzleUseCase } from "../../../../Domain/Interface/Usecases/User/PuzzleManagement/IGetDailyPuzzleUseCase";
 
 
 export class AdminPuzzleController{
@@ -18,6 +19,7 @@ export class AdminPuzzleController{
     private readonly _softDeletePuzzleUseCase: ISoftDeleteUseCase,
     private readonly _syncLichessPuzzleUseCase: ISyncLichessDailyPuzzleUseCase,
     private readonly _generatePuzzleFromGameUseCase: IGeneratePuzzleFromGameUseCase,
+    private readonly _getDailyPuzzleUseCase: IGetDailyPuzzleUseCase,
   ) {}
 
   createPuzzle = async(req:Request,res:Response):Promise<Response> =>{
@@ -58,6 +60,15 @@ export class AdminPuzzleController{
 
     }
   };
+
+  getDailyPuzzle = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
+    try {
+      const dailyPuzzle = await this._getDailyPuzzleUseCase.execute();
+      return res.status(HttpStatusCodes.OK).json(dailyPuzzle);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   editPuzzles = async(req:Request,res:Response,next:NextFunction):Promise<Response|void>=>{
     try{
