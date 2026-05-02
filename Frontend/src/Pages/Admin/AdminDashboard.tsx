@@ -14,23 +14,7 @@ import { Link } from "react-router-dom";
 import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-
-type AnalyticsData = {
-  stats: { label: string; value: string; icon: string }[];
-  recentTransactions: {
-    _id: string;
-    amount: number;
-    createdAt: string;
-    userId?: { displayname: string; email: string };
-  }[];
-  recentUsers: {
-    _id: string;
-    displayname: string;
-    createdAt: string;
-    avatarKey?: string;
-    role: string;
-  }[];
-};
+import { AnalyticsData } from "../../Types/AdminTypes";
 
 export function AdminDashboard() {
   const { data, isLoading, isError } = useQuery<AnalyticsData>({

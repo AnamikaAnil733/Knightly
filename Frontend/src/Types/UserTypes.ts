@@ -46,3 +46,14 @@ export interface UserAuthState {
 export interface RootState {
   userAuth: UserAuthState;
 }
+
+//Admin
+
+export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED" | "PREMIUM";
+
+export type UsersResponse = {
+  users: IUser[];
+  total: number;
+  page: number;
+  totalPages: number;
+};

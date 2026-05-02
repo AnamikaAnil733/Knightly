@@ -1,4 +1,4 @@
-import { IUser } from "../Types/User";
+import { IUser } from "../Types/UserTypes";
 
 const DEFAULT_AVATAR =
   "https://api.dicebear.com/7.x/adventurer/svg?seed=6968895a226ff40d72afb713";

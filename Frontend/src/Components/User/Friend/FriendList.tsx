@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { ReportUserModal } from "../Common/ReportUserModal";
 import toast from "react-hot-toast";
-import { IFriend } from "../../../Types/Friend";
+import { IFriend } from "../../../Types/FriendTypes";
 
 interface FriendListProps {
   userId?: string;

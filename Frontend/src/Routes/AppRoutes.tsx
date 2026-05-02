@@ -46,7 +46,7 @@ import { useSystemSettings } from "../Context/SystemSettingsContext";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/Store";
-import { UserRole } from "../Types/User";
+import { UserRole } from "../Types/UserTypes";
 
 export default function AppRoutes() {
   const { settings, isLoading: isSettingsLoading } = useSystemSettings();

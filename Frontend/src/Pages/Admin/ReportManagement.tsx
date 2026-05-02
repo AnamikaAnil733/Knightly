@@ -14,26 +14,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-
-export type ReportStatus = "PENDING" | "RESOLVED" | "DISMISSED";
-
-interface IReport {
-  id: string;
-  reporterId: string;
-  reporterName?: string;
-  reportedId: string;
-  reportedName?: string;
-  reporterEmail?: string;
-  reportedEmail?: string;
-  reason: string;
-  description: string;
-  evidence?: {
-    gameId?: string;
-    chatSnapshot?: { sender: string; text: string; time: string }[];
-  };
-  status: ReportStatus;
-  createdAt: string;
-}
+import { IReport, ReportStatus } from "../../Types/ReportTypes";
 
 export function ReportManagement() {
   const queryClient = useQueryClient();

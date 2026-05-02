@@ -3,17 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Flag, XIcon, AlertCircle, Loader2 } from "lucide-react";
 import axios from "../../../Service/Api/Axios/Useraxios";
 import toast from "react-hot-toast";
-
-interface ChatMessage {
-  sender: string;
-  text: string;
-  time: string;
-}
-
-interface ReportEvidence {
-  gameId?: string;
-  chatSnapshot?: ChatMessage[];
-}
+import { ChatMessage, ReportEvidence } from "../../../Types/ReportTypes";
 
 interface ReportUserModalProps {
   isOpen: boolean;

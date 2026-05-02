@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, GameType } from "../../Types/User";
+import { RootState } from "../../Store/Store";
+import { GameType } from "../../Types/UserTypes";
 import { getAvatarUrl } from "../../Utils/GetAvatarurl";
 import { updateUser } from "../../Store/Slices/Auth/UserAuthSlice";
 import toast from "react-hot-toast";

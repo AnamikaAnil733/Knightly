@@ -3,6 +3,7 @@ import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
 import Pagination from "../../Components/Reuseable/Pagination";
+import { LessonDetail } from "../../Types/LessonTypes";
 
 const CATEGORIES = [
   "GETTING_STARTED",
@@ -12,16 +13,6 @@ const CATEGORIES = [
   "ENDGAMES",
 ];
 const DIFFICULTIES = ["BEGINNER", "INTERMEDIATE", "ADVANCED"];
-
-interface Lesson {
-  id: string;
-  title: string;
-  category: string;
-  difficulty: string;
-  order: number;
-  content: string;
-  fen?: string;
-}
 
 const emptyForm = {
   title: "",
@@ -33,10 +24,10 @@ const emptyForm = {
 };
 
 export const LessonManagement: React.FC = () => {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [lessons, setLessons] = useState<LessonDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<Lesson | null>(null);
+  const [editing, setEditing] = useState<LessonDetail | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,7 +54,7 @@ export const LessonManagement: React.FC = () => {
     setShowForm(true);
   };
 
-  const openEdit = (lesson: Lesson) => {
+  const openEdit = (lesson: LessonDetail) => {
     setEditing(lesson);
     setForm({
       title: lesson.title,

@@ -12,8 +12,8 @@ import {
 } from "../../Service/Api/FriendApi";
 import toast from "react-hot-toast";
 import { socket } from "../../Service/Socket";
-import { IUser } from "../../Types/User";
-import { IPendingRequest } from "../../Types/Friend";
+import { IUser } from "../../Types/UserTypes";
+import { IPendingRequest } from "../../Types/FriendTypes";
 
 import { RootState } from "../../Store/Store";
 import { useSelector } from "react-redux";

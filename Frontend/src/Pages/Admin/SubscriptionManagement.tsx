@@ -4,27 +4,14 @@ import toast from "react-hot-toast";
 import { SearchIcon, CreditCard } from "lucide-react";
 
 import axios from "../../Service/Api/Axios/Adminaxios";
-import { IUser } from "../../Types/User";
+import { IUser } from "../../Types/UserTypes";
 import { UserTable } from "../../Components/Admin/UserManagement/UserTable";
 import { UserProfile } from "../../Components/Admin/UserManagement/UserProfile";
 import { SubscriptionStats } from "../../Components/Admin/Subscription/SubscriptionStats";
-
-type SubscriptionResponse = {
-  users: IUser[];
-  total: number;
-  page: number;
-  totalPages: number;
-};
-
-type StatsResponse = {
-  stats: {
-    label: string;
-    value: string;
-    change: string;
-    trend: "up" | "down";
-  }[];
-  revenueData: { date: string; amount: number }[];
-};
+import {
+  SubscriptionResponse,
+  StatsResponse,
+} from "../../Types/SubscriptionTypes";
 
 const LIMIT = 10;
 

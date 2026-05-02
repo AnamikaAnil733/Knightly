@@ -27,29 +27,11 @@ import {
   setUser,
 } from "../../Store/Slices/Auth/UserAuthSlice";
 import ChessAnimation from "../../Components/Authentication/ChessAnimation";
-
-/* ===================== TYPES ===================== */
-
-type Role = "ADMIN" | "USER";
-
-interface AuthPageProps {
-  role?: Role;
-  initialMode?: "LOGIN" | "SIGNUP";
-}
-
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-interface SignupFormData {
-  displayname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-/* ===================== COMPONENT ===================== */
+import {
+  AuthPageProps,
+  LoginFormData,
+  SignupFormData,
+} from "../../Types/AuthTypes";
 
 export const AuthPage: React.FC<AuthPageProps> = ({
   role = "USER",
@@ -82,8 +64,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       confirmPassword: "",
     },
   });
-
-  /* ===================== HANDLERS ===================== */
 
   const onLoginSubmit = async (data: LoginFormData) => {
     const api = role === "ADMIN" ? axiosAdmin : axiosUser;
@@ -163,11 +143,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
     }
   };
 
-  /* ===================== UI ===================== */
-
   return (
     <>
-      {/* Scoped keyframes for the sliding animation — unavoidable in pure Tailwind */}
       <style>{`
         @keyframes showPanel {
           0%, 49.9% { opacity: 0; z-index: 1; }

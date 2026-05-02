@@ -1,13 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { SendIcon } from "lucide-react";
 import { socket } from "../../../Service/Socket";
-
-interface Message {
-  sender: string;
-  text: string;
-  time: string;
-  socketId?: string;
-}
+import { Message } from "../../../Types/ChatTypes";
 
 interface ChatPanelProps {
   gameId: string;

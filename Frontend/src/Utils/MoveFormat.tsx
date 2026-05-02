@@ -1,14 +1,6 @@
+import { Position, MoveDTO } from "../Types/ChessTypes";
+
 const alpha = ["a", "b", "c", "d", "e", "f", "g", "h"];
-
-type Position = { row: number; col: number };
-
-type MoveDTO = {
-  from: Position;
-  to: Position;
-  piece: string;
-  color: "WHITE" | "BLACK";
-  promotion?: string;
-};
 
 export function toSquare(p: Position) {
   return `${alpha[p.col]}${8 - p.row}`;

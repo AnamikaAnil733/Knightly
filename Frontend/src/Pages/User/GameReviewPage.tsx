@@ -9,7 +9,7 @@ import {
   movesToFens,
   findCheckSquare,
 } from "../../Utils/ChessUtils";
-import { BoardGrid, MoveDTO, AnalysisData } from "../../Types/Chess";
+import { BoardGrid, MoveDTO, AnalysisData } from "../../Types/ChessTypes";
 import {
   ChevronLeft,
   ChevronRight,

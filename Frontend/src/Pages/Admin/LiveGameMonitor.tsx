@@ -4,25 +4,7 @@ import { Gamepad2, Users, Clock, Eye, RefreshCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
-
-type LiveGame = {
-  id: string;
-  status: string;
-  timeControl: string;
-  whitePlayer: {
-    id: string;
-    name: string;
-    rating: number;
-    avatar: string | null;
-  };
-  blackPlayer: {
-    id: string;
-    name: string;
-    rating: number;
-    avatar: string | null;
-  };
-  createdAt: string;
-};
+import { LiveGames } from "../../Types/LiveTypes";
 
 export function LiveGameMonitor() {
   const navigate = useNavigate();
@@ -35,7 +17,7 @@ export function LiveGameMonitor() {
     refetch,
     isFetching,
     dataUpdatedAt,
-  } = useQuery<LiveGame[]>({
+  } = useQuery<LiveGames[]>({
     queryKey: ["admin-live-games"],
     queryFn: async () => {
       const res = await axios.get("/admin/live-games");

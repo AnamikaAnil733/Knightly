@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ConfirmationModal from "../../Reuseable/ConformationModel";
 import { ShieldCheckIcon, BanIcon } from "lucide-react";
-import { IUser } from "../../../Types/User";
+import { IUser } from "../../../Types/UserTypes";
 
 interface UserTableProps {
   users: IUser[];

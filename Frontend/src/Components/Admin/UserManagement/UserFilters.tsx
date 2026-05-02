@@ -1,4 +1,4 @@
-import { UserFilter } from "../../../Pages/Admin/UserManagement";
+import { UserFilter } from "../../../Types/UserTypes";
 
 interface Props {
   filter: UserFilter;
@@ -21,7 +21,7 @@ export function UserFilters({
       <button
         disabled={blockedCount === 0}
         onClick={() =>
-          setFilter((prev) => (prev === "BLOCKED" ? "ALL" : "BLOCKED"))
+          setFilter((prev: UserFilter) => (prev === "BLOCKED" ? "ALL" : "BLOCKED"))
         }
         className={`px-4 py-2 rounded-md text-sm border transition
           ${
@@ -39,7 +39,7 @@ export function UserFilters({
       <button
         disabled={unblockedCount === 0}
         onClick={() =>
-          setFilter((prev) => (prev === "UNBLOCKED" ? "ALL" : "UNBLOCKED"))
+          setFilter((prev: UserFilter) => (prev === "UNBLOCKED" ? "ALL" : "UNBLOCKED"))
         }
         className={`px-4 py-2 rounded-md text-sm border transition
           ${
@@ -57,7 +57,7 @@ export function UserFilters({
       <button
         disabled={premiumCount === 0}
         onClick={() =>
-          setFilter((prev) => (prev === "PREMIUM" ? "ALL" : "PREMIUM"))
+          setFilter((prev: UserFilter) => (prev === "PREMIUM" ? "ALL" : "PREMIUM"))
         }
         className={`px-4 py-2 rounded-md text-sm border transition
           ${

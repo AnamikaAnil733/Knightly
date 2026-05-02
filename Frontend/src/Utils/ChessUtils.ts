@@ -1,5 +1,5 @@
 import { Chess } from "chess.js";
-import { BoardGrid, ChessPiece, MoveDTO } from "../Types/Chess";
+import { BoardGrid, ChessPiece, MoveDTO } from "../Types/ChessTypes";
 
 export const fenToBoardGrid = (fen: string): BoardGrid => {
   const chess = new Chess(fen);

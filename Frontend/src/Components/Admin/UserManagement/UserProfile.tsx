@@ -1,4 +1,4 @@
-import { IUser } from "../../../Types/User";
+import { IUser } from "../../../Types/UserTypes";
 import { useState } from "react";
 import ConfirmationModal from "../../Reuseable/ConformationModel";
 

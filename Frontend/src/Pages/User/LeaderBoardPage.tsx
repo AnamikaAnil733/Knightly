@@ -10,13 +10,7 @@ import {
   Award,
 } from "lucide-react";
 import { Navbar } from "../../Components/User/Common/Navbar";
-
-interface LeaderboardEntry {
-  rank: number;
-  displayname: string;
-  avatarKey: string;
-  rating: number;
-}
+import { LeaderboardEntry } from "../../Types/LeaderBoardTypes";
 
 const CATEGORIES = [
   { id: "bullet", label: "Bullet", icon: Zap },

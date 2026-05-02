@@ -1,4 +1,4 @@
-import { Puzzle } from "../../../Pages/Admin/PuzzleManagement";
+import { Puzzle } from "../../../Types/PuzzleTypes";
 import { ChessboardPreview } from "./ChessBoardPreview";
 import { CalendarIcon, TrophyIcon } from "lucide-react";
 interface DailyPuzzleProps {

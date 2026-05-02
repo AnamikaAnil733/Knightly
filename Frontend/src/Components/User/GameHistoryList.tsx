@@ -3,26 +3,8 @@ import { getGameHistory } from "../../Service/Api/ChessApi";
 import { ChevronRight, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../Types/User";
-
-interface GameHistoryEntry {
-  id: string;
-  whitePlayer: {
-    id: string;
-    displayname: string;
-    avatarUrl: string | null;
-  };
-  blackPlayer: {
-    id: string;
-    displayname: string;
-    avatarUrl: string | null;
-  };
-  status: string;
-  createdAt: string;
-  timeControl: string;
-  whiteRatingChange?: number;
-  blackRatingChange?: number;
-}
+import { RootState } from "../../Store/Store";
+import { GameHistoryEntry } from "../../Types/MatchTypes";
 
 export function GameHistoryList() {
   const currentUser = useSelector((state: RootState) => state.userAuth.user);

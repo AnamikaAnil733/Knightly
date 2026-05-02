@@ -1,4 +1,4 @@
-import { Puzzle } from "../../../Pages/Admin/PuzzleManagement";
+import { Puzzle } from "../../../Types/PuzzleTypes";
 import { PencilIcon, TrashIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PuzzleTableProps {

@@ -30,3 +30,14 @@ export interface StreakCalendarProps {
   showCurrentMonthOnly?: boolean;
   hideHeader?: boolean;
 }
+
+export interface Puzzle {
+  id: string;
+  fen: string;
+  difficulty: "Easy" | "Medium" | "Hard" | "Expert";
+  moves: string[];
+  solutionLength: number;
+  description?: string;
+  isActive: boolean;
+  createdAt: string;
+}

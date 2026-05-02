@@ -9,19 +9,7 @@ import {
 } from "lucide-react";
 import axios from "../../Service/Api/Axios/Adminaxios";
 import toast from "react-hot-toast";
-
-type SettingsData = {
-  general: {
-    maintenanceMode: boolean;
-    platformName: string;
-    contactEmail: string;
-  };
-  subscription: {
-    monthlyPrice: number;
-    annualPrice: number;
-    currency: string;
-  };
-};
+import { SettingsData } from "../../Types/AdminTypes";
 
 export function SystemSettings() {
   const [activeTab, setActiveTab] = useState<"general" | "billing">("general");

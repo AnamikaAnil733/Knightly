@@ -19,7 +19,7 @@ import {
 } from "../../Store/Slices/Auth/UserAuthSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
-import { FormErrors } from "../../Types/Error";
+import { FormErrors } from "../../Types/ErrorTypes";
 
 interface ApiErrorResponse {
   message: string;

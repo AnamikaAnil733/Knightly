@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Trophy, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getLiveGames } from "../../../Service/Api/ChessApi";
-
-interface Match {
-  id?: string;
-  timeControl: string;
-  whitePlayerId?: string;
-  blackPlayerId?: string;
-}
+import { Match } from "../../../Types/LiveTypes";
 
 export function LiveMatches() {
   const navigate = useNavigate();

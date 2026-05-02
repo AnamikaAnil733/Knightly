@@ -5,41 +5,23 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import api from "../../Service/Api/Axios/Useraxios";
 import { KnightlyParticles } from "../../Utils/Particle";
+import {
+  VerifyOtpPayload,
+  RegisterPayload,
+  ApiErrorResponse,
+  OTPVerifyProps,
+} from "../../Types/EmailVerificationTypes";
 
-/* -------- Types --------*/
-interface VerifyOtpPayload {
-  email: string;
-  otp: string;
-}
-
-interface RegisterPayload {
-  displayname: string;
-  email: string;
-  password: string;
-}
-
-interface ApiErrorResponse {
-  message: string;
-}
-
-interface OTPVerifyProps {
-  mode: "signup" | "forgot"; // NEW
-}
-
-/* -------- API -------- */
 const verifyOtpRequest = async (data: VerifyOtpPayload) =>
   (await api.post("/auth/verify-otp", data)).data;
 
 const registerRequest = async (data: RegisterPayload) =>
   (await api.post("/auth/register", data)).data;
 
-/* -------- Component -------- */
 export function OTPVerify({ mode }: OTPVerifyProps) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Signup flow: displayname & password
-  // Forgot flow: only email required
   const { email, displayname, password } = location.state || {};
 
   useEffect(() => {
@@ -47,7 +29,6 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
     if (mode === "signup" && (!password || !displayname)) navigate("/signup");
   }, [email, mode, password, displayname, navigate]);
 
-  /* State */
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", "", ""]);
   const [timer, setTimer] = useState(60);
   const [message, setMessage] = useState<{
@@ -73,7 +54,7 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
 
   /* -------- Resend OTP Mutation -------- */
   const resendOtpRequest = async (email: string) => {
-    return api.post("/auth/resend-otp", { email }); // Backend route must exist
+    return api.post("/auth/resend-otp", { email });
   };
 
   const resendOtpMutation = useMutation({
@@ -131,15 +112,6 @@ export function OTPVerify({ mode }: OTPVerifyProps) {
     }
     verifyOtpMutation.mutate({ email, otp: otpString });
   };
-
-  // const handleResend=()=>{
-  //   if(timer===0){
-  //     setTimer(300);
-  //     setOtp(["","","","","","",""]);
-  //     setMessage({type:null,text:""});
-  //     inputRefs.current[0]?.focus();
-  //   }
-  // };
 
   return (
     <div className="min-h-screen w-full relative flex flex-col overflow-hidden bg-knightly-gradient">

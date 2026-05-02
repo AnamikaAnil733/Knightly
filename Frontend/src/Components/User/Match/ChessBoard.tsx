@@ -4,14 +4,7 @@ import { Piece_Images } from "../../Reuseable/ChessPieces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import { BOARD_THEMES } from "./BoardThemes";
-
-type ChessColor = "WHITE" | "BLACK";
-
-type ChessPiece = {
-  type: "PAWN" | "ROOK" | "KNIGHT" | "BISHOP" | "QUEEN" | "KING";
-  color: ChessColor;
-  hasMoved: boolean;
-};
+import { ChessPiece } from "../../../Types/ChessTypes";
 
 type ChessboardProps = {
   board: (ChessPiece | null)[][];

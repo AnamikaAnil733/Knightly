@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../Types/User";
+import { RootState } from "../../../Store/Store";
 import { SectionHeader } from "./Heading/Sectionheader";
 import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
 import toast from "react-hot-toast";

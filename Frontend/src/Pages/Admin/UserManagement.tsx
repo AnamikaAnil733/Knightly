@@ -9,26 +9,14 @@ import toast from "react-hot-toast";
 import { SearchIcon } from "lucide-react";
 
 import axios from "../../Service/Api/Axios/Adminaxios";
-import { IUser, UserRole } from "../../Types/User";
+import { IUser, UserRole } from "../../Types/UserTypes";
 
 import { UserTable } from "../../Components/Admin/UserManagement/UserTable";
 import { UserProfile } from "../../Components/Admin/UserManagement/UserProfile";
 import { UserFilters } from "../../Components/Admin/UserManagement/UserFilters";
-
-/* ===================== TYPES ===================== */
-
-export type UserFilter = "ALL" | "BLOCKED" | "UNBLOCKED" | "PREMIUM";
-
-type UsersResponse = {
-  users: IUser[];
-  total: number;
-  page: number;
-  totalPages: number;
-};
+import { UserFilter, UsersResponse } from "../../Types/UserTypes";
 
 const LIMIT = 10;
-
-/* ===================== COMPONENT ===================== */
 
 export function UserManagement() {
   const queryClient = useQueryClient();
@@ -37,8 +25,6 @@ export function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<UserFilter>("ALL");
   const [page, setPage] = useState(1);
-
-  /* ===================== FETCH USERS ===================== */
 
   const { data, isLoading, isError } = useQuery<UsersResponse>({
     queryKey: ["admin-users", page, searchTerm, filter],
@@ -56,23 +42,17 @@ export function UserManagement() {
     placeholderData: keepPreviousData,
   });
 
-  /* ===================== ERROR HANDLING ===================== */
-
   useEffect(() => {
     if (isError) {
       toast.error("Failed to load users");
     }
   }, [isError]);
 
-  /* ===================== DERIVED DATA ===================== */
-
   const users = useMemo(() => {
     return (data?.users ?? []).filter((u) => u.role !== UserRole.ADMIN);
   }, [data]);
 
   const totalPages = data?.totalPages ?? 1;
-
-  /* ===================== BAN / UNBAN (OPTIMISTIC) ===================== */
 
   const banMutation = useMutation({
     mutationFn: async ({ id, block }: { id: string; block: boolean }) => {
@@ -82,7 +62,6 @@ export function UserManagement() {
       return res.data;
     },
 
-    /* 🔥 Optimistic Update */
     onMutate: async ({ id, block }) => {
       await queryClient.cancelQueries({
         queryKey: ["admin-users"],
@@ -120,7 +99,6 @@ export function UserManagement() {
       return { previousData };
     },
 
-    /* 🔥 Rollback if error */
     onError: (_err, _vars, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(
@@ -141,8 +119,6 @@ export function UserManagement() {
     banMutation.mutate({ id: userId, block });
   };
 
-  /* ===================== COUNTS ===================== */
-
   const blockedCount = useMemo(
     () => users.filter((u) => u.isBlocked).length,
     [users],
@@ -157,8 +133,6 @@ export function UserManagement() {
     () => users.filter((u) => u.premium).length,
     [users],
   );
-
-  /* ===================== UI ===================== */
 
   return (
     <div className="w-full min-h-screen p-6">

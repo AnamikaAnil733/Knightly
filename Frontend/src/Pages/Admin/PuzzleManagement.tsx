@@ -16,21 +16,7 @@ import {
   generatePuzzlesFromGameApi,
 } from "../../Service/Api/AdminPuzzleApi";
 import toast from "react-hot-toast";
-
-/* ===================== TYPES ===================== */
-
-export interface Puzzle {
-  id: string;
-  fen: string;
-  difficulty: "Easy" | "Medium" | "Hard" | "Expert";
-  moves: string[];
-  solutionLength: number;
-  description?: string;
-  isActive: boolean;
-  createdAt: string;
-}
-
-/* ===================== COMPONENT ===================== */
+import { Puzzle } from "../../Types/PuzzleTypes";
 
 export function PuzzleManagement() {
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
@@ -38,8 +24,6 @@ export function PuzzleManagement() {
   const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  /* ===================== FETCH ===================== */
 
   useEffect(() => {
     const fetchPuzzles = async () => {
@@ -54,7 +38,6 @@ export function PuzzleManagement() {
     fetchPuzzles();
   }, [page]);
 
-  /* ===================== CREATE ===================== */
   const fetchPuzzles = async (pageNumber = page) => {
     try {
       const res = await getAllPuzzlesApi({ page: pageNumber, limit: 10 });
@@ -88,14 +71,10 @@ export function PuzzleManagement() {
     }
   };
 
-  /* ===================== EDIT ===================== */
-
   const handleEditPuzzle = (puzzle: Puzzle) => {
     setEditingPuzzle(puzzle);
     setIsModalOpen(true);
   };
-
-  /* ===================== DELETE ===================== */
 
   const handleDeletePuzzle = async (id: string) => {
     try {
@@ -149,8 +128,6 @@ export function PuzzleManagement() {
       console.error(error);
     }
   };
-
-  /* ===================== RENDER ===================== */
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">

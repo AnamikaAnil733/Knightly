@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Zap, Timer, Clock, Trophy, ChevronLeft, Bot } from "lucide-react";
 import { ColorSelectionModal } from "../../Components/User/Match/ColorSelectionModal";
-import { GameMode } from "../../Types/Chess";
+import { GameMode } from "../../Types/ChessTypes";
 
 const gameModes: GameMode[] = [
   {

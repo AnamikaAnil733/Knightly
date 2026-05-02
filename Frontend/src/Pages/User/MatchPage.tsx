@@ -23,9 +23,9 @@ import {
   getLegalMoves,
 } from "../../Service/Api/ChessApi";
 
-import { BoardGrid, MoveDTO } from "../../Types/Chess";
+import { BoardGrid, MoveDTO } from "../../Types/ChessTypes";
 import { findCheckSquare, movesToFens } from "../../Utils/ChessUtils";
-import { Turn, GameStatus } from "../../Types/Chess";
+import { Turn, GameStatus } from "../../Types/ChessTypes";
 import { ArrowLeft } from "lucide-react";
 import { useMemo } from "react";
 

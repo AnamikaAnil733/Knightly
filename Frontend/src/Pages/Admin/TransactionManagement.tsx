@@ -3,26 +3,8 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { DollarSign, SearchIcon, ExternalLink } from "lucide-react";
 import axios from "../../Service/Api/Axios/Adminaxios";
+import { PopulatedUser, TransactionsResponse } from "../../Types/AdminTypes";
 
-type PopulatedUser = {
-  _id: string;
-  displayname: string;
-  email: string;
-  avatarUrl?: string;
-};
-
-type Transaction = {
-  _id: string;
-  userId: PopulatedUser | string | null;
-  amount: number;
-  currency: string;
-  status: string;
-  stripeSessionId: string;
-  type: string;
-  createdAt: string;
-};
-
-/** Safely extract user fields regardless of whether userId is populated */
 function getUser(userId: PopulatedUser | string | null): PopulatedUser {
   if (userId && typeof userId === "object" && "displayname" in userId) {
     return userId;
@@ -33,14 +15,6 @@ function getUser(userId: PopulatedUser | string | null): PopulatedUser {
     email: "N/A",
   };
 }
-
-type TransactionsResponse = {
-  transactions: Transaction[];
-  total: number;
-  page: number;
-  totalPages: number;
-};
-
 const LIMIT = 10;
 
 export function TransactionManagement() {
