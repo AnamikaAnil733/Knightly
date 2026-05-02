@@ -30,6 +30,12 @@ export class GetPuzzleDifficultyUsecase implements IGetPuzzleByDifficulty {
     const puzzle = await this._puzzleRepository.getPuzzleByDifficulty(userId, difficulty);
     if (!puzzle) throw new Error("all puzzles are completed");
 
-    return PuzzleMapper.toUserPuzzleResponseDTO(puzzle);
+    let isSolved = false;
+    if (userId && puzzle.id) {
+        const progress = await this._progressRepository.findByUserAndPuzzle(userId, puzzle.id);
+        isSolved = !!progress?.solved;
+    }
+
+    return PuzzleMapper.toUserPuzzleResponseDTO(puzzle, isSolved);
   }
 }

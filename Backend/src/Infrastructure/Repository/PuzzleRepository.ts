@@ -70,7 +70,9 @@ export class PuzzleManagementRepository
     const objectIds = solvedPuzzleId.map(
       (id) => new mongoose.Types.ObjectId(id),
     );
-    const docs = await PuzzleModel.aggregate([
+    
+    // Try to find an unsolved puzzle first
+    let docs = await PuzzleModel.aggregate([
       {
         $match: {
           difficulty,
@@ -81,10 +83,45 @@ export class PuzzleManagementRepository
       { $sample: { size: 1 } },
     ]);
 
+    // If all puzzles in this category are solved, allow replaying by picking any random puzzle
+    if (!docs.length) {
+        docs = await PuzzleModel.aggregate([
+            {
+              $match: {
+                difficulty,
+                isActive: true,
+              },
+            },
+            { $sample: { size: 1 } },
+          ]);
+    }
+
     if (!docs.length) {
       return null;
     }
     const doc = docs[0] as HydratedDocument<PuzzleSchemaType>;
     return MongoPuzzleMapper.toEntityFromDocument(doc);
+  }
+
+  async countUnsolvedByCategory(userId: string, difficulty: PuzzleType): Promise<number> {
+    const solvedPuzzleIds = await ProgressPuzzleModel.find({
+        userId,
+        solved: true,
+    }).distinct("puzzleId");
+    
+    const objectIds = solvedPuzzleIds.map(id => new mongoose.Types.ObjectId(id));
+
+    return PuzzleModel.countDocuments({
+        difficulty,
+        isActive: true,
+        _id: { $nin: objectIds }
+    });
+  }
+
+  async countByCategory(difficulty: PuzzleType): Promise<number> {
+    return PuzzleModel.countDocuments({
+        difficulty,
+        isActive: true
+    });
   }
 }

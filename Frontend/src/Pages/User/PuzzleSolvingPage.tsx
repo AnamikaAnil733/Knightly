@@ -109,6 +109,8 @@ export function PuzzleSolvingPage() {
   const [hintCooldown, setHintCooldown] = useState(0);
   const [isStreakModalOpen, setIsStreakModalOpen] = useState(false);
   const [currentStreakCount, setCurrentStreakCount] = useState(0);
+  const [previouslySolved, setPreviouslySolved] = useState(false);
+  const [allCompleted, setAllCompleted] = useState(false);
 
   const board = useMemo(() => {
     return game.board().map((row) =>
@@ -130,7 +132,8 @@ export function PuzzleSolvingPage() {
         difficulty === "daily"
           ? await fetchDailyPuzzle()
           : await fetchPuzzleByDifficulty(difficulty);
-      setIsSolved(false);
+      setIsSolved(false); // Reset session solved state
+      setPreviouslySolved(!!data.isSolved);
       setIsWrong(false);
       setHintSquare(null);
       // Removed redundant setLoading(true)
@@ -157,6 +160,8 @@ export function PuzzleSolvingPage() {
       ) {
         setLimitMessage(errorMessage);
         setIsPremiumModalOpen(true);
+      } else if (errorMessage.includes("all puzzles are completed")) {
+        setAllCompleted(true);
       } else {
         toast.error(errorMessage);
       }
@@ -238,6 +243,9 @@ export function PuzzleSolvingPage() {
                       setCurrentStreakCount(result.currentStreak);
                       setIsStreakModalOpen(true);
                     }
+                    if (result.allCompleted) {
+                      setAllCompleted(true);
+                    }
                   }
                 }, 500);
               } else if (result.solved) {
@@ -247,6 +255,9 @@ export function PuzzleSolvingPage() {
                   dispatch(updateUser({ currentStreak: result.currentStreak }));
                   setCurrentStreakCount(result.currentStreak);
                   setIsStreakModalOpen(true);
+                }
+                if (result.allCompleted) {
+                  setAllCompleted(true);
                 }
               }
             } else {
@@ -370,6 +381,14 @@ export function PuzzleSolvingPage() {
               </span>
             </div>
           )}
+          {previouslySolved && (
+            <div className="flex items-center gap-2 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-400 font-bold text-sm">
+                Previously Solved
+              </span>
+            </div>
+          )}
           <button
             onClick={loadNewPuzzle}
             className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all font-semibold text-sm"
@@ -430,6 +449,45 @@ export function PuzzleSolvingPage() {
                     <span className="text-2xl font-bold text-white">
                       Try Again
                     </span>
+                  </div>
+                </motion.div>
+              )}
+              {allCompleted && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute inset-0 z-30 flex items-center justify-center p-6"
+                >
+                  <div className="bg-[#11193F]/95 backdrop-blur-2xl border-2 border-emerald-500/30 p-10 rounded-[3rem] shadow-[0_0_50px_rgba(16,185,129,0.1)] flex flex-col items-center text-center gap-6 max-w-sm">
+                    <div className="w-20 h-20 rounded-3xl bg-emerald-500/20 flex items-center justify-center shadow-lg shadow-emerald-500/10">
+                      <Trophy className="w-10 h-10 text-emerald-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-black mb-2 bg-gradient-to-r from-white to-emerald-400 bg-clip-text text-transparent">
+                        Mastery Achieved!
+                      </h2>
+                      <p className="text-[#C9CAD9] text-sm opacity-80 leading-relaxed">
+                        You've conquered every {config.name} puzzle in our library. 
+                        Come back later for new challenges!
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-3 w-full">
+                      <button
+                        onClick={() => {
+                          setAllCompleted(false);
+                          loadNewPuzzle();
+                        }}
+                        className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all active:scale-95"
+                      >
+                        Next Puzzle
+                      </button>
+                      <button
+                        onClick={() => navigate("/puzzles")}
+                        className="w-full py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold transition-all active:scale-95"
+                      >
+                        Return to Dashboard
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               )}

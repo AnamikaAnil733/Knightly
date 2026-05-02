@@ -2,6 +2,7 @@ import { UserManagementRepository } from "../Repository/UserRepository";
 import { PuzzleManagementRepository } from "../Repository/PuzzleRepository";
 import { ReportRepository } from "../Repository/ReportRepository";
 import { AchievementsRepository } from "../Repository/AchievementsRepository";
+import { UserPuzzleProgressRepository } from "../Repository/UserPuzzleProgressRepository";
 
 import { GetAllUserController } from "../../Presentation/Controllers/Admin/UserManagement/FindallUserController";
 import {  BlockUserController }  from "../../Presentation/Controllers/Admin/UserManagement/BlockUserController";
@@ -65,6 +66,7 @@ const analyticsRepo = new AnalyticsRepository(AuthModel, GameModel, TransactionM
 const systemSettingsRepo = new SystemSettingsRepository(SystemSettingsModel);
 const reportRepo = new ReportRepository();
 const achievementsRepo = new AchievementsRepository();
+const ProgressPuzzleRepo = new UserPuzzleProgressRepository();
 
 //service
 const tokenService = new TokenService();
@@ -106,7 +108,7 @@ const generatePuzzleFromGameUseCase = new GeneratePuzzleFromGameUseCase(
   puzzleMangementRepo,
   chessGameRepo,
 );
-const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(puzzleMangementRepo);
+const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(puzzleMangementRepo, ProgressPuzzleRepo);
 const addAchievementsUseCase = new AddAchievementsUseCase(achievementsRepo);
 const getAllAchievementsUseCase = new GetAllAchievementsUseCase(achievementsRepo);
 const updateAchievementUseCase = new UpdateAchievementUseCase(achievementsRepo)

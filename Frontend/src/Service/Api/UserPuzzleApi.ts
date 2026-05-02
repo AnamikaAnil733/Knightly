@@ -21,6 +21,7 @@ export const getSolveCount = async (): Promise<{
   success: boolean;
   today: number;
   total: number;
+  completedCategories?: string[];
 }> => {
   const response = await axios.get("/user/puzzles/solve-count");
   return response.data;

@@ -6,9 +6,10 @@ import { RootState } from "../../Store/Store";
 import {
   getSolveCount,
   fetchSolveHistory,
+  fetchDailyPuzzle,
 } from "../../Service/Api/UserPuzzleApi";
 import { StreakCalendar } from "../../Components/User/Puzzle/StreakCalendar";
-import { DifficultyLevel } from "../../Types/PuzzleTypes";
+import { DifficultyLevel, UserPuzzleResponseDTO } from "../../Types/PuzzleTypes";
 
 import {
   ChevronLeft,
@@ -82,10 +83,12 @@ export function PuzzleTactics() {
   const user = useSelector((state: RootState) => state.userAuth.user);
   const [solveCount, setSolveCount] = useState<number>(0);
   const [totalSolveCount, setTotalSolveCount] = useState<number>(0);
+  const [completedCategories, setCompletedCategories] = useState<string[]>([]);
   const [, setIsLoadingCount] = useState(true);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [solveHistory, setSolveHistory] = useState<string[]>([]);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [dailyPuzzle, setDailyPuzzle] = useState<UserPuzzleResponseDTO | null>(null);
 
   const todayDifficulty = getDailyDifficulty();
   const todayLabel = getTodayLabel();
@@ -98,6 +101,7 @@ export function PuzzleTactics() {
         if (data.success) {
           setSolveCount(data.today);
           setTotalSolveCount(data.total);
+          setCompletedCategories(data.completedCategories || []);
         }
       } catch (err) {
         console.error("Failed to fetch solve count:", err);
@@ -117,8 +121,18 @@ export function PuzzleTactics() {
       }
     };
 
+    const fetchDaily = async () => {
+      try {
+        const puzzle = await fetchDailyPuzzle();
+        setDailyPuzzle(puzzle);
+      } catch (err) {
+        console.error("Failed to fetch daily puzzle:", err);
+      }
+    };
+
     fetchCount();
     fetchHistory();
+    fetchDaily();
   }, []);
 
   const PUZZLE_LIMIT = 5;
@@ -265,10 +279,16 @@ export function PuzzleTactics() {
                 className={`px-6 py-3 rounded-xl font-bold text-xs shadow-lg shadow-black/30 transition-all whitespace-nowrap ${
                   isLimited
                     ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-white/5"
+                    : dailyPuzzle?.isSolved
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
                     : `bg-gradient-to-r ${todayConfig.color} text-white hover:shadow-xl hover:shadow-black/40`
                 }`}
               >
-                {isLimited ? "Limit Reached" : "Start Today's Puzzle"}
+                {isLimited
+                  ? "Limit Reached"
+                  : dailyPuzzle?.isSolved
+                  ? "Replay Today"
+                  : "Start Today's Puzzle"}
               </motion.button>
             </div>
           </div>
@@ -295,13 +315,27 @@ export function PuzzleTactics() {
                     : "border-white/5 group-hover:border-[#3A6FF7]/40"
                 }`}
               >
-                {isTodaysDifficulty(level.id) && (
-                  <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/30 z-10">
-                    <span className="text-[9px] font-bold text-[#FFD166] uppercase tracking-widest">
-                      Today
-                    </span>
-                  </div>
-                )}
+                <div className="flex items-center justify-between mb-4 min-h-[32px]">
+                  {completedCategories.includes(level.id.toLowerCase()) ? (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                      <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">
+                        Completed
+                      </span>
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                  {isTodaysDifficulty(level.id) ? (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/30">
+                      <span className="text-[9px] font-bold text-[#FFD166] uppercase tracking-widest">
+                        Today
+                      </span>
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                </div>
 
                 <div
                   className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center mb-6 shadow-2xl shadow-black/40 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shrink-0`}
@@ -338,10 +372,16 @@ export function PuzzleTactics() {
                       className={`px-4 py-2 rounded-lg text-[10px] font-bold shadow-lg transition-all uppercase tracking-tight ${
                         isLimited
                           ? "bg-gray-700/50 text-gray-500 cursor-not-allowed"
+                          : completedCategories.includes(level.id.toLowerCase())
+                          ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30"
                           : `bg-gradient-to-r ${level.color} text-white shadow-black/20 hover:shadow-black/40`
                       }`}
                     >
-                      {isLimited ? "Locked" : "Solve"}
+                      {isLimited
+                        ? "Locked"
+                        : completedCategories.includes(level.id.toLowerCase())
+                        ? "Replay All"
+                        : "Solve"}
                     </motion.button>
                   </div>
                 </div>

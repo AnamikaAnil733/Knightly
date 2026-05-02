@@ -20,7 +20,7 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
     puzzleId: string;
     move: string;
     moveIndex: number;
-  }): Promise<{ correct: boolean; nextMove?: string; solved: boolean; currentStreak?: number }> {
+  }): Promise<{ correct: boolean; nextMove?: string; solved: boolean; currentStreak?: number; allCompleted?: boolean }> {
     const { userId, puzzleId, move, moveIndex } = input;
     if (!userId) throw new Error("userId is required");
     if (!puzzleId) throw new Error("puzzleId is required");
@@ -65,6 +65,7 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
         correct: true,
         solved: true,
         currentStreak,
+        allCompleted: await this._isCategoryCompleted(userId, puzzle.difficulty)
       };
     }
 
@@ -88,6 +89,7 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
         nextMove: puzzle.moves[engineResponseIndex],
         solved: true,
         currentStreak,
+        allCompleted: await this._isCategoryCompleted(userId, puzzle.difficulty)
       };
     }
 
@@ -128,5 +130,10 @@ export class ValidatePuzzlesMoves implements IValidateMoveusecase {
       }
     }
     return undefined;
+  }
+
+  private async _isCategoryCompleted(userId: string, difficulty: string): Promise<boolean> {
+    const unsolvedCount = await this._puzzleRepository.countUnsolvedByCategory(userId, difficulty as any);
+    return unsolvedCount === 0;
   }
 }

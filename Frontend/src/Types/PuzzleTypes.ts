@@ -15,6 +15,7 @@ export interface UserPuzzleResponseDTO {
   difficulty: string;
   description?: string;
   solution?: string[];
+  isSolved?: boolean;
 }
 
 export interface CalendarDay {

@@ -18,13 +18,14 @@ export class PuzzleMapper{
     };
   }
 
-  static toUserPuzzleResponseDTO(puzzle: EPuzzle): UserPuzzleResponseDTO {
+  static toUserPuzzleResponseDTO(puzzle: EPuzzle, isSolved: boolean = false): UserPuzzleResponseDTO {
     return {
       id: puzzle.id!,
       fen: puzzle.fen,
       difficulty: puzzle.difficulty,
       description: puzzle.description,
       solution: puzzle.moves,
+      isSolved: isSolved
     };
   }
 }

@@ -146,6 +146,7 @@ export interface UserPuzzleResponseDTO {
     difficulty: PuzzleType;
     description?: string;
     solution?: string[];
+    isSolved?: boolean;
   }
 
 

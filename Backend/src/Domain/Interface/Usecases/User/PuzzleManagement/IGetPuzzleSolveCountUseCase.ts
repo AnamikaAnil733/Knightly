@@ -1,3 +1,7 @@
 export interface IGetPuzzleSolveCountUseCase {
-    execute(userId: string): Promise<{ today: number; total: number }>;
+    execute(userId: string): Promise<{ 
+        today: number; 
+        total: number;
+        completedCategories: string[]; 
+    }>;
 }

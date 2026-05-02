@@ -14,4 +14,7 @@ export interface IPuzzleRepository extends IBaseRepository<EPuzzle, string> {
     userId: string,
     difficulty: PuzzleType
   ): Promise<EPuzzle | null>;
+  
+  countUnsolvedByCategory(userId: string, difficulty: PuzzleType): Promise<number>;
+  countByCategory(difficulty: PuzzleType): Promise<number>;
 }
