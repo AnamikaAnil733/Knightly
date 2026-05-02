@@ -151,14 +151,27 @@ export interface UserPuzzleResponseDTO {
 
 
 //------LeaderBoardDTO-----
+export interface LeaderBoardUserData {
+  displayname: string;
+  avatarKey: string;
+  rating: {
+    BULLET: number;
+    BLITZ: number;
+    RAPID: number;
+    CLASSICAL: number;
+  };
+  gamesWin: number;
+  currentStreak: number;
+}
+
 export interface LeaderBoardResponse {
   rank: number;
   displayname: string;
   avatarKey: string;
   rating: number;
   averageRating: number;
-  gamesWin?:number;
-  streak:number;
+  win: number;
+  streak: number;
 }
 
 

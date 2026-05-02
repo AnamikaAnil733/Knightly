@@ -4,7 +4,6 @@ export interface LeaderboardEntry {
   avatarKey: string;
   rating: number;
   averageRating: number;
-  premium: boolean;
   win: number;
   color?: string;
   streak: number;
