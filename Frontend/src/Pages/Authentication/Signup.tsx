@@ -6,6 +6,7 @@ import {
   CrownIcon,
   EyeIcon,
   EyeOffIcon,
+  CheckCircleIcon,
 } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { sendSignupOtp } from "../../Service/Api/Authapi";
@@ -45,6 +46,15 @@ export function SignupPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  // Password validation
+  const hasMinLength = formData.password.length >= 8;
+  const hasNumber = /\d/.test(formData.password);
+  const hasCapital = /[A-Z]/.test(formData.password);
+  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
+  const allRequirementsMet =
+    hasMinLength && hasNumber && hasCapital && hasSymbol;
 
   const signupMutation = useMutation({
     mutationFn: sendSignupOtp,
@@ -70,14 +80,22 @@ export function SignupPage() {
     if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/))
       newErrors.email = "Enter valid email";
 
-    if (formData.password.length < 8)
+    if (formData.password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
-    if (formData.password.length > 20)
-      newErrors.password = "Password must be at most 20 characters";
+    } else if (!allRequirementsMet) {
+      newErrors.password = "Password does not meet all requirements";
+    }
+
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
 
     setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -142,7 +160,7 @@ export function SignupPage() {
         </div>
 
         <div
-          className="rounded-2xl p-10 backdrop-blur-md relative"
+          className={`rounded-2xl p-10 backdrop-blur-md relative ${shake ? "animate-shake" : ""}`}
           style={{
             background: "rgba(17, 25, 63, 0.85)",
             border: "1px solid transparent",
@@ -223,6 +241,49 @@ export function SignupPage() {
               {errors.password && (
                 <p className="text-red-400 text-xs mt-1">{errors.password}</p>
               )}
+
+              {/* Password Requirements */}
+              <div className="mt-3 space-y-2 text-xs text-[#C9CAD9]">
+                <p className="font-medium">Password must include:</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircleIcon
+                      className="w-3 h-3"
+                      style={{ color: hasMinLength ? "#FFD166" : "#C9CAD9" }}
+                    />
+                    <span style={{ color: hasMinLength ? "#FFD166" : "#C9CAD9" }}>
+                      8+ characters
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircleIcon
+                      className="w-3 h-3"
+                      style={{ color: hasNumber ? "#FFD166" : "#C9CAD9" }}
+                    />
+                    <span style={{ color: hasNumber ? "#FFD166" : "#C9CAD9" }}>
+                      1 number
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircleIcon
+                      className="w-3 h-3"
+                      style={{ color: hasCapital ? "#FFD166" : "#C9CAD9" }}
+                    />
+                    <span style={{ color: hasCapital ? "#FFD166" : "#C9CAD9" }}>
+                      1 capital letter
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircleIcon
+                      className="w-3 h-3"
+                      style={{ color: hasSymbol ? "#FFD166" : "#C9CAD9" }}
+                    />
+                    <span style={{ color: hasSymbol ? "#FFD166" : "#C9CAD9" }}>
+                      1 symbol
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div>
@@ -296,6 +357,16 @@ export function SignupPage() {
           </p>
         </div>
       </div>
+      <style>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-10px); }
+          75% { transform: translateX(10px); }
+        }
+        .animate-shake {
+          animation: shake 0.3s ease-in-out;
+        }
+      `}</style>
     </div>
   );
 }
