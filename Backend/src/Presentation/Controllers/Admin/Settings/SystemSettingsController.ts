@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IGetSystemSettingsUseCase, IUpdateSystemSettingsUseCase } from "../../../../Domain/Interface/Usecases/Admin/Settings/ISystemSettingsUseCase";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
+import { SystemSettingsMapper } from "../../../../Application/Mapper/SystemSettingsMapper";
 
 export class SystemSettingsController {
   constructor(
@@ -15,7 +16,7 @@ export class SystemSettingsController {
   ): Promise<Response | void> => {
     try {
       const data = await this._getSettingsUseCase.execute();
-      return res.status(HttpStatusCodes.OK).json(data);
+      return res.status(HttpStatusCodes.OK).json(SystemSettingsMapper.toAdminDTO(data));
     } catch (error) {
       next(error);
     }
@@ -28,7 +29,7 @@ export class SystemSettingsController {
   ): Promise<Response | void> => {
     try {
       const data = await this._updateSettingsUseCase.execute(req.body);
-      return res.status(HttpStatusCodes.OK).json(data);
+      return res.status(HttpStatusCodes.OK).json(SystemSettingsMapper.toAdminDTO(data));
     } catch (error) {
       next(error);
     }

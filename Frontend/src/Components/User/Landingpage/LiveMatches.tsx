@@ -89,9 +89,9 @@ export function LiveMatches() {
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
                     <p className="text-white font-black text-xl mb-1 truncate">
-                      {match.whitePlayerId === "stockfish-bot"
+                      {match.whitePlayer.id === "stockfish-bot"
                         ? "Stockfish AI"
-                        : match.whitePlayerId || "Anonymous"}
+                        : match.whitePlayer.name || "Anonymous"}
                     </p>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-white/20" />
@@ -109,9 +109,9 @@ export function LiveMatches() {
 
                   <div className="flex-1 text-right">
                     <p className="text-white font-black text-xl mb-1 truncate">
-                      {match.blackPlayerId === "stockfish-bot"
+                      {match.blackPlayer.id === "stockfish-bot"
                         ? "Stockfish AI"
-                        : match.blackPlayerId || "Anonymous"}
+                        : match.blackPlayer.name || "Anonymous"}
                     </p>
                     <div className="flex items-center gap-2 justify-end">
                       <span className="text-[#AAB3D1] text-[10px] font-bold uppercase tracking-widest">

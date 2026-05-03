@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Swords, XIcon, CheckIcon, Timer } from "lucide-react";
 
@@ -23,6 +23,13 @@ export function InviteModal({
   onReject,
 }: Props) {
   const [receiverIsPublic, setReceiverIsPublic] = useState(senderIsPublic);
+  
+  useEffect(() => {
+    if (isOpen) {
+      setReceiverIsPublic(senderIsPublic);
+    }
+  }, [isOpen, senderIsPublic]);
+
   return (
     <AnimatePresence>
       {isOpen && (

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Play, Clock, Search, Ghost } from "lucide-react";
+import { Play, Clock, Search, Ghost, ArrowLeft } from "lucide-react";
 import { getLiveGames } from "../../Service/Api/ChessApi";
-import { LiveGame } from "../../Types/LiveTypes";
+import { LiveGames } from "../../Types/LiveTypes";
 
 export function LiveGamesPage() {
   const navigate = useNavigate();
-  const [games, setGames] = useState<LiveGame[]>([]);
+  const [games, setGames] = useState<LiveGames[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -32,8 +32,8 @@ export function LiveGamesPage() {
     const searchLower = searchTerm.toLowerCase();
     return (
       game.id.toLowerCase().includes(searchLower) ||
-      game.whitePlayerId?.toLowerCase().includes(searchLower) ||
-      game.blackPlayerId?.toLowerCase().includes(searchLower)
+      game.whitePlayer.name.toLowerCase().includes(searchLower) ||
+      game.blackPlayer.name.toLowerCase().includes(searchLower)
     );
   });
 
@@ -42,22 +42,32 @@ export function LiveGamesPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-          <div>
-            <motion.h1
+          <div className="flex items-center gap-6">
+            <motion.button
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-[#FFD166] bg-clip-text text-transparent font-['Poppins'] mb-2"
+              onClick={() => navigate("/landing-page")}
+              className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
             >
-              Live Matches
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-[#C9CAD9] text-lg"
-            >
-              Watch the action unfold in real-time.
-            </motion.p>
+              <ArrowLeft className="w-6 h-6 text-[#FFD166] group-hover:-translate-x-1 transition-transform" />
+            </motion.button>
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-[#FFD166] bg-clip-text text-transparent font-['Poppins'] mb-2"
+              >
+                Live Matches
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-[#C9CAD9] text-lg"
+              >
+                Watch the action unfold in real-time.
+              </motion.p>
+            </div>
           </div>
 
           <div className="relative group max-w-md w-full">
@@ -116,9 +126,7 @@ export function LiveGamesPage() {
                         </div>
                         <div>
                           <p className="text-white font-bold truncate max-w-[120px]">
-                            {game.whitePlayerId === "stockfish-bot"
-                              ? "Stockfish AI"
-                              : game.whitePlayerId || "Anonymous"}
+                            {game.whitePlayer.name}
                           </p>
                           <p className="text-[#C9CAD9]/40 text-[10px] font-bold uppercase">
                             White
@@ -127,7 +135,10 @@ export function LiveGamesPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-[#FFD166] font-bold text-sm">
-                          Active
+                          {game.whitePlayer.rating}
+                        </p>
+                        <p className="text-[#C9CAD9]/40 text-[8px] uppercase font-bold">
+                          Rating
                         </p>
                       </div>
                     </div>
@@ -146,9 +157,7 @@ export function LiveGamesPage() {
                         </div>
                         <div>
                           <p className="text-white font-bold truncate max-w-[120px]">
-                            {game.blackPlayerId === "stockfish-bot"
-                              ? "Stockfish AI"
-                              : game.blackPlayerId || "Anonymous"}
+                            {game.blackPlayer.name}
                           </p>
                           <p className="text-[#C9CAD9]/40 text-[10px] font-bold uppercase">
                             Black
@@ -157,7 +166,10 @@ export function LiveGamesPage() {
                       </div>
                       <div className="text-right">
                         <p className="text-[#3A6FF7] font-bold text-sm">
-                          Active
+                          {game.blackPlayer.rating}
+                        </p>
+                        <p className="text-[#C9CAD9]/40 text-[8px] uppercase font-bold">
+                          Rating
                         </p>
                       </div>
                     </div>

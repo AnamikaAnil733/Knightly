@@ -28,8 +28,20 @@ export type LiveGames = {
 };
 
 export interface Match {
-  id?: string;
+  id: string;
+  status: string;
   timeControl: string;
-  whitePlayerId?: string;
-  blackPlayerId?: string;
+  whitePlayer: {
+    id: string;
+    name: string;
+    rating: number;
+    avatar: string | null;
+  };
+  blackPlayer: {
+    id: string;
+    name: string;
+    rating: number;
+    avatar: string | null;
+  };
+  createdAt: string;
 }

@@ -432,7 +432,7 @@ export function Hero() {
               }}
               onClick={() => navigate("/play")}
             >
-              Play Your First Game
+              Play Your Game
             </button>
           </Tilt>
         </div>

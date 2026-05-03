@@ -1,11 +1,35 @@
 import { IGetLivePublicGamesUseCase } from "../../../../Domain/Interface/Usecases/User/GameManagement/IGetLivePublicGamesUseCase";
 import { IChessGameRepository } from "../../../../Domain/Interface/Repositories/IGameRepository";
-import { ChessGame } from "../../../../Domain/Entity/ChessGame";
+import { IBaseRepository } from "../../../../Domain/Interface/Repositories/IBaseRepository";
+import EAuth from "../../../../Domain/Entity/Auth";
+import { ILiveGameDTO } from "../../../../Domain/Interface/Usecases/Admin/GameManagement/IGetAllLiveGamesUseCase";
+import { LiveGameMapper } from "../../../../Infrastructure/Mapper/LiveGameMapper";
 
 export class GetLivePublicGamesUseCase implements IGetLivePublicGamesUseCase {
-  constructor(private readonly gameRepository: IChessGameRepository) {}
+  constructor(
+    private readonly gameRepository: IChessGameRepository,
+    private readonly userRepository: IBaseRepository<EAuth, string>,
+  ) {}
 
-  async execute(): Promise<ChessGame[]> {
-    return await this.gameRepository.findLivePublicGames();
+  async execute(): Promise<ILiveGameDTO[]> {
+    const liveGames = await this.gameRepository.findLivePublicGames();
+
+    const populatedGames = await Promise.all(
+      liveGames.map(async (game) => {
+        const whitePlayerId = game.getWhitePlayerId();
+        const blackPlayerId = game.getBlackPlayerId();
+
+        const isValidObjectId = (id: string) => /^[0-9a-fA-F]{24}$/.test(id);
+
+        const [whitePlayer, blackPlayer] = await Promise.all([
+          whitePlayerId && isValidObjectId(whitePlayerId) ? this.userRepository.findById(whitePlayerId) : null,
+          blackPlayerId && isValidObjectId(blackPlayerId) ? this.userRepository.findById(blackPlayerId) : null,
+        ]);
+
+        return LiveGameMapper.toDTO(game, whitePlayer, blackPlayer);
+      }),
+    );
+
+    return populatedGames;
   }
 }

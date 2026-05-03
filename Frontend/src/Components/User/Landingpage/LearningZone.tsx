@@ -1,4 +1,4 @@
-import { BookOpenIcon, PuzzleIcon, BotIcon, SparklesIcon } from "lucide-react";
+import { BookOpenIcon, PuzzleIcon, SparklesIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function LearningZone() {
@@ -13,11 +13,6 @@ export function LearningZone() {
       title: "Tactics Puzzles",
       icon: PuzzleIcon,
       description: "Sharpen your skills",
-    },
-    {
-      title: "AI Practice Mode",
-      icon: BotIcon,
-      description: "Train with AI opponents",
     },
     {
       title: "Solve Today's Puzzle",
@@ -37,13 +32,19 @@ export function LearningZone() {
         >
           Learning & Practice Zone
         </h2>
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {cards.map((card, index) => (
             <div
               key={index}
-              onClick={() =>
-                card.title === "Tactics Puzzles" && navigate("/puzzles")
-              }
+              onClick={() => {
+                if (card.title === "Tactics Puzzles") {
+                  navigate("/puzzles");
+                } else if (card.title === "Solve Today's Puzzle") {
+                  navigate("/puzzle/solve/daily");
+                } else if (card.title === "Learn Chess") {
+                  navigate("/learn");
+                }
+              }}
               className="bg-[#1C254E]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-[#4F7CFF]/50 transition-all card-glow text-center group cursor-pointer"
             >
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#4F7CFF] to-[#6D5DF6] mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">

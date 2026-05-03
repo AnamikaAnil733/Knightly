@@ -111,7 +111,7 @@ const getDailyPuzzleUseCase = new GetDailyPuzzleUseCase(PuzzleRepo, ProgressPuzz
 const getPuzzleSolveHistoryUseCase = new GetPuzzleSolveHistoryUseCase(ProgressPuzzleRepo, GameRepo);
 const reviewGameUseCase = new ReviewGameUseCase(GameRepo, stockfishService, UserRepo);
 const getGameHistoryUseCase = new GetGameHistoryUseCase(GameRepo, UserRepo);
-const getLivePublicGamesUseCase = new GetLivePublicGamesUseCase(GameRepo);
+const getLivePublicGamesUseCase = new GetLivePublicGamesUseCase(GameRepo, UserRepo);
 const getLeaderBoardUseCase = new GetLeaderBoardUseCase(LeaderRepo, mediaService);
 
 const sendFriendRequestUseCase = new SendFriendRequestUseCase(FriendshipRepo, UserRepo);

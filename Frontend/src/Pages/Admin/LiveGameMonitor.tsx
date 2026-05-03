@@ -21,7 +21,8 @@ export function LiveGameMonitor() {
     queryKey: ["admin-live-games"],
     queryFn: async () => {
       const res = await axios.get("/admin/live-games");
-      return res.data;
+      // Handle both [games] and { success: true, data: [games] } formats
+      return Array.isArray(res.data) ? res.data : res.data.data || [];
     },
     refetchInterval: 10000,
   });
@@ -123,10 +124,10 @@ export function LiveGameMonitor() {
                     <span className="flex items-center gap-1 text-[10px] text-gray-400">
                       <Clock className="h-3 w-3" />
                       Started{" "}
-                      {new Date(game.createdAt).toLocaleTimeString([], {
+                      {game.createdAt ? new Date(game.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
-                      })}
+                      }) : "Just now"}
                     </span>
                   </div>
 
@@ -177,7 +178,7 @@ export function LiveGameMonitor() {
 
                 {/* WATCH BUTTON */}
                 <button
-                  onClick={() => navigate(`/match/${game.id}`)}
+                  onClick={() => navigate(`/match/${game.id}?monitor=true`)}
                   className="w-full py-4 bg-[#1e2547] group-hover:bg-[#FFD166] flex items-center justify-center gap-2 transition-all"
                 >
                   <Eye className="h-4 w-4 text-[#FFD166] group-hover:text-black" />

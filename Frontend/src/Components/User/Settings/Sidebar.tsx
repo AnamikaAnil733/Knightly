@@ -1,7 +1,7 @@
 import {
-  PaletteIcon,
+  // PaletteIcon,
   GridIcon,
-  SlidersIcon,
+  // SlidersIcon,
   UserIcon,
   Crown,
 } from "lucide-react";
@@ -15,21 +15,21 @@ interface SidebarProps {
 export const Sidebar = ({ activeSection, setActiveSection }: SidebarProps) => {
   const user = useSelector((state: RootState) => state.userAuth.user);
   const navItems = [
-    {
-      id: "theme",
-      label: "Website Theme",
-      icon: <PaletteIcon size={20} />,
-    },
+    // {
+    //   id: "theme",
+    //   label: "Website Theme",
+    //   icon: <PaletteIcon size={20} />,
+    // },
     {
       id: "chessboard",
       label: "Chessboard Themes",
       icon: <GridIcon size={20} />,
     },
-    {
-      id: "controls",
-      label: "Controls",
-      icon: <SlidersIcon size={20} />,
-    },
+    // {
+    //   id: "controls",
+    //   label: "Controls",
+    //   icon: <SlidersIcon size={20} />,
+    // },
     {
       id: "account",
       label: "Account",

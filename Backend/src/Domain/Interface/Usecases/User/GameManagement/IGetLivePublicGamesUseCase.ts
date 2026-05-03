@@ -1,5 +1,5 @@
-import { ChessGame } from "../../../../Entity/ChessGame";
+import { ILiveGameDTO } from "../../Admin/GameManagement/IGetAllLiveGamesUseCase";
 
 export interface IGetLivePublicGamesUseCase {
-  execute(): Promise<ChessGame[]>;
+  execute(): Promise<ILiveGameDTO[]>;
 }

@@ -165,6 +165,7 @@ function App() {
         senderId={inviteData?.senderId || ""}
         senderName={inviteData?.senderName || ""}
         gameFormat={inviteData?.gameFormat || ""}
+        senderIsPublic={inviteData?.senderIsPublic}
         onClose={() => {
           setInviteData(null);
           setShowInviteModal(false);
