@@ -36,7 +36,6 @@ export function Match() {
   const isMonitorMode =
     new URLSearchParams(location.search).get("monitor") === "true";
   const user = useSelector((state: RootState) => state.userAuth.user);
-  const admin = useSelector((state: RootState) => state.adminAuth.admin);
 
   const [board, setBoard] = useState<BoardGrid>([]);
   const [turn, setTurn] = useState<Turn>("WHITE");
@@ -364,7 +363,7 @@ export function Match() {
         {myRole === "SPECTATOR" && (
           <button
             onClick={() =>
-              navigate(isMonitorMode ? "/admin/live-games" : "/live-games")
+              navigate(isMonitorMode ? "/admin/live-games" : "/live")
             }
             className="absolute top-4 left-4 z-[100] px-4 py-2 bg-[#FFD166] text-black rounded-lg font-bold flex items-center gap-2 hover:bg-[#FFD166]/80 transition-all shadow-xl shadow-black/50"
           >
