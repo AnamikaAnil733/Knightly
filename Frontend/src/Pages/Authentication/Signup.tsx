@@ -251,7 +251,9 @@ export function SignupPage() {
                       className="w-3 h-3"
                       style={{ color: hasMinLength ? "#FFD166" : "#C9CAD9" }}
                     />
-                    <span style={{ color: hasMinLength ? "#FFD166" : "#C9CAD9" }}>
+                    <span
+                      style={{ color: hasMinLength ? "#FFD166" : "#C9CAD9" }}
+                    >
                       8+ characters
                     </span>
                   </div>
