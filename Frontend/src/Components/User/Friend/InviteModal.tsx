@@ -23,7 +23,7 @@ export function InviteModal({
   onReject,
 }: Props) {
   const [receiverIsPublic, setReceiverIsPublic] = useState(senderIsPublic);
-  
+
   useEffect(() => {
     if (isOpen) {
       setReceiverIsPublic(senderIsPublic);

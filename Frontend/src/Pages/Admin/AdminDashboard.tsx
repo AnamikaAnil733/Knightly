@@ -195,17 +195,9 @@ export function AdminDashboard() {
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#0A0F2C]/50 transition-colors"
                 >
                   <div className="h-10 w-10 rounded-full border border-[#1e2547] overflow-hidden">
-                    {user.avatarKey ? (
-                      <img
-                        src={user.avatarKey}
-                        alt={user.displayname}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-[#1e2547] flex items-center justify-center text-gray-400">
-                        <Users size={20} />
-                      </div>
-                    )}
+                    <div className="h-full w-full bg-[#1e2547] flex items-center justify-center text-gray-400">
+                      <Users size={20} />
+                    </div>
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold">{user.displayname}</p>

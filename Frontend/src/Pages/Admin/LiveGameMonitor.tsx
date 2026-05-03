@@ -124,10 +124,12 @@ export function LiveGameMonitor() {
                     <span className="flex items-center gap-1 text-[10px] text-gray-400">
                       <Clock className="h-3 w-3" />
                       Started{" "}
-                      {game.createdAt ? new Date(game.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }) : "Just now"}
+                      {game.createdAt
+                        ? new Date(game.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "Just now"}
                     </span>
                   </div>
 

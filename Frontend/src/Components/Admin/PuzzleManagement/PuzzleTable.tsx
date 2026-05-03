@@ -47,8 +47,8 @@ export function PuzzleTable({
                 key={puzzle.id}
                 className="border-b border-[#3A6FF7]/20 hover:bg-[#11193F]/50 transition-colors"
               >
-                <td className="px-4 py-3 text-sm font-medium text-white">
-                  {puzzle.id}
+                <td className="px-4 py-3 text-sm font-medium text-white font-mono">
+                  #{puzzle.id.substring(0, 8)}
                 </td>
                 <td className="px-4 py-3 text-sm">
                   <span

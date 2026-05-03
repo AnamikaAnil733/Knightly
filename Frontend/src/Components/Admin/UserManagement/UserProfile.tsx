@@ -4,7 +4,6 @@ import ConfirmationModal from "../../Reuseable/ConformationModel";
 
 import {
   FlameIcon,
-  TrophyIcon,
   // AwardIcon,
   SaveIcon,
   // AlertTriangleIcon,
@@ -81,22 +80,11 @@ export function UserProfile({ user, onBanUser }: UserProfileProps) {
               {user.longestStreak || 0} days
             </p>
           </div>
-          <div className="bg-[#11193F] p-3 rounded-lg">
-            <div className="flex items-center text-[#FFD166]">
-              <TrophyIcon className="h-4 w-4 mr-2" />
-              <span className="text-sm font-medium">Rewards</span>
-            </div>
-            <p className="text-white text-lg font-bold mt-1 truncate">
-              {user.rewards && user.rewards.length > 0
-                ? user.rewards[0]
-                : "No rewards"}
-            </p>
-          </div>
         </div>
       </div>
       {/* Achievements */}
       <div className="p-6 border-b border-gray-800">
-        <h3 className="text-sm font-medium text-gray-400 mb-3 uppercase tracking-widest text-[10px] font-black">
+        <h3 className="text-sm font-medium-black text-gray-400 mb-3 uppercase tracking-widest text-[10px] ">
           ACHIEVEMENTS
         </h3>
         <div className="space-y-2">

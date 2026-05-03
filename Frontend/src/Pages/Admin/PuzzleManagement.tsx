@@ -6,6 +6,7 @@ import {
 } from "../../Components/Admin/PuzzleManagement/PuzzleModal";
 import { DailyPuzzle } from "../../Components/Admin/PuzzleManagement/DailyPuzzle";
 import { PlusIcon } from "lucide-react";
+import ConfirmationModal from "../../Components/Reuseable/ConformationModel";
 
 import {
   createPuzzleApi,
@@ -26,6 +27,8 @@ export function PuzzleManagement() {
   const [editingPuzzle, setEditingPuzzle] = useState<Puzzle | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [puzzleToDelete, setPuzzleToDelete] = useState<string | null>(null);
 
   const fetchPuzzles = useCallback(async () => {
     try {
@@ -121,13 +124,24 @@ export function PuzzleManagement() {
     setIsModalOpen(true);
   };
 
-  const handleDeletePuzzle = async (id: string) => {
+  const handleDeletePuzzle = (id: string) => {
+    setPuzzleToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!puzzleToDelete) return;
     try {
-      await deletePuzzleApi(id);
+      await deletePuzzleApi(puzzleToDelete);
+      toast.success("Puzzle deleted successfully");
       await fetchPuzzles();
       fetchDailyPuzzle();
     } catch (error) {
       console.error("Failed to delete puzzle", error);
+      toast.error("Failed to delete puzzle");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setPuzzleToDelete(null);
     }
   };
 
@@ -254,6 +268,19 @@ export function PuzzleManagement() {
           }
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Puzzle?"
+        description="Are you sure you want to delete this puzzle? This action cannot be undone."
+        confirmText="Delete"
+        onConfirm={confirmDelete}
+        onCancel={() => {
+          setIsDeleteModalOpen(false);
+          setPuzzleToDelete(null);
+        }}
+      />
     </div>
   );
 }

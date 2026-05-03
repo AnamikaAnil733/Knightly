@@ -33,7 +33,8 @@ export function Match() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const isMonitorMode = new URLSearchParams(location.search).get("monitor") === "true";
+  const isMonitorMode =
+    new URLSearchParams(location.search).get("monitor") === "true";
   const user = useSelector((state: RootState) => state.userAuth.user);
   const admin = useSelector((state: RootState) => state.adminAuth.admin);
 
@@ -362,10 +363,13 @@ export function Match() {
         {/* Admin Back Button Overlay (Spectators only) */}
         {myRole === "SPECTATOR" && (
           <button
-            onClick={() => navigate(isMonitorMode ? "/admin/live-games" : "/live-games")}
+            onClick={() =>
+              navigate(isMonitorMode ? "/admin/live-games" : "/live-games")
+            }
             className="absolute top-4 left-4 z-[100] px-4 py-2 bg-[#FFD166] text-black rounded-lg font-bold flex items-center gap-2 hover:bg-[#FFD166]/80 transition-all shadow-xl shadow-black/50"
           >
-            <ArrowLeft size={16} /> {isMonitorMode ? "Back to Live Monitor" : "Back to Matches"}
+            <ArrowLeft size={16} />{" "}
+            {isMonitorMode ? "Back to Live Monitor" : "Back to Matches"}
           </button>
         )}
 
@@ -395,7 +399,9 @@ export function Match() {
           <div className="flex items-center gap-4">
             {myRole === "SPECTATOR" && (
               <button
-                onClick={() => navigate(isMonitorMode ? "/admin/live-games" : "/live")}
+                onClick={() =>
+                  navigate(isMonitorMode ? "/admin/live-games" : "/live")
+                }
                 className="p-2 bg-[#FFD166]/10 hover:bg-[#FFD166]/20 rounded-lg text-[#FFD166] transition-all border border-[#FFD166]/20 flex items-center gap-2 group"
               >
                 <ArrowLeft
@@ -407,7 +413,7 @@ export function Match() {
                 </span>
               </button>
             )}
-            <h1 
+            <h1
               className="text-2xl font-bold text-[#FFD166] tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate(user ? "/landing-page" : "/admin/users")}
             >
