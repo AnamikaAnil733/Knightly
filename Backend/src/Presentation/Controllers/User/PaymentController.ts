@@ -3,7 +3,7 @@ import ICreateCheckoutSessionUseCase from "../../../Domain/Interface/Usecases/Pa
 import IStripeWebhookUseCase from "../../../Domain/Interface/Usecases/Payment/IStripeWebhookUseCase";
 import IVerifySessionUseCase from "../../../Domain/Interface/Usecases/Payment/IVerifySessionUseCase";
 
-export default class PaymentController {
+export  class PaymentController {
   constructor(
     private _createCheckoutSessionUseCase: ICreateCheckoutSessionUseCase,
     private _stripeWebhookUseCase: IStripeWebhookUseCase,

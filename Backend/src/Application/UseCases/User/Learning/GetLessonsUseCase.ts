@@ -5,7 +5,7 @@ import { LessonCategory, LessonDifficulty } from "../../../../Domain/Types/Lesso
 
 import { LessonMapper } from "../../../Mapper/LessonMapper";
 
-export default class GetLessonsUseCase implements IGetLessonsUseCase {
+export  class GetLessonsUseCase implements IGetLessonsUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
   async execute(filters?: { category?: LessonCategory; difficulty?: LessonDifficulty }): Promise<LessonSummaryDTO[]> {

@@ -5,7 +5,7 @@ import { IBlockUserUseCase } from "../../../../Domain/Interface/Usecases/User/Fr
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class BlockUserUseCase implements IBlockUserUseCase {
+export  class BlockUserUseCase implements IBlockUserUseCase {
   constructor(private friendshipRepository: IFriendshipRepository) {}
 
   async execute(requesterId: string, recipientId: string): Promise<void> {

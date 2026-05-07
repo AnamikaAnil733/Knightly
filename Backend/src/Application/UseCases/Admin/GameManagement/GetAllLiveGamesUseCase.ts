@@ -4,7 +4,7 @@ import EAuth from "../../../../Domain/Entity/Auth";
 import { IGetAllLiveGamesUseCase, ILiveGameDTO } from "../../../../Domain/Interface/Usecases/Admin/GameManagement/IGetAllLiveGamesUseCase";
 import { LiveGameMapper } from "../../../../Infrastructure/Mapper/LiveGameMapper";
 
-export default class GetAllLiveGamesUseCase implements IGetAllLiveGamesUseCase {
+export  class GetAllLiveGamesUseCase implements IGetAllLiveGamesUseCase {
   constructor(
     private readonly gameRepository: IChessGameRepository,
     private readonly userRepository: IBaseRepository<EAuth, string>,

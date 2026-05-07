@@ -15,8 +15,8 @@ import { AchievementController } from "../../Presentation/Controllers/Admin/Achi
 import { GetAllUserUseCase }  from "../../Application/UseCases/Admin/UserManagement/GetAllUserUseCase";
 import { BlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/BlockUserUseCase";
 import { UnBlockUserUseCase } from "../../Application/UseCases/Admin/UserManagement/UnBlockUserUseCase";
-import GetSubscriptionStatsUseCase from "../../Application/UseCases/Admin/UserManagement/GetSubscriptionStatsUseCase";
-import GetAllTransactionsUseCase from "../../Application/UseCases/Admin/UserManagement/GetAllTransactionsUseCase";
+import { GetSubscriptionStatsUseCase } from "../../Application/UseCases/Admin/UserManagement/GetSubscriptionStatsUseCase";
+import { GetAllTransactionsUseCase } from "../../Application/UseCases/Admin/UserManagement/GetAllTransactionsUseCase";
 import { GetSubscriptionStatsController } from "../../Presentation/Controllers/Admin/UserManagement/GetSubscriptionStatsController";
 import { GetAllTransactionsController } from "../../Presentation/Controllers/Admin/UserManagement/GetAllTransactionsController";
 import { TransactionRepository } from "../Repository/TransactionRepository";
@@ -26,12 +26,12 @@ import { EditPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManage
 import { SoftDeletePuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/DeletePuzzleUseCase";
 import { SyncLichessDailyPuzzleUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/SyncLichessDailyPuzzleUseCase";
 import { GeneratePuzzleFromGameUseCase } from "../../Application/UseCases/Admin/PuzzleManagement/GeneratePuzzleFromGameUseCase";
-import GetAllLiveGamesUseCase from "../../Application/UseCases/Admin/GameManagement/GetAllLiveGamesUseCase";
+import { GetAllLiveGamesUseCase } from "../../Application/UseCases/Admin/GameManagement/GetAllLiveGamesUseCase";
 import { GetAllLiveGamesController } from "../../Presentation/Controllers/Admin/GameManagement/GetAllLiveGamesController";
 import { AuthRepository } from "../Repository/AuthRepository";
 import { ChessGameRepository } from "../Repository/GameRepository";
 import { AnalyticsRepository } from "../Repository/AnalyticsRepository";
-import GetAdminAnalyticsUseCase from "../../Application/UseCases/Admin/Analytics/GetAdminAnalyticsUseCase";
+import { GetAdminAnalyticsUseCase } from "../../Application/UseCases/Admin/Analytics/GetAdminAnalyticsUseCase";
 import { GetAdminAnalyticsController } from "../../Presentation/Controllers/Admin/Analytics/GetAdminAnalyticsController";
 import { SystemSettingsRepository } from "../Repository/SystemSettingsRepository";
 import { GetSystemSettingsUseCase } from "../../Application/UseCases/Admin/Settings/GetSystemSettingsUseCase";

@@ -1,7 +1,7 @@
 import { IUserManagmentRepository } from "../../../../Domain/Interface/Repositories/IUserManagementRepository";
 import { IGetSubscriptionStatsUseCase, ISubscriptionStatsResponse } from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetSubscriptionStatsUseCase";
 
-export default class GetSubscriptionStatsUseCase implements IGetSubscriptionStatsUseCase {
+export  class GetSubscriptionStatsUseCase implements IGetSubscriptionStatsUseCase {
   constructor(private userRepository: IUserManagmentRepository) {}
 
   async execute(): Promise<ISubscriptionStatsResponse> {

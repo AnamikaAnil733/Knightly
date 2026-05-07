@@ -1,7 +1,7 @@
 import { IAnalyticsRepository } from "../../../../Domain/Interface/Repositories/IAnalyticsRepository";
 import { IGetAdminAnalyticsUseCase, IAdminAnalyticsDTO } from "../../../../Domain/Interface/Usecases/Admin/Analytics/IGetAdminAnalyticsUseCase";
 
-export default class GetAdminAnalyticsUseCase implements IGetAdminAnalyticsUseCase {
+export  class GetAdminAnalyticsUseCase implements IGetAdminAnalyticsUseCase {
   constructor(private readonly analyticsRepository: IAnalyticsRepository) {}
 
   async execute(): Promise<IAdminAnalyticsDTO> {

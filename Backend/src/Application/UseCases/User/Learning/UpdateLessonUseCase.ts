@@ -5,7 +5,7 @@ import { LessonCategory, LessonDifficulty } from "../../../../Domain/Types/Lesso
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class UpdateLessonUseCase implements IUpdateLessonUseCase {
+export  class UpdateLessonUseCase implements IUpdateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
   async execute(id: string, params: {

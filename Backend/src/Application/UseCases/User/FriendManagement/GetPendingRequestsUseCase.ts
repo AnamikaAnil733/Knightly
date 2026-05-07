@@ -5,7 +5,7 @@ import { IGetPendingRequestsUseCase } from "../../../../Domain/Interface/Usecase
 import { FriendMapper } from "../../../Mapper/FriendMapper";
 import { PendingRequestDTO } from "../../../../Domain/DTOs/UserDTOs";
 
-export default class GetPendingRequestsUseCase implements IGetPendingRequestsUseCase {
+export  class GetPendingRequestsUseCase implements IGetPendingRequestsUseCase {
   constructor(
     private friendshipRepository: IFriendshipRepository,
     private userRepository: IUserManagmentRepository,

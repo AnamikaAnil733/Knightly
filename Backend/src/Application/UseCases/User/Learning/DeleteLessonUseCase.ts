@@ -3,7 +3,7 @@ import { IDeleteLessonUseCase } from "../../../../Domain/Interface/Usecases/User
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class DeleteLessonUseCase implements IDeleteLessonUseCase {
+export  class DeleteLessonUseCase implements IDeleteLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
   async execute(id: string): Promise<void> {

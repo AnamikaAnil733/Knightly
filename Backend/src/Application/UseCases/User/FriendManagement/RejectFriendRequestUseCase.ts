@@ -4,7 +4,7 @@ import { IRejectFriendRequestUseCase } from "../../../../Domain/Interface/Usecas
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class RejectFriendRequestUseCase implements IRejectFriendRequestUseCase {
+export class RejectFriendRequestUseCase implements IRejectFriendRequestUseCase {
   constructor(private friendshipRepository: IFriendshipRepository) {}
 
   async execute(requesterId: string, recipientId: string): Promise<void> {

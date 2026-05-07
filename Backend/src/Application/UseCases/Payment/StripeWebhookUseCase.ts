@@ -1,10 +1,10 @@
 import { IUserRepository } from "../../../Domain/Interface/Repositories/IUserRepository";
 import ETransaction from "../../../Domain/Entity/Transaction";
 import { ITransactionRepository } from "../../../Domain/Interface/Repositories/ITransactionRepository";
-import StripeService from "../../../Infrastructure/Services/StripeService";
+import { StripeService } from "../../../Infrastructure/Services/StripeService";
 import IStripeWebhookUseCase from "../../../Domain/Interface/Usecases/Payment/IStripeWebhookUseCase";
 
-export default class StripeWebhookUseCase implements IStripeWebhookUseCase {
+export  class StripeWebhookUseCase implements IStripeWebhookUseCase {
   constructor(
     private stripeService: StripeService,
     private userRepository: IUserRepository,

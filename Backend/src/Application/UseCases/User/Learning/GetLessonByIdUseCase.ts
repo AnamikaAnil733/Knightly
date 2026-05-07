@@ -8,7 +8,7 @@ import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
 import { LessonMapper } from "../../../Mapper/LessonMapper";
 
-export default class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
+export  class GetLessonByIdUseCase implements IGetLessonByIdUseCase {
   constructor(
     private lessonRepository: ILessonRepository,
     private userRepository: IBaseRepository<EAuth, string>,

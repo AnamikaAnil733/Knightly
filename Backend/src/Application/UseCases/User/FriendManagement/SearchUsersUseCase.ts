@@ -4,7 +4,7 @@ import { ISearchUsersUseCase } from "../../../../Domain/Interface/Usecases/User/
 import { FriendMapper } from "../../../Mapper/FriendMapper";
 import { SearchUserDTO } from "../../../../Domain/DTOs/UserDTOs";
 
-export default class SearchUsersUseCase implements ISearchUsersUseCase {
+export class SearchUsersUseCase implements ISearchUsersUseCase {
   constructor(
     private userRepository: IUserManagmentRepository,
     private mediaService: IMediaService,

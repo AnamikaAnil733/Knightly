@@ -2,7 +2,7 @@ import { ITransactionRepository } from "../../../../Domain/Interface/Repositorie
 import ETransaction from "../../../../Domain/Entity/Transaction";
 import IGetAllTransactionsUseCase from "../../../../Domain/Interface/Usecases/Admin/UserManagement/IGetAllTransactionsUseCase";
 
-export default class GetAllTransactionsUseCase implements IGetAllTransactionsUseCase {
+export  class GetAllTransactionsUseCase implements IGetAllTransactionsUseCase {
   constructor(private transactionRepository: ITransactionRepository) {}
 
   async execute(page: number, limit: number): Promise<{ transactions: ETransaction[]; total: number }> {

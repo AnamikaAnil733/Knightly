@@ -3,7 +3,7 @@ import { IUnfriendUseCase } from "../../../../Domain/Interface/Usecases/User/Fri
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class UnfriendUseCase implements IUnfriendUseCase {
+export  class UnfriendUseCase implements IUnfriendUseCase {
   constructor(private friendshipRepository: IFriendshipRepository) {}
 
   async execute(userId1: string, userId2: string): Promise<void> {

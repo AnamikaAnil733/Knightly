@@ -36,15 +36,15 @@ import { GetPuzzleSolveHistoryUseCase } from "../../Application/UseCases/User/Pu
 import { GetAvatarUrlUseCase } from "../../Application/UseCases/User/ProfileManagement/AvatarUseCase";
 import { SaveDiceBearAvatarUseCase } from "../../Application/UseCases/User/ProfileManagement/SaveDiceBearAvatarUseCase";
 import { GetUserProfileUseCase } from "../../Application/UseCases/User/ProfileManagement/GetUserProfileUseCase";
-import SendFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/SendFriendRequestUseCase";
-import AcceptFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/AcceptFriendRequestUseCase";
-import GetFriendsListUseCase from "../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
-import SearchUsersUseCase from "../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
-import GetPendingRequestsUseCase from "../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
-import RejectFriendRequestUseCase from "../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
-import UnfriendUseCase from "../../Application/UseCases/User/FriendManagement/UnfriendUseCase";
-import BlockUserUseCase from "../../Application/UseCases/User/FriendManagement/BlockUserUseCase";
-import UnblockUserUseCase from "../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
+import { SendFriendRequestUseCase } from "../../Application/UseCases/User/FriendManagement/SendFriendRequestUseCase";
+import { AcceptFriendRequestUseCase } from "../../Application/UseCases/User/FriendManagement/AcceptFriendRequestUseCase";
+import { GetFriendsListUseCase } from "../../Application/UseCases/User/FriendManagement/GetFriendsListUseCase";
+import { SearchUsersUseCase } from "../../Application/UseCases/User/FriendManagement/SearchUsersUseCase";
+import { GetPendingRequestsUseCase } from "../../Application/UseCases/User/FriendManagement/GetPendingRequestsUseCase";
+import { RejectFriendRequestUseCase } from "../../Application/UseCases/User/FriendManagement/RejectFriendRequestUseCase";
+import { UnfriendUseCase } from "../../Application/UseCases/User/FriendManagement/UnfriendUseCase";
+import { BlockUserUseCase } from "../../Application/UseCases/User/FriendManagement/BlockUserUseCase";
+import { UnblockUserUseCase } from "../../Application/UseCases/User/FriendManagement/UnblockUserUseCase";
 import { CreateReportUseCase } from "../../Application/UseCases/User/Report/CreateReportUseCase";
 
 import { GetEarnedAchievementsUseCase } from "../../Application/UseCases/User/Achievement/GetEarnedAchievementsUseCase";

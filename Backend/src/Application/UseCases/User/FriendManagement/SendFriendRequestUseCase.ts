@@ -6,7 +6,7 @@ import { ISendFriendRequestUseCase } from "../../../../Domain/Interface/Usecases
 import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 
-export default class SendFriendRequestUseCase implements ISendFriendRequestUseCase {
+export  class SendFriendRequestUseCase implements ISendFriendRequestUseCase {
   constructor(
     private friendshipRepository: IFriendshipRepository,
     private userRepository: IUserManagmentRepository,

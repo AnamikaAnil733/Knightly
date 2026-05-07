@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { IStripeService } from "../../Domain/Interface/Service/IStripeService";
 
-export default class StripeService implements IStripeService {
+export class StripeService implements IStripeService {
   private stripe: any;
 
   constructor() {

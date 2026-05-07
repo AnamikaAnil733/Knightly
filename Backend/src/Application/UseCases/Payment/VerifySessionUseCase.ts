@@ -7,7 +7,7 @@ import { ITransactionRepository } from "../../../Domain/Interface/Repositories/I
 import ETransaction from "../../../Domain/Entity/Transaction";
 import IVerifySessionUseCase from "../../../Domain/Interface/Usecases/Payment/IVerifySessionUseCase";
 
-export default class VerifySessionUseCase implements IVerifySessionUseCase {
+export  class VerifySessionUseCase implements IVerifySessionUseCase {
   constructor(
     private stripeService: IStripeService,
     private userRepository: IBaseRepository<EAuth, string>,

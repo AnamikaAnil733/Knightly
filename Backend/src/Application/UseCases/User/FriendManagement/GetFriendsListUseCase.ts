@@ -5,7 +5,7 @@ import { IGetFriendsListUseCase } from "../../../../Domain/Interface/Usecases/Us
 import { FriendMapper } from "../../../Mapper/FriendMapper";
 import { FriendDTO } from "../../../../Domain/DTOs/UserDTOs";
 
-export default class GetFriendsListUseCase implements IGetFriendsListUseCase {
+export  class GetFriendsListUseCase implements IGetFriendsListUseCase {
   constructor(
     private friendshipRepository: IFriendshipRepository,
     private userRepository: IUserManagmentRepository,

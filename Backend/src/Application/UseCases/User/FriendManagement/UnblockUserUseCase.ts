@@ -4,7 +4,7 @@ import { CustomError } from "../../../../Domain/Entity/CustomError";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
 import { FriendshipStatus } from "../../../../Domain/Types/FriendshipStatus";
 
-export default class UnblockUserUseCase implements IUnblockUserUseCase {
+export class UnblockUserUseCase implements IUnblockUserUseCase {
   constructor(private friendshipRepository: IFriendshipRepository) {}
 
   async execute(requesterId: string, recipientId: string): Promise<void> {

@@ -4,7 +4,7 @@ import { LessonDetailDTO } from "../../../../Domain/DTOs/LessonDTOs";
 import LessonEntity from "../../../../Domain/Entity/LessonEntity";
 import { LessonCategory, LessonDifficulty } from "../../../../Domain/Types/LessonTypes";
 
-export default class CreateLessonUseCase implements ICreateLessonUseCase {
+export  class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
 
   async execute(params: {
