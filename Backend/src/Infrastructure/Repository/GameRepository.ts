@@ -19,13 +19,19 @@ export class ChessGameRepository
     return docs.map((doc) => this.mapper.toEntityFromDocument(doc));
   }
 
-  async findByUserId(userId: string): Promise<ChessGame[]> {
-    logger.info(`Finding games for userId: ${userId}`);
+  async findByUserId(
+    userId: string,
+    skip: number = 0,
+    limit: number = 10,
+  ): Promise<ChessGame[]> {
+    logger.info(`Finding games for userId: ${userId} (skip: ${skip}, limit: ${limit})`);
     const docs = await this.model
       .find({
         $or: [{ whitePlayerId: userId }, { blackPlayerId: userId }],
       })
       .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .exec();
 
     logger.info(`Found ${docs.length} games`);
@@ -36,6 +42,12 @@ export class ChessGameRepository
         logger.error(`Error mapping game ${doc._id}:`, err);
         throw new Error(`Corrupted game data for ${doc._id}: ${err.message}`);
       }
+    });
+  }
+
+  async countByUserId(userId: string): Promise<number> {
+    return await this.model.countDocuments({
+      $or: [{ whitePlayerId: userId }, { blackPlayerId: userId }],
     });
   }
 

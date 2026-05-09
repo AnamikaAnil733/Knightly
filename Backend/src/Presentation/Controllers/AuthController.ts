@@ -290,7 +290,7 @@ export class AuthController {
         accessToken,
       });
     } catch (error) {
-      logger.error("REFRESH TOKEN FAILED");
+      logger.error(error,"REFRESH TOKEN FAILED");
       return res.status(HttpStatusCodes.UNAUTHORIZED).json({
         message: MESSAGES.INVALID_REFRESH_TOKEN,
       });

@@ -41,8 +41,10 @@ export const getLeaderboard = async (type: string) => {
   return res.data.data;
 };
 
-export const getGameHistory = async () => {
-  const res = await axios.get("/user/games/history");
+export const getGameHistory = async (page: number = 1, limit: number = 10) => {
+  const res = await axios.get("/user/games/history", {
+    params: { page, limit },
+  });
   return res.data.data;
 };
 

@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatusCodes } from "../../../../Domain/Types/StatusCode";
-import GetLessonsUseCase from "../../../../Application/UseCases/User/Learning/GetLessonsUseCase";
-import GetLessonByIdUseCase from "../../../../Application/UseCases/User/Learning/GetLessonByIdUseCase";
-import CreateLessonUseCase from "../../../../Application/UseCases/User/Learning/CreateLessonUseCase";
-import UpdateLessonUseCase from "../../../../Application/UseCases/User/Learning/UpdateLessonUseCase";
-import DeleteLessonUseCase from "../../../../Application/UseCases/User/Learning/DeleteLessonUseCase";
+import {GetLessonsUseCase} from "../../../../Application/UseCases/User/Learning/GetLessonsUseCase";
+import {GetLessonByIdUseCase} from "../../../../Application/UseCases/User/Learning/GetLessonByIdUseCase";
+import {CreateLessonUseCase } from "../../../../Application/UseCases/User/Learning/CreateLessonUseCase";
+import {UpdateLessonUseCase } from "../../../../Application/UseCases/User/Learning/UpdateLessonUseCase";
+import {DeleteLessonUseCase } from "../../../../Application/UseCases/User/Learning/DeleteLessonUseCase";
 import { LessonCategory, LessonDifficulty } from "../../../../Domain/Types/LessonTypes";
 
 

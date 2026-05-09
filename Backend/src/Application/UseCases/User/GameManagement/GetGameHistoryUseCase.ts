@@ -10,11 +10,19 @@ export class GetGameHistoryUseCase implements IGetGameHistoryUseCase {
     private readonly _userRepository: IUserManagmentRepository,
   ) {}
 
-  async execute(userId: string): Promise<GameHistoryDTO[]> {
+  async execute(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ history: GameHistoryDTO[]; total: number }> {
     if (!userId) throw new Error("User ID is required");
 
+    const skip = (page - 1) * limit;
 
-    const games = await this._gameRepository.findByUserId(userId);
+    const [games, total] = await Promise.all([
+      this._gameRepository.findByUserId(userId, skip, limit),
+      this._gameRepository.countByUserId(userId),
+    ]);
 
     const history: GameHistoryDTO[] = [];
 
@@ -31,7 +39,8 @@ export class GetGameHistoryUseCase implements IGetGameHistoryUseCase {
             const difficulty = game.getDifficulty() || 1;
             whitePlayer = {
               displayname: `Stockfish Bot (Lvl ${difficulty})`,
-              avatarKey: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+              avatarKey:
+                "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
             };
           } else {
             whitePlayer = await this._userRepository.findById(whiteId);
@@ -43,7 +52,8 @@ export class GetGameHistoryUseCase implements IGetGameHistoryUseCase {
             const difficulty = game.getDifficulty() || 1;
             blackPlayer = {
               displayname: `Stockfish Bot (Lvl ${difficulty})`,
-              avatarKey: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
+              avatarKey:
+                "https://upload.wikimedia.org/wikipedia/commons/1/1a/Computer_icon.svg",
             };
           } else {
             blackPlayer = await this._userRepository.findById(blackId);
@@ -66,10 +76,12 @@ export class GetGameHistoryUseCase implements IGetGameHistoryUseCase {
           ),
         );
       } catch (gameError: any) {
-        throw new Error(`Failed to process game ${game.id}: ${gameError.message}`);
+        throw new Error(
+          `Failed to process game ${game.id}: ${gameError.message}`,
+        );
       }
     }
 
-    return history;
+    return { history, total };
   }
 }

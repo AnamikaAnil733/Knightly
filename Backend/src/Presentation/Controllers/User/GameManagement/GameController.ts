@@ -170,8 +170,15 @@ export class GameController {
         );
       }
 
-      const history = await this._getGameHistoryUseCase.execute(userId);
-      res.status(HttpStatusCodes.OK).json({ success: true, data: history });
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const result = await this._getGameHistoryUseCase.execute(
+        userId,
+        page,
+        limit,
+      );
+      res.status(HttpStatusCodes.OK).json({ success: true, data: result });
     } catch (error) {
       next(error);
     }
