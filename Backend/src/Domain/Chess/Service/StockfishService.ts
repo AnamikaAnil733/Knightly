@@ -128,6 +128,14 @@ export class StockfishService{
             const mateMatch = line.match(/score mate (-?\d+)/);
             if (mateMatch) {
               currentMate = parseInt(mateMatch[1]);
+              if (currentMate > 0) {
+                currentScore = 100000 - currentMate;
+              } else if (currentMate < 0) {
+                currentScore = -100000 - currentMate;
+              } else {
+                // currentMate === 0 means already checkmate
+                currentScore = -100001; // The side to move is already mated
+              }
             }
 
             const bestMoveMatch = line.match(/bestmove\s([a-h1-8qrbn]{4,5}|\(none\))/);

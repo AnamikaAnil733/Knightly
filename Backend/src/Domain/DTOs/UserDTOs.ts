@@ -107,6 +107,7 @@ export interface MoveDTO {
     to: { row: number; col: number }
     piece: string
     color: "WHITE" | "BLACK"
+    promotion?: string
   }
 
 

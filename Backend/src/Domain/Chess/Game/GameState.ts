@@ -182,7 +182,7 @@ export class GameState{
 
 
     this._moveHistory.push(
-      new Move(from,to,finalPieceType,piece.color),
+      new Move(from,to,finalPieceType,piece.color, promotionType),
     );
 
     if (piece.type === "PAWN" || isCapture) {

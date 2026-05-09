@@ -29,6 +29,7 @@ export class GameMapper {
         },
         piece: move.pieceType,
         color: move.color,
+        promotion: move.promotionType,
       })),
       status: game.getStatus(),
       clock: {
