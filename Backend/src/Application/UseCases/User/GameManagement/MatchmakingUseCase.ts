@@ -37,7 +37,7 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
       const myTimeInQueue = (now - player.joinedAt) / 1000;
 
       const maxWait = Math.max(timeInQueue, myTimeInQueue);
-      const allowedDiff = 100 + Math.floor(maxWait / 5) * 50;
+      const allowedDiff = 50 + Math.floor(maxWait / 5) * 50;
 
       const ratingDiff = Math.abs(qPlayer.rating - player.rating);
       return ratingDiff <= allowedDiff;
@@ -72,6 +72,71 @@ export class MatchmakingUseCase implements IMatchmakingUseCase {
       white,
       black,
     };
+  }
+
+  async processQueue(): Promise<MatchResult[]> {
+    const results: MatchResult[] = [];
+    const now = Date.now();
+
+    // Iterate through the queue and try to find matches for each player
+    // We go backwards to handle splice safely if needed, or just restart the scan
+    let i = 0;
+    while (i < this.queue.length) {
+      const player = this.queue[i];
+      
+      // Look for an opponent for THIS player among OTHER players further in the queue
+      let opponentIndex = -1;
+      for (let j = i + 1; j < this.queue.length; j++) {
+        const qPlayer = this.queue[j];
+
+        if (qPlayer.timeControl !== player.timeControl) continue;
+        if (qPlayer.isPublic !== player.isPublic) continue;
+
+        const timeInQueue = (now - qPlayer.joinedAt) / 1000;
+        const myTimeInQueue = (now - player.joinedAt) / 1000;
+        const maxWait = Math.max(timeInQueue, myTimeInQueue);
+        const allowedDiff = 50 + Math.floor(maxWait / 5) * 50;
+
+        const ratingDiff = Math.abs(qPlayer.rating - player.rating);
+        if (ratingDiff <= allowedDiff) {
+          opponentIndex = j;
+          break;
+        }
+      }
+
+      if (opponentIndex !== -1) {
+        // Match found!
+        const opponent = this.queue.splice(opponentIndex, 1)[0];
+        const matchedPlayer = this.queue.splice(i, 1)[0];
+
+        const isGamePublic = matchedPlayer.isPublic && opponent.isPublic;
+        const whiteFirst = Math.random() < 0.5;
+        const white = whiteFirst ? matchedPlayer : opponent;
+        const black = whiteFirst ? opponent : matchedPlayer;
+
+        const { gameId } = await this.createGameUseCase.execute(
+          white.userId,
+          black.userId,
+          matchedPlayer.timeControl,
+          undefined,
+          isGamePublic
+        );
+
+        results.push({
+          type: "MATCH_FOUND",
+          gameId,
+          white,
+          black,
+        });
+
+        // Since we spliced current index, don't increment i
+        continue;
+      }
+
+      i++;
+    }
+
+    return results;
   }
 
   removeFromQueue(socketId: string) {

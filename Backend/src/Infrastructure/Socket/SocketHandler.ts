@@ -77,6 +77,8 @@ export class SocketHandler {
   }
 
   public initialize() {
+    this.startMatchmakingLoop();
+
     this._io.on("connection", (socket: Socket) => {
       console.log("socket connected", socket.id);
 
@@ -136,25 +138,7 @@ export class SocketHandler {
           if (result.type === "MATCH_FOUND") {
             const { gameId, white, black } = result;
 
-            this.rooms.set(gameId, {
-              white: white.socketId,
-              black: black.socketId,
-            });
-
-            this._io.sockets.sockets.get(white.socketId)?.join(gameId);
-            this._io.sockets.sockets.get(black.socketId)?.join(gameId);
-
-            this._io.to(white.socketId).emit("matchFound", {
-              gameId,
-              role: "WHITE",
-            });
-
-            this._io.to(black.socketId).emit("matchFound", {
-              gameId,
-              role: "BLACK",
-            });
-
-            console.log("Match created:", gameId);
+            this.handleMatchFound(gameId, white, black);
           }
         } catch (error) {
           console.error("Matchmaking error:", error);
@@ -628,5 +612,49 @@ export class SocketHandler {
         console.log("Socket disconnected", socket.id);
       });
     });
+  }
+
+  private startMatchmakingLoop() {
+    setInterval(async () => {
+      try {
+        const matches = await this._matchmakingUseCase.processQueue();
+        for (const match of matches) {
+          if (match.type === "MATCH_FOUND") {
+            this.handleMatchFound(match.gameId, match.white, match.black);
+          }
+        }
+      } catch (error) {
+        console.error("Matchmaking loop error:", error);
+      }
+    }, 3000); // Check every 3 seconds
+  }
+
+  private handleMatchFound(gameId: string, white: any, black: any) {
+    // Use latest socket IDs from our map in case they refreshed/reconnected
+    const whiteSocketId = this.userToSocket.get(white.userId) || white.socketId;
+    const blackSocketId = this.userToSocket.get(black.userId) || black.socketId;
+
+    this.rooms.set(gameId, {
+      white: whiteSocketId,
+      black: blackSocketId,
+    });
+
+    const whiteSocket = this._io.sockets.sockets.get(whiteSocketId);
+    const blackSocket = this._io.sockets.sockets.get(blackSocketId);
+
+    if (whiteSocket) whiteSocket.join(gameId);
+    if (blackSocket) blackSocket.join(gameId);
+
+    this._io.to(whiteSocketId).emit("matchFound", {
+      gameId,
+      role: "WHITE",
+    });
+
+    this._io.to(blackSocketId).emit("matchFound", {
+      gameId,
+      role: "BLACK",
+    });
+
+    console.log(`Match created: ${gameId} for users ${white.userId} and ${black.userId}`);
   }
 }

@@ -21,4 +21,5 @@ export interface IMatchmakingUseCase {
     removeFromQueue(socketId: string): void;
     getQueueSize(): number;
     getQueueSizeFor(timeControl: string): number;
+    processQueue(): Promise<MatchResult[]>;
   }

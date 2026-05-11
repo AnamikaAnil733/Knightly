@@ -5,8 +5,8 @@ class AppLogger {
   private logger: Logger;
 
   constructor() {
-    const logLevel = process.env.LOG_LEVEL || "info";
-    const isProduction = process.env.NODE_ENV === "production";
+    const logLevel = "info";
+    const isProduction = "production";
 
     const targets = [];
 
@@ -15,7 +15,7 @@ class AppLogger {
       target: "pino-roll",
       level: logLevel,
       options: {
-        file: path.resolve(__dirname, "../../../logs/app.log"),
+        file: path.resolve(__dirname, "../../logs/app.log"),
         size: process.env.SIZE,
         count: Number(process.env.COUNT),
         mkdir: true,
