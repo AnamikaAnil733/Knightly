@@ -26,7 +26,7 @@ import {
 import { BoardGrid, MoveDTO } from "../../Types/ChessTypes";
 import { findCheckSquare, movesToFens } from "../../Utils/ChessUtils";
 import { Turn, GameStatus } from "../../Types/ChessTypes";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageSquare, List } from "lucide-react";
 import { useMemo } from "react";
 
 export function Match() {
@@ -74,6 +74,9 @@ export function Match() {
     id: string;
     name: string;
   } | null>(null);
+  const [activeMobileTab, setActiveMobileTab] = useState<"MOVES" | "CHAT">(
+    "MOVES",
+  );
   const myRoleRef = useRef(myRole);
   useEffect(() => {
     myRoleRef.current = myRole;
@@ -393,45 +396,47 @@ export function Match() {
   return (
     <div className="w-full h-screen bg-gradient-to-br from-[#0A0F2C] to-[#1B1452] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="w-full px-6 py-3 bg-[#11193F]/40 backdrop-blur-sm border-b border-[#FFD166]/20 shrink-0 z-50">
+      <div className="w-full px-4 lg:px-6 py-2 lg:py-3 bg-[#11193F]/40 backdrop-blur-md border-b border-[#FFD166]/20 shrink-0 z-50">
         <div className="max-w-[1920px] mx-auto flex justify-between items-center text-white">
-          <div className="flex items-center gap-4">
-            {myRole === "SPECTATOR" && (
+          <div className="flex items-center gap-3 lg:gap-4">
+            {(myRole === "SPECTATOR" || isMonitorMode) && (
               <button
                 onClick={() =>
                   navigate(isMonitorMode ? "/admin/live-games" : "/live")
                 }
-                className="p-2 bg-[#FFD166]/10 hover:bg-[#FFD166]/20 rounded-lg text-[#FFD166] transition-all border border-[#FFD166]/20 flex items-center gap-2 group"
+                className="p-1.5 lg:p-2 bg-[#FFD166]/10 hover:bg-[#FFD166]/20 rounded-lg text-[#FFD166] transition-all border border-[#FFD166]/20 flex items-center gap-2 group"
               >
                 <ArrowLeft
-                  size={16}
-                  className="group-hover:-translate-x-1 transition-transform"
+                  size={14}
+                  className="group-hover:-translate-x-1 transition-transform lg:w-4 lg:h-4"
                 />
-                <span className="text-xs font-bold uppercase tracking-wider">
+                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider hidden sm:inline">
                   {isMonitorMode ? "Monitor" : "Matches"}
                 </span>
               </button>
             )}
             <h1
-              className="text-2xl font-bold text-[#FFD166] tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
+              className="text-xl lg:text-2xl font-bold text-[#FFD166] tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate(user ? "/landing-page" : "/admin/users")}
             >
               Knightly
             </h1>
           </div>
-          <span className="text-sm font-medium opacity-80 bg-[#ffffff]/10 px-3 py-1 rounded-full border border-[#ffffff]/10">
-            {turn} to move
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] lg:text-sm font-medium opacity-80 bg-[#ffffff]/10 px-2 lg:px-3 py-1 rounded-full border border-[#ffffff]/10 uppercase tracking-wide">
+              {turn}'s Turn
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* LEFT/CENTER: Game Area (Board + Players) */}
-        <div className="flex-1 flex flex-col items-center justify-center p-2 lg:p-4 overflow-hidden relative">
-          <div className="flex flex-col items-center gap-2 w-full h-full justify-center max-w-[1200px]">
+        <div className="flex-1 flex flex-col items-center justify-center p-1 sm:p-2 lg:p-4 overflow-hidden relative z-10 min-h-0 w-full">
+          <div className="flex flex-col items-center gap-1.5 sm:gap-2 lg:gap-4 w-full h-full justify-center max-w-[1200px] mx-auto overflow-y-auto lg:overflow-visible">
             {/* Top Player (Opponent) */}
-            <div className="w-full max-w-[800px] shrink-0">
+            <div className="w-full max-w-[min(800px,100%)] shrink-0 px-2 sm:px-4">
               <PlayerPanel
                 name={
                   myRole === "BLACK"
@@ -457,84 +462,85 @@ export function Match() {
               />
             </div>
 
-            {/* Chess Board */}
-            {/* Flex-1 to take available space, aspect-square to keep shape, min-h-0 for flex scrolling */}
-            <div className="relative flex-1 min-h-0 aspect-square max-w-full">
-              <div
-                className={`relative w-full h-full transition-all duration-500 ${
-                  status === "CHECKMATE" || status === "STALEMATE"
-                    ? "blur-[2px] grayscale-[0.3]"
-                    : ""
-                }`}
-              >
-                <Chessboard
-                  board={board}
-                  selectedSquare={selected}
-                  legalMoves={legalMoves}
-                  onSquareClick={handleSquareClick}
-                  orientation={orientation}
-                  lastMove={
-                    history.length > 0 ? history[history.length - 1] : null
-                  }
-                  checkSquare={checkSquare}
+            {/* Chess Board Container */}
+            <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-1 sm:p-2">
+              <div className="relative w-full h-full max-h-[min(450px,65vh)] lg:max-h-none aspect-square flex items-center justify-center">
+                <div
+                  className={`relative w-full h-full transition-all duration-500 flex items-center justify-center ${
+                    status === "CHECKMATE" || status === "STALEMATE"
+                      ? "blur-[1px] grayscale-[0.2]"
+                      : ""
+                  }`}
+                >
+                  <Chessboard
+                    board={board}
+                    selectedSquare={selected}
+                    legalMoves={legalMoves}
+                    onSquareClick={handleSquareClick}
+                    orientation={orientation}
+                    lastMove={
+                      history.length > 0 ? history[history.length - 1] : null
+                    }
+                    checkSquare={checkSquare}
+                  />
+                </div>
+
+                {/* Overlays */}
+                {status !== "ACTIVE" && status !== "CHECK" && (
+                  <GameOver
+                    status={status}
+                    turn={turn}
+                    myRole={myRole}
+                    ratingDelta={ratingDelta}
+                    onRematch={handleRematch}
+                    rematchOffered={isRematchOffered}
+                    rematchRequested={isRematchRequested}
+                    format={gameFormat}
+                    modeName={modeName}
+                    gameId={gameId}
+                  />
+                )}
+
+                {promotion && (
+                  <PromotionModal
+                    color={promotion.color}
+                    onSelect={async (type) => {
+                      if (!gameId) return;
+                      socket.emit("move", {
+                        gameId,
+                        from: promotion.from,
+                        to: promotion.to,
+                        promotionType: type,
+                      });
+                      setPromotion(null);
+                      setSelected(null);
+                      setLegalMoves([]);
+                    }}
+                  />
+                )}
+
+                <ResignModal
+                  isOpen={isResignModalOpen}
+                  onClose={() => setIsResignModalOpen(false)}
+                  onConfirm={confirmResign}
+                />
+
+                <DrawOfferModal
+                  isOpen={isDrawOfferModalOpen}
+                  onClose={() => setIsDrawOfferModalOpen(false)}
+                  onConfirm={confirmAcceptDraw}
+                />
+
+                <RematchModal
+                  isOpen={isRematchOffered}
+                  onClose={() => setIsRematchOffered(false)}
+                  onAccept={handleRematch}
                 />
               </div>
-
-              {/* Overlays */}
-              {status !== "ACTIVE" && status !== "CHECK" && (
-                <GameOver
-                  status={status}
-                  turn={turn}
-                  myRole={myRole}
-                  ratingDelta={ratingDelta}
-                  onRematch={handleRematch}
-                  rematchOffered={isRematchOffered}
-                  rematchRequested={isRematchRequested}
-                  format={gameFormat}
-                  modeName={modeName}
-                  gameId={gameId}
-                />
-              )}
-
-              {promotion && (
-                <PromotionModal
-                  color={promotion.color}
-                  onSelect={async (type) => {
-                    if (!gameId) return;
-                    socket.emit("move", {
-                      gameId,
-                      from: promotion.from,
-                      to: promotion.to,
-                      promotionType: type,
-                    });
-                    setPromotion(null);
-                    setSelected(null);
-                    setLegalMoves([]);
-                  }}
-                />
-              )}
-
-              <ResignModal
-                isOpen={isResignModalOpen}
-                onClose={() => setIsResignModalOpen(false)}
-                onConfirm={confirmResign}
-              />
-
-              <DrawOfferModal
-                isOpen={isDrawOfferModalOpen}
-                onClose={() => setIsDrawOfferModalOpen(false)}
-                onConfirm={confirmAcceptDraw}
-              />
-
-              <RematchModal
-                isOpen={isRematchOffered}
-                onClose={() => setIsRematchOffered(false)}
-                onAccept={handleRematch}
-              />
             </div>
 
             {/* Bottom Player (You) */}
-            <div className="w-full max-w-[800px] shrink-0">
+            <div className="w-full max-w-[min(800px,100%)] shrink-0 px-2 sm:px-4">
               <PlayerPanel
                 name={
                   myRole === "BLACK"
@@ -560,68 +566,99 @@ export function Match() {
                 isOpponent={false}
               />
             </div>
+
+            {/* Mobile Controls (Visible only on mobile, below Bottom Player) */}
+            <div className="w-full lg:hidden shrink-0 mt-1 px-2">
+              <ControlBar
+                onResign={handleResign}
+                onDraw={handleOfferDraw}
+                onReport={() => {
+                  const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
+                  if (opp && opp.id)
+                    handleReport({ id: opp.id, name: opp.name });
+                }}
+                hideDraw={isBotMatch}
+                hideReport={isBotMatch}
+              />
+            </div>
           </div>
         </div>
 
-        {/* RIGHT: Sidebar (Moves + Chat + Controls) */}
-        <div className="hidden lg:flex w-96 flex-col bg-[#11193F]/30 border-l border-[#ffffff]/10 h-full shrink-0 backdrop-blur-sm">
-          {/* Moves: Top Section */}
-          <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
-            <MoveList history={history} status={status} />
+        {/* RIGHT: Sidebar (Desktop: All visible, Mobile: Tabbed) */}
+        <div className="w-full lg:w-[380px] xl:w-[450px] flex flex-col bg-[#11193F]/30 border-t lg:border-t-0 lg:border-l border-[#ffffff]/10 h-[35vh] lg:h-full shrink-0 backdrop-blur-md z-20 overflow-hidden">
+          {/* Mobile Tabs Header */}
+          <div className="flex lg:hidden bg-[#0A0F2C]/60 border-b border-[#ffffff]/10 shrink-0">
+            <button
+              onClick={() => setActiveMobileTab("MOVES")}
+              className={`flex-1 py-3 flex items-center justify-center gap-2 transition-all ${
+                activeMobileTab === "MOVES"
+                  ? "bg-[#3A6FF7]/10 text-[#3A6FF7] border-b-2 border-[#3A6FF7]"
+                  : "text-[#C9CAD9]/60"
+              }`}
+            >
+              <List size={18} />
+              <span className="text-sm font-bold uppercase tracking-wider">
+                Moves
+              </span>
+            </button>
+            {!isBotMatch && (
+              <button
+                onClick={() => setActiveMobileTab("CHAT")}
+                className={`flex-1 py-3 flex items-center justify-center gap-2 transition-all ${
+                  activeMobileTab === "CHAT"
+                    ? "bg-[#6B2EFF]/10 text-[#6B2EFF] border-b-2 border-[#6B2EFF]"
+                    : "text-[#C9CAD9]/60"
+                }`}
+              >
+                <MessageSquare size={18} />
+                <span className="text-sm font-bold uppercase tracking-wider">
+                  Chat
+                </span>
+              </button>
+            )}
           </div>
 
-          {/* Chat: Middle Section */}
-          {!isBotMatch && (
-            <div className="flex-1 min-h-0 border-b border-[#ffffff]/10 p-4">
-              <ChatPanel
-                gameId={gameId || ""}
-                senderName={user?.displayname || "Observer"}
-                messages={messages}
+          {/* Sidebar Content */}
+          <div className="flex-1 flex flex-col min-h-0">
+            {/* Moves Section */}
+            <div
+              className={`flex-1 min-h-0 border-b border-[#ffffff]/10 p-2 lg:p-4 ${
+                activeMobileTab === "MOVES" ? "flex" : "hidden lg:flex"
+              } flex-col`}
+            >
+              <MoveList history={history} status={status} />
+            </div>
+
+            {/* Chat Section */}
+            {!isBotMatch && (
+              <div
+                className={`flex-1 min-h-0 lg:border-b border-[#ffffff]/10 p-2 lg:p-4 ${
+                  activeMobileTab === "CHAT" ? "flex" : "hidden lg:flex"
+                } flex-col`}
+              >
+                <ChatPanel
+                  gameId={gameId || ""}
+                  senderName={user?.displayname || "Observer"}
+                  messages={messages}
+                />
+              </div>
+            )}
+
+            {/* Controls Section (Desktop only here, Mobile has it below the board) */}
+            <div className="hidden lg:block shrink-0 p-4 bg-[#0A0F2C]/40">
+              <ControlBar
+                onResign={handleResign}
+                onDraw={handleOfferDraw}
+                onReport={() => {
+                  const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
+                  if (opp && opp.id)
+                    handleReport({ id: opp.id, name: opp.name });
+                }}
+                hideDraw={isBotMatch}
+                hideReport={isBotMatch}
               />
             </div>
-          )}
-
-          {/* Controls: Bottom Section */}
-          <div className="shrink-0 p-4 bg-[#0A0F2C]/40">
-            <ControlBar
-              onResign={handleResign}
-              onDraw={handleOfferDraw}
-              onReport={() => {
-                const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
-                if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
-              }}
-              hideDraw={isBotMatch}
-              hideReport={isBotMatch}
-            />
           </div>
-        </div>
-
-        {/* Mobile/Tablet View for Sidebar */}
-        <div className="lg:hidden w-full flex flex-col gap-4 p-4 bg-[#0A0F2C]">
-          <div className="flex justify-center">
-            <ControlBar
-              onResign={handleResign}
-              onDraw={handleOfferDraw}
-              onReport={() => {
-                const opp = myRole === "BLACK" ? whitePlayer : blackPlayer;
-                if (opp && opp.id) handleReport({ id: opp.id, name: opp.name });
-              }}
-              hideDraw={isBotMatch}
-              hideReport={isBotMatch}
-            />
-          </div>
-          <div className="h-64">
-            <MoveList history={history} status={status} />
-          </div>
-          {!isBotMatch && (
-            <div className="h-64">
-              <ChatPanel
-                gameId={gameId || ""}
-                senderName={user?.displayname || "Observer"}
-                messages={messages}
-              />
-            </div>
-          )}
         </div>
       </div>
 

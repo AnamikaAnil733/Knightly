@@ -151,7 +151,7 @@ export function Chessboard({
   const theme = BOARD_THEMES[themeKey] || BOARD_THEMES.classic;
 
   return (
-    <div className="relative w-full max-w-[800px] aspect-square mx-auto">
+    <div className="relative w-full max-w-[min(800px,100%)] p-4 sm:p-6 lg:p-8 aspect-square mx-auto flex items-center justify-center">
       {/* Glowing frame */}
       <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30 pointer-events-none" />
 
@@ -274,7 +274,7 @@ export function Chessboard({
                   {/* Rank Numbers (1-8) - Top Left of first col */}
                   {displayColIndex === 0 && (
                     <span
-                      className={`absolute top-0.5 left-0.5 text-[15px] sm:text-s font-bold leading-none select-none z-10`}
+                      className={`absolute top-0.5 left-0.5 text-[6px] xs:text-[8px] sm:text-[10px] lg:text-[12px] font-bold leading-none select-none z-10`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayRanks[displayRowIndex]}
@@ -284,7 +284,7 @@ export function Chessboard({
                   {/* File Letters (a-h) - Bottom Right of last row */}
                   {displayRowIndex === 7 && (
                     <span
-                      className={`absolute bottom-0.5 right-0.5 text-[15px] sm:text-s font-bold leading-none select-none z-10`}
+                      className={`absolute bottom-0.5 right-0.5 text-[6px] xs:text-[8px] sm:text-[10px] lg:text-[12px] font-bold leading-none select-none z-10`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayFiles[displayColIndex]}
@@ -336,15 +336,15 @@ export function Chessboard({
           })}
         </div>
 
-        {/* Rank labels */}
-        <div className="absolute -left-6 top-0 h-full flex flex-col justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
+        {/* Rank labels (Inside Padding) */}
+        <div className="absolute left-0.5 sm:left-1 top-4 sm:top-6 bottom-4 sm:bottom-6 flex flex-col justify-around text-[#C9CAD9] text-[9px] sm:text-xs lg:text-sm font-medium pointer-events-none">
           {displayRanks.map((n) => (
             <span key={n}>{n}</span>
           ))}
         </div>
 
-        {/* File labels */}
-        <div className="absolute -bottom-6 left-0 w-full flex justify-around text-[#C9CAD9] text-sm font-medium pointer-events-none">
+        {/* File labels (Inside Padding) */}
+        <div className="absolute bottom-0.5 sm:bottom-1 left-4 sm:left-6 right-4 sm:right-6 flex justify-around text-[#C9CAD9] text-[9px] sm:text-xs lg:text-sm font-medium pointer-events-none">
           {displayFiles.map((l) => (
             <span key={l}>{l}</span>
           ))}
