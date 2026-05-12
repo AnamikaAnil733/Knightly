@@ -160,11 +160,15 @@ export function GameHistoryList() {
               {Array.from({ length: totalPages }, (_, i) => i + 1)
                 .filter((p) => {
                   if (totalPages <= 5) return true;
-                  return Math.abs(p - currentPage) <= 1 || p === 1 || p === totalPages;
+                  return (
+                    Math.abs(p - currentPage) <= 1 ||
+                    p === 1 ||
+                    p === totalPages
+                  );
                 })
                 .map((p, i, arr) => (
                   <div key={p} className="flex items-center">
-                    {i > 0 && arr[i-1] !== p - 1 && (
+                    {i > 0 && arr[i - 1] !== p - 1 && (
                       <span className="text-gray-600 px-1">...</span>
                     )}
                     <button

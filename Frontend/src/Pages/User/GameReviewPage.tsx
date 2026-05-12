@@ -682,7 +682,9 @@ export function GameReviewPage() {
               const isWhite = idx % 2 === 0;
               const active = currentMoveIndex === idx + 1;
               const move = moveHistory[idx];
-              const promoSuffix = move.promotion ? `=${move.promotion.charAt(0)}` : "";
+              const promoSuffix = move.promotion
+                ? `=${move.promotion.charAt(0)}`
+                : "";
               const moveText = `${String.fromCharCode(97 + move.from.col)}${8 - move.from.row}-${String.fromCharCode(97 + move.to.col)}${8 - move.to.row}${promoSuffix}`;
 
               return (
