@@ -20,6 +20,9 @@ import { ChessGameRepository } from "./Infrastructure/Repository/GameRepository"
 import { AuthRepository } from "./Infrastructure/Repository/AuthRepository";
 import { GameModel } from "./Infrastructure/Database/Model/GameModel";
 
+import { createAdapter } from "@socket.io/redis-adapter";
+import { redisClient, subClient ,connectRedis } from "./Infrastructure/Redis/RedisClient";
+
 import { errorHandler } from "./Presentation/Middleware/ErrorHandlingMiddleware";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -41,6 +44,8 @@ export class App {
         methods:["GET","POST"],
       },
     });
+
+    this._io.adapter(createAdapter(redisClient, subClient));
 
     this.initializeMiddlewares();
     this.initializeDatabase();
@@ -87,6 +92,7 @@ export class App {
 
   private async initializeDatabase(): Promise<void> {
     await MongoDB.connect();
+    await connectRedis();
   }
 
 

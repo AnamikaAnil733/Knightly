@@ -8,10 +8,9 @@ import { RatingUpdateService } from "../../Domain/Chess/Service/RatingUpdateServ
 import { IUserRepository } from "../../Domain/Interface/Repositories/IUserRepository";
 import { TIME_CONTROLS } from "../../Domain/Chess/Types/GameFormat";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
+import { redisClient } from "../../Infrastructure/Redis/RedisClient";
 
 export class SocketHandler {
-  private rooms = new Map<string, { white?: string; black?: string }>();
-  private userToSocket = new Map<string, string>();
 
   constructor(
     private readonly _io: Server,
@@ -74,6 +73,16 @@ export class SocketHandler {
         blackDelta: ratings.blackDelta,
       } : null,
     });
+
+    if (status !== "ACTIVE" && status !== "CHECK") {
+      await this.cleanupRoom(game.id);
+    }
+  }
+
+  private async cleanupRoom(gameId: string) {
+    // Redis Cleanup
+    await redisClient.del(`games:${gameId}`);
+    console.log(`Room ${gameId} cleaned up from Redis.`);
   }
 
   public initialize() {
@@ -82,8 +91,9 @@ export class SocketHandler {
     this._io.on("connection", (socket: Socket) => {
       console.log("socket connected", socket.id);
 
-      socket.on("identify", (userId: string) => {
-        this.userToSocket.set(userId, socket.id);
+      socket.on("identify", async (userId: string) => {
+        await redisClient.set(`user_to_socket:${userId}`, socket.id);
+        await redisClient.set(`socket_to_user:${socket.id}`, userId);
         console.log(`User ${userId} identified with socket ${socket.id}`);
       });
 
@@ -166,11 +176,14 @@ export class SocketHandler {
           const blackPlayerId = playerRole === "BLACK" ? userId : "stockfish-bot";
 
           const { gameId } = await this._createGameUseCase.execute(whitePlayerId, blackPlayerId, gameFormat, difficulty, isPublic);
+              const whiteSocketId = playerRole === "WHITE" ? socket.id : "bot-socket-placeholder";
+    const blackSocketId = playerRole === "BLACK" ? socket.id : "bot-socket-placeholder";
 
-          this.rooms.set(gameId, {
-            white: playerRole === "WHITE" ? socket.id : "bot-socket-placeholder",
-            black: playerRole === "BLACK" ? socket.id : "bot-socket-placeholder",
+          await redisClient.hSet(`games:${gameId}`, {
+            white: whiteSocketId,
+            black: blackSocketId,
           });
+          await redisClient.set(`socket_to_game:${socket.id}`, gameId);
 
           socket.join(gameId);
 
@@ -209,35 +222,28 @@ export class SocketHandler {
         socket.emit("searchCancelled");
       });
 
-      socket.on("joinGame", (gameId: string) => {
+      socket.on("joinGame", async (gameId: string) => {
         socket.join(gameId);
 
-        if (!this.rooms.has(gameId)) {
-          this.rooms.set(gameId, {});
-        }
-
-        const room = this.rooms.get(gameId)!;
-
+        const room = await redisClient.hGetAll(`games:${gameId}`);
         let role: "WHITE" | "BLACK" | "SPECTATOR";
 
-        // Prioritize existing assignment (from matchmaking)
         if (room.white === socket.id) {
           role = "WHITE";
         } else if (room.black === socket.id) {
           role = "BLACK";
-        }
-        // Otherwise fill empty seats (direct joins)
-        else if (!room.white) {
-          room.white = socket.id;
+        } else if (!room.white || room.white === "") {
+          await redisClient.hSet(`games:${gameId}`, "white", socket.id);
           role = "WHITE";
-        } else if (!room.black) {
-          room.black = socket.id;
+        } else if (!room.black || room.black === "") {
+          await redisClient.hSet(`games:${gameId}`, "black", socket.id);
           role = "BLACK";
         } else {
           role = "SPECTATOR";
         }
 
         socket.emit("roleAssigned", role);
+        await redisClient.set(`socket_to_game:${socket.id}`, gameId);
 
         console.log(`Socket ${socket.id} joined ${gameId} as ${role}`);
       });
@@ -265,8 +271,8 @@ export class SocketHandler {
           )
             return;
 
-          const room = this.rooms.get(gameId);
-          if (!room) return;
+          const room = await redisClient.hGetAll(`games:${gameId}`);
+          if (Object.keys(room).length === 0) return;
 
           let status: any;
           if (room.white === socket.id) {
@@ -291,8 +297,8 @@ export class SocketHandler {
           const game = await this._gameRepo.findById(gameId);
           if (!game || (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")) return;
 
-          const room = this.rooms.get(gameId);
-          if (!room) return;
+          const room = await redisClient.hGetAll(`games:${gameId}`);
+          if (Object.keys(room).length === 0) return;
 
           // Find the opponent's socket
           const opponentSocketId = room.white === socket.id ? room.black : room.white;
@@ -319,8 +325,8 @@ export class SocketHandler {
       });
 
 
-      socket.on("invite_friend", ({ recipientId, senderId, senderName, gameFormat = "5+0", isPublic = false }) => {
-        const recipientSocketId = this.userToSocket.get(recipientId);
+      socket.on("invite_friend", async ({ recipientId, senderId, senderName, gameFormat = "5+0", isPublic = false }) => {
+        const recipientSocketId = await redisClient.get(`user_to_socket:${recipientId}`);
         if (recipientSocketId) {
           this._io.to(recipientSocketId).emit("receive_friend_invite", {
             senderId,
@@ -336,7 +342,7 @@ export class SocketHandler {
 
       socket.on("accept_friend_invite", async ({ senderId, recipientId, gameFormat = "5+0", senderIsPublic = false, receiverIsPublic = false }) => {
         try {
-          const senderSocketId = this.userToSocket.get(senderId);
+          const senderSocketId = await redisClient.get(`user_to_socket:${senderId}`);
           if (!senderSocketId) {
             socket.emit("invite_failed", "Sender is offline");
             return;
@@ -347,10 +353,12 @@ export class SocketHandler {
 
           const { gameId } = await this._createGameUseCase.execute(senderId, recipientId, gameFormat, undefined, isGamePublic);
 
-          this.rooms.set(gameId, {
+          await redisClient.hSet(`games:${gameId}`, {
             white: senderSocketId,
             black: socket.id,
           });
+          await redisClient.set(`socket_to_game:${senderSocketId}`, gameId);
+          await redisClient.set(`socket_to_game:${socket.id}`, gameId);
 
           const senderSocket = this._io.sockets.sockets.get(senderSocketId);
           if (senderSocket) {
@@ -370,6 +378,7 @@ export class SocketHandler {
             role: "BLACK",
           });
 
+
           console.log(`[Friend Match] Emitted matchFound to recipient ${recipientId} (Socket: ${socket.id})`);
           console.log(`[Friend Match] Created game: ${gameId}`);
         } catch (error) {
@@ -377,22 +386,22 @@ export class SocketHandler {
         }
       });
 
-      socket.on("reject_friend_invite", ({ senderId }) => {
-        const senderSocketId = this.userToSocket.get(senderId);
+      socket.on("reject_friend_invite", async ({ senderId }) => {
+        const senderSocketId = await redisClient.get(`user_to_socket:${senderId}`);
         if (senderSocketId) {
           this._io.to(senderSocketId).emit("invite_rejected");
         }
       });
 
-      socket.on("send_friend_request", ({ recipientId, senderName }) => {
-        const recipientSocketId = this.userToSocket.get(recipientId);
+      socket.on("send_friend_request", async ({ recipientId, senderName }) => {
+        const recipientSocketId = await redisClient.get(`user_to_socket:${recipientId}`);
         if (recipientSocketId) {
           this._io.to(recipientSocketId).emit("receive_friend_request", { senderName });
         }
       });
 
-      socket.on("accept_friend_request", ({ requesterId }) => {
-        const requesterSocketId = this.userToSocket.get(requesterId);
+      socket.on("accept_friend_request", async ({ requesterId }) => {
+        const requesterSocketId = await redisClient.get(`user_to_socket:${requesterId}`);
         if (requesterSocketId) {
           this._io.to(requesterSocketId).emit("friendship_changed");
         }
@@ -400,8 +409,8 @@ export class SocketHandler {
         socket.emit("friendship_changed");
       });
 
-      socket.on("friendship_action", ({ targetUserId }) => {
-        const targetSocketId = this.userToSocket.get(targetUserId);
+      socket.on("friendship_action", async ({ targetUserId }) => {
+        const targetSocketId = await redisClient.get(`user_to_socket:${targetUserId}`);
         if (targetSocketId) {
           this._io.to(targetSocketId).emit("friendship_changed");
         }
@@ -420,8 +429,8 @@ export class SocketHandler {
             return;
           }
 
-          const room = this.rooms.get(gameId);
-          if (!room) return;
+          const room = await redisClient.hGetAll(`games:${gameId}`);
+         if (Object.keys(room).length === 0) return; 
 
           const opponentSocketId =
             room.white === socket.id ? room.black : room.white;
@@ -442,8 +451,8 @@ export class SocketHandler {
           const oldGame = await this._gameRepo.findById(gameId);
           if (!oldGame) return;
 
-          const room = this.rooms.get(gameId);
-          if (!room || !room.white || !room.black) return;
+          const room = await redisClient.hGetAll(`games:${gameId}`);
+          if (Object.keys(room).length === 0 || !room.white || !room.black) return;
 
           // Swap colors for rematch
           const newWhiteSocketId = room.black;
@@ -464,11 +473,12 @@ export class SocketHandler {
             oldGame.getIsPublic(),
           );
 
-          // Update rooms map for the new game
-          this.rooms.set(newGameId, {
+          await redisClient.hSet(`games:${newGameId}`, {
             white: newWhiteSocketId,
             black: newBlackSocketId,
           });
+          await redisClient.set(`socket_to_game:${newWhiteSocketId}`, newGameId);
+          await redisClient.set(`socket_to_game:${newBlackSocketId}`, newGameId);
 
           // Join both players to the new socket room
           const whiteSocket = this._io.sockets.sockets.get(newWhiteSocketId);
@@ -516,8 +526,8 @@ export class SocketHandler {
 
       socket.on("move", async ({ gameId, from, to, promotionType }) => {
         try {
-          const room = this.rooms.get(gameId);
-          if (!room) return;
+          const room = await redisClient.hGetAll(`games:${gameId}`);
+          if (Object.keys(room).length === 0) return;
 
           let playerColor: "WHITE" | "BLACK" | null = null;
 
@@ -591,22 +601,26 @@ export class SocketHandler {
           socket.emit("moveError", (err as Error).message);
         }
       });
-      socket.on("disconnect", () => {
+      socket.on("disconnect",async () => {
         this._matchmakingUseCase.removeFromQueue(socket.id);
+          const gameId = await redisClient.get(`socket_to_game:${socket.id}`);
+           if (gameId) {
+    const room = await redisClient.hGetAll(`games:${gameId}`);
+    if (Object.keys(room).length > 0) {
+    if (room.white === socket.id) await redisClient.hSet(`games:${gameId}`, "white", "");
+    if (room.black === socket.id) await redisClient.hSet(`games:${gameId}`, "black", "");
+}
 
-        for (const [gameId, room] of this.rooms.entries()) {
-          if (room.white === socket.id) {
-            room.white = undefined;
+    await redisClient.del(`socket_to_game:${socket.id}`);
+  }
+
+        const userId = await redisClient.get(`socket_to_user:${socket.id}`);
+        if (userId) {
+          const currentSocketId = await redisClient.get(`user_to_socket:${userId}`);
+          if (currentSocketId === socket.id) {
+            await redisClient.del(`user_to_socket:${userId}`);
           }
-          if (room.black === socket.id) {
-            room.black = undefined;
-          }
-        }
-        for (const [userId, sId] of this.userToSocket.entries()) {
-          if (sId === socket.id) {
-            this.userToSocket.delete(userId);
-            break;
-          }
+          await redisClient.del(`socket_to_user:${socket.id}`);
         }
 
         console.log("Socket disconnected", socket.id);
@@ -620,7 +634,7 @@ export class SocketHandler {
         const matches = await this._matchmakingUseCase.processQueue();
         for (const match of matches) {
           if (match.type === "MATCH_FOUND") {
-            this.handleMatchFound(match.gameId, match.white, match.black);
+           await this.handleMatchFound(match.gameId, match.white, match.black);
           }
         }
       } catch (error) {
@@ -629,15 +643,18 @@ export class SocketHandler {
     }, 3000); // Check every 3 seconds
   }
 
-  private handleMatchFound(gameId: string, white: any, black: any) {
-    // Use latest socket IDs from our map in case they refreshed/reconnected
-    const whiteSocketId = this.userToSocket.get(white.userId) || white.socketId;
-    const blackSocketId = this.userToSocket.get(black.userId) || black.socketId;
+  private async handleMatchFound(gameId: string, white: any, black: any) {
+    // Use latest socket IDs from Redis
+    const whiteSocketId = await redisClient.get(`user_to_socket:${white.userId}`) || white.socketId;
+    const blackSocketId = await redisClient.get(`user_to_socket:${black.userId}`) || black.socketId;
 
-    this.rooms.set(gameId, {
+    await redisClient.hSet(`games:${gameId}`, {
       white: whiteSocketId,
       black: blackSocketId,
     });
+
+    await redisClient.set(`socket_to_game:${whiteSocketId}`, gameId);
+    await redisClient.set(`socket_to_game:${blackSocketId}`, gameId);
 
     const whiteSocket = this._io.sockets.sockets.get(whiteSocketId);
     const blackSocket = this._io.sockets.sockets.get(blackSocketId);
@@ -654,6 +671,7 @@ export class SocketHandler {
       gameId,
       role: "BLACK",
     });
+
 
     console.log(`Match created: ${gameId} for users ${white.userId} and ${black.userId}`);
   }
