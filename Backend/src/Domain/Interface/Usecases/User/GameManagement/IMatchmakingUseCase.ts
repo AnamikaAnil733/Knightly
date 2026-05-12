@@ -19,7 +19,7 @@ export type MatchResult =
 export interface IMatchmakingUseCase {
     findMatch(player: QueuePlayer): Promise<MatchResult>;
     removeFromQueue(socketId: string): void;
-    getQueueSize(): number;
-    getQueueSizeFor(timeControl: string): number;
+    getQueueSize(): Promise<number>;
+    getQueueSizeFor(timeControl: string): Promise<number>;
     processQueue(): Promise<MatchResult[]>;
   }

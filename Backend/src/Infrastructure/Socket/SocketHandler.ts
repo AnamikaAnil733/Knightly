@@ -9,6 +9,10 @@ import { IUserRepository } from "../../Domain/Interface/Repositories/IUserReposi
 import { TIME_CONTROLS } from "../../Domain/Chess/Types/GameFormat";
 import { StockfishService } from "../../Domain/Chess/Service/StockfishService";
 import { redisClient } from "../../Infrastructure/Redis/RedisClient";
+import { GameCacheService } from "../../Infrastructure/Redis/GameCacheService";
+
+
+const GAME_SESSION_TTL_SECONDS = 7200;
 
 export class SocketHandler {
 
@@ -80,8 +84,10 @@ export class SocketHandler {
   }
 
   private async cleanupRoom(gameId: string) {
-    // Redis Cleanup
+    // Remove socket-role mapping
     await redisClient.del(`games:${gameId}`);
+    // Evict game state cache — game is over
+    await GameCacheService.del(gameId);
     console.log(`Room ${gameId} cleaned up from Redis.`);
   }
 
@@ -120,6 +126,12 @@ export class SocketHandler {
           const user = (await this._userRepo.findById(userId)) as any;
           if (!user) return;
 
+          const activeGameId = await redisClient.get(`socket_to_game:${socket.id}`);
+          if (activeGameId) {
+            socket.emit("alreadyInGame", { gameId: activeGameId });
+            return;
+          }
+
           const config = TIME_CONTROLS[gameFormat] || TIME_CONTROLS["5+0"];
           const ratingMode = config.mode;
 
@@ -139,7 +151,7 @@ export class SocketHandler {
 
           if (result.type === "WAITING") {
             socket.emit("waiting", {
-              queueSize: this._matchmakingUseCase.getQueueSizeFor(gameFormat),
+              queueSize: await this._matchmakingUseCase.getQueueSizeFor(gameFormat),
               format: gameFormat,
             });
             return;
@@ -179,11 +191,11 @@ export class SocketHandler {
               const whiteSocketId = playerRole === "WHITE" ? socket.id : "bot-socket-placeholder";
     const blackSocketId = playerRole === "BLACK" ? socket.id : "bot-socket-placeholder";
 
-          await redisClient.hSet(`games:${gameId}`, {
-            white: whiteSocketId,
-            black: blackSocketId,
-          });
-          await redisClient.set(`socket_to_game:${socket.id}`, gameId);
+          const botSessionPipeline = redisClient.multi();
+          botSessionPipeline.hSet(`games:${gameId}`, { white: whiteSocketId, black: blackSocketId });
+          botSessionPipeline.expire(`games:${gameId}`, GAME_SESSION_TTL_SECONDS);
+          await botSessionPipeline.exec();
+          await redisClient.set(`socket_to_game:${socket.id}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
 
           socket.join(gameId);
 
@@ -243,7 +255,7 @@ export class SocketHandler {
         }
 
         socket.emit("roleAssigned", role);
-        await redisClient.set(`socket_to_game:${socket.id}`, gameId);
+        await redisClient.set(`socket_to_game:${socket.id}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
 
         console.log(`Socket ${socket.id} joined ${gameId} as ${role}`);
       });
@@ -353,12 +365,12 @@ export class SocketHandler {
 
           const { gameId } = await this._createGameUseCase.execute(senderId, recipientId, gameFormat, undefined, isGamePublic);
 
-          await redisClient.hSet(`games:${gameId}`, {
-            white: senderSocketId,
-            black: socket.id,
-          });
-          await redisClient.set(`socket_to_game:${senderSocketId}`, gameId);
-          await redisClient.set(`socket_to_game:${socket.id}`, gameId);
+          const friendSessionPipeline = redisClient.multi();
+          friendSessionPipeline.hSet(`games:${gameId}`, { white: senderSocketId, black: socket.id });
+          friendSessionPipeline.expire(`games:${gameId}`, GAME_SESSION_TTL_SECONDS);
+          await friendSessionPipeline.exec();
+          await redisClient.set(`socket_to_game:${senderSocketId}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
+          await redisClient.set(`socket_to_game:${socket.id}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
 
           const senderSocket = this._io.sockets.sockets.get(senderSocketId);
           if (senderSocket) {
@@ -473,12 +485,12 @@ export class SocketHandler {
             oldGame.getIsPublic(),
           );
 
-          await redisClient.hSet(`games:${newGameId}`, {
-            white: newWhiteSocketId,
-            black: newBlackSocketId,
-          });
-          await redisClient.set(`socket_to_game:${newWhiteSocketId}`, newGameId);
-          await redisClient.set(`socket_to_game:${newBlackSocketId}`, newGameId);
+          const rematchSessionPipeline = redisClient.multi();
+          rematchSessionPipeline.hSet(`games:${newGameId}`, { white: newWhiteSocketId, black: newBlackSocketId });
+          rematchSessionPipeline.expire(`games:${newGameId}`, GAME_SESSION_TTL_SECONDS);
+          await rematchSessionPipeline.exec();
+          await redisClient.set(`socket_to_game:${newWhiteSocketId}`, newGameId, { EX: GAME_SESSION_TTL_SECONDS });
+          await redisClient.set(`socket_to_game:${newBlackSocketId}`, newGameId, { EX: GAME_SESSION_TTL_SECONDS });
 
           // Join both players to the new socket room
           const whiteSocket = this._io.sockets.sockets.get(newWhiteSocketId);
@@ -648,13 +660,13 @@ export class SocketHandler {
     const whiteSocketId = await redisClient.get(`user_to_socket:${white.userId}`) || white.socketId;
     const blackSocketId = await redisClient.get(`user_to_socket:${black.userId}`) || black.socketId;
 
-    await redisClient.hSet(`games:${gameId}`, {
-      white: whiteSocketId,
-      black: blackSocketId,
-    });
+    const matchSessionPipeline = redisClient.multi();
+    matchSessionPipeline.hSet(`games:${gameId}`, { white: whiteSocketId, black: blackSocketId });
+    matchSessionPipeline.expire(`games:${gameId}`, GAME_SESSION_TTL_SECONDS);
+    await matchSessionPipeline.exec();
 
-    await redisClient.set(`socket_to_game:${whiteSocketId}`, gameId);
-    await redisClient.set(`socket_to_game:${blackSocketId}`, gameId);
+    await redisClient.set(`socket_to_game:${whiteSocketId}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
+    await redisClient.set(`socket_to_game:${blackSocketId}`, gameId, { EX: GAME_SESSION_TTL_SECONDS });
 
     const whiteSocket = this._io.sockets.sockets.get(whiteSocketId);
     const blackSocket = this._io.sockets.sockets.get(blackSocketId);
