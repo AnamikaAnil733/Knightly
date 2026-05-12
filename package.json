@@ -1,6 +1,5 @@
 {
-  "dependencies": {
-    "@socket.io/redis-adapter": "^8.3.0",
-    "redis": "^5.12.1"
-  }
+  "name": "knightly-root",
+  "private": true,
+  "description": "Knightly Chess Platform Monorepo Root"
 }

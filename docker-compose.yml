@@ -44,10 +44,9 @@ networks:
     driver: bridge
 
 
-    redis:
+  redis:
     image: redis:alpine
-    container_name:
-    knightly_redis
-    restart : unless-stopped
-    networks: 
-    - kinghtly_net
+    container_name: knightly_redis
+    restart: unless-stopped
+    networks:
+      - knightly_net
