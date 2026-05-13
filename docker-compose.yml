@@ -25,28 +25,57 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+      redis:
+        condition: service_started
     env_file:
       - ./Backend/.env
     environment:
-      # Override localhost with the Docker service name so the backend can reach MongoDB
+      # Override localhost with the Docker service name so the backend can reach MongoDB/Redis
       MONGODB_URL: mongodb://mongo:27017/Knightly
+      REDIS_URL: redis://redis:6379
       NODE_ENV: production
     ports:
       - "5001:5000"
     networks:
       - knightly_net
 
-volumes:
-  mongo_data:
-
-networks:
-  knightly_net:
-    driver: bridge
-
-
+  # Redis
   redis:
     image: redis:alpine
     container_name: knightly_redis
     restart: unless-stopped
     networks:
       - knightly_net
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+      
+  # Frontend
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_BASE_URL=http://${EC2_PUBLIC_IP}:5001/api
+    container_name: knightly_frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - knightly_net
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+  redis_data:
+
+networks:
+  knightly_net:
+    driver: bridge
+
