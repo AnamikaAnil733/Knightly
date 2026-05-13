@@ -39,15 +39,6 @@ jobs:
             ghcr.io/${{ env.REPO_LOWER }}/backend:latest
             ghcr.io/${{ env.REPO_LOWER }}/backend:${{ github.sha }}
 
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./Frontend
-          push: true
-          tags: |
-            ghcr.io/${{ env.REPO_LOWER }}/frontend:latest
-            ghcr.io/${{ env.REPO_LOWER }}/frontend:${{ github.sha }}
-
       # NOTE: This step requires a server with SSH access and secrets defined in GitHub.
       # - name: Deploy to Server
       #   uses: appleboy/ssh-action@master
