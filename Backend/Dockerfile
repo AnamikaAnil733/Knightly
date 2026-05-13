@@ -16,6 +16,7 @@ RUN npm run build
 FROM node:22-alpine AS production
 
 WORKDIR /app
+RUN apk add --no-cache stockfish --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 ENV NODE_ENV=production
 

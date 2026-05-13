@@ -1,4 +1,5 @@
 import {spawn,ChildProcess} from "child_process";
+
 import { Position } from "../Position";
 
 export class StockfishService{
@@ -7,6 +8,7 @@ export class StockfishService{
 
   constructor(){
     this.engineProcess = spawn("stockfish");
+
 
     this.engineProcess.stdout?.on("data",(data)=>{
       const output = data.toString();
@@ -99,6 +101,7 @@ export class StockfishService{
   public analyzeGame(history: any[], depth: number = 10): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
       const analyzerProcess = spawn("stockfish");
+
       const evaluations: any[] = [];
       const uciMoves: string[] = [];
 

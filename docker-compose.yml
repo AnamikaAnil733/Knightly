@@ -33,7 +33,7 @@ services:
       REDIS_URL: redis://redis:6379
       NODE_ENV: production
     ports:
-      - "5001:5000"
+      - "5000:5000"
     networks:
       - knightly_net
 
