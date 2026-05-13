@@ -54,23 +54,6 @@ services:
       timeout: 5s
       retries: 5
 
-      
-  # Frontend
-  frontend:
-    build:
-      context: ./Frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_BASE_URL=http://${EC2_PUBLIC_IP}:5001/api
-    container_name: knightly_frontend
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    networks:
-      - knightly_net
-    depends_on:
-      - backend
-
 volumes:
   mongo_data:
   redis_data:
