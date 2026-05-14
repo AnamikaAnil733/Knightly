@@ -1,5 +1,8 @@
 {
   "name": "knightly-root",
   "private": true,
-  "description": "Knightly Chess Platform Monorepo Root"
+  "description": "Knightly Chess Platform Monorepo Root",
+  "overrides": {
+    "redis": "^4.7.0"
+  }
 }

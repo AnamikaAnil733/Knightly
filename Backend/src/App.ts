@@ -31,53 +31,63 @@ import { settingsRepo, tokenservice } from "./Infrastructure/Composition/AuthCom
 
 export class App {
   private app: Application;
-  private _server:http.Server;
-  private _io:Server;
+  private _server: http.Server;
+  private _io: Server;
+  private _socketHandler: SocketHandler | null = null;
 
   constructor() {
     this.app = express();
     this._server = http.createServer(this.app);
 
-    this._io = new Server(this._server,{
-      cors:{
-        origin:process.env.ORIGIN_URL,
-        methods:["GET","POST"],
+    this._io = new Server(this._server, {
+      cors: {
+        origin: process.env.ORIGIN_URL,
+        methods: ["GET", "POST"],
       },
     });
 
     this._io.adapter(createAdapter(redisClient, subClient));
 
     this.initializeMiddlewares();
-    this.initializeDatabase();
     this.initializeRoutes();
-
-    const gameRepo = new ChessGameRepository(GameModel);
-    const makeMoveUseCase = new MakeMoveUsecase(gameRepo);
-
-    // Matchmaking Setup
-    const createGameUseCase = new CreateGameUseCase(gameRepo);
-    const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
-    const authRepo = new AuthRepository();
-    const ratingUpdateService = new RatingUpdateService(authRepo, achievementServiceLive);
-    const stockfishService = new StockfishService();
-
-    const socketHandler = new SocketHandler(
-      this._io,
-      makeMoveUseCase,
-      gameRepo,
-      matchmakingUseCase,
-      createGameUseCase,
-      authRepo,
-      ratingUpdateService,
-      stockfishService,
-    );
-    socketHandler.initialize();
-
     this.setErrorHandlerMiddleware();
   }
+
+  public async init(): Promise<void> {
+    try {
+      console.log("Initializing databases...");
+      await MongoDB.connect();
+      await connectRedis();
+      console.log("Databases initialized successfully.");
+
+      const gameRepo = new ChessGameRepository(GameModel);
+      const makeMoveUseCase = new MakeMoveUsecase(gameRepo);
+      const createGameUseCase = new CreateGameUseCase(gameRepo);
+      const matchmakingUseCase = new MatchmakingUseCase(createGameUseCase);
+      const authRepo = new AuthRepository();
+      const ratingUpdateService = new RatingUpdateService(authRepo, achievementServiceLive);
+      const stockfishService = new StockfishService();
+
+      this._socketHandler = new SocketHandler(
+        this._io,
+        makeMoveUseCase,
+        gameRepo,
+        matchmakingUseCase,
+        createGameUseCase,
+        authRepo,
+        ratingUpdateService,
+        stockfishService,
+      );
+      this._socketHandler.initialize();
+      console.log("Socket handler initialized.");
+    } catch (error) {
+      console.error("Failed to initialize App:", error);
+      throw error;
+    }
+  }
+
   private initializeMiddlewares(): void {
     this.app.use(cors(corsOptions));
-
     this.app.use(cookieParser());
     this.app.use(
       express.json({
@@ -90,17 +100,11 @@ export class App {
     this.app.use(maintenanceMiddleware(settingsRepo, tokenservice));
   }
 
-  private async initializeDatabase(): Promise<void> {
-    await MongoDB.connect();
-    await connectRedis();
-  }
-
-
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     this.app.use("/api/auth", authRoutes.router);
-    this.app.use("/api/admin",adminRoutes.router);
-    this.app.use("/api/user",userRoutes.router);
+    this.app.use("/api/admin", adminRoutes.router);
+    this.app.use("/api/user", userRoutes.router);
     this.app.use("/api/payment", paymentRoutes.router);
   }
 
@@ -108,7 +112,7 @@ export class App {
     this.app.use(errorHandler);
   }
 
-  public listen(port:any): void {
+  public listen(port: any): void {
     this._server.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
@@ -116,4 +120,11 @@ export class App {
 }
 
 const app = new App();
-app.listen(process.env.PORT);
+app.init()
+  .then(() => {
+    app.listen(process.env.PORT);
+  })
+  .catch((err) => {
+    console.error("App startup failed:", err);
+    process.exit(1);
+  });

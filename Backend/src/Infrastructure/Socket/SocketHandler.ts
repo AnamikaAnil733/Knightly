@@ -221,7 +221,7 @@ export class SocketHandler {
                   bestMove.promotionType as any,
                 );
                 await this.finalizeGame(updatedBotGame);
-              });
+              }).catch((err) => console.error("[Bot] First move failed:", err));
             }
           }
         } catch (error) {
@@ -526,7 +526,7 @@ export class SocketHandler {
                   bestMove.promotionType as any,
                 );
                 await this.finalizeGame(updatedBotGame);
-              });
+              }).catch((err) => console.error("[Bot] Rematch first move failed:", err));
             }
           }
 
@@ -596,15 +596,13 @@ export class SocketHandler {
                   gameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
                   { row: bestMove.to.row, col: bestMove.to.column },
-              bestMove.promotionType as any,
+                  bestMove.promotionType as any,
                 );
-
-                // Broadcast the bot's move to the user
                 await this.finalizeGame(botTurnGame);
               } catch(err) {
-                console.error("Bot Move failed:", err);
+                console.error("[Bot] Move execute failed:", err);
               }
-            });
+            }).catch((err) => console.error("[Bot] getBestMove failed:", err));
           }
 
 
