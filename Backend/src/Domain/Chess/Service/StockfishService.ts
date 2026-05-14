@@ -14,47 +14,8 @@ const STOCKFISH_BIN = resolveStockfishBin();
 const MOVE_TIMEOUT_MS = 10_000;
 
 export class StockfishService {
-  private engineProcess: ChildProcess | null = null;
-  private readyPromise: Promise<void> = Promise.resolve();
-
   constructor() {
-    this.startEngine();
-  }
-
-  // ─── Engine Lifecycle ────────────────────────────────────────────────────
-
-  private startEngine(): void {
-    const proc = spawn(STOCKFISH_BIN);
-
-    proc.on("error", (err) => {
-      console.error("[Stockfish] Failed to start engine:", err.message);
-    });
-
-    proc.on("exit", (code, signal) => {
-      console.warn(`[Stockfish] Engine exited (code=${code}, signal=${signal})`);
-      this.engineProcess = null;
-      // Auto-restart engine after a short delay
-      setTimeout(() => {
-        console.log("[Stockfish] Restarting engine...");
-        this.startEngine();
-      }, 1000);
-    });
-
-    this.engineProcess = proc;
-
-    // Build a fresh readyPromise for this engine instance
-    this.readyPromise = new Promise<void>((resolve) => {
-      const listener = (data: Buffer) => {
-        if (data.toString().includes("readyok")) {
-          proc.stdout?.removeListener("data", listener);
-          resolve();
-        }
-      };
-      proc.stdout?.on("data", listener);
-    });
-
-    proc.stdin?.write("uci\n");
-    proc.stdin?.write("isready\n");
+    // No longer starting a persistent engine process here
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────
@@ -107,55 +68,61 @@ export class StockfishService {
   public async getBestMove(
     history: any[],
     skillLevel: number = 10,
-  ): Promise<{ from: any; to: any; promotionType?: string }> {
-    // Capture the readyPromise for the CURRENT engine instance.
-    // If the engine restarts mid-call, we'll use the new instance's promise next time.
-    const currentReadyPromise = this.readyPromise;
-    await currentReadyPromise;
-
-    const proc = this.engineProcess;
-    if (!proc || !proc.stdin || !proc.stdout) {
-      throw new Error("[Stockfish] Engine not available");
-    }
-
+  ): Promise<{ from: any; to: any; promotionType?: string } | null> {
+    const proc = spawn(STOCKFISH_BIN);
     const uciMoves = this.historyToUciMoves(history);
 
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         proc.stdout?.removeListener("data", listener);
+        proc.kill();
         reject(new Error("[Stockfish] getBestMove timed out after 10s"));
       }, MOVE_TIMEOUT_MS);
 
       const listener = (data: Buffer) => {
         const output = data.toString();
-        const match = output.match(/bestmove\s([a-h][1-8][a-h][1-8][qrbn]?|\(none\))/);
-        if (match) {
-          clearTimeout(timeoutId);
-          proc.stdout?.removeListener("data", listener);
-          const bestMoveAlg = match[1];
-          console.log(`[Stockfish] bestmove: ${bestMoveAlg}`);
-          if (bestMoveAlg === "(none)") {
-            resolve({ from: new Position(0, 0), to: new Position(0, 0) });
-          } else {
-            resolve(this.algebraicToPosition(bestMoveAlg));
+        const lines = output.split("\n");
+
+        for (const line of lines) {
+          const match = line.match(/bestmove\s([a-h][1-8][a-h][1-8][qrbn]?|\(none\))/);
+          if (match) {
+            clearTimeout(timeoutId);
+            proc.stdout?.removeListener("data", listener);
+            const bestMoveAlg = match[1];
+            console.log(`[Stockfish] bestmove output: ${bestMoveAlg}`);
+
+            proc.stdin?.write("quit\n");
+            proc.kill();
+
+            if (bestMoveAlg === "(none)") {
+              resolve(null); // Game is over
+            } else {
+              resolve(this.algebraicToPosition(bestMoveAlg));
+            }
+            return;
           }
         }
       };
 
       proc.stdout!.on("data", listener);
 
+      proc.stdin!.write("uci\n");
+      proc.stdin!.write("isready\n");
+      proc.stdin!.write("ucinewgame\n");
       proc.stdin!.write(`setoption name Skill Level value ${skillLevel}\n`);
+
       if (uciMoves.length > 0) {
         proc.stdin!.write(`position startpos moves ${uciMoves}\n`);
       } else {
         proc.stdin!.write("position startpos\n");
       }
-      console.log(`[Stockfish] Sending: position startpos moves ${uciMoves}`);
+
       proc.stdin!.write("go depth 10\n");
     });
   }
 
   public analyzeGame(history: any[], depth: number = 10): Promise<any[]> {
+
     return new Promise(async (resolve, reject) => {
       const analyzerProcess = spawn(STOCKFISH_BIN);
 

@@ -55,6 +55,15 @@ export class ChessGame extends BaseEntity {
       return;
     }
 
+    // Permanently disable timer logic for bot matches
+    if (this.isBotMatch()) {
+      return;
+    }
+
+    if (this.clock.turn === this._gameState.getTurn()) {
+      return;
+    }
+
     this.clock.applyMove(now);
 
     const timeoutWinner = this.clock.isTimeout();
@@ -70,6 +79,11 @@ export class ChessGame extends BaseEntity {
 
   checkPassiveTimeout(now: number = Date.now()): boolean {
     if (this._status !== "ACTIVE" && this._status !== "CHECK") {
+      return false;
+    }
+
+    // Permanently disable timeout detection for bot matches
+    if (this.isBotMatch()) {
       return false;
     }
 
@@ -144,5 +158,12 @@ export class ChessGame extends BaseEntity {
 
   setIsPublic(isPublic: boolean): void {
     this._isPublic = isPublic;
+  }
+
+  isBotMatch(): boolean {
+    return (
+      this._whitePlayerId === "stockfish-bot" ||
+      this._blackPlayerId === "stockfish-bot"
+    );
   }
 }

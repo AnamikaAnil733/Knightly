@@ -18,7 +18,7 @@ services:
   # Backend
   backend:
     image: anamikaanil/knightly-backend:latest
-    container_name: knightly_backend
+    container_name: knightly
     restart: unless-stopped
     depends_on:
       mongo:

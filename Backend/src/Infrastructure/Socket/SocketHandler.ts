@@ -41,7 +41,6 @@ export class SocketHandler {
       }
     }
 
-    const updatedState = game.getGameState();
     const clock = game.getClock();
     const liveTimes = clock.getLiveTimes();
 
@@ -52,9 +51,9 @@ export class SocketHandler {
     const modeName = isBotMatch ? "Play Computer" : config.mode;
 
     this._io.to(game.id).emit("gameUpdated", {
-      board: updatedState.getBoard().serialize(),
-      turn: updatedState.getTurn(),
-      history: updatedState.getHistory().map((move: any) => ({
+      board: game.getGameState().getBoard().serialize(),
+      turn: game.getGameState().getTurn(),
+      history: game.getGameState().getHistory().map((move: any) => ({
         from: { row: move.from.row, col: move.from.column },
         to: { row: move.to.row, col: move.to.column },
         piece: move.pieceType,
@@ -111,6 +110,8 @@ export class SocketHandler {
             (game.getStatus() !== "ACTIVE" && game.getStatus() !== "CHECK")
           )
             return;
+
+          if (game.isBotMatch()) return;
 
           if (game.checkPassiveTimeout()) {
             await this._gameRepo.update(game);
@@ -214,6 +215,14 @@ export class SocketHandler {
               const skillLevel = Math.min(20, (difficulty - 1) * 4);
 
               this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+                if (!bestMove) {
+                  console.log(`[Bot] No move available (game over) for ${gameId}`);
+                  botGame.statusFromGameState();
+                  await this._gameRepo.update(botGame);
+                  await this.finalizeGame(botGame);
+                  return;
+                }
+
                 const updatedBotGame = await this._makeMoveUseCase.execute(
                   gameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
@@ -519,6 +528,14 @@ export class SocketHandler {
               const skillLevel = Math.min(20, (difficulty - 1) * 4);
 
               this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
+                if (!bestMove) {
+                  console.log(`[Bot] No move available (game over) for rematch ${newGameId}`);
+                  botGame.statusFromGameState();
+                  await this._gameRepo.update(botGame);
+                  await this.finalizeGame(botGame);
+                  return;
+                }
+
                 const updatedBotGame = await this._makeMoveUseCase.execute(
                   newGameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
@@ -592,6 +609,14 @@ export class SocketHandler {
             // Call stockfish asynchronously
             this._stockfishService.getBestMove(state.getHistory(), skillLevel).then(async (bestMove) => {
               try {
+                if (!bestMove) {
+                  console.log(`[Bot] No move available (game over) for ${gameId}`);
+                  updatedGame.statusFromGameState();
+                  await this._gameRepo.update(updatedGame);
+                  await this.finalizeGame(updatedGame);
+                  return;
+                }
+
                 const botTurnGame = await this._makeMoveUseCase.execute(
                   gameId,
                   { row: bestMove.from.row, col: bestMove.from.column },
