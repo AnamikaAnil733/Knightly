@@ -3,10 +3,12 @@ import { X, Trophy, Award, Pencil } from "lucide-react";
 import type {
   Achievement,
   CreateAchievementPayload,
-  CriteriaType,
   UpdateAchievementPayload,
 } from "../../../Service/Api/AdminAchievementApi";
 import { ICON_OPTIONS, CRITERIA_OPTIONS } from "./AchievementConstants";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AchievementSchema, AchievementFormData } from "../../../Utils/Validators";
 
 interface Props {
   onClose: () => void;
@@ -23,40 +25,34 @@ export function AchievementModal({
   editData,
 }: Props) {
   const isEditMode = !!editData;
+  const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState<CreateAchievementPayload>({
-    title: editData?.title ?? "",
-    description: editData?.description ?? "",
-    icon: editData?.icon ?? "Trophy",
-    criteriaType: editData?.criteriaType ?? "GAMES_WON",
-    criteriaValue: editData?.criteriaValue ?? 1,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    control,
+  } = useForm<AchievementFormData>({
+    resolver: zodResolver(AchievementSchema),
+    defaultValues: {
+      title: editData?.title ?? "",
+      description: editData?.description ?? "",
+      icon: editData?.icon ?? "Trophy",
+      criteriaType: editData?.criteriaType ?? "GAMES_WON",
+      criteriaValue: editData?.criteriaValue ?? 1,
+    },
   });
 
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof CreateAchievementPayload, string>>
-  >({});
+  const watchedValues = useWatch({ control });
 
-  /* ── Validation ─────────────────────────────────────────── */
-  const validate = () => {
-    const e: typeof errors = {};
-    if (form.title.length < 3) e.title = "Title must be at least 3 characters.";
-    if (form.description.length < 10)
-      e.description = "Description must be at least 10 characters.";
-    if (form.criteriaValue < 1) e.criteriaValue = "Value must be at least 1.";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
+  const onSubmit = async (data: AchievementFormData) => {
     setLoading(true);
     try {
       if (isEditMode && onUpdate) {
-        await onUpdate(editData!.id, form);
+        await onUpdate(editData!.id, data as UpdateAchievementPayload);
       } else {
-        await onSave(form);
+        await onSave(data as CreateAchievementPayload);
       }
       onClose();
     } finally {
@@ -66,7 +62,7 @@ export function AchievementModal({
 
   /* ── Selected icon preview ──────────────────────────────── */
   const SelectedIcon =
-    ICON_OPTIONS.find((i) => i.name === form.icon)?.Component ?? Trophy;
+    ICON_OPTIONS.find((i) => i.name === watchedValues.icon)?.Component ?? Trophy;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -112,7 +108,7 @@ export function AchievementModal({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
           {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1.5">
@@ -120,15 +116,14 @@ export function AchievementModal({
             </label>
             <input
               type="text"
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              {...register("title")}
               placeholder="e.g. First Blood"
               className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10
                          text-white placeholder-gray-500 text-sm
                          focus:outline-none focus:border-[#3A6FF7] transition-colors"
             />
             {errors.title && (
-              <p className="mt-1 text-xs text-red-400">{errors.title}</p>
+              <p className="mt-1 text-xs text-red-400">{errors.title.message}</p>
             )}
           </div>
 
@@ -138,10 +133,7 @@ export function AchievementModal({
               Description
             </label>
             <textarea
-              value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
+              {...register("description")}
               placeholder="What does the user need to do to earn this?"
               rows={3}
               className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10
@@ -149,7 +141,7 @@ export function AchievementModal({
                          focus:outline-none focus:border-[#3A6FF7] transition-colors"
             />
             {errors.description && (
-              <p className="mt-1 text-xs text-red-400">{errors.description}</p>
+              <p className="mt-1 text-xs text-red-400">{errors.description.message}</p>
             )}
           </div>
 
@@ -163,10 +155,10 @@ export function AchievementModal({
                 <button
                   key={name}
                   type="button"
-                  onClick={() => setForm({ ...form, icon: name })}
+                  onClick={() => setValue("icon", name, { shouldValidate: true })}
                   className={`flex items-center justify-center p-2.5 rounded-lg border transition-all
                     ${
-                      form.icon === name
+                      watchedValues.icon === name
                         ? "border-[#FFD166] bg-[#FFD166]/20 text-[#FFD166] shadow-[0_0_10px_rgba(255,209,102,0.3)]"
                         : "border-white/10 text-gray-400 hover:border-[#3A6FF7]/50 hover:text-white bg-white/5"
                     }`}
@@ -185,13 +177,7 @@ export function AchievementModal({
                 Criteria Type
               </label>
               <select
-                value={form.criteriaType}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    criteriaType: e.target.value as CriteriaType,
-                  })
-                }
+                {...register("criteriaType")}
                 className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10
                            text-white text-sm focus:outline-none focus:border-[#3A6FF7]
                            transition-colors appearance-none cursor-pointer"
@@ -214,16 +200,13 @@ export function AchievementModal({
               <input
                 type="number"
                 min={1}
-                value={form.criteriaValue}
-                onChange={(e) =>
-                  setForm({ ...form, criteriaValue: Number(e.target.value) })
-                }
+                {...register("criteriaValue", { valueAsNumber: true })}
                 className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10
                            text-white text-sm focus:outline-none focus:border-[#3A6FF7] transition-colors"
               />
               {errors.criteriaValue && (
                 <p className="mt-1 text-xs text-red-400">
-                  {errors.criteriaValue}
+                  {errors.criteriaValue.message}
                 </p>
               )}
             </div>
@@ -239,20 +222,20 @@ export function AchievementModal({
             </div>
             <div>
               <p className="text-sm font-semibold text-white">
-                {form.title || "Achievement Title"}
+                {watchedValues.title || "Achievement Title"}
               </p>
               <p className="text-xs text-gray-400 mt-0.5">
-                {form.description || "Achievement description..."}
+                {watchedValues.description || "Achievement description..."}
               </p>
               <span
                 className="inline-block mt-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full
                                bg-[#3A6FF7]/20 text-[#3A6FF7] border border-[#3A6FF7]/30"
               >
                 {
-                  CRITERIA_OPTIONS.find((c) => c.value === form.criteriaType)
+                  CRITERIA_OPTIONS.find((c) => c.value === watchedValues.criteriaType)
                     ?.label
                 }
-                : {form.criteriaValue}
+                : {watchedValues.criteriaValue}
               </span>
             </div>
           </div>

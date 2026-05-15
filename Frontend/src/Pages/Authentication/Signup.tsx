@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   MailIcon,
   LockIcon,
@@ -20,7 +20,9 @@ import {
 } from "../../Store/Slices/Auth/UserAuthSlice";
 import { GoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
-import { FormErrors } from "../../Types/ErrorTypes";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SignupSchema, SignupFormData } from "../../Utils/Validators";
 
 interface ApiErrorResponse {
   message: string;
@@ -35,35 +37,45 @@ export function SignupPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    displayname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const [errors, setErrors] = useState<FormErrors>({});
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [shake, setShake] = useState(false);
 
-  // Password validation
-  const hasMinLength = formData.password.length >= 8;
-  const hasNumber = /\d/.test(formData.password);
-  const hasCapital = /[A-Z]/.test(formData.password);
-  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(formData.password);
-  const allRequirementsMet =
-    hasMinLength && hasNumber && hasCapital && hasSymbol;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(SignupSchema),
+    defaultValues: {
+      displayname: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const watchedPassword = useWatch({
+    control,
+    name: "password",
+    defaultValue: "",
+  });
+
+  // Password validation visuals
+  const hasMinLength = watchedPassword.length >= 8;
+  const hasNumber = /\d/.test(watchedPassword);
+  const hasCapital = /[A-Z]/.test(watchedPassword);
+  const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(watchedPassword);
 
   const signupMutation = useMutation({
     mutationFn: sendSignupOtp,
     onSuccess: (_, variables) => {
       navigate("/verify-otp", {
         state: {
-          displayname: formData.displayname,
+          displayname: variables.displayname,
           email: variables.email,
-          password: formData.password,
+          password: watchedPassword,
         },
       });
     },
@@ -72,48 +84,17 @@ export function SignupPage() {
     },
   });
 
-  const validateForm = () => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.displayname.trim())
-      newErrors.displayname = "Full name required";
-    if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/))
-      newErrors.email = "Enter valid email";
-
-    if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    } else if (!allRequirementsMet) {
-      newErrors.password = "Password does not meet all requirements";
-    }
-
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    }
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    setErrors((prev) => ({ ...prev, [e.target.name]: "" })); // remove error on typing
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
+  const onSubmit = (data: SignupFormData) => {
     signupMutation.mutate({
-      displayname: formData.displayname,
-      email: formData.email,
+      displayname: data.displayname,
+      email: data.email,
       role: "user",
     });
+  };
+
+  const onInvalid = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
   };
 
   const handleGoogleLogin = async (response: CredentialResponse) => {
@@ -171,7 +152,7 @@ export function SignupPage() {
             boxShadow: "0 0 40px rgba(58, 111, 247, 0.2)",
           }}
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-5">
             <div>
               <label className="text-white text-sm font-medium">
                 Full Name
@@ -180,16 +161,14 @@ export function SignupPage() {
                 <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  name="displayname"
-                  value={formData.displayname}
-                  onChange={handleChange}
+                  {...register("displayname")}
                   placeholder="Enter your full name"
                   className="w-full bg-transparent border border-purple-600 rounded-xl px-11 py-3 text-white"
                 />
               </div>
               {errors.displayname && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.displayname}
+                  {errors.displayname.message}
                 </p>
               )}
             </div>
@@ -200,15 +179,13 @@ export function SignupPage() {
                 <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  {...register("email")}
                   placeholder="Enter your email"
                   className="w-full bg-transparent border border-purple-600 rounded-xl px-11 py-3 text-white"
                 />
               </div>
               {errors.email && (
-                <p className="text-red-400 text-xs mt-1">{errors.email}</p>
+                <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
               )}
             </div>
 
@@ -219,9 +196,7 @@ export function SignupPage() {
 
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  {...register("password")}
                   placeholder="Create password"
                   className="w-full bg-transparent border border-purple-600 rounded-xl px-11 py-3 text-white"
                 />
@@ -239,7 +214,7 @@ export function SignupPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-400 text-xs mt-1">{errors.password}</p>
+                <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>
               )}
 
               {/* Password Requirements */}
@@ -297,9 +272,7 @@ export function SignupPage() {
 
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
+                  {...register("confirmPassword")}
                   placeholder="Confirm your password"
                   className="w-full bg-transparent border border-purple-600 rounded-xl px-11 py-3 text-white"
                 />
@@ -318,7 +291,7 @@ export function SignupPage() {
               </div>
               {errors.confirmPassword && (
                 <p className="text-red-400 text-xs mt-1">
-                  {errors.confirmPassword}
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>

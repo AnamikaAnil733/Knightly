@@ -3,6 +3,9 @@ import { XIcon, LockIcon, EyeOffIcon, EyeIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { changePasswordApi } from "../../../Service/Api/UserApi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ChangePasswordSchema, ChangePasswordFormData } from "../../../Utils/Validators";
 
 interface Props {
   isOpen: boolean;
@@ -10,29 +13,36 @@ interface Props {
 }
 
 export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
     newPassword: false,
     confirmPassword: false,
   });
-  const [error, setError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ChangePasswordFormData>({
+    resolver: zodResolver(ChangePasswordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
 
   const changePassword = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (data: ChangePasswordFormData) =>
       changePasswordApi({
-        currentPassword,
-        newPassword,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
       }),
     onSuccess: () => {
       toast.success("Password updated successfully");
       onClose();
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      reset();
     },
     onError: (error: unknown) => {
       const axiosError = error as {
@@ -40,54 +50,15 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
       };
       const errorMessage =
         axiosError.response?.data?.message ||
-        "Failed to update change Password";
+        "Failed to update password";
       toast.error(errorMessage);
     },
   });
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
-    const validationError = validate(newPassword);
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-    setError("");
-    changePassword.mutate();
-  };
-
-  const validate = (value: string) => {
-    const trimmed = value.trim();
-
-    if (!trimmed) {
-      return "Password is required";
-    }
-
-    if (trimmed.length < 8) {
-      return "Password must be at least 8 characters";
-    }
-
-    if (!/[A-Z]/.test(trimmed)) {
-      return "Password must contain at least one uppercase letter";
-    }
-
-    if (!/[a-z]/.test(trimmed)) {
-      return "Password must contain at least one lowercase letter";
-    }
-
-    if (!/[0-9]/.test(trimmed)) {
-      return "Password must contain at least one number";
-    }
-
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(trimmed)) {
-      return "Password must contain at least one special character";
-    }
-
-    if (/\s/.test(trimmed)) {
-      return "Password must not contain spaces";
-    }
-    return "";
+  const onSubmit = (data: ChangePasswordFormData) => {
+    changePassword.mutate(data);
   };
 
   /* ===================== UI ===================== */
@@ -117,9 +88,8 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
               />
               <input
                 type={showPassword.oldPassword ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full bg-[#11193F] border border-gray-700 rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none"
+                {...register("currentPassword")}
+                className={`w-full bg-[#11193F] border ${errors.currentPassword ? "border-red-500" : "border-gray-700"} rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none`}
               />
               <button
                 type="button"
@@ -152,9 +122,8 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
               />
               <input
                 type={showPassword.newPassword ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full bg-[#11193F] border border-gray-700 rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none"
+                {...register("newPassword")}
+                className={`w-full bg-[#11193F] border ${errors.newPassword ? "border-red-500" : "border-gray-700"} rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none`}
               />
               <button
                 type="button"
@@ -187,9 +156,8 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
               />
               <input
                 type={showPassword.confirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-[#11193F] border border-gray-700 rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none"
+                {...register("confirmPassword")}
+                className={`w-full bg-[#11193F] border ${errors.confirmPassword ? "border-red-500" : "border-gray-700"} rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none`}
               />
               <button
                 type="button"
@@ -210,7 +178,9 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
             </div>
           </div>
 
-          {error && <p className="text-sm text-red-500">{error}</p>}
+          {errors.currentPassword && <p className="text-sm text-red-500">{errors.currentPassword.message}</p>}
+          {errors.newPassword && <p className="text-sm text-red-500">{errors.newPassword.message}</p>}
+          {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>}
         </div>
 
         {/* Footer */}
@@ -223,7 +193,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
           </button>
 
           <button
-            onClick={handleSubmit}
+            onClick={handleSubmit(onSubmit)}
             disabled={changePassword.isPending}
             className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#6B2EFF] to-[#7C4DFF] text-white disabled:opacity-50"
           >

@@ -20,12 +20,10 @@ import {
   setUser,
 } from "../../Store/Slices/Auth/UserAuthSlice";
 
-/* ===================== TYPES ===================== */
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema, LoginFormData } from "../../Utils/Validators";
 
-type FormValues = {
-  email: string;
-  password: string;
-};
+/* ===================== TYPES ===================== */
 
 type LoginPageProps = {
   role: "ADMIN" | "USER";
@@ -46,11 +44,13 @@ export function LoginPage({ role }: LoginPageProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(LoginSchema),
+  });
 
   /* ===================== LOGIN ===================== */
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: LoginFormData) => {
     const api = role === "ADMIN" ? axiosAdmin : axiosUser;
 
     try {
@@ -144,7 +144,7 @@ export function LoginPage({ role }: LoginPageProps) {
                 className={`w-full px-4 py-3 bg-[#0A0F2C] border rounded-lg text-white ${
                   errors.email ? "border-red-500" : "border-[#3A6FF7]/30"
                 }`}
-                {...register("email", { required: "Email is required" })}
+                {...register("email")}
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -164,9 +164,7 @@ export function LoginPage({ role }: LoginPageProps) {
                   className={`w-full px-4 py-3 bg-[#0A0F2C] border rounded-lg text-white pr-10 ${
                     errors.password ? "border-red-500" : "border-[#3A6FF7]/30"
                   }`}
-                  {...register("password", {
-                    required: "Password is required",
-                  })}
+                  {...register("password")}
                 />
                 <button
                   type="button"

@@ -1,21 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ChevronLeft, Crown } from "lucide-react";
 import axios from "../../Service/Api/Axios/Useraxios";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ForgetPasswordSchema, ForgetPasswordFormData } from "../../Utils/Validators";
 
 export function ForgotPassword() {
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgetPasswordFormData>({
+    resolver: zodResolver(ForgetPasswordSchema),
+  });
+
+  const onSubmit = async (data: ForgetPasswordFormData) => {
     try {
       setLoading(true);
-      await axios.post("/auth/forget-password", { email });
-      setLoading(false);
-      navigate("/forgot-otp", { state: { email } }); // move to OTP screen
+      await axios.post("/auth/forget-password", { email: data.email });
+      navigate("/forgot-otp", { state: { email: data.email } }); // move to OTP screen
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       alert(err.response?.data?.message ?? "Something went wrong");
@@ -83,7 +91,7 @@ export function ForgotPassword() {
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#3A6FF7] via-[#6B2EFF] to-[#3A6FF7] opacity-20 blur-sm -z-10"></div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -96,15 +104,16 @@ export function ForgotPassword() {
               <input
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register("email")}
                 placeholder="your.email@example.com"
-                required
-                className="w-full bg-transparent border border-[#6B2EFF] rounded-xl px-4 py-3 text-white 
+                className={`w-full bg-transparent border ${errors.email ? "border-red-500" : "border-[#6B2EFF]"} rounded-xl px-4 py-3 text-white 
                            placeholder-gray-500 focus:outline-none focus:border-[#3A6FF7] 
-                           focus:shadow-[0_0_8px_rgba(58,111,247,0.5)] transition-all duration-300"
+                           focus:shadow-[0_0_8px_rgba(58,111,247,0.5)] transition-all duration-300`}
                 style={{ fontFamily: "Inter, sans-serif" }}
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+              )}
             </div>
 
             <button

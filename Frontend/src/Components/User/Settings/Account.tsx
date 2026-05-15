@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import { SectionHeader } from "./Heading/Sectionheader";
@@ -8,39 +8,40 @@ import { useMutation } from "@tanstack/react-query";
 import { updateUser } from "../../../Store/Slices/Auth/UserAuthSlice";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { editUserProfile } from "../../../Service/Api/UserApi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProfileSchema, ProfileFormData } from "../../../Utils/Validators";
 
 export const AccountSettings = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.userAuth.user);
 
-  const [nameError, setNameError] = useState("");
-  const [displayname, setDisplayname] = useState(() => {
-    return user?.displayname || "";
-  });
   const [showChangePassword, setShowChangePassword] = useState(false);
 
-  const validateDisplayName = (value: string) => {
-    if (!value.trim()) {
-      return "Username is required";
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(ProfileSchema),
+    defaultValues: {
+      displayname: user?.displayname || "",
+    },
+  });
+
+  useEffect(() => {
+    if (user?.displayname) {
+      reset({ displayname: user.displayname });
     }
-    if (value.length < 3) {
-      return "Username must be at least 3 characters";
-    }
-    if (value.length > 20) {
-      return "Username must be at most 20 characters";
-    }
-    if (!/^[a-zA-Z0-9_ ]+$/.test(value)) {
-      return "Only letters, numbers, and underscore allowed";
-    }
-    return "";
-  };
+  }, [user, reset]);
 
   const editProfile = useMutation({
-    mutationFn: async ({ displayname }: { displayname: string }) =>
-      editUserProfile({ displayname }),
+    mutationFn: async (data: ProfileFormData) =>
+      editUserProfile({ displayname: data.displayname }),
 
-    onSuccess: () => {
-      dispatch(updateUser({ displayname: displayname }));
+    onSuccess: (_, variables) => {
+      dispatch(updateUser({ displayname: variables.displayname }));
       toast.success("User profile updated");
     },
 
@@ -49,14 +50,8 @@ export const AccountSettings = () => {
     },
   });
 
-  const handleSubmit = () => {
-    const error = validateDisplayName(displayname);
-    if (error) {
-      setNameError(error);
-      return;
-    }
-    console.log(displayname);
-    editProfile.mutate({ displayname });
+  const onSubmit = (data: ProfileFormData) => {
+    editProfile.mutate(data);
   };
 
   return (
@@ -84,25 +79,18 @@ export const AccountSettings = () => {
 
               <input
                 type="text"
-                value={displayname}
-                onChange={(e) => {
-                  setDisplayname(e.target.value);
-                  setNameError(validateDisplayName(e.target.value));
-                }}
-                onBlur={(e) =>
-                  setNameError(validateDisplayName(e.target.value))
-                }
+                {...register("displayname")}
                 className={`w-full bg-[#0A0F2C] border rounded-lg py-2.5 pl-10 pr-3 text-white focus:outline-none focus:ring-1
                   ${
-                    nameError
+                    errors.displayname
                       ? "border-red-500 focus:ring-red-500"
                       : "border-gray-700 focus:border-[#7C4DFF] focus:ring-[#7C4DFF]"
                   }`}
               />
             </div>
 
-            {nameError && (
-              <p className="mt-1 text-sm text-red-500">{nameError}</p>
+            {errors.displayname && (
+              <p className="mt-1 text-sm text-red-500">{errors.displayname.message}</p>
             )}
           </div>
 
@@ -184,13 +172,17 @@ export const AccountSettings = () => {
       {/* Actions */}
       <div className="mt-8">
         <button
-          onClick={handleSubmit}
-          className="py-2.5 px-5 rounded-lg bg-gradient-to-r from-[#6B2EFF] to-[#7C4DFF] text-white font-medium hover:opacity-90 transition-opacity"
+          onClick={handleSubmit(onSubmit)}
+          disabled={editProfile.isPending}
+          className="py-2.5 px-5 rounded-lg bg-gradient-to-r from-[#6B2EFF] to-[#7C4DFF] text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          Save Changes
+          {editProfile.isPending ? "Saving..." : "Save Changes"}
         </button>
 
-        <button className="py-2.5 px-5 ml-3 rounded-lg border border-gray-600 text-[#C9CAD9] hover:text-white transition-colors">
+        <button 
+          onClick={() => reset()}
+          className="py-2.5 px-5 ml-3 rounded-lg border border-gray-600 text-[#C9CAD9] hover:text-white transition-colors"
+        >
           Cancel
         </button>
       </div>
