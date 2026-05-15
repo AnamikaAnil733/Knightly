@@ -44,10 +44,10 @@ jobs:
             git pull origin main
             
             echo "Pulling latest images..."
-            docker compose pull backend
+            sudo docker compose pull backend
             
             echo "Restarting Backend container..."
-            docker compose up -d --remove-orphans backend
+            sudo docker compose up -d --remove-orphans backend
             
             echo "Cleaning up old images..."
-            docker image prune -f
+            sudo docker image prune -fn
