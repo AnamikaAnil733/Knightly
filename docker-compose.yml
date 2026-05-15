@@ -28,8 +28,6 @@ services:
     env_file:
       - ./Backend/.env
     environment:
-      # Override localhost with the Docker service name so the backend can reach MongoDB/Redis
-      MONGODB_URL: mongodb://mongo:27017/Knightly
       REDIS_URL: redis://redis:6379
       NODE_ENV: production
     ports:
