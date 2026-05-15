@@ -433,10 +433,10 @@ export function Match() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* LEFT/CENTER: Game Area (Board + Players) */}
-        <div className="flex-1 flex flex-col items-center justify-center p-1 sm:p-2 lg:p-4 overflow-hidden relative z-10 min-h-0 w-full">
-          <div className="flex flex-col items-center gap-1.5 sm:gap-2 lg:gap-4 w-full h-full justify-center max-w-[1200px] mx-auto overflow-y-auto lg:overflow-visible">
+        <div className="flex-1 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-6 overflow-hidden relative z-10 min-h-0 w-full">
+          <div className="flex flex-col items-center justify-between w-full h-full max-w-[1200px] mx-auto">
             {/* Top Player (Opponent) */}
-            <div className="w-full max-w-[min(800px,100%)] shrink-0 px-2 sm:px-4">
+            <div className="w-full max-w-[min(800px,100%)] shrink-0 mb-2 lg:mb-4">
               <PlayerPanel
                 name={
                   myRole === "BLACK"
@@ -463,8 +463,8 @@ export function Match() {
             </div>
 
             {/* Chess Board Container */}
-            <div className="relative flex-1 min-h-0 w-full flex items-center justify-center p-1 sm:p-2">
-              <div className="relative w-full h-full max-h-[min(450px,65vh)] lg:max-h-none aspect-square flex items-center justify-center">
+            <div className="relative flex-1 min-h-0 w-full flex items-center justify-center">
+              <div className="relative h-full aspect-square max-h-[min(800px,calc(100vh-320px))] lg:max-h-none flex items-center justify-center">
                 <div
                   className={`relative w-full h-full transition-all duration-500 flex items-center justify-center ${
                     status === "CHECKMATE" || status === "STALEMATE"
@@ -540,7 +540,7 @@ export function Match() {
             </div>
 
             {/* Bottom Player (You) */}
-            <div className="w-full max-w-[min(800px,100%)] shrink-0 px-2 sm:px-4">
+            <div className="w-full max-w-[min(800px,100%)] shrink-0 mt-2 lg:mt-4">
               <PlayerPanel
                 name={
                   myRole === "BLACK"
@@ -568,7 +568,7 @@ export function Match() {
             </div>
 
             {/* Mobile Controls (Visible only on mobile, below Bottom Player) */}
-            <div className="w-full lg:hidden shrink-0 mt-1 px-2">
+            <div className="w-full lg:hidden shrink-0 mt-2">
               <ControlBar
                 onResign={handleResign}
                 onDraw={handleOfferDraw}

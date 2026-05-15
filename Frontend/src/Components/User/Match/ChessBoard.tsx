@@ -151,9 +151,9 @@ export function Chessboard({
   const theme = BOARD_THEMES[themeKey] || BOARD_THEMES.classic;
 
   return (
-    <div className="relative w-full max-w-[min(800px,100%)] p-4 sm:p-6 lg:p-8 aspect-square mx-auto flex items-center justify-center">
+    <div className="relative w-full max-w-[min(800px,95vw)] aspect-square mx-auto flex items-center justify-center overflow-hidden">
       {/* Glowing frame */}
-      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-xl opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#3A6FF7] to-[#6B2EFF] blur-2xl opacity-20 pointer-events-none" />
 
       {/* Board container */}
       <div
@@ -230,11 +230,11 @@ export function Chessboard({
                       : "transparent",
                     borderRight:
                       displayColIndex < 7
-                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        ? "1px solid rgba(255, 209, 102, 0.05)"
                         : "none",
                     borderBottom:
                       displayRowIndex < 7
-                        ? "1px solid rgba(255, 209, 102, 0.1)"
+                        ? "1px solid rgba(255, 209, 102, 0.05)"
                         : "none",
                   }}
                 >
@@ -274,7 +274,7 @@ export function Chessboard({
                   {/* Rank Numbers (1-8) - Top Left of first col */}
                   {displayColIndex === 0 && (
                     <span
-                      className={`absolute top-0.5 left-0.5 text-[6px] xs:text-[8px] sm:text-[10px] lg:text-[12px] font-bold leading-none select-none z-10`}
+                      className={`absolute top-0.5 left-0.5 text-[7px] sm:text-[10px] lg:text-[13px] font-bold leading-none select-none z-10 opacity-70`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayRanks[displayRowIndex]}
@@ -284,7 +284,7 @@ export function Chessboard({
                   {/* File Letters (a-h) - Bottom Right of last row */}
                   {displayRowIndex === 7 && (
                     <span
-                      className={`absolute bottom-0.5 right-0.5 text-[6px] xs:text-[8px] sm:text-[10px] lg:text-[12px] font-bold leading-none select-none z-10`}
+                      className={`absolute bottom-0.5 right-0.5 text-[7px] sm:text-[10px] lg:text-[13px] font-bold leading-none select-none z-10 opacity-70`}
                       style={{ color: isLight ? theme.dark : theme.light }}
                     >
                       {displayFiles[displayColIndex]}
@@ -334,20 +334,6 @@ export function Chessboard({
               </motion.div>
             );
           })}
-        </div>
-
-        {/* Rank labels (Inside Padding) */}
-        <div className="absolute left-0.5 sm:left-1 top-4 sm:top-6 bottom-4 sm:bottom-6 flex flex-col justify-around text-[#C9CAD9] text-[9px] sm:text-xs lg:text-sm font-medium pointer-events-none">
-          {displayRanks.map((n) => (
-            <span key={n}>{n}</span>
-          ))}
-        </div>
-
-        {/* File labels (Inside Padding) */}
-        <div className="absolute bottom-0.5 sm:bottom-1 left-4 sm:left-6 right-4 sm:right-6 flex justify-around text-[#C9CAD9] text-[9px] sm:text-xs lg:text-sm font-medium pointer-events-none">
-          {displayFiles.map((l) => (
-            <span key={l}>{l}</span>
-          ))}
         </div>
       </div>
     </div>
