@@ -122,7 +122,7 @@ export function LoginPage({ role }: LoginPageProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -133,26 +133,30 @@ export function LoginPage({ role }: LoginPageProps) {
         <div className="relative bg-[#0F172A]/80 backdrop-blur-2xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden">
           {/* Subtle top highlight */}
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#FFD166]/30 to-transparent"></div>
-          
+
           {/* Brand Emblem Watermark */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none opacity-[0.05] z-0">
             <motion.div
-              animate={{ 
+              animate={{
                 y: [0, -15, 0],
               }}
-              transition={{ 
-                duration: 10, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
               }}
             >
-              <CrownIcon size={280} strokeWidth={0.5} className="text-[#FFD166]" />
+              <CrownIcon
+                size={280}
+                strokeWidth={0.5}
+                className="text-[#FFD166]"
+              />
             </motion.div>
           </div>
-          
+
           {/* Header */}
           <div className="pt-10 pb-6 px-8 text-center relative">
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
@@ -161,10 +165,19 @@ export function LoginPage({ role }: LoginPageProps) {
               <ShieldCheckIcon className="h-10 w-10 text-[#FFD166] drop-shadow-[0_0_8px_rgba(255,209,102,0.5)]" />
             </motion.div>
 
-            <h1 className="text-3xl font-bold text-white mb-2 tracking-tight" style={{ fontFamily: "'Cinzel', serif" }}>
-              {role === "ADMIN"
-                ? <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">Knightly Admin</span>
-                : <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">Knightly Login</span>}
+            <h1
+              className="text-3xl font-bold text-white mb-2 tracking-tight"
+              style={{ fontFamily: "'Cinzel', serif" }}
+            >
+              {role === "ADMIN" ? (
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">
+                  Knightly Admin
+                </span>
+              ) : (
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">
+                  Knightly Login
+                </span>
+              )}
             </h1>
             <p className="text-[#94A3B8] text-sm font-medium">
               Access the grandmaster command center
@@ -176,12 +189,14 @@ export function LoginPage({ role }: LoginPageProps) {
             {/* Email */}
             <div className="mb-6">
               <label className="block text-xs font-bold uppercase tracking-widest text-[#94A3B8] mb-2 px-1">
-                 Email
+                Email
               </label>
               <input
                 type="email"
                 className={`w-full px-4 py-3 bg-[#0A0F2C]/50 border rounded-xl text-white transition-all duration-300 focus:ring-2 focus:ring-[#3A6FF7]/30 outline-none ${
-                  errors.email ? "border-red-500" : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
+                  errors.email
+                    ? "border-red-500"
+                    : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
                 }`}
                 {...register("email")}
                 placeholder="name@company.com"
@@ -202,7 +217,9 @@ export function LoginPage({ role }: LoginPageProps) {
                 <input
                   type={showPassword ? "text" : "password"}
                   className={`w-full px-4 py-3 bg-[#0A0F2C]/50 border rounded-xl text-white pr-10 transition-all duration-300 focus:ring-2 focus:ring-[#3A6FF7]/30 outline-none ${
-                    errors.password ? "border-red-500" : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
+                    errors.password
+                      ? "border-red-500"
+                      : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
                   }`}
                   {...register("password")}
                   placeholder="••••••••"
@@ -251,7 +268,9 @@ export function LoginPage({ role }: LoginPageProps) {
                 {/* Divider */}
                 <div className="flex items-center gap-4 my-8">
                   <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#3A6FF7]/20 to-transparent"></div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">or continue with</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">
+                    or continue with
+                  </span>
                   <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#3A6FF7]/20 to-transparent"></div>
                 </div>
 

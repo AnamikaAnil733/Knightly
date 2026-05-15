@@ -36,13 +36,17 @@ const SuccessPage: React.FC = () => {
 
       try {
         // Verify the Stripe session server-side and activate premium in the DB
-        const response = await userApi.post("/payment/verify-session", { sessionId });
+        const response = await userApi.post("/payment/verify-session", {
+          sessionId,
+        });
 
         // Update Redux state so UI immediately reflects premium status
-        dispatch(updateUser({ 
-          premium: true, 
-          subscriptionStart: response.data.subscriptionStart 
-        }));
+        dispatch(
+          updateUser({
+            premium: true,
+            subscriptionStart: response.data.subscriptionStart,
+          }),
+        );
         setStatus("success");
       } catch (err: unknown) {
         const error = err as {

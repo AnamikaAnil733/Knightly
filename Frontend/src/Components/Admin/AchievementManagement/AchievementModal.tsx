@@ -8,7 +8,10 @@ import type {
 import { ICON_OPTIONS, CRITERIA_OPTIONS } from "./AchievementConstants";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AchievementSchema, AchievementFormData } from "../../../Utils/Validators";
+import {
+  AchievementSchema,
+  AchievementFormData,
+} from "../../../Utils/Validators";
 
 interface Props {
   onClose: () => void;
@@ -62,7 +65,8 @@ export function AchievementModal({
 
   /* ── Selected icon preview ──────────────────────────────── */
   const SelectedIcon =
-    ICON_OPTIONS.find((i) => i.name === watchedValues.icon)?.Component ?? Trophy;
+    ICON_OPTIONS.find((i) => i.name === watchedValues.icon)?.Component ??
+    Trophy;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -123,7 +127,9 @@ export function AchievementModal({
                          focus:outline-none focus:border-[#3A6FF7] transition-colors"
             />
             {errors.title && (
-              <p className="mt-1 text-xs text-red-400">{errors.title.message}</p>
+              <p className="mt-1 text-xs text-red-400">
+                {errors.title.message}
+              </p>
             )}
           </div>
 
@@ -141,7 +147,9 @@ export function AchievementModal({
                          focus:outline-none focus:border-[#3A6FF7] transition-colors"
             />
             {errors.description && (
-              <p className="mt-1 text-xs text-red-400">{errors.description.message}</p>
+              <p className="mt-1 text-xs text-red-400">
+                {errors.description.message}
+              </p>
             )}
           </div>
 
@@ -155,7 +163,9 @@ export function AchievementModal({
                 <button
                   key={name}
                   type="button"
-                  onClick={() => setValue("icon", name, { shouldValidate: true })}
+                  onClick={() =>
+                    setValue("icon", name, { shouldValidate: true })
+                  }
                   className={`flex items-center justify-center p-2.5 rounded-lg border transition-all
                     ${
                       watchedValues.icon === name
@@ -232,8 +242,9 @@ export function AchievementModal({
                                bg-[#3A6FF7]/20 text-[#3A6FF7] border border-[#3A6FF7]/30"
               >
                 {
-                  CRITERIA_OPTIONS.find((c) => c.value === watchedValues.criteriaType)
-                    ?.label
+                  CRITERIA_OPTIONS.find(
+                    (c) => c.value === watchedValues.criteriaType,
+                  )?.label
                 }
                 : {watchedValues.criteriaValue}
               </span>

@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   MailIcon,
   LockIcon,
@@ -152,7 +152,10 @@ export function SignupPage() {
             boxShadow: "0 0 40px rgba(58, 111, 247, 0.2)",
           }}
         >
-          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-5">
+          <form
+            onSubmit={handleSubmit(onSubmit, onInvalid)}
+            className="space-y-5"
+          >
             <div>
               <label className="text-white text-sm font-medium">
                 Full Name
@@ -185,7 +188,9 @@ export function SignupPage() {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>
+                <p className="text-red-400 text-xs mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -214,7 +219,9 @@ export function SignupPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>
+                <p className="text-red-400 text-xs mt-1">
+                  {errors.password.message}
+                </p>
               )}
 
               {/* Password Requirements */}

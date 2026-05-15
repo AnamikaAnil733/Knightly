@@ -5,7 +5,10 @@ import toast from "react-hot-toast";
 import { changePasswordApi } from "../../../Service/Api/UserApi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangePasswordSchema, ChangePasswordFormData } from "../../../Utils/Validators";
+import {
+  ChangePasswordSchema,
+  ChangePasswordFormData,
+} from "../../../Utils/Validators";
 
 interface Props {
   isOpen: boolean;
@@ -49,8 +52,7 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
         response?: { data?: { message?: string } };
       };
       const errorMessage =
-        axiosError.response?.data?.message ||
-        "Failed to update password";
+        axiosError.response?.data?.message || "Failed to update password";
       toast.error(errorMessage);
     },
   });
@@ -178,9 +180,19 @@ export const ChangePasswordModal = ({ isOpen, onClose }: Props) => {
             </div>
           </div>
 
-          {errors.currentPassword && <p className="text-sm text-red-500">{errors.currentPassword.message}</p>}
-          {errors.newPassword && <p className="text-sm text-red-500">{errors.newPassword.message}</p>}
-          {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>}
+          {errors.currentPassword && (
+            <p className="text-sm text-red-500">
+              {errors.currentPassword.message}
+            </p>
+          )}
+          {errors.newPassword && (
+            <p className="text-sm text-red-500">{errors.newPassword.message}</p>
+          )}
+          {errors.confirmPassword && (
+            <p className="text-sm text-red-500">
+              {errors.confirmPassword.message}
+            </p>
+          )}
         </div>
 
         {/* Footer */}

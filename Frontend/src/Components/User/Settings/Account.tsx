@@ -90,7 +90,9 @@ export const AccountSettings = () => {
             </div>
 
             {errors.displayname && (
-              <p className="mt-1 text-sm text-red-500">{errors.displayname.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.displayname.message}
+              </p>
             )}
           </div>
 
@@ -126,7 +128,6 @@ export const AccountSettings = () => {
             <LockIcon size={18} className="mr-2" />
             Change Password
           </button>
-
         </div>
       </div>
       <ChangePasswordModal
@@ -142,25 +143,40 @@ export const AccountSettings = () => {
               <Crown size={20} className="text-[#FFD166]" />
             </div>
             <div>
-              <h3 className="text-lg font-medium text-white">Subscription Plan</h3>
-              <p className="text-xs text-[#FFD166] font-bold uppercase tracking-widest">Knightly Pro Member</p>
+              <h3 className="text-lg font-medium text-white">
+                Subscription Plan
+              </h3>
+              <p className="text-xs text-[#FFD166] font-bold uppercase tracking-widest">
+                Knightly Pro Member
+              </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#0A0F2C] p-4 rounded-xl border border-white/5">
-              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Current Status</p>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
+                Current Status
+              </p>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <p className="text-white font-bold">Active</p>
               </div>
             </div>
             <div className="bg-[#0A0F2C] p-4 rounded-xl border border-white/5">
-              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Next Billing Date</p>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">
+                Next Billing Date
+              </p>
               <p className="text-white font-bold">
-                {user.subscriptionStart 
-                  ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(
-                      new Date(new Date(user.subscriptionStart).getTime() + 30 * 24 * 60 * 60 * 1000)
+                {user.subscriptionStart
+                  ? new Intl.DateTimeFormat("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    }).format(
+                      new Date(
+                        new Date(user.subscriptionStart).getTime() +
+                          30 * 24 * 60 * 60 * 1000,
+                      ),
                     )
                   : "N/A"}
               </p>
@@ -179,7 +195,7 @@ export const AccountSettings = () => {
           {editProfile.isPending ? "Saving..." : "Save Changes"}
         </button>
 
-        <button 
+        <button
           onClick={() => reset()}
           className="py-2.5 px-5 ml-3 rounded-lg border border-gray-600 text-[#C9CAD9] hover:text-white transition-colors"
         >

@@ -176,7 +176,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           style={{
             background: "rgba(15, 23, 42, 0.8)",
             backdropFilter: "blur(40px)",
-            boxShadow: "0 40px 100px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.05)",
+            boxShadow:
+              "0 40px 100px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.05)",
           }}
         >
           {/* Subtle top highlight */}
@@ -184,7 +185,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           {/* ── LOGIN FORM ── */}
           <div
             className={`absolute top-0 left-0 flex flex-col justify-center z-[2] transition-all duration-[0.8s] w-full md:w-1/2 h-full px-6 md:px-[60px] ${
-              isSignup ? "md:translate-x-full opacity-0 hidden md:flex" : "translate-x-0 opacity-100 flex"
+              isSignup
+                ? "md:translate-x-full opacity-0 hidden md:flex"
+                : "translate-x-0 opacity-100 flex"
             }`}
             style={{
               transitionTimingFunction: "cubic-bezier(0.7,0,0.3,1)",
@@ -201,10 +204,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   className="mb-0 text-3xl font-extrabold tracking-tight"
                   style={{
                     fontFamily: "'Cinzel', serif",
-                    background: "linear-gradient(to right, #FFF, #FFD166, #ffb84d)",
+                    background:
+                      "linear-gradient(to right, #FFF, #FFD166, #ffb84d)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
-                    filter: "drop-shadow(0 2px 8px rgba(255,209,102,0.3))"
+                    filter: "drop-shadow(0 2px 8px rgba(255,209,102,0.3))",
                   }}
                 >
                   Knightly Login
@@ -223,16 +227,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     size={18}
                   />
                   {(() => {
-                    const { onBlur: rhfBlur, ...rest } = regLogin("email", {
+                    const { ...rest } = regLogin("email", {
                       required: "Email is required",
                     });
                     return (
-                        <input
-                          type="email"
-                          className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
-                          placeholder="Email Address"
-                          {...rest}
-                        />
+                      <input
+                        type="email"
+                        className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
+                        placeholder="Email Address"
+                        {...rest}
+                      />
                     );
                   })()}
                 </div>
@@ -252,7 +256,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     size={18}
                   />
                   {(() => {
-                    const { onBlur: rhfBlur, ...rest } = regLogin("password", {
+                    const { ...rest } = regLogin("password", {
                       required: "Password is required",
                     });
                     return (
@@ -268,7 +272,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                           className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
+                          {showPassword ? (
+                            <EyeOffIcon size={18} />
+                          ) : (
+                            <EyeIcon size={18} />
+                          )}
                         </button>
                       </div>
                     );
@@ -297,7 +305,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                 type="submit"
                 className="w-full text-[#0A0F2C] font-bold py-4 rounded-xl border-none cursor-pointer transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] shadow-[0_15px_30px_-5px_rgba(255,209,102,0.3)] hover:shadow-[0_20px_40px_-5px_rgba(255,209,102,0.4)]"
                 style={{
-                  background: "linear-gradient(135deg, #FFD166 0%, #ffb84d 100%)",
+                  background:
+                    "linear-gradient(135deg, #FFD166 0%, #ffb84d 100%)",
                 }}
               >
                 Sign In
@@ -348,7 +357,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           {/* ── SIGNUP FORM ── */}
           <div
             className={`absolute top-0 left-0 flex flex-col justify-center z-[5] transition-all duration-[0.8s] w-full md:w-1/2 h-full px-6 md:px-[60px] ${
-              isSignup ? "md:translate-x-full opacity-100 flex" : "-translate-x-full opacity-0 hidden md:flex"
+              isSignup
+                ? "md:translate-x-full opacity-100 flex"
+                : "-translate-x-full opacity-0 hidden md:flex"
             }`}
             style={{
               transitionTimingFunction: "cubic-bezier(0.7,0,0.3,1)",
@@ -367,10 +378,11 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     className="mb-0 text-3xl font-extrabold tracking-tight"
                     style={{
                       fontFamily: "'Cinzel', serif",
-                      background: "linear-gradient(to right, #FFF, #FFD166, #ffb84d)",
+                      background:
+                        "linear-gradient(to right, #FFF, #FFD166, #ffb84d)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
-                      filter: "drop-shadow(0 2px 8px rgba(255,209,102,0.3))"
+                      filter: "drop-shadow(0 2px 8px rgba(255,209,102,0.3))",
                     }}
                   >
                     Knightly Signup
@@ -389,10 +401,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       size={18}
                     />
                     {(() => {
-                      const { onBlur: rhfBlur, ...rest } = regSignup(
-                        "displayname",
-                        { required: "Name is required" },
-                      );
+                      const { ...rest } = regSignup("displayname", {
+                        required: "Name is required",
+                      });
                       return (
                         <input
                           type="text"
@@ -419,7 +430,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       size={18}
                     />
                     {(() => {
-                      const { onBlur: rhfBlur, ...rest } = regSignup("email", {
+                      const { ...rest } = regSignup("email", {
                         required: "Email is required",
                       });
                       return (
@@ -448,26 +459,30 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       size={18}
                     />
                     {(() => {
-                      const { onBlur: rhfBlur, ...rest } = regSignup("password", {
+                      const { ...rest } = regSignup("password", {
                         required: "Password is required",
                         minLength: { value: 8, message: "Min 8 characters" },
                       });
                       return (
-                      <div className="relative w-full">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
-                          placeholder="Password"
-                          {...rest}
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                        </button>
-                      </div>
+                        <div className="relative w-full">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
+                            placeholder="Password"
+                            {...rest}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <EyeOffIcon size={18} />
+                            ) : (
+                              <EyeIcon size={18} />
+                            )}
+                          </button>
+                        </div>
                       );
                     })()}
                   </div>
@@ -487,31 +502,34 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                       size={18}
                     />
                     {(() => {
-                      const { onBlur: rhfBlur, ...rest } = regSignup(
-                        "confirmPassword",
-                        {
-                          required: "Confirm password",
-                          validate: (val) =>
-                            val === getValues("password") ||
-                            "Passwords do not match",
-                        },
-                      );
+                      const { ...rest } = regSignup("confirmPassword", {
+                        required: "Confirm password",
+                        validate: (val) =>
+                          val === getValues("password") ||
+                          "Passwords do not match",
+                      });
                       return (
-                      <div className="relative w-full">
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
-                          placeholder="Confirm Password"
-                          {...rest}
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        >
-                          {showConfirmPassword ? <EyeOffIcon size={18} /> : <EyeIcon size={18} />}
-                        </button>
-                      </div>
+                        <div className="relative w-full">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            className="w-full rounded-2xl text-sm text-white pl-11 pr-11 py-4 focus:outline-none transition-all duration-300 bg-[#0A0F2C]/40 border border-white/10 focus:border-[#FFD166]/60 focus:ring-4 focus:ring-[#FFD166]/10 shadow-[inset_0_1px_3px_rgba(255,255,255,0.05)] backdrop-blur-sm"
+                            placeholder="Confirm Password"
+                            {...rest}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOffIcon size={18} />
+                            ) : (
+                              <EyeIcon size={18} />
+                            )}
+                          </button>
+                        </div>
                       );
                     })()}
                   </div>
@@ -526,10 +544,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   type="submit"
                   className="w-full text-white font-bold py-4 rounded-xl border-none cursor-pointer transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] shadow-[0_15px_30px_-5px_rgba(58,111,247,0.4)] hover:shadow-[0_20px_40px_-5px_rgba(58,111,247,0.5)]"
                   style={{
-                    background: "linear-gradient(135deg, #3A6FF7 0%, #6B2EFF 100%)",
+                    background:
+                      "linear-gradient(135deg, #3A6FF7 0%, #6B2EFF 100%)",
                   }}
                 >
-                  {signupMutation.isPending ? "Sending OTP..." : "Start Journey"}
+                  {signupMutation.isPending
+                    ? "Sending OTP..."
+                    : "Start Journey"}
                 </button>
 
                 <div className="flex justify-center items-center mt-5">

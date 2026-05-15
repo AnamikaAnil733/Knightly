@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ForgetPasswordSchema, ForgetPasswordFormData } from "../../Utils/Validators";
+import {
+  ForgetPasswordSchema,
+  ForgetPasswordFormData,
+} from "../../Utils/Validators";
 
 export function ForgotPassword() {
   const [loading, setLoading] = useState(false);
@@ -112,7 +115,9 @@ export function ForgotPassword() {
                 style={{ fontFamily: "Inter, sans-serif" }}
               />
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
