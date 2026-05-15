@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { GoogleLogin } from "@react-oauth/google";
-import { EyeIcon, EyeOffIcon, ShieldCheckIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { EyeIcon, EyeOffIcon, ShieldCheckIcon, CrownIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 
@@ -113,38 +114,77 @@ export function LoginPage({ role }: LoginPageProps) {
   /* ===================== UI ===================== */
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#0A0F2C] px-4">
-      <div className="w-full max-w-md relative">
-        <div className="absolute inset-0 bg-[#3A6FF7] opacity-20 blur-xl rounded-2xl -rotate-3"></div>
+    <div className="flex items-center justify-center min-h-screen bg-[#050816] px-4 relative overflow-hidden font-inter">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-purple-600/15 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/15 rounded-full blur-[120px] animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
+      </div>
 
-        <div className="relative bg-[#11193F] rounded-xl shadow-2xl z-10">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full max-w-md relative z-10"
+      >
+        <div className="absolute inset-0 bg-[#3A6FF7] opacity-5 blur-[100px] rounded-full"></div>
+
+        <div className="relative bg-[#0F172A]/80 backdrop-blur-2xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden">
+          {/* Subtle top highlight */}
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#FFD166]/30 to-transparent"></div>
+          
+          {/* Brand Emblem Watermark */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none opacity-[0.05] z-0">
+            <motion.div
+              animate={{ 
+                y: [0, -15, 0],
+              }}
+              transition={{ 
+                duration: 10, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            >
+              <CrownIcon size={280} strokeWidth={0.5} className="text-[#FFD166]" />
+            </motion.div>
+          </div>
+          
           {/* Header */}
-          <div className="pt-8 pb-6 px-8 text-center">
-            <div className="inline-flex items-center justify-center p-3 rounded-full bg-[#0A0F2C] border border-[#3A6FF7]/30 mb-4">
-              <ShieldCheckIcon className="h-8 w-8 text-[#FFD166]" />
-            </div>
+          <div className="pt-10 pb-6 px-8 text-center relative">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-flex items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-[#1E293B] to-[#0F172A] border border-white/10 shadow-inner mb-6"
+            >
+              <ShieldCheckIcon className="h-10 w-10 text-[#FFD166] drop-shadow-[0_0_8px_rgba(255,209,102,0.5)]" />
+            </motion.div>
 
-            <h1 className="text-2xl font-bold text-white mb-1">
+            <h1 className="text-3xl font-bold text-white mb-2 tracking-tight" style={{ fontFamily: "'Cinzel', serif" }}>
               {role === "ADMIN"
-                ? "Knightly Admin Login"
-                : "Knightly User Login"}
+                ? <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">Knightly Admin</span>
+                : <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500">Knightly Login</span>}
             </h1>
-            <p className="text-[#C9CAD9] text-sm">
-              Enter your credentials to continue
+            <p className="text-[#94A3B8] text-sm font-medium">
+              Access the grandmaster command center
             </p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8">
             {/* Email */}
-            <div className="mb-5">
-              <label className="block text-sm text-[#C9CAD9] mb-2">Email</label>
+            <div className="mb-6">
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#94A3B8] mb-2 px-1">
+                 Email
+              </label>
               <input
                 type="email"
-                className={`w-full px-4 py-3 bg-[#0A0F2C] border rounded-lg text-white ${
-                  errors.email ? "border-red-500" : "border-[#3A6FF7]/30"
+                className={`w-full px-4 py-3 bg-[#0A0F2C]/50 border rounded-xl text-white transition-all duration-300 focus:ring-2 focus:ring-[#3A6FF7]/30 outline-none ${
+                  errors.email ? "border-red-500" : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
                 }`}
                 {...register("email")}
+                placeholder="name@company.com"
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">
@@ -154,27 +194,28 @@ export function LoginPage({ role }: LoginPageProps) {
             </div>
 
             {/* Password */}
-            <div className="mb-5">
-              <label className="block text-sm text-[#C9CAD9] mb-2">
+            <div className="mb-8">
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#94A3B8] mb-2 px-1">
                 Password
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className={`w-full px-4 py-3 bg-[#0A0F2C] border rounded-lg text-white pr-10 ${
-                    errors.password ? "border-red-500" : "border-[#3A6FF7]/30"
+                  className={`w-full px-4 py-3 bg-[#0A0F2C]/50 border rounded-xl text-white pr-10 transition-all duration-300 focus:ring-2 focus:ring-[#3A6FF7]/30 outline-none ${
+                    errors.password ? "border-red-500" : "border-[#3A6FF7]/20 focus:border-[#3A6FF7]/50"
                   }`}
                   {...register("password")}
+                  placeholder="••••••••"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#FFD166] transition-colors"
                   onClick={() => setShowPassword((p) => !p)}
                 >
                   {showPassword ? (
-                    <EyeOffIcon size={18} />
+                    <EyeOffIcon size={20} />
                   ) : (
-                    <EyeIcon size={18} />
+                    <EyeIcon size={20} />
                   )}
                 </button>
               </div>
@@ -186,51 +227,63 @@ export function LoginPage({ role }: LoginPageProps) {
             </div>
 
             {/* Forgot */}
-            <div className="text-right mb-6">
-              <a
-                href="/forgotpassword"
-                className="text-sm text-[#6B2EFF] hover:text-[#FFD166]"
-              >
-                Forgot password?
-              </a>
-            </div>
+            {role !== "ADMIN" && (
+              <div className="text-right mb-6">
+                <a
+                  href="/forgotpassword"
+                  className="text-sm text-[#6B2EFF] hover:text-[#FFD166]"
+                >
+                  Forgot password?
+                </a>
+              </div>
+            )}
 
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-[#FFD166] text-[#0A0F2C] font-medium py-3 rounded-lg hover:opacity-90"
+              className="w-full bg-gradient-to-r from-[#FFD166] to-[#ffb84d] text-[#0A0F2C] font-bold py-4 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-[0_15px_30px_-5px_rgba(255,209,102,0.3)] hover:shadow-[0_20px_40px_-5px_rgba(255,209,102,0.4)] mb-2"
             >
               Sign In
             </button>
 
-            {/* Divider */}
-            <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-px bg-[#3A6FF7]/30"></div>
-              <span className="text-sm text-[#C9CAD9]">or</span>
-              <div className="flex-1 h-px bg-[#3A6FF7]/30"></div>
-            </div>
+            {role !== "ADMIN" && (
+              <>
+                {/* Divider */}
+                <div className="flex items-center gap-4 my-8">
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#3A6FF7]/20 to-transparent"></div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#94A3B8]">or continue with</span>
+                  <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#3A6FF7]/20 to-transparent"></div>
+                </div>
 
-            {/* Google */}
-            <div className="flex justify-center">
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => toast.error("Google login failed")}
-              />
-            </div>
+                {/* Google */}
+                <div className="flex justify-center mb-8">
+                  <div className="p-[1px] bg-gradient-to-r from-white/10 to-transparent rounded-lg">
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() => toast.error("Google login failed")}
+                      theme="filled_black"
+                      shape="pill"
+                    />
+                  </div>
+                </div>
 
-            {/* Signup */}
-            <p className="text-center text-sm text-[#C9CAD9] mt-6">
-              Don’t have an account?{" "}
-              <a
-                href="/"
-                className="text-[#FFD166] hover:text-[#6B2EFF] font-semibold"
-              >
-                Sign Up
-              </a>
-            </p>
+                {/* Signup */}
+                <div className="pt-4 border-t border-white/5">
+                  <p className="text-center text-sm text-[#94A3B8]">
+                    New to the realm?{" "}
+                    <a
+                      href="/"
+                      className="text-[#FFD166] hover:text-white transition-colors font-bold ml-1"
+                    >
+                      Create an Account
+                    </a>
+                  </p>
+                </div>
+              </>
+            )}
           </form>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
