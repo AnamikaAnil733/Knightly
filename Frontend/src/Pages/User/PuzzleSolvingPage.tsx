@@ -12,7 +12,6 @@ import {
   Brain,
   ShieldCheck,
   Zap,
-  Star,
   CheckCircle2,
   AlertCircle,
   Sparkles,
@@ -389,17 +388,6 @@ export function PuzzleSolvingPage() {
               </span>
             </div>
           )}
-          <button
-            onClick={loadNewPuzzle}
-            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all font-semibold text-sm"
-          >
-            Next Puzzle
-            <ChevronRight className="w-4 h-4" />
-          </button>
-          <div className="flex items-center gap-2 bg-[#FFD166]/10 px-4 py-2 rounded-xl border border-[#FFD166]/20">
-            <Star className="w-4 h-4 text-[#FFD166] fill-[#FFD166]" />
-            <span className="text-[#FFD166] font-bold text-sm">3,420</span>
-          </div>
         </div>
       </header>
 
