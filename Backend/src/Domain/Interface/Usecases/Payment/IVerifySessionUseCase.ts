@@ -1,4 +1,4 @@
 export default interface IVerifySessionUseCase {
-  execute(sessionId: string, userId: string): Promise<{ premium: boolean }>;
+  execute(sessionId: string, userId: string): Promise<{ premium: boolean; subscriptionStart?: Date }>;
 }
 

@@ -7,6 +7,8 @@ import { CustomError } from "../../../Domain/Entity/CustomError";
 import { MESSAGES } from "../../../Domain/Constants/Messages/Messages";
 import { IRegisterUserUseCase } from "../../../Domain/Interface/Usecases/Authentication/IRegisterUseCase";
 import { HttpStatusCodes } from "../../../Domain/Types/StatusCode";
+import { AuthResponseDTO } from "../../../Domain/DTOs/AuthDTO";
+import { AuthMapper } from "../../Mapper/AuthMapper";
 
 export class RegisterUserUseCase implements IRegisterUserUseCase {
   constructor(
@@ -20,7 +22,7 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
     email: string;
     password?: string;
     googleId?: string;
-  }) {
+  }): Promise<AuthResponseDTO> {
     const verified = await this._cachingService.getData<boolean>(
       `VERIFIED_USER:${data.email}`,
     );
@@ -49,6 +51,8 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
       updatedAt: new Date(),
     });
 
-    return await this._userRepo.create(newUser);
+    const createdUser = await this._userRepo.create(newUser);
+
+    return AuthMapper.toAuthResponseDTOfromEntity(createdUser, "");
   }
 }

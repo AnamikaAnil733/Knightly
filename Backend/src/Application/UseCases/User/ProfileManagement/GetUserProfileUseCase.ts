@@ -64,6 +64,7 @@ export class GetUserProfileUseCase implements IGetUserProfileUseCase {
       rewards: user.rewards,
       achievements: user.achievements,
       ratingHistory: user.ratingHistory,
+      subscriptionStart: user.subscriptionStart,
       avatarUrl,
     };
   }

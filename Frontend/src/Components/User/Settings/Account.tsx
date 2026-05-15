@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../Store/Store";
 import { SectionHeader } from "./Heading/Sectionheader";
-import { UserIcon, MailIcon, LockIcon, BellIcon } from "lucide-react";
+import { UserIcon, MailIcon, LockIcon, Crown } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { updateUser } from "../../../Store/Slices/Auth/UserAuthSlice";
@@ -139,16 +139,47 @@ export const AccountSettings = () => {
             Change Password
           </button>
 
-          <button className="flex items-center text-[#C9CAD9] hover:text-white">
-            <BellIcon size={18} className="mr-2" />
-            Notification Preferences
-          </button>
         </div>
       </div>
       <ChangePasswordModal
         isOpen={showChangePassword}
         onClose={() => setShowChangePassword(false)}
       />
+
+      {/* Subscription Info */}
+      {user?.premium && (
+        <div className="bg-[#11193F] rounded-lg p-6 mb-6 border border-[#FFD166]/20 shadow-lg shadow-[#FFD166]/5">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-[#FFD166]/10">
+              <Crown size={20} className="text-[#FFD166]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-medium text-white">Subscription Plan</h3>
+              <p className="text-xs text-[#FFD166] font-bold uppercase tracking-widest">Knightly Pro Member</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-[#0A0F2C] p-4 rounded-xl border border-white/5">
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Current Status</p>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-white font-bold">Active</p>
+              </div>
+            </div>
+            <div className="bg-[#0A0F2C] p-4 rounded-xl border border-white/5">
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-1">Next Billing Date</p>
+              <p className="text-white font-bold">
+                {user.subscriptionStart 
+                  ? new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(
+                      new Date(new Date(user.subscriptionStart).getTime() + 30 * 24 * 60 * 60 * 1000)
+                    )
+                  : "N/A"}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Actions */}
       <div className="mt-8">

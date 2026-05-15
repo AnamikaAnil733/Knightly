@@ -23,6 +23,7 @@ export class AuthMapper {
       achievements: auth.achievements,
       premium: auth.premium ?? false,
       avatarUrl: auth.avatarUrl!,
+      subscriptionStart: auth.subscriptionStart,
     };
   }
 }

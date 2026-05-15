@@ -1,4 +1,4 @@
-import EAuth from "../../../Entity/Auth";
+import { AuthResponseDTO } from "../../../DTOs/AuthDTO";
 
 export interface IRegisterUserUseCase {
   execute(data: {
@@ -6,5 +6,5 @@ export interface IRegisterUserUseCase {
     email: string;
     password?: string;
     googleId?: string;
-  }): Promise<EAuth>;
+  }): Promise<AuthResponseDTO>;
 }

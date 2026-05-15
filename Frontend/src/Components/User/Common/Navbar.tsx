@@ -18,6 +18,7 @@ import { getPendingRequests } from "../../../Service/Api/FriendApi";
 import { socket } from "../../../Service/Socket";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSystemSettings } from "../../../Context/SystemSettingsContext";
+import { PlanDetailsModal } from "../Settings/PlanDetailsModal";
 
 export function Navbar() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export function Navbar() {
   const [pendingCount, setPendingCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -154,7 +156,7 @@ export function Navbar() {
           {user ? (
             <div className="flex items-center gap-4">
               {/* Premium Button */}
-              {!user.premium && (
+              {!user.premium ? (
                 <Link
                   to="/pricing"
                   className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#F7E7CE] via-[#E7D4B5] to-[#D4AF37] text-black font-bold text-xs uppercase tracking-tighter hover:shadow-[0_0_20px_rgba(231,212,181,0.3)] transition-all"
@@ -162,6 +164,14 @@ export function Navbar() {
                   <CrownIcon className="w-3.5 h-3.5 fill-black" />
                   Upgrade
                 </Link>
+              ) : (
+                <button
+                  onClick={() => setIsPlanModalOpen(true)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1A2352]/50 border border-[#F7E7CE]/20 text-[#F7E7CE] font-bold text-[10px] uppercase tracking-widest hover:bg-[#1A2352]/80 transition-all"
+                >
+                  <CrownIcon className="w-3.5 h-3.5 fill-[#F7E7CE]" />
+                  Knightly Pro
+                </button>
               )}
 
               {/* User Dropdown */}
@@ -294,6 +304,11 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <PlanDetailsModal
+        isOpen={isPlanModalOpen}
+        onClose={() => setIsPlanModalOpen(false)}
+        user={user}
+      />
     </nav>
   );
 }

@@ -31,6 +31,7 @@ export interface IUser {
   avatarUrl?: string | null;
   avatarSeed: string;
   avatarStyle: string;
+  subscriptionStart?: string;
 }
 
 export enum UserRole {

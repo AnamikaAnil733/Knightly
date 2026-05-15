@@ -29,5 +29,5 @@ export interface AuthResponseDTO{
     achievements: string[];
     premium: boolean;
     avatarUrl:string;
-
+    subscriptionStart?: Date;
 }

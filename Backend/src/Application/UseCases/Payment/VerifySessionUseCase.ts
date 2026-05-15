@@ -14,7 +14,7 @@ export  class VerifySessionUseCase implements IVerifySessionUseCase {
     private transactionRepository: ITransactionRepository,
   ) {}
 
-  async execute(sessionId: string, userId: string): Promise<{ premium: boolean }> {
+  async execute(sessionId: string, userId: string): Promise<{ premium: boolean; subscriptionStart?: Date }> {
     if (!sessionId) {
       throw new CustomError(HttpStatusCodes.BAD_REQUEST, "Session ID is required");
     }
@@ -67,6 +67,6 @@ export  class VerifySessionUseCase implements IVerifySessionUseCase {
       }
     }
 
-    return { premium: true };
+    return { premium: true, subscriptionStart: user.subscriptionStart };
   }
 }

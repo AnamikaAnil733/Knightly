@@ -5,15 +5,18 @@ import {
   UserIcon,
   Crown,
 } from "lucide-react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../../Store/Store";
+import { PlanDetailsModal } from "./PlanDetailsModal";
 interface SidebarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
 }
 export const Sidebar = ({ activeSection, setActiveSection }: SidebarProps) => {
   const user = useSelector((state: RootState) => state.userAuth.user);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const navItems = [
     // {
     //   id: "theme",
@@ -81,16 +84,25 @@ export const Sidebar = ({ activeSection, setActiveSection }: SidebarProps) => {
       )}
 
       {user?.premium && (
-        <div className="mt-8 p-4 rounded-2xl bg-[#1A2352]/50 border border-[#F7E7CE]/20 flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7E7CE] to-[#E7D4B5]">
+        <button
+          onClick={() => setIsPlanModalOpen(true)}
+          className="mt-8 w-full p-4 rounded-2xl bg-[#1A2352]/50 border border-[#F7E7CE]/20 flex items-center gap-3 hover:bg-[#1A2352]/80 transition-all text-left group"
+        >
+          <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7E7CE] to-[#E7D4B5] group-hover:scale-110 transition-transform">
             <Crown className="w-5 h-5 text-black fill-black" />
           </div>
           <div>
             <p className="text-white font-bold text-sm">Knightly Pro</p>
             <p className="text-xs text-[#E7D4B5]/80">Active Member</p>
           </div>
-        </div>
+        </button>
       )}
+
+      <PlanDetailsModal
+        isOpen={isPlanModalOpen}
+        onClose={() => setIsPlanModalOpen(false)}
+        user={user}
+      />
     </aside>
   );
 };
