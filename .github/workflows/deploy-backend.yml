@@ -50,4 +50,4 @@ jobs:
             sudo docker compose up -d --remove-orphans backend
             
             echo "Cleaning up old images..."
-            sudo docker image prune -fn
+            sudo docker image prune -f
