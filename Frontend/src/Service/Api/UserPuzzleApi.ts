@@ -17,6 +17,7 @@ export const validatePuzzleMove = async (
   });
   return response.data;
 };
+
 export const getSolveCount = async (): Promise<{
   success: boolean;
   today: number;

@@ -2,9 +2,7 @@ import { spawn, ChildProcess } from "child_process";
 import path from "path";
 import { Position } from "../Position";
 
-// Resolve stockfish binary: prefer system binary (Docker via STOCKFISH_PATH),
-// fall back to the npm package binary for local dev.
-// spawn() does NOT inherit npm's augmented PATH, so we resolve explicitly.
+
 function resolveStockfishBin(): string {
   if (process.env.STOCKFISH_PATH) return process.env.STOCKFISH_PATH;
   return path.join(__dirname, "../../../../node_modules/.bin/stockfish");
@@ -15,7 +13,6 @@ const MOVE_TIMEOUT_MS = 10_000;
 
 export class StockfishService {
   constructor() {
-    // No longer starting a persistent engine process here
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────

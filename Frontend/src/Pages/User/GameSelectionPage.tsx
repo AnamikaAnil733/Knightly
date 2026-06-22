@@ -81,7 +81,7 @@ const gameModes: GameMode[] = [
 export function GameSelectionPage() {
   const navigate = useNavigate();
   const [selectedBotLevel, setSelectedBotLevel] = React.useState<{
-    label: string;
+    id: string;
   } | null>(null);
   const [isPublic, setIsPublic] = React.useState(false);
 
@@ -264,12 +264,12 @@ export function GameSelectionPage() {
         <ColorSelectionModal
           isOpen={!!selectedBotLevel}
           onClose={() => setSelectedBotLevel(null)}
-          levelLabel={selectedBotLevel?.label || ""}
+          levelLabel={selectedBotLevel?.id || ""}
           onSelect={(color) => {
             if (selectedBotLevel) {
               navigate("/waiting", {
                 state: {
-                  format: selectedBotLevel.label,
+                  format: selectedBotLevel.id,
                   modeName: "Play Computer",
                   preferredColor: color,
                   isPublic,
